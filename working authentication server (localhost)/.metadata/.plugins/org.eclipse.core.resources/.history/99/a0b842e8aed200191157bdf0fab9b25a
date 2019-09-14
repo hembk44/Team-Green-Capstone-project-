@@ -1,0 +1,5 @@
+package com.csci4060.app.security.services;
+
+public class UserDetailsServiceImpl {
+
+}
