@@ -8,7 +8,7 @@
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
 		<list key="findhistory">
-			<item value="packaging"/>
+			<item value="userprincipal"/>
 		</list>
 		<list key="replacehistory">
 		</list>

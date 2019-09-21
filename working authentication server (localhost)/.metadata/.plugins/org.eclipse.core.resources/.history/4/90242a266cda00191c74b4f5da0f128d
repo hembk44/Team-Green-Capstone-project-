@@ -1,0 +1,24 @@
+package com.csci4060.app.model.principle;
+
+import java.util.Date;
+import com.csci4060.app.model.User;
+import com.csci4060.app.model.authentication.ConfirmationToken;
+
+public class ConfirmationTokenPrinciple {
+
+	private long tokenId;
+	private String confirmationToken;
+	private Date createdDate;
+	private User user;
+	
+	public ConfirmationTokenPrinciple(long tokenId, String confirmationToken, Date createdDate, User user) {
+		this.tokenId = tokenId;
+		this.confirmationToken = confirmationToken;
+		this.createdDate = createdDate;
+		this.user = user;
+	}
+	
+	public static ConfirmationTokenPrinciple build(ConfirmationToken token) {
+		return new ConfirmationTokenPrinciple(token.getTokenid(), token.getConfirmationToken(), token.getCreatedDate(), token.getUser());
+	}
+}

@@ -1,0 +1,21 @@
+package com.csci4060.app.services;
+
+import java.util.List;
+
+import com.csci4060.app.model.User;
+import com.sun.security.auth.UserPrincipal;
+
+public interface UserService {
+
+	User save(User user);
+	
+	List<User> findAll();
+	
+	void delete(String email);
+	
+	User findbyEmail(String email);
+	
+	User findById(int id);
+	
+	UserPrincipal update(UserPrincipal userPrincipal);
+}

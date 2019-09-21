@@ -1,2 +1,0 @@
-jwtSecret = jwtGrokonezSecretKey
-jwtExpiration = 86400
