@@ -1,0 +1,5 @@
+package com.csci4060.app.message.request;
+
+public class LoginForm {
+
+}

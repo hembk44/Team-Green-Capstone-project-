@@ -1,0 +1,10 @@
+grokonez.app.jwtSecret=jwtGrokonezSecretKey
+grokonez.app.jwtExpiration=86400
+
+spring.datasource.url=jdbc:mysql://localhost:3306/test
+spring.datasource.username= root
+spring.datasource.password= 
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.database-platform=org.hibernate.dialect.MySQL5InnoDBDialect
+spring.jpa.show-sql = true
+server.port = 8181

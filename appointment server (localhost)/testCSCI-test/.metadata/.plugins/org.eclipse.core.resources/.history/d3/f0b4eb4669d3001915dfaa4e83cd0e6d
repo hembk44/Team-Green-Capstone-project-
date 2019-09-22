@@ -1,0 +1,2 @@
+grokonez.app.jwtSecret=jwtGrokonezSecretKey
+grokonez.app.jwtExpiration=86400
