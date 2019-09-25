@@ -1,0 +1,10 @@
+package com.csci4060.app.model;
+
+import lombok.Data;
+
+@Data
+public class APIresponse {
+	private String status;
+	private String message;
+	private String result;
+}

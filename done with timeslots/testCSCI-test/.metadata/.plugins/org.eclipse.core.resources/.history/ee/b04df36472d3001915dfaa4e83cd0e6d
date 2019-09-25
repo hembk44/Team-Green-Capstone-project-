@@ -1,0 +1,20 @@
+package com.csci4060.app;
+
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Bean;
+
+public class DevelopmentConfig {
+
+	public class DevelopmentConfig {
+
+		  @Bean
+		  public CommandLineRunner dataLoader(IngredientRepository repo,
+		        UserRepository userRepo, PasswordEncoder encoder, TacoRepository tacoRepo) { // user repo for ease of testing with a built-in user
+		    return new CommandLineRunner() {
+		      @Override
+		      public void run(String... args) throws Exception {
+		       
+
+		      }
+		    };
+}
