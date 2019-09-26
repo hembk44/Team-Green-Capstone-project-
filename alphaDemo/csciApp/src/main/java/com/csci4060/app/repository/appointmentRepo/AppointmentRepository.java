@@ -11,6 +11,7 @@ import com.csci4060.app.model.appointment.Appointment;
 public interface AppointmentRepository extends JpaRepository<Appointment,Long>{
 
 	List<Appointment> findAllByRecepients(User user);
+	List<Appointment> findAllByCreatedBy(User createdBy);
 	
 	Optional<Appointment> findById(Long id);
 }

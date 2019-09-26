@@ -32,4 +32,9 @@ public class AppointmentServiceImpl implements AppointmentService {
 				.orElseThrow(() -> new RuntimeException("Fail! -> Appointment with the given ID not find."));
 	}
 
+	@Override
+	public List<Appointment> findAllByCreatedBy(User user) {
+		return appointmentRepo.findAllByCreatedBy(user);
+	}
+
 }

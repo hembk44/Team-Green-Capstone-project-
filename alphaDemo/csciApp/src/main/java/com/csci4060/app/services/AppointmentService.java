@@ -11,5 +11,7 @@ public interface AppointmentService {
 	
 	List<Appointment> findAllByRecepients(User user);
 	
+	List<Appointment> findAllByCreatedBy(User user);
+	
 	Appointment findById(Long id);
 }

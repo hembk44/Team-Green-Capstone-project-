@@ -1,9 +1,6 @@
 package com.csci4060.app.model.appointment;
 
 import java.time.LocalTime;
-import java.util.List;
-
-import javax.persistence.Id;
 
 import lombok.Data;
 
@@ -14,17 +11,29 @@ public class TimeSlotResponse {
 	private LocalTime startTime;
 	private LocalTime endTime;
 	private String date;
+	private String selectorName;
+	private String selectorEmail;
 	
+	public TimeSlotResponse(Long id, LocalTime startTime, LocalTime endTime, String date, String selectorName, String selectorEmail) {
+		super();
+		this.id = id;
+		this.startTime = startTime;
+		this.endTime = endTime;
+		this.date = date;
+		this.selectorName = selectorName;
+		this.selectorEmail = selectorEmail;
+	}
+
+	public TimeSlotResponse() {
+		super();
+	}
+
 	public TimeSlotResponse(Long id, LocalTime startTime, LocalTime endTime, String date) {
 		super();
 		this.id = id;
 		this.startTime = startTime;
 		this.endTime = endTime;
 		this.date = date;
-	}
-
-	public TimeSlotResponse() {
-		super();
 	}
 	
 	

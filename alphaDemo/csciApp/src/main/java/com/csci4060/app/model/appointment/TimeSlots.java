@@ -7,8 +7,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
+import com.csci4060.app.model.User;
+import com.csci4060.app.model.authentication.UserPrinciple;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.sun.security.auth.UserPrincipal;
 
 import lombok.Data;
 
@@ -23,21 +27,23 @@ public class TimeSlots {
 	
 	private LocalTime startTime;
 	private LocalTime endTime;
-	private boolean isSelected;
 	
+	@JsonIgnore
 	@ManyToOne(targetEntity = AppointmentDate.class)
 	private AppointmentDate date;
 	
-	@JsonIgnore
 	@ManyToOne(targetEntity = Appointment.class)
 	private Appointment appointment;
 	
-	public TimeSlots(LocalTime startTime, LocalTime endTime, boolean isSelected, AppointmentDate date, Appointment appointment) {
+	@OneToOne(targetEntity = User.class)
+	private User selectedBy;
+	
+	public TimeSlots(LocalTime startTime, LocalTime endTime, AppointmentDate date, Appointment appointment, User selectedBy) {
 		this.startTime = startTime;
 		this.endTime = endTime;
-		this.isSelected = isSelected;
 		this.date = date;
 		this.appointment = appointment;
+		this.selectedBy = selectedBy;
 	}
 
 	public TimeSlots() {

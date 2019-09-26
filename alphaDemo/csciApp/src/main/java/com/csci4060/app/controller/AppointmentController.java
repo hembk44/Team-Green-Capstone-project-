@@ -29,6 +29,7 @@ import com.csci4060.app.model.appointment.AppointmentDummy;
 import com.csci4060.app.model.appointment.AppointmentTime;
 import com.csci4060.app.model.appointment.TimeSlotResponse;
 import com.csci4060.app.model.appointment.TimeSlots;
+import com.csci4060.app.model.authentication.UserPrinciple;
 import com.csci4060.app.services.AppointmentDateService;
 import com.csci4060.app.services.AppointmentService;
 import com.csci4060.app.services.AppointmentTimeService;
@@ -55,7 +56,7 @@ public class AppointmentController {
 
 	@Autowired
 	TimeSlotsService timeSlotsService;
-	
+
 	@Autowired
 	private EmailSenderService emailSenderService;
 
@@ -108,7 +109,7 @@ public class AppointmentController {
 
 				for (int i = 0; i < maxAppointment; i++) {
 					LocalTime slotEndTime = slotStartTime.plusMinutes(time.getInterv());
-					timeSlotsService.save(new TimeSlots(slotStartTime, slotEndTime, false, date, appointment));
+					timeSlotsService.save(new TimeSlots(slotStartTime, slotEndTime, date, appointment, null));
 					slotStartTime = slotEndTime;
 				}
 
@@ -116,23 +117,43 @@ public class AppointmentController {
 		}
 
 		SimpleMailMessage mailMessage = new SimpleMailMessage();
-		
+
 		String[] emails = recepientsEmailList.toArray(new String[recepientsEmailList.size()]);
-		
+
 		mailMessage.setTo(emails);
 		mailMessage.setSubject("Appointment Information");
 		mailMessage.setFrom("ulmautoemail@gmail.com");
 		mailMessage.setText(
 				"A faculty has set an appointment for you. Please log in to you ULM communication app and register for the appointment. "
-				+ "Thank you!");
+						+ "Thank you!");
 
 		emailSenderService.sendEmail(mailMessage);
 
-		return new APIresponse(HttpStatus.CREATED.value(), "Appointment created successfully", null);
+		return new APIresponse(HttpStatus.CREATED.value(), "Appointment created successfully", appointment);
 	}
 
-	@GetMapping(path = "/all")
-	@PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
+	@GetMapping(path = "faculty/allAppointments")
+	@PreAuthorize("hasRole('PM') or hasRole('ADMIN')" )
+	public APIresponse getFacultyAppointments() {
+
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		String username = "";
+
+		if (principal instanceof UserDetails) {
+			username = ((UserDetails) principal).getUsername();
+		}
+
+		User user = userService.findByUsername(username);
+
+		List<Appointment> appointments = appointmentService.findAllByCreatedBy(user);
+
+		return new APIresponse(HttpStatus.OK.value(), "All appointments successfully sent.", appointments);
+
+	}
+	
+	@GetMapping(path = "user/allAppointments")
+	@PreAuthorize("hasRole('USER')")
 	public APIresponse getAppointments() {
 
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -150,10 +171,34 @@ public class AppointmentController {
 		return new APIresponse(HttpStatus.OK.value(), "All appointments successfully sent.", appointments);
 
 	}
+	
+	
 
-	@GetMapping(path = "/timeslots/{id}")
-	@PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
+	@GetMapping(path = "/timeslots/user/{id}")
+	@PreAuthorize("hasRole('USER')")
 	public APIresponse getSlots(@PathVariable("id") Long appointmentId) {
+
+		Appointment appointment = appointmentService.findById(appointmentId);
+
+		List<TimeSlots> slotsFromAppointment = timeSlotsService.findByAppointment(appointment);
+
+		List<TimeSlotResponse> timeSlotResponses = new ArrayList<TimeSlotResponse>();
+		
+		for (TimeSlots slots : slotsFromAppointment) {
+
+			if (slots.getSelectedBy() == null) {
+				timeSlotResponses.add(new TimeSlotResponse(slots.getId(), slots.getStartTime(), slots.getEndTime(),
+						slots.getDate().getDate()));
+			}
+		}
+
+		System.out.println("For loop is done");
+		return new APIresponse(HttpStatus.OK.value(), "Time slots successfully sent.", timeSlotResponses);
+	}
+
+	@GetMapping(path = "/timeslots/faculty/{id}")
+	@PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
+	public APIresponse getSlotsForFaculty(@PathVariable("id") Long appointmentId) {
 
 		Appointment appointment = appointmentService.findById(appointmentId);
 
@@ -162,21 +207,48 @@ public class AppointmentController {
 		List<TimeSlotResponse> timeSlotResponses = new ArrayList<TimeSlotResponse>();
 
 		for (TimeSlots slots : slotsFromAppointment) {
-			if (!slots.isSelected()) {
-				timeSlotResponses.add(new TimeSlotResponse(slots.getId(), slots.getStartTime(), slots.getEndTime(),
-						slots.getDate().getDate()));
+
+			String selectorName = "Not selected";
+			String selectorEmail = "Not selected";
+			
+			if(slots.getSelectedBy() != null) {
+				
+				User selectedBy = slots.getSelectedBy();
+
+				selectorName = selectedBy.getName();
+				selectorEmail = selectedBy.getEmail();
+
 			}
+						
+			timeSlotResponses.add(new TimeSlotResponse(slots.getId(), slots.getStartTime(), slots.getEndTime(),
+					slots.getDate().getDate(), selectorName, selectorEmail));
+
 		}
 
-		return new APIresponse(HttpStatus.OK.value(), "Time slots successfully sent.", timeSlotResponses);
+		return new APIresponse(HttpStatus.OK.value(), "Time slots successfully sent.", slotsFromAppointment);
 	}
 
 	@PostMapping(path = "timeslots/postSlot", produces = "application/json")
 	@PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
 	public APIresponse postSlots(@RequestBody TimeSlotResponse timeSlotResponse) {
+
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		String username = "";
+
+		if (principal instanceof UserDetails) {
+			username = ((UserDetails) principal).getUsername();
+		}
+
+		User selectedBy = userService.findByUsername(username);
+
 		TimeSlots slotToRemove = timeSlotsService.findById(timeSlotResponse.getId());
-		slotToRemove.setSelected(true);
+		slotToRemove.setSelectedBy(selectedBy);
 		timeSlotsService.save(slotToRemove);
-		return new APIresponse(HttpStatus.GONE.value(), "User has selected the timeslot.", slotToRemove);
+		
+		TimeSlotResponse response = new TimeSlotResponse(slotToRemove.getId(), slotToRemove.getStartTime(), slotToRemove.getEndTime(),
+				slotToRemove.getDate().getDate(), selectedBy.getName(), selectedBy.getEmail());
+		
+		return new APIresponse(HttpStatus.GONE.value(), "User has selected the timeslot.", response);
 	}
 }
