@@ -1,0 +1,38 @@
+.error {
+  color: red
+}
+
+.success {
+  color: green
+}
+
+.login-container {
+  box-shadow: 3px 3px 0px 1px #BD955A;
+  border: 3px solid #800029;
+  width: 300px;
+  margin: 20px auto;
+  padding: 10px
+}
+
+.form-control:focus {
+  color: #495057;
+  background-color: #fff;
+  border-color: #800029;
+  outline: 0;
+  box-shadow: 0 0 0 0.1rem #BD955A;
+}
+
+.form-control {
+  border-color: #800029;
+
+}
+
+
+.container {
+  background-image: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), url(https://webservices.ulm.edu/apps/system/files/logos/ulm_academic_maroon_white.png);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-attachment: scroll;
+  /* opacity:0.4; */
+}

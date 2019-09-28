@@ -1,0 +1,10 @@
+<button mat-stroked-button color="primary" (click)="create()">
+  Create Appointment
+</button>
+
+<app-appointment-item
+  *ngFor="let appointment of appointments; let i = index"
+  [appointment]="appointment"
+  [id]="i"
+>
+</app-appointment-item>
