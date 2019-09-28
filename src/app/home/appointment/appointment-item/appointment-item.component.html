@@ -1,0 +1,14 @@
+<mat-list [routerLink]="[id]" style="cursor: pointer;">
+  <h3 mat-subheader>{{ appointment.name }}</h3>
+  <mat-list-item>
+    <mat-icon mat-list-icon>assignment</mat-icon>
+    <h4 mat-line>{{ appointment.description }}</h4>
+    <p mat-line>{{ appointment.email[0] }}</p>
+    <p mat-line>
+      {{ appointment.dateRange[0].appointmentDate | date }}
+    </p>
+    <p mat-line></p>
+
+    <!-- <p mat-line> {{folder.updated | date}} </p> -->
+  </mat-list-item>
+</mat-list>
