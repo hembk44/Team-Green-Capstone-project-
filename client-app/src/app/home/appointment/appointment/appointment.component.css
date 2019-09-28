@@ -1,0 +1,13 @@
+mat-grid-tile {
+  background: lightblue;
+  /* padding: 20px; */
+  /* margin-left: 20px;
+  margin-right: 20px; */
+
+}
+
+.mat-grid-list {
+  display: block;
+  position: relative;
+  margin: 10px;
+}
