@@ -11,6 +11,7 @@ export class EventService{
         private calendarService: CalendarService
     ){}
     calendars = this.calendarService.getCalendars();
+    //list of events for testing
     events: CalEvent[] = [
         {
             title: 'Test Event',
@@ -45,6 +46,7 @@ export class EventService{
     ];
     tempEvents: CalEvent[] = this.events;
 
+    // returns events
     getEvents(){
         const ev: CalEvent[]=[];
         for(let event of this.events){
@@ -55,15 +57,18 @@ export class EventService{
         return ev.slice();
     }
 
+    //add events to list
     addEvent(e: CalEvent){
         this.events.push(e);
         this.updateEvents();
     }
 
+    //change events list
     setEvents(eventList: CalEvent[]){
         this.events = eventList;
     }
 
+    //updates list for hiding calendars
     updateEvents(){
         const newEvents: CalEvent[]=[]
         for(let event of this.events){

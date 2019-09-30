@@ -3,6 +3,7 @@ import { Calendar } from './calendar.model';
 
 @Injectable()
 export class CalendarService{
+    //list of calendars for testing
     calendars: Calendar[] = [
         {
             user: 'moorea1',
@@ -24,9 +25,12 @@ export class CalendarService{
         }
     ];
 
+    //returns calendars
     getCalendars(){
         return this.calendars.slice();
     }
+
+    //sets calendar list
     setCalendars(cals: Calendar[]){
         this.calendars = cals;
     }

@@ -11,7 +11,5 @@ export class CalEvent{
         public location: string,
         public createdBy: string,
         public calendar: Calendar
-        //@Optional() public image: File
-        //@Optional() public interval: string
     ){}
 }

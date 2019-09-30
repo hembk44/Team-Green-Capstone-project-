@@ -36,7 +36,7 @@ export class CalendarComponent implements OnInit {
   CalendarView = CalendarView;
   activeDayIsOpen: boolean = false;
 
-  events: CalEvent[];
+  events: CalEvent[];//list of events
 
   ngOnInit() {
     this.setView(CalendarView.Month);
@@ -48,10 +48,12 @@ export class CalendarComponent implements OnInit {
     );
   }
 
+  //changes view of calendar to day, week, month
   setView(view: CalendarView) {
     this.view = view;
   }
 
+  // changes view date for list of events
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
     if (isSameMonth(date, this.viewDate)) {
       this.viewDate = date;
@@ -62,6 +64,7 @@ export class CalendarComponent implements OnInit {
     console.log(event);
   }
 
+  // navigates to event creation form
   createEvent() {
     this.router.navigate(["home/create-event"]);
   }
