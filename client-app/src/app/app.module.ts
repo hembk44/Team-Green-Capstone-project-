@@ -67,12 +67,13 @@ import {
 import { CreateEventComponent } from "./home/calendar/create-event/create-event.component";
 import { CalendarListComponent } from "./home/calendar/calendar-list/calendar-list.component";
 import { CalendarItemComponent } from "./home/calendar/calendar-list/calendar-item/calendar-item.component";
-import { HttpClientModule } from "@angular/common/http";
+import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { EventService } from "./home/calendar/events.service";
 import { CalendarService } from "./home/calendar/calendar-list/calendar.service";
 import { LoginComponent } from "./login/login.component";
 import { RegisterComponent } from "./register/register.component";
 import { LoadingSpinnerComponent } from "./loading-spinner/loading-spinner.component";
+import { AuthInterceptor } from "./auth/auth-interceptor";
 
 @NgModule({
   declarations: [
@@ -131,6 +132,7 @@ import { LoadingSpinnerComponent } from "./loading-spinner/loading-spinner.compo
     MatDatepickerModule,
     EventService,
     CalendarService,
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     { provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: { hasBackdrop: false } }
   ],
   bootstrap: [AppComponent]
