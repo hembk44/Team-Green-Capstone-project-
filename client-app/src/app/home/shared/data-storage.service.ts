@@ -5,6 +5,8 @@ import { map, tap } from "rxjs/operators";
 
 import { Appointment } from "../appointment/appointment-model/appointment.model";
 import { TimeInterval } from '../appointment/appointment-model/time-interval.model';
+import { CalEvent } from '../calendar/events.model';
+import { EventService } from '../calendar/events.service';
 
 @Injectable({
   providedIn: "root"
@@ -13,6 +15,7 @@ export class DataStorageService {
   constructor(
     private http: HttpClient,
     private appointmentService: AppointmentService,
+    private eventService: EventService
   ) {}
 
   storeAppointment(appointment: Appointment) {
@@ -45,4 +48,19 @@ export class DataStorageService {
   //     })
   //   );
   // }
+
+  fetchEvents(){
+    return this.http.get<CalEvent[]>("event url").pipe(
+      tap(events => {
+        this.eventService.setEvents(events);
+      })
+    );
+  }
+
+  storeEvents(){
+    const events = this.eventService.getEvents();
+    this.http.put("event url", events).subscribe(response => {
+      console.log(response);
+    });
+  }
 }

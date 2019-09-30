@@ -3,58 +3,62 @@ import { CalEvent } from './events.model';
 import { Calendar } from './calendar-list/calendar.model';
 import { CalendarService } from './calendar-list/calendar.service';
 import { Subject } from 'rxjs';
+import { DataStorageService } from '../shared/data-storage.service';
 
 @Injectable()
 export class EventService{
     eventsChanged: Subject<CalEvent[]> = new Subject<CalEvent[]>();
     constructor(
-        private calendarService: CalendarService
+        private calendarService: CalendarService,
+        private dataService: DataStorageService
     ){}
     calendars = this.calendarService.getCalendars();
     //list of events for testing
-    events: CalEvent[] = [
-        {
-            title: 'Test Event',
-            start: new Date(2019,8,23,12),
-            end: new Date(2019,8,23,15,20),
-            createdBy: 'test',
-            users: ['moorea1'],
-            description: 'test event',
-            location: 'test location',
-            calendar: this.calendars[0]
-        },
-        {
-            title: 'Test Event 2',
-            start: new Date(2019,8,23,12),
-            end: new Date(2019,8,26,15,20),
-            createdBy: 'test',
-            users: ['moorea1'],
-            description: 'test event',
-            location: 'test location',
-            calendar: this.calendars[1]
-        },
-        {
-            title: 'Test Event 3',
-            start: new Date(2019,8,23,12),
-            end: new Date(2019,8,23,15,20),
-            createdBy: 'test',
-            users: ['moorea1'],
-            description: 'test event',
-            location: 'test location',
-            calendar: this.calendars[2]
-        }
-    ];
+    events: CalEvent[] = this.dataService.fetchEvents();
+    // [
+    //     {
+    //         title: 'Test Event',
+    //         start: new Date(2019,8,23,12),
+    //         end: new Date(2019,8,23,15,20),
+    //         createdBy: 'test',
+    //         users: ['moorea1'],
+    //         description: 'test event',
+    //         location: 'test location',
+    //         calendar: this.calendars[0]
+    //     },
+    //     {
+    //         title: 'Test Event 2',
+    //         start: new Date(2019,8,23,12),
+    //         end: new Date(2019,8,26,15,20),
+    //         createdBy: 'test',
+    //         users: ['moorea1'],
+    //         description: 'test event',
+    //         location: 'test location',
+    //         calendar: this.calendars[1]
+    //     },
+    //     {
+    //         title: 'Test Event 3',
+    //         start: new Date(2019,8,23,12),
+    //         end: new Date(2019,8,23,15,20),
+    //         createdBy: 'test',
+    //         users: ['moorea1'],
+    //         description: 'test event',
+    //         location: 'test location',
+    //         calendar: this.calendars[2]
+    //     }
+    // ];
     tempEvents: CalEvent[] = this.events;
 
     // returns events
     getEvents(){
-        const ev: CalEvent[]=[];
-        for(let event of this.events){
-            if(event.calendar.shown){
-                ev.push(event);
-            }
-        }
-        return ev.slice();
+        
+
+        // for(let event of this.events){
+        //     if(event.calendar.shown){
+        //         ev.push(event);
+        //     }
+        // }
+        return this.events.slice();
     }
 
     //add events to list
