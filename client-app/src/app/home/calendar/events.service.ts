@@ -10,7 +10,6 @@ export class EventService{
     eventsChanged: Subject<CalEvent[]> = new Subject<CalEvent[]>();
     constructor(
         private calendarService: CalendarService,
-        private dataService: DataStorageService
     ){}
     calendars = this.calendarService.getCalendars();
 
