@@ -13,8 +13,11 @@ export class EventService{
         private dataService: DataStorageService
     ){}
     calendars = this.calendarService.getCalendars();
-    //list of events for testing
-    events: CalEvent[] = this.dataService.fetchEvents();
+
+    
+    events: CalEvent[] = [];
+    // list for testing
+    //
     // [
     //     {
     //         title: 'Test Event',
@@ -47,6 +50,7 @@ export class EventService{
     //         calendar: this.calendars[2]
     //     }
     // ];
+
     tempEvents: CalEvent[] = this.events;
 
     // returns events
@@ -75,11 +79,11 @@ export class EventService{
     //updates list for hiding calendars
     updateEvents(){
         const newEvents: CalEvent[]=[]
-        for(let event of this.events){
-            if(event.calendar.shown){
-                newEvents.push(event);
-            }
-        }
+        // for(let event of this.events){
+        //     if(event.calendar.shown){
+        //         newEvents.push(event);
+        //     }
+        // }
         this.tempEvents = newEvents;
         return this.eventsChanged.next(this.tempEvents.slice());
     }

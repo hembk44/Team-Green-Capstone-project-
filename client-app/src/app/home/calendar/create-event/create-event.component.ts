@@ -69,7 +69,7 @@ export class CreateEventComponent implements OnInit {
       this.eventForm.value["description"],
       this.eventForm.value["location"],
       "event",
-      this.calendars[1]
+      // this.calendars[0]
     );
 
     this.eventService.addEvent(newEvent);

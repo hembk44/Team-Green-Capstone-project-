@@ -10,6 +10,6 @@ export class CalEvent{
         public description: string,
         public location: string,
         public createdBy: string,
-        public calendar: Calendar
+        //public calendar: Calendar
     ){}
 }
