@@ -1,15 +1,13 @@
 import { Optional } from '@angular/core';
 import { Calendar } from './calendar-list/calendar.model';
+import { DateRange } from '../appointment/appointment-model/date-range.model';
 
 export class CalEvent{
     constructor(
-        public title:string,
-        public start: Date,
-        public end: Date,
-        public users: any[],
+        @Optional() id: number,
+        public name:string,
         public description: string,
-        public location: string,
-        public createdBy: string,
-        //public calendar: Calendar
+        public email: string,
+        public dateRange: DateRange[]
     ){}
 }
