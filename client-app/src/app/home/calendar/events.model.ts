@@ -7,6 +7,7 @@ export class CalEvent{
         @Optional() id: number,
         public name:string,
         public description: string,
+        public location: string,
         public email: string,
         public dateRange: DateRange[]
     ){}
