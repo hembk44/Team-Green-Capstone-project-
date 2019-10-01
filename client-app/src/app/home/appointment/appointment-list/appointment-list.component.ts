@@ -6,6 +6,7 @@ import { Subscription } from "rxjs";
 import { Router } from "@angular/router";
 import { IAppointment } from "../appointment-interfaces/appointment";
 import { DataStorageService } from "../../shared/data-storage.service";
+import { IfStmt } from "@angular/compiler";
 
 @Component({
   selector: "app-appointment-list",
@@ -28,12 +29,13 @@ export class AppointmentListComponent implements OnInit {
     //   }
     // );
 
-    this.dataStorage.isLoading.subscribe(loading => {
-      if (!loading) {
-        this.dataStorage.fetchAppointment();
+    this.dataStorage.fetchAppointment();
+    this.dataStorage.isLoading.subscribe(result => {
+      if (!result) {
         this.appointments = this.dataStorage.appointmentLists;
       }
     });
+
     // this.dataStorage.fetchAppointment().subscribe(
     //   response => {
     //     this.appointments = <Appointment[]>response.result;
