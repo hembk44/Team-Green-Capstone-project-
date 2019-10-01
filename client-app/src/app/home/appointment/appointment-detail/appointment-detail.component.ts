@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { AppointmentService } from "../appointment-service/appointment.service";
+// import { AppointmentService } from "../appointment-service/appointment.service";
 import { ActivatedRoute, Router, Params } from "@angular/router";
 import { Appointment } from "../appointment-model/appointment.model";
 import { TimeInterval } from "../appointment-model/time-interval.model";
@@ -16,7 +16,7 @@ export class AppointmentDetailComponent implements OnInit {
   id: number;
   timeSlots: TimeInterval[]; // = this.dataService.fetchTimeSlots(id);
   constructor(
-    private appointmentService: AppointmentService,
+    // private appointmentService: AppointmentService,
     private route: ActivatedRoute,
     private router: Router,
     private dataService: DataStorageService

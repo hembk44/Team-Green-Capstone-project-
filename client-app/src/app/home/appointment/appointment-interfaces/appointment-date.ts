@@ -1,6 +1,6 @@
-import { TimeInterval } from "./time-interval";
+import { ITimeInterval } from "./time-interval";
 
-export interface AppointmentDate {
+export interface IAppointmentDate {
   date: Date;
-  times: TimeInterval[];
+  times: ITimeInterval[];
 }

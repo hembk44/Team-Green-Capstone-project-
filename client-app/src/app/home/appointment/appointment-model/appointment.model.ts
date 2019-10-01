@@ -3,8 +3,8 @@ import { DateRange } from "./date-range.model";
 export class Appointment {
   public name: string;
   public description: string;
-  public email: string[];
-  public dateRange: DateRange[];
+  public recepients: string[];
+  public dates: DateRange[];
 
   constructor(
     name: string,
@@ -14,7 +14,7 @@ export class Appointment {
   ) {
     this.name = name;
     this.description = desc;
-    this.email = email;
-    this.dateRange = dateRange;
+    this.recepients = email;
+    this.dates = dateRange;
   }
 }

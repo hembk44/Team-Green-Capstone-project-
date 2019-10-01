@@ -1,10 +1,10 @@
 import { Component, OnInit, Inject } from "@angular/core";
 
-import { AppointmentService } from "../appointment-service/appointment.service";
+// import { AppointmentService } from "../appointment-service/appointment.service";
 // import { Appointment } from "../appointment-model/appointment.model";
 import { Subscription } from "rxjs";
 import { Router } from "@angular/router";
-import { Appointment } from "../appointment-interfaces/appointment";
+import { IAppointment } from "../appointment-interfaces/appointment";
 import { DataStorageService } from "../../shared/data-storage.service";
 
 @Component({
@@ -13,11 +13,10 @@ import { DataStorageService } from "../../shared/data-storage.service";
   styleUrls: ["./appointment-list.component.css"]
 })
 export class AppointmentListComponent implements OnInit {
-  appointments: Appointment[] = [];
-  appointment: Appointment;
+  appointments: IAppointment[] = [];
+  appointment: IAppointment;
   // subscription: Subscription;
   constructor(
-    private appointmentService: AppointmentService,
     private router: Router,
     private dataStorage: DataStorageService
   ) {}
@@ -28,17 +27,24 @@ export class AppointmentListComponent implements OnInit {
     //     this.appointments = newAppointments;
     //   }
     // );
-    this.dataStorage.fetchAppointment().subscribe(
-      response => {
-        this.appointments = <Appointment[]>response.result;
-        console.log(response.result);
 
-        // console.log(response.result[0].dates);
-        // console.log(this.appointments);
-        // console.log(this.appointments[0]);
-      },
-      err => console.log(err)
-    );
+    this.dataStorage.isLoading.subscribe(loading => {
+      if (!loading) {
+        this.dataStorage.fetchAppointment();
+        this.appointments = this.dataStorage.appointmentLists;
+      }
+    });
+    // this.dataStorage.fetchAppointment().subscribe(
+    //   response => {
+    //     this.appointments = <Appointment[]>response.result;
+    //     console.log(response.result);
+
+    // console.log(response.result[0].dates);
+    // console.log(this.appointments);
+    // console.log(this.appointments[0]);
+    //   },
+    //   err => console.log(err)
+    // );
   }
   create() {
     this.router.navigate(["home/appointment/type/create"]);

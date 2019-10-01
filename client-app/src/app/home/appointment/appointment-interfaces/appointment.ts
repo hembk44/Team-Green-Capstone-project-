@@ -1,9 +1,9 @@
-import { AppointmentDate } from "./appointment-date";
+import { IAppointmentDate } from "./appointment-date";
 
-export interface Appointment {
+export interface IAppointment {
   id: number;
   name: string;
   description: string;
-  // email: string[];
-  dates: AppointmentDate[];
+  email?: string[];
+  dates: IAppointmentDate[];
 }

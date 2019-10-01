@@ -1,7 +1,7 @@
-<mat-card class="example-card">
+<!-- <mat-card class="example-card">
   <mat-card-header>
     <mat-card-title>{{ appointment.name }}</mat-card-title>
-    <!-- <mat-card-subtitle>{{appointment.name}}</mat-card-subtitle> -->
+    <mat-card-subtitle>{{appointment.name}}</mat-card-subtitle>
   </mat-card-header>
 
   <mat-card-content>
@@ -21,22 +21,22 @@
       Appointment Time Interval Duration:
       {{ appointment.dateRange[0].timeInterval[0].timeIntervalDuration }}
     </p>
-    <!-- loop for time slots -->
-    <!-- <div *ngFor="let date of appointment.dateRange">
+    loop for time slots
+    <div *ngFor="let date of appointment.dateRange">
       {{ date.appointmentDate.toDateString() }}
       <div *ngFor="let time of appointment.dateRange.timeInterval">
         {{ time.startTime }} - {{ time.endTime }}
       </div>
-    </div> -->
+    </div>
     <mat-accordion>
       <mat-expansion-panel>
         <mat-expansion-panel-header>
           <mat-panel-title>
             Manage
           </mat-panel-title>
-          <!-- <mat-panel-description>
+          <mat-panel-description>
             Edit or Delete appointment
-          </mat-panel-description> -->
+          </mat-panel-description>
         </mat-expansion-panel-header>
         <p>
           <a style="cursor: pointer;" (click)="onDeleteAppointment()">Delete</a>
@@ -47,4 +47,4 @@
       </mat-expansion-panel>
     </mat-accordion>
   </mat-card-content>
-</mat-card>
+</mat-card> -->

@@ -1,29 +1,55 @@
 import { Injectable } from "@angular/core";
-import { AppointmentService } from "../appointment/appointment-service/appointment.service";
+// import { AppointmentService } from "../appointment/appointment-service/appointment.service";
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
-import { map, tap, catchError } from "rxjs/operators";
+import { map, tap, catchError, finalize } from "rxjs/operators";
 
-import { Appointment } from "../appointment/appointment-interfaces/appointment";
-import { throwError, Observable } from "rxjs";
+import { throwError, Observable, BehaviorSubject } from "rxjs";
 import { ApiResponse } from "src/app/auth/api.response";
+import { Appointment } from "../appointment/appointment-model/appointment.model";
+import { IAppointment } from "../appointment/appointment-interfaces/appointment";
 
 @Injectable({
   providedIn: "root"
 })
 export class DataStorageService {
-  constructor(
-    private http: HttpClient,
-    private appointmentService: AppointmentService
-  ) {}
+  private storeSubject: BehaviorSubject<any> = new BehaviorSubject<any>({});
+  public storeObservable: Observable<any> = this.storeSubject.asObservable();
+  private isLoadingSubject: BehaviorSubject<boolean> = new BehaviorSubject<
+    boolean
+  >(false);
+  public isLoading: Observable<boolean> = this.isLoadingSubject.asObservable();
+  private appointmentSubject: BehaviorSubject<any> = new BehaviorSubject<any>(
+    {}
+  );
+  public apointmentList: Observable<
+    ApiResponse
+  > = this.appointmentSubject.asObservable();
 
+  constructor(private http: HttpClient) {}
+
+  get store(): ApiResponse {
+    return this.storeSubject.value;
+  }
+
+  get appointmentLists(): IAppointment[] {
+    return this.appointmentSubject.value;
+  }
   // baseUrl = "localhost:8181/api/appointment/";
 
-  // storeAppointment(appointment: Appointment) {
-  //   // const appointments = this.appointmentService.getAppointments();
-  //   this.http.post<Appointment>(" API URL", appointment).subscribe(response => {
-  //     console.log(response);
-  //   });
-  // }
+  storeAppointment(appointment: Appointment) {
+    // const appointments = this.appointmentService.getAppointments();
+    this.http
+      .post<Appointment>(
+        "http://localhost:8181/api/appointment/set",
+        appointment
+      )
+      .pipe((map(data => data), catchError(error => throwError(error))))
+      .subscribe((result: any) => {
+        if (result) {
+          return this.storeSubject.next(result);
+        }
+      });
+  }
 
   // storeAppointments() {
   //   const appointments = this.appointmentService.getAppointments();
@@ -32,12 +58,22 @@ export class DataStorageService {
   //   });
   // }
 
-  fetchAppointment(): Observable<ApiResponse> {
+  fetchAppointment() {
+    this.isLoadingSubject.next(true);
     return this.http
       .get<ApiResponse>(
         "http://localhost:8181/api/appointment/faculty/allAppointments"
       )
-      .pipe(catchError(this.handleError));
+      .pipe(
+        (map(data => data),
+        catchError(error => throwError(error)),
+        finalize(() => this.isLoadingSubject.next(false)))
+      )
+      .subscribe((result: ApiResponse) => {
+        if (result.status == 200) {
+          this.appointmentSubject.next(result.result);
+        }
+      });
     // .pipe(
     //   tap(appointments => {
     //     this.appointmentService.setAppointments(appointments);
