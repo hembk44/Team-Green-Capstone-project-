@@ -39,7 +39,7 @@ export class CalendarComponent implements OnInit {
   activeDayIsOpen: boolean = false;
 
   calEvents: CalEvent[];//list of events
-  compatibleEvents: CompatibleEvent[];
+  compatibleEvents: CompatibleEvent[] = [];
 
   ngOnInit() {
     this.setView(CalendarView.Month);
@@ -51,13 +51,14 @@ export class CalendarComponent implements OnInit {
     );
 
     for(let event of this.calEvents){
-      const tempStartDate = new Date(event.dateRange[0].date.substring(0,14).concat(event.dateRange[0].times[0].startTime));
-      const tempEndDate = new Date(event.dateRange[event.dateRange.length - 1].date.substring(0,14).concat(event.dateRange[event.dateRange.length - 1].times[event.dateRange[event.dateRange.length-1].times.length-1].endTime));
+      const tempStartDate = new Date(event.dateRange[0].date.toString().substring(0,15).concat(' ').concat(event.dateRange[0].times[0].startTime));
+      const tempEndDate = new Date(event.dateRange[event.dateRange.length - 1].date.toString().substring(0,14).concat(' ').concat(event.dateRange[event.dateRange.length - 1].times[event.dateRange[event.dateRange.length-1].times.length-1].endTime));
       const tempEvent: CompatibleEvent = new CompatibleEvent(
         event.title,
         tempStartDate,
         tempEndDate
       );
+      
       this.compatibleEvents.push(tempEvent);
     }
 
