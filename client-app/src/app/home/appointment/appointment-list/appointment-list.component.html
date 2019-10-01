@@ -3,8 +3,9 @@
 </button>
 
 <app-appointment-item
-  *ngFor="let appointment of appointments; let i = index"
+  *ngFor="let appointment of appointments"
   [appointment]="appointment"
-  [id]="i"
+  [id]="appointment.id"
+  [dates]="appointment.dates"
 >
 </app-appointment-item>

@@ -5,6 +5,7 @@ import { EventService } from "../events.service";
 import { Router } from "@angular/router";
 import { CalendarService } from "../calendar-list/calendar.service";
 import { Calendar } from "../calendar-list/calendar.model";
+import { DateRange } from '../../appointment/appointment-model/date-range.model';
 
 @Component({
   selector: "app-create-event",
@@ -48,31 +49,27 @@ export class CreateEventComponent implements OnInit {
 
   onSubmit() {
     // for appt, only have one option for date
-    const start = new Date(
-      this.eventForm.value["start-date"]
-        .toLocaleString()
-        .concat(" ", this.eventForm.value["start-time"])
-        .toLocaleString()
-    );
-    const end = new Date(
-      this.eventForm.value["end-date"]
-        .toLocaleString()
-        .concat(" ", this.eventForm.value["end-time"])
-        .toLocaleString()
-    );
+    // const start = new Date(
+    //   this.eventForm.value["start-date"]
+    //     .toLocaleString()
+    //     .concat(" ", this.eventForm.value["start-time"])
+    //     .toLocaleString()
+    // );
+    // const end = new Date(
+    //   this.eventForm.value["end-date"]
+    //     .toLocaleString()
+    //     .concat(" ", this.eventForm.value["end-time"])
+    //     .toLocaleString()
+    // );
 
-    const newEvent: CalEvent = new CalEvent(
-      this.eventForm.value["name"],
-      start,
-      end,
-      ["andrew"],
-      this.eventForm.value["description"],
-      this.eventForm.value["location"],
-      "event",
-      // this.calendars[0]
-    );
+    // const newEvent: CalEvent = {
+    //   title: this.eventForm.value['name'],
+    //   description: this.eventForm.value['description'],
+    //   location: this.eventForm.value['location'],
+    //   email: ['andrew.moore9497@gmail.com'],
+    // };
 
-    this.eventService.addEvent(newEvent);
+    // this.eventService.addEvent(newEvent);
     this.router.navigate(["home/calendar"]);
   }
 }

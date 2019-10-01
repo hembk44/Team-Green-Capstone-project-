@@ -14,7 +14,8 @@ import { Router } from "@angular/router";
 import { Appointment } from "../appointment-model/appointment.model";
 import { DateRange } from "../appointment-model/date-range.model";
 import { TimeInterval } from "../appointment-model/time-interval.model";
-import { AppointmentService } from "../appointment-service/appointment.service";
+// import { AppointmentService } from "../appointment-service/appointment.service";
+import { DataStorageService } from "../../shared/data-storage.service";
 
 // export interface DialogData {
 //   animal: string;
@@ -44,7 +45,7 @@ export class AppointmentCreateComponent implements OnInit {
     private formBuilder: FormBuilder,
     private router: Router,
     public dialog: MatDialog,
-    private appointmentService: AppointmentService
+    private dataStorage: DataStorageService
   ) {}
 
   ngOnInit() {
@@ -88,8 +89,10 @@ export class AppointmentCreateComponent implements OnInit {
       [appointmentFormValues.email],
       this.dateRangeArray
     );
-    console.log(this.appointmentData);
-    this.appointmentService.addAppointment(this.appointmentData);
+    console.log(this.dataStorage.storeAppointment(this.appointmentData));
+    this.dataStorage.fetchAppointment();
+
+    // this.appointmentService.addAppointment(this.appointmentData);
     // console.log(this.appointmentService.getAppointments);
     // console.log(this.appointmentData);
   }
