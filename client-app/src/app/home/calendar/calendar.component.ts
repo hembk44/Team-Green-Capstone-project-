@@ -20,6 +20,8 @@ import { Subject, Subscription } from "rxjs";
 import { CalEvent } from "./events.model";
 import { EventService } from "./events.service";
 import { Router } from "@angular/router";
+import { CompatibleEvent } from './compatible-events.model';
+import { Time } from '@angular/common';
 
 @Component({
   selector: "app-calendar",
@@ -36,16 +38,29 @@ export class CalendarComponent implements OnInit {
   CalendarView = CalendarView;
   activeDayIsOpen: boolean = false;
 
-  events: CalEvent[];//list of events
+  calEvents: CalEvent[];//list of events
+  compatibleEvents: CompatibleEvent[];
 
   ngOnInit() {
     this.setView(CalendarView.Month);
-    this.events = this.eventService.getEvents();
+    this.calEvents = this.eventService.getEvents();
     this.subscription = this.eventService.eventsChanged.subscribe(
       (events: CalEvent[]) => {
-        this.events = events;
+        this.calEvents = events;
       }
     );
+
+    for(let event of this.calEvents){
+      const tempStartDate = new Date(event.dateRange[0].date.substring(0,14).concat(event.dateRange[0].times[0].startTime));
+      const tempEndDate = new Date(event.dateRange[event.dateRange.length - 1].date.substring(0,14).concat(event.dateRange[event.dateRange.length - 1].times[event.dateRange[event.dateRange.length-1].times.length-1].endTime));
+      const tempEvent: CompatibleEvent = new CompatibleEvent(
+        event.title,
+        tempStartDate,
+        tempEndDate
+      );
+      this.compatibleEvents.push(tempEvent);
+    }
+
   }
 
   //changes view of calendar to day, week, month

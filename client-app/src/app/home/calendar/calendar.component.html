@@ -69,20 +69,20 @@
         <mwl-calendar-month-view
           *ngSwitchCase="'month'"
           [viewDate]="viewDate"
-          [events]="events"
+          [events]="compatibleEvents"
           (dayClicked)="dayClicked($event.day)"
         >
         </mwl-calendar-month-view>
         <mwl-calendar-week-view
           *ngSwitchCase="'week'"
           [viewDate]="viewDate"
-          [events]="events"
+          [events]="compatibleEvents"
           (eventClicked)="eventClicked($event.event)"
         >
         </mwl-calendar-week-view>
         <mwl-calendar-day-view
           [viewDate]="viewDate"
-          [events]="events"
+          [events]="compatibleEvents"
           *ngSwitchCase="'day'"
           (eventClicked)="eventClicked($event.event)"
         >
