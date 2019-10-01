@@ -24,9 +24,14 @@ export class DataStorageService {
   private appointmentSubject: BehaviorSubject<any> = new BehaviorSubject<any>(
     {}
   );
+  
+  private eventSubject: BehaviorSubject<any>=new BehaviorSubject<any>({});
+
   public apointmentList: Observable<
     ApiResponse
   > = this.appointmentSubject.asObservable();
+
+  public eventList: Observable<ApiResponse> = this.eventSubject.asObservable();
 
   constructor(private http: HttpClient, private eventService: EventService) {}
 
@@ -74,7 +79,7 @@ export class DataStorageService {
       )
       .subscribe((result: ApiResponse) => {
         if (result.status == 200) {
-          this.appointmentSubject.next(result.result);
+          this.eventSubject.next(result.result);
         }
       });
     // .pipe(
@@ -108,17 +113,34 @@ export class DataStorageService {
   // }
 
   fetchEvents(){
-    return this.http.get<CalEvent[]>("event url").pipe(
-      tap(events => {
-        this.eventService.setEvents(events);
-      })
-    );
+    this.isLoadingSubject.next(true);
+    return this.http
+      .get<ApiResponse>(
+        "event url"
+      )
+      .pipe(
+        (map(data => data),
+        catchError(error => throwError(error)),
+        finalize(() => this.isLoadingSubject.next(false)))
+      )
+      .subscribe((result: ApiResponse) => {
+        if (result.status == 200) {
+          this.appointmentSubject.next(result.result);
+        }
+      });
   }
 
-  storeEvents(){
-    const events = this.eventService.getEvents();
-    this.http.put("event url", events).subscribe(response => {
-      console.log(response);
-    });
+  storeEvent(event: CalEvent){
+    this.http
+      .post<CalEvent>(
+        "event url",
+        event
+      )
+      .pipe((map(data => data), catchError(error => throwError(error))))
+      .subscribe((result: any) => {
+        if (result) {
+          return this.storeSubject.next(result);
+        }
+      });
   }
 }
