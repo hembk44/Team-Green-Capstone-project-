@@ -28,13 +28,16 @@ export class AppointmentListComponent implements OnInit {
     //     this.appointments = newAppointments;
     //   }
     // );
-
-    this.dataStorage.fetchAppointment();
-    this.dataStorage.isLoading.subscribe(result => {
-      if (!result) {
-        this.appointments = this.dataStorage.appointmentLists;
-      }
-    });
+    console.log(this.dataStorage.fetchAppointment());
+    if (this.dataStorage.fetchAppointment() !== null) {
+      this.dataStorage.fetchAppointment();
+      this.dataStorage.isLoading.subscribe(result => {
+        if (!result) {
+          this.appointments = this.dataStorage.appointmentLists;
+        }
+      });
+    }
+    console.log("nodata");
 
     // this.dataStorage.fetchAppointment().subscribe(
     //   response => {
