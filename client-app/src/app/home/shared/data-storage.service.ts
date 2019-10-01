@@ -37,7 +37,6 @@ export class DataStorageService {
   // baseUrl = "localhost:8181/api/appointment/";
 
   storeAppointment(appointment: Appointment) {
-    // const appointments = this.appointmentService.getAppointments();
     this.isLoadingSubject.next(true);
     this.http
       .post<Appointment>(
@@ -55,13 +54,6 @@ export class DataStorageService {
       });
   }
 
-  // storeAppointments() {
-  //   const appointments = this.appointmentService.getAppointments();
-  //   this.http.put("API URL", appointments).subscribe(response => {
-  //     console.log(response);
-  //   });
-  // }
-
   fetchAppointment() {
     this.isLoadingSubject.next(true);
     return this.http
@@ -78,11 +70,6 @@ export class DataStorageService {
           this.appointmentSubject.next(result.result);
         }
       });
-    // .pipe(
-    //   tap(appointments => {
-    //     this.appointmentService.setAppointments(appointments);
-    //   })
-    // );
   }
 
   private handleError(errorRes: HttpErrorResponse) {
