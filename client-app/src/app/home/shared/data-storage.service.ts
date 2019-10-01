@@ -34,7 +34,7 @@ export class DataStorageService {
 
   public eventList: Observable<ApiResponse> = this.eventSubject.asObservable();
 
-  constructor(private http: HttpClient, private eventService: EventService) {}
+  constructor(private http: HttpClient) {}
 
   get store(): ApiResponse {
     return this.storeSubject.value;
@@ -128,7 +128,7 @@ export class DataStorageService {
 
   storeEvent(event: CalEvent){
     this.http
-      .post<CalEvent>(
+      .post<any>(
         "http://localhost:8181/api/event/set",
         event
       )

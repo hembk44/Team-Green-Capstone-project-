@@ -12,6 +12,7 @@ export class EventService{
     eventsChanged: Subject<CalEvent[]> = new Subject<CalEvent[]>();
     constructor(
         private calendarService: CalendarService,
+        private dataService: DataStorageService
     ){}
     calendars = this.calendarService.getCalendars();
     tempTimes: TimeInterval = {
@@ -24,16 +25,16 @@ export class EventService{
         times: [this.tempTimes]
     }
     
-    events: CalEvent[] = [
-    // list for testing
-        {
-            title: "test event",
-            description: "this is a test",
-            location: "test location",
-            email: [],
-            dateRange: [this.tempDate]
-        }
-    ];
+    events: CalEvent[] = this.dataService.eventsList;
+        // list for testing
+        // {
+        //     title: "test event",
+        //     description: "this is a test",
+        //     location: "test location",
+        //     email: [],
+        //     dateRange: [this.tempDate]
+        // }
+    
 
     tempEvents: CalEvent[] = this.events;
 
@@ -46,7 +47,7 @@ export class EventService{
         //         ev.push(event);
         //     }
         // }
-        return this.events.slice();
+        return this.events;
     }
 
     //add events to list

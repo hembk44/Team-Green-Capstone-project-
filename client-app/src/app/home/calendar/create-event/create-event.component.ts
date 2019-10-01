@@ -38,7 +38,6 @@ export class CreateEventComponent implements OnInit {
       location: [""]
     });
     this.calendars = this.calendarService.getCalendars();
-    this.dataStorage.storeEvent(this.eventService.getEvents()[0]);
   }
 
   // initForm() {
@@ -94,7 +93,7 @@ export class CreateEventComponent implements OnInit {
       }
     });
 
-    this.eventService.addEvent(this.eventData);
+    //this.eventService.addEvent(this.eventData);
     this.dataStorage.storeEvent(this.eventData);
 
     this.router.navigate(["home/calendar"]);
