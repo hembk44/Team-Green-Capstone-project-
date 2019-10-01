@@ -38,15 +38,19 @@ export class DataStorageService {
 
   storeAppointment(appointment: Appointment) {
     // const appointments = this.appointmentService.getAppointments();
+    this.isLoadingSubject.next(true);
     this.http
       .post<Appointment>(
         "http://localhost:8181/api/appointment/set",
         appointment
       )
-      .pipe((map(data => data), catchError(error => throwError(error))))
+      .pipe(
+        (map(data => data), catchError(error => throwError(error))),
+        finalize(() => this.isLoadingSubject.next(false))
+      )
       .subscribe((result: any) => {
         if (result) {
-          return this.storeSubject.next(result);
+          this.storeSubject.next(result);
         }
       });
   }
