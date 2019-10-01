@@ -25,12 +25,12 @@ export class AppointmentDetailComponent implements OnInit {
   ngOnInit() {
     this.route.params.subscribe((params: Params) => {
       this.id = +params["id"];
-      this.appointment = this.appointmentService.getAppointment(this.id);
+      // this.appointment = this.appointmentService.getAppointment(this.id);
     });
   }
 
   onDeleteAppointment() {
-    this.appointmentService.deleteAppointment(this.id);
+    // this.appointmentService.deleteAppointment(this.id);
     this.router.navigate(["./appointment/type"]);
   }
   onUpdateAppointment() {

@@ -89,7 +89,7 @@ export class AppointmentCreateComponent implements OnInit {
       this.dateRangeArray
     );
     console.log(this.appointmentData);
-    this.appointmentService.addAppointment(this.appointmentData);
+    // this.appointmentService.addAppointment(this.appointmentData);
     // console.log(this.appointmentService.getAppointments);
     // console.log(this.appointmentData);
   }
