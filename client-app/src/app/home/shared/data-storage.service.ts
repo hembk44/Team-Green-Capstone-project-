@@ -10,6 +10,7 @@ import { TimeInterval } from '../appointment/appointment-model/time-interval.mod
 import { CalEvent } from '../calendar/events.model';
 import { EventService } from '../calendar/events.service';
 import { IAppointment } from '../appointment/appointment-interfaces/appointment';
+import { ICalEvent } from '../calendar/event-interface/event';
 
 @Injectable({
   providedIn: "root"
@@ -41,6 +42,10 @@ export class DataStorageService {
 
   get appointmentLists(): IAppointment[] {
     return this.appointmentSubject.value;
+  }
+
+  get eventsList(): ICalEvent[]{
+    return this.eventSubject.value;
   }
   // baseUrl = "localhost:8181/api/appointment/";
 
@@ -120,7 +125,7 @@ export class DataStorageService {
     this.isLoadingSubject.next(true);
     return this.http
       .get<ApiResponse>(
-        "http://localhost:8181/api/appointment/faculty/allAppointments"
+        "event url"
       )
       .pipe(
         (map(data => data),

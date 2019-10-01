@@ -48,7 +48,7 @@ export class CalendarComponent implements OnInit {
     this.dataStorage.isLoading.subscribe(loading => {
       if(!loading){
         this.dataStorage.fetchEvents();
-        this.calEvents = this.dataStorage.eventList;
+        this.calEvents = this.dataStorage.eventsList;
       }
     })
 
