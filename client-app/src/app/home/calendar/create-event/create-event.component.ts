@@ -9,6 +9,7 @@ import { DateRange } from '../../appointment/appointment-model/date-range.model'
 import { MatDialog } from '@angular/material';
 import { DataStorageService } from '../../shared/data-storage.service';
 import { DialogDateTimeIntervalDialog } from '../../appointment/appointment-create/appointment-create.component';
+import { ICalEvent } from '../event-interface/event';
 
 @Component({
   selector: "app-create-event",
@@ -37,6 +38,7 @@ export class CreateEventComponent implements OnInit {
       location: [""]
     });
     this.calendars = this.calendarService.getCalendars();
+    this.dataStorage.storeEvent(this.eventService.getEvents()[0]);
   }
 
   // initForm() {
@@ -82,10 +84,19 @@ export class CreateEventComponent implements OnInit {
       eventFormValues.title,
       eventFormValues.description,
       eventFormValues.location,
-      [],
+      ['andrew.moore9497@gmail.com'],
       this.dateRangeArray
-    )
+    );
     this.dataStorage.storeEvent(this.eventData);
+    this.dataStorage.isLoading.subscribe(loading => {
+      if (!loading) {
+        this.dataStorage.fetchEvents();
+      }
+    });
+
+    this.eventService.addEvent(this.eventData);
+    this.dataStorage.storeEvent(this.eventData);
+
     this.router.navigate(["home/calendar"]);
   }
 }

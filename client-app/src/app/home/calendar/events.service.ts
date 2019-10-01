@@ -4,6 +4,8 @@ import { Calendar } from './calendar-list/calendar.model';
 import { CalendarService } from './calendar-list/calendar.service';
 import { Subject } from 'rxjs';
 import { DataStorageService } from '../shared/data-storage.service';
+import { DateRange } from '../appointment/appointment-model/date-range.model';
+import { TimeInterval } from '../appointment/appointment-model/time-interval.model';
 
 @Injectable()
 export class EventService{
@@ -12,43 +14,26 @@ export class EventService{
         private calendarService: CalendarService,
     ){}
     calendars = this.calendarService.getCalendars();
-
+    tempTimes: TimeInterval = {
+        startTime: "1300",
+        endTime: "1400",
+        interv: 60
+    }
+    tempDate: DateRange = {
+        date: "Tue Oct 01 2019 16:16:23 GMT-0500 (Central Daylight Time)",
+        times: [this.tempTimes]
+    }
     
-    events: CalEvent[] = [];
+    events: CalEvent[] = [
     // list for testing
-    //
-    // [
-    //     {
-    //         title: 'Test Event',
-    //         start: new Date(2019,8,23,12),
-    //         end: new Date(2019,8,23,15,20),
-    //         createdBy: 'test',
-    //         users: ['moorea1'],
-    //         description: 'test event',
-    //         location: 'test location',
-    //         calendar: this.calendars[0]
-    //     },
-    //     {
-    //         title: 'Test Event 2',
-    //         start: new Date(2019,8,23,12),
-    //         end: new Date(2019,8,26,15,20),
-    //         createdBy: 'test',
-    //         users: ['moorea1'],
-    //         description: 'test event',
-    //         location: 'test location',
-    //         calendar: this.calendars[1]
-    //     },
-    //     {
-    //         title: 'Test Event 3',
-    //         start: new Date(2019,8,23,12),
-    //         end: new Date(2019,8,23,15,20),
-    //         createdBy: 'test',
-    //         users: ['moorea1'],
-    //         description: 'test event',
-    //         location: 'test location',
-    //         calendar: this.calendars[2]
-    //     }
-    // ];
+        {
+            title: "test event",
+            description: "this is a test",
+            location: "test location",
+            email: [],
+            dateRange: [this.tempDate]
+        }
+    ];
 
     tempEvents: CalEvent[] = this.events;
 

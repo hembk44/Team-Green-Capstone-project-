@@ -94,7 +94,7 @@
   <div class="col-3 side-view bg-white" *ngIf="view === CalendarView.Month">
     <h4 class="sticky-top bg-white mt-4">{{ viewDate.toDateString() }}</h4>
     <hr />
-    <div *ngFor="let event of events">
+    <div *ngFor="let event of compatibleEvents">
       <div
         class="event-wrapper"
         *ngIf="

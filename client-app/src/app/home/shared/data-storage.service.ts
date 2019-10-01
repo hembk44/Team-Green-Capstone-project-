@@ -44,7 +44,7 @@ export class DataStorageService {
     return this.appointmentSubject.value;
   }
 
-  get eventsList(): ICalEvent[]{
+  get eventsList(): CalEvent[]{
     return this.eventSubject.value;
   }
   // baseUrl = "localhost:8181/api/appointment/";
@@ -125,7 +125,7 @@ export class DataStorageService {
     this.isLoadingSubject.next(true);
     return this.http
       .get<ApiResponse>(
-        "event url"
+        "http://localhost:8181/api/event/faculty/allEvents"
       )
       .pipe(
         (map(data => data),
@@ -142,7 +142,7 @@ export class DataStorageService {
   storeEvent(event: CalEvent){
     this.http
       .post<CalEvent>(
-        "event url",
+        "http://localhost:8181/api/event/set",
         event
       )
       .pipe((map(data => data), catchError(error => throwError(error))))
