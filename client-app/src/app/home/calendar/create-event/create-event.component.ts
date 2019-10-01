@@ -1,11 +1,14 @@
 import { Component, OnInit } from "@angular/core";
-import { FormGroup, FormControl, FormArray } from "@angular/forms";
+import { FormGroup, FormControl, FormArray, FormBuilder, Validators } from "@angular/forms";
 import { CalEvent } from "../events.model";
 import { EventService } from "../events.service";
 import { Router } from "@angular/router";
 import { CalendarService } from "../calendar-list/calendar.service";
 import { Calendar } from "../calendar-list/calendar.model";
 import { DateRange } from '../../appointment/appointment-model/date-range.model';
+import { MatDialog } from '@angular/material';
+import { DataStorageService } from '../../shared/data-storage.service';
+import { DialogDateTimeIntervalDialog } from '../../appointment/appointment-create/appointment-create.component';
 
 @Component({
   selector: "app-create-event",
@@ -15,61 +18,74 @@ import { DateRange } from '../../appointment/appointment-model/date-range.model'
 export class CreateEventComponent implements OnInit {
   eventForm: FormGroup;
   calendars: Calendar[];
+  dateRangeArray: DateRange[] = [];
+  eventData: CalEvent;
 
   constructor(
     private eventService: EventService,
     private router: Router,
-    private calendarService: CalendarService
+    private calendarService: CalendarService,
+    private formBuilder: FormBuilder,
+    public dialog: MatDialog,
+    private dataStorage: DataStorageService
   ) {}
 
   ngOnInit() {
-    this.initForm();
+    this.eventForm = this.formBuilder.group({
+      title: ["", Validators.required],
+      description: ["", Validators.required],
+      location: [""]
+    });
     this.calendars = this.calendarService.getCalendars();
   }
 
-  initForm() {
-    let eventName = "";
-    let startDate = "";
-    let startTime = "";
-    let endDate = "";
-    let endTime = "";
-    let description = "";
-    let location = "";
+  // initForm() {
+  //   let eventName = "";
+  //   let startDate = "";
+  //   let startTime = "";
+  //   let endDate = "";
+  //   let endTime = "";
+  //   let description = "";
+  //   let location = "";
 
-    this.eventForm = new FormGroup({
-      name: new FormControl(eventName),
-      "start-date": new FormControl(startDate),
-      "start-time": new FormControl(startTime),
-      "end-date": new FormControl(endDate),
-      "end-time": new FormControl(endTime),
-      description: new FormControl(description),
-      location: new FormControl(location)
+  //   this.eventForm = new FormGroup({
+  //     name: new FormControl(eventName),
+  //     "start-date": new FormControl(startDate),
+  //     "start-time": new FormControl(startTime),
+  //     "end-date": new FormControl(endDate),
+  //     "end-time": new FormControl(endTime),
+  //     description: new FormControl(description),
+  //     location: new FormControl(location)
+  //   });
+  // }
+
+  openDateRangeDialog(): void {
+    const dialogRef = this.dialog.open(DialogDateTimeIntervalDialog, {
+      width: "300px"
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(result);
+      this.dateRangeArray = result;
+      // this.appointmentDate = result.date;
+      // console.log(this.appointmentDate);
+      // this.startTime = result.startTime;
+      // this.endTime = result.endTime;
+      // this.timeInterval = result.timeInterval;
     });
   }
 
   onSubmit() {
-    // for appt, only have one option for date
-    // const start = new Date(
-    //   this.eventForm.value["start-date"]
-    //     .toLocaleString()
-    //     .concat(" ", this.eventForm.value["start-time"])
-    //     .toLocaleString()
-    // );
-    // const end = new Date(
-    //   this.eventForm.value["end-date"]
-    //     .toLocaleString()
-    //     .concat(" ", this.eventForm.value["end-time"])
-    //     .toLocaleString()
-    // );
+    const eventFormValues = this.eventForm.value;
 
-    // const newEvent: CalEvent = {
-    //   title: this.eventForm.value['name'],
-    //   description: this.eventForm.value['description'],
-    //   location: this.eventForm.value['location'],
-    //   email: ['andrew.moore9497@gmail.com'],
-    // };
-
-    // this.eventService.addEvent(newEvent);
+    this.eventData = new CalEvent(
+      eventFormValues.title,
+      eventFormValues.description,
+      eventFormValues.location,
+      [],
+      this.dateRangeArray
+    )
+    this.eventService.addEvent(this.eventData);
     this.router.navigate(["home/calendar"]);
   }
 }

@@ -89,15 +89,6 @@
         </mwl-calendar-day-view>
       </div>
     </div>
-
-    <!-- Button for event creation form -->
-    <div class="row">
-      <h3 class="mt-3 ml-3">
-        <button class="btn btn-secondary pull-right" (click)="createEvent()">
-          Create Event
-        </button>
-      </h3>
-    </div>
   </div>
 
   <div class="col-3 side-view bg-white" *ngIf="view === CalendarView.Month">
@@ -124,6 +115,14 @@
           {{ event.end.toLocaleTimeString() }}
         </p>
       </div>
+    </div>
+    <!-- Button for event creation form -->
+    <div class="row">
+      <h3 class="mt-3 ml-3">
+        <button class="btn btn-secondary pull-right" (click)="createEvent()">
+          Create Event
+        </button>
+      </h3>
     </div>
   </div>
 

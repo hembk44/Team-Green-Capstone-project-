@@ -1,53 +1,60 @@
+<form
+  class="example-container"
+  [formGroup]="eventForm"
+  (ngSubmit)="onSubmit()"
+>
+  <mat-form-field>
+    <input matInput placeholder="Event Title" formControlName="title" />
+  </mat-form-field>
 
-<div class="container rounded bg-white mt-3 p-2">
-    <h2 class="mt-3">Event Creation</h2>
-    <hr>
-    <form class="col-xs-12 ml-3 form-group" [formGroup]="eventForm" (ngSubmit)="onSubmit()">
-        <div class="row input-group">
-            <div class="col-xs-12">
-            <label for="name">Event Name: </label>
-            <input id="name" formControlName="name" type="text" class="rounded" style="margin-left:5px;"> 
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-xs-12">
-                <label for="start-date">Start: </label>
-                <input id="start-date" formControlName="start-date" class="rounded" type="date" style="margin-left:5px;"> 
-                <label for="start-time"></label>
-                <input id="start-time" formControlName="start-time" class="rounded" type="time" step="600">
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-xs-12">
-                <label for="end-date">End: </label>
-                <input id="end-date" formControlName="end-date" class="rounded" type="date" style="margin-left:5px;"> 
-                <label for="end-time"></label>
-                <input id="end-time" formControlName="end-time" class="rounded" type="time" step="600">
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-xs-12">
-                <label for="location">Location</label>
-                <input type="text"  id="location" formControlName="location" class="rounded">
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-xs-12">
-                <label for="description" class="align-self-center">Event Description: </label>
-                <textarea formControlName="description" cols="80" rows="5" class="rounded" style="margin-left:5px;"></textarea>
-            </div>
-        </div>
-        <!-- <div class="row">
-            <div class="col-xs-12">
-                <label for="image">Image: </label>
-                <input name="image" type="file" style="margin-left:5px;">
-            </div>
-        </div> -->
-        <div class="row">
-            <div class="col-xs-12 mt-4">
-                <button class="btn btn-secondary" (click)="onSubmit()" type="button" style="cursor:pointer">Add Event</button>
-            </div>
-        </div>
-    </form>
+  <mat-form-field>
+    <textarea
+      matInput
+      placeholder="Event Description"
+      formControlName="description"
+    ></textarea>
+  </mat-form-field>
 
-</div>
+  <mat-form-field>
+    <input
+      matInput
+      placeholder="Event Location"
+      formControlName="location"
+    />
+  </mat-form-field>
+
+  <mat-toolbar>
+    <mat-toolbar-row>
+      <!-- <p>Please click on the side to select date and time interval</p> -->
+      <span class="example-spacer"></span>
+      <button
+        type="button"
+        class="primary"
+        mat-raised-button
+        (click)="openDateRangeDialog()"
+      >
+        Add date and time
+      </button>
+    </mat-toolbar-row>
+    <!-- <mat-toolbar-row>
+      <button
+        type="button"
+        class="primary"
+        mat-raised-button
+        (click)="openDialog()"
+      >
+        Add date
+      </button>
+    </mat-toolbar-row> -->
+  </mat-toolbar>
+  <mat-divider></mat-divider>
+
+  <mat-toolbar>
+    <mat-toolbar-row>
+      <span class="example-spacer"></span>
+      <button type="submit" mat-raised-button class="primary">
+        Create Event
+      </button>
+    </mat-toolbar-row>
+  </mat-toolbar>
+</form>

@@ -6,25 +6,15 @@ import { map, tap, catchError, finalize } from "rxjs/operators";
 import { throwError, Observable, BehaviorSubject } from "rxjs";
 import { ApiResponse } from "src/app/auth/api.response";
 import { Appointment } from "../appointment/appointment-model/appointment.model";
-<<<<<<< HEAD
 import { TimeInterval } from '../appointment/appointment-model/time-interval.model';
 import { CalEvent } from '../calendar/events.model';
 import { EventService } from '../calendar/events.service';
-=======
-import { IAppointment } from "../appointment/appointment-interfaces/appointment";
->>>>>>> b8fc6e0b647c64be7db5f0fda3f2aeb659bed5e1
+import { IAppointment } from '../appointment/appointment-interfaces/appointment';
 
 @Injectable({
   providedIn: "root"
 })
 export class DataStorageService {
-<<<<<<< HEAD
-  constructor(
-    private http: HttpClient,
-    private appointmentService: AppointmentService,
-    private eventService: EventService
-  ) {}
-=======
   private storeSubject: BehaviorSubject<any> = new BehaviorSubject<any>({});
   public storeObservable: Observable<any> = this.storeSubject.asObservable();
   private isLoadingSubject: BehaviorSubject<boolean> = new BehaviorSubject<
@@ -38,7 +28,7 @@ export class DataStorageService {
     ApiResponse
   > = this.appointmentSubject.asObservable();
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private eventService: EventService) {}
 
   get store(): ApiResponse {
     return this.storeSubject.value;
@@ -48,7 +38,6 @@ export class DataStorageService {
     return this.appointmentSubject.value;
   }
   // baseUrl = "localhost:8181/api/appointment/";
->>>>>>> b8fc6e0b647c64be7db5f0fda3f2aeb659bed5e1
 
   storeAppointment(appointment: Appointment) {
     // const appointments = this.appointmentService.getAppointments();
