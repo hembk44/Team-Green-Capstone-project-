@@ -24,7 +24,7 @@ export class DataStorageService {
   private appointmentSubject: BehaviorSubject<any> = new BehaviorSubject<any>(
     {}
   );
-  
+
   private eventSubject: BehaviorSubject<any>=new BehaviorSubject<any>({});
 
   public apointmentList: Observable<
@@ -116,7 +116,7 @@ export class DataStorageService {
     this.isLoadingSubject.next(true);
     return this.http
       .get<ApiResponse>(
-        "event url"
+        "http://localhost:8181/api/appointment/faculty/allAppointments"
       )
       .pipe(
         (map(data => data),

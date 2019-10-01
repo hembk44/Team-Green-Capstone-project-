@@ -85,7 +85,7 @@ export class CreateEventComponent implements OnInit {
       [],
       this.dateRangeArray
     )
-    this.eventService.addEvent(this.eventData);
+    this.dataStorage.storeEvent(this.eventData);
     this.router.navigate(["home/calendar"]);
   }
 }
