@@ -36,7 +36,8 @@ export class DataStorageService {
   }
 
   get eventsList(): CalEvent[]{
-      return this.eventSubject.value;
+    console.log(this.eventSubject.value);
+    return this.eventSubject.value;
   }
   // baseUrl = "localhost:8181/api/appointment/";
 

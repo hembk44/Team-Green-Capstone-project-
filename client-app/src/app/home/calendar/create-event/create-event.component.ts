@@ -58,17 +58,34 @@ export class CreateEventComponent implements OnInit {
 
   onSubmit() {
     const eventFormValues = this.eventForm.value;
-    const obj = {
+    // const obj = {
+    //   name: eventFormValues.title,
+    //   description: eventFormValues.description,
+    //   dates: this.dateRangeArray,
+    //   location: eventFormValues.location
+    // };
+    const obj = JSON.stringify({
       name: eventFormValues.title,
       description: eventFormValues.description,
-      dates: this.dateRangeArray,
+      eventdates: [
+          {
+              date: this.dateRangeArray[0].date,
+              eventtimes: [
+                  {
+                      startTime: this.dateRangeArray[0].times[0].startTime,
+                      endTime: this.dateRangeArray[0].times[0].endTime
+                  }
+              ]
+          }
+      ],
       location: eventFormValues.location
-    };
+    })
     
     this.dataStorage.storeEvent(obj).subscribe(result => {
-      if(result) {
-        this.dataStorage.fetchEvents();
-      }
+      // if(result) {
+      //   this.dataStorage.fetchEvents();
+      // }
+      console.log(result);
     });
 
     this.router.navigate(["home"]);

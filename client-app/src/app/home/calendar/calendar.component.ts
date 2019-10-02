@@ -27,16 +27,20 @@ export class CalendarComponent implements OnInit {
   activeDayIsOpen: boolean = false;
 
   calEvents: CalEvent[];//list of events
-  compatibleEvents: CompatibleEvent[] = [];
 
   ngOnInit() {
     //this.calEvents=this.eventService.getEvents();
-    console.log(this.dataStorage.fetchEvents());
-    this.dataStorage.isLoading.subscribe(loading=>{
-      if(!loading){
-        this.calEvents = this.dataStorage.eventsList;
-      }
-    })
+    if(this.dataStorage.eventsList != undefined){
+      this.dataStorage.isLoading.subscribe(loading=>{
+        if(!loading){
+            this.calEvents = this.dataStorage.eventsList;
+        }
+      })
+    }
+
+    else{
+      this.calEvents = [];
+    }
 
   }
 
