@@ -47,7 +47,9 @@ export class EventService{
         //         ev.push(event);
         //     }
         // }
-        return this.events;
+        if(this.events){
+            return this.events;
+        }
     }
 
     //add events to list
