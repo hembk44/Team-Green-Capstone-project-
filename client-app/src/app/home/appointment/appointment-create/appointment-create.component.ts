@@ -16,6 +16,7 @@ import { DateRange } from "../appointment-model/date-range.model";
 import { TimeInterval } from "../appointment-model/time-interval.model";
 // import { AppointmentService } from "../appointment-service/appointment.service";
 import { DataStorageService } from "../../shared/data-storage.service";
+import { ApiResponse } from "src/app/auth/api.response";
 
 // export interface DialogData {
 //   animal: string;
@@ -89,12 +90,13 @@ export class AppointmentCreateComponent implements OnInit {
       [appointmentFormValues.email],
       this.dateRangeArray
     );
-    this.dataStorage.storeAppointment(this.appointmentData);
-    this.dataStorage.isLoading.subscribe(loading => {
-      if (!loading) {
-        this.dataStorage.fetchAppointment();
-      }
-    });
+    this.dataStorage
+      .storeAppointment(this.appointmentData)
+      .subscribe(result => {
+        if (result) {
+          this.dataStorage.fetchAppointment();
+        }
+      });
 
     // this.appointmentService.addAppointment(this.appointmentData);
     // console.log(this.appointmentService.getAppointments);

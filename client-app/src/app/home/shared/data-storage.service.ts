@@ -12,8 +12,6 @@ import { IAppointment } from "../appointment/appointment-interfaces/appointment"
   providedIn: "root"
 })
 export class DataStorageService {
-  private storeSubject: BehaviorSubject<any> = new BehaviorSubject<any>({});
-  public storeObservable: Observable<any> = this.storeSubject.asObservable();
   private isLoadingSubject: BehaviorSubject<boolean> = new BehaviorSubject<
     boolean
   >(false);
@@ -22,14 +20,10 @@ export class DataStorageService {
     {}
   );
   public apointmentList: Observable<
-    ApiResponse
+    IAppointment[]
   > = this.appointmentSubject.asObservable();
 
   constructor(private http: HttpClient) {}
-
-  get store(): ApiResponse {
-    return this.storeSubject.value;
-  }
 
   get appointmentLists(): IAppointment[] {
     return this.appointmentSubject.value;
@@ -38,7 +32,7 @@ export class DataStorageService {
 
   storeAppointment(appointment: Appointment) {
     this.isLoadingSubject.next(true);
-    this.http
+    return this.http
       .post<Appointment>(
         "http://localhost:8181/api/appointment/set",
         appointment
@@ -46,17 +40,12 @@ export class DataStorageService {
       .pipe(
         (map(data => data), catchError(error => throwError(error))),
         finalize(() => this.isLoadingSubject.next(false))
-      )
-      .subscribe((result: any) => {
-        if (result) {
-          this.storeSubject.next(result);
-        }
-      });
+      );
   }
 
   fetchAppointment() {
     this.isLoadingSubject.next(true);
-    return this.http
+    this.http
       .get<ApiResponse>(
         "http://localhost:8181/api/appointment/faculty/allAppointments"
       )
@@ -66,7 +55,7 @@ export class DataStorageService {
         finalize(() => this.isLoadingSubject.next(false)))
       )
       .subscribe((result: ApiResponse) => {
-        if (result.status == 200) {
+        if (result.status == 200 && result.result) {
           this.appointmentSubject.next(result.result);
         }
       });
