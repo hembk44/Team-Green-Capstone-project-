@@ -54,29 +54,7 @@ export class LoginComponent implements OnInit {
 
     // this.loginInfo = new AuthLoginInfo(this.form.username, this.form.password);
     this.isLoading = true;
-    this.authService.attemptAuth(loginPayload).subscribe(
-      data => {
-        this.tokenStorage.saveToken(data.result.accessToken);
-        // this.tokenStorage.saveUsername(data.username);
-        // this.tokenStorage.saveAuthorities(data.authorities);
-        // console.log(data);
-        console.log(data);
-        console.log(data.result.accessToken);
-        this.isLoginFailed = false;
-        this.isLoggedIn = true;
-        this.isLoading = false;
-        this.router.navigate(["home"]);
-
-        // this.roles = this.tokenStorage.getAuthorities();
-        // this.reloadPage();
-      },
-      errorMessage => {
-        console.log(errorMessage);
-        this.errorMessage = errorMessage;
-        this.isLoginFailed = true;
-        this.isLoading = false;
-      }
-    );
+    this.authService.attemptAuth(loginPayload);
     // this.router.navigate(["home"]);
   }
 
