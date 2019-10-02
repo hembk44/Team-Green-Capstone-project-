@@ -1,15 +1,15 @@
-<!-- <mat-card class="example-card">
-  <mat-card-header>
-    <mat-card-title>{{ appointment.name }}</mat-card-title>
-    <mat-card-subtitle>{{appointment.name}}</mat-card-subtitle>
-  </mat-card-header>
+<mat-card class="example-card">
+  <!-- <mat-card-header *ngFor="let time of appointment">
+    <mat-card-title>{{ time[0].appointment.name }}</mat-card-title>
+    <mat-card-subtitle>{{ time[0].appointment.description }}</mat-card-subtitle>
+  </mat-card-header> -->
 
-  <mat-card-content>
-    <p>
-      {{ appointment.description }}
-    </p>
-    <p>Email: {{ appointment.email[0] }}</p>
-    <p>
+  <mat-card-content *ngFor="let time of appointment">
+    <h4>time[0</h4>
+    <p>start time: {{ time.startTime }}</p>
+    <p>End time: {{ time.endTime }}</p>
+    <hr />
+    <!-- <p>
       Appointment date: {{ appointment.dateRange[0].appointmentDate | date }}
     </p>
     <p>
@@ -20,15 +20,8 @@
     <p>
       Appointment Time Interval Duration:
       {{ appointment.dateRange[0].timeInterval[0].timeIntervalDuration }}
-    </p>
-    loop for time slots
-    <div *ngFor="let date of appointment.dateRange">
-      {{ date.appointmentDate.toDateString() }}
-      <div *ngFor="let time of appointment.dateRange.timeInterval">
-        {{ time.startTime }} - {{ time.endTime }}
-      </div>
-    </div>
-    <mat-accordion>
+    </p> -->
+    <!-- <mat-accordion>
       <mat-expansion-panel>
         <mat-expansion-panel-header>
           <mat-panel-title>
@@ -45,6 +38,6 @@
           <a style="cursor: pointer;" (click)="onUpdateAppointment()">Update</a>
         </p>
       </mat-expansion-panel>
-    </mat-accordion>
+    </mat-accordion> -->
   </mat-card-content>
-</mat-card> -->
+</mat-card>

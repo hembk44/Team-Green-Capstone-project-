@@ -4,9 +4,10 @@ import { Component, OnInit, Inject } from "@angular/core";
 // import { Appointment } from "../appointment-model/appointment.model";
 import { Subscription } from "rxjs";
 import { Router } from "@angular/router";
-import { IAppointment } from "../appointment-interfaces/appointment";
+// import { IAppointment } from "../appointment-interfaces/appointment";
 import { DataStorageService } from "../../shared/data-storage.service";
 import { IfStmt } from "@angular/compiler";
+import { Appointment } from "../appointment-model/appointment.model";
 
 @Component({
   selector: "app-appointment-list",
@@ -14,8 +15,8 @@ import { IfStmt } from "@angular/compiler";
   styleUrls: ["./appointment-list.component.css"]
 })
 export class AppointmentListComponent implements OnInit {
-  appointments: IAppointment[] = [];
-  appointment: IAppointment;
+  appointments: Appointment[] = [];
+  appointment: Appointment;
   // subscription: Subscription;
   constructor(
     private router: Router,

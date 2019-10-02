@@ -6,7 +6,7 @@ import { map, tap, catchError, finalize } from "rxjs/operators";
 import { throwError, Observable, BehaviorSubject } from "rxjs";
 import { ApiResponse } from "src/app/auth/api.response";
 import { Appointment } from "../appointment/appointment-model/appointment.model";
-import { IAppointment } from "../appointment/appointment-interfaces/appointment";
+// import { IAppointment } from "../appointment/appointment-interfaces/appointment";
 
 @Injectable({
   providedIn: "root"
@@ -20,12 +20,12 @@ export class DataStorageService {
     {}
   );
   public apointmentList: Observable<
-    IAppointment[]
+    Appointment[]
   > = this.appointmentSubject.asObservable();
 
   constructor(private http: HttpClient) {}
 
-  get appointmentLists(): IAppointment[] {
+  get appointmentLists(): Appointment[] {
     return this.appointmentSubject.value;
   }
   // baseUrl = "localhost:8181/api/appointment/";
@@ -58,6 +58,24 @@ export class DataStorageService {
       });
   }
 
+  displayAppointmentDetails(id: number) {
+    this.isLoadingSubject.next(true);
+    return this.http
+      .get<ApiResponse>(
+        "http://localhost:8181/api/appointment/timeslots/faculty/" + id
+      )
+      .pipe(
+        (map(data => data),
+        catchError(error => throwError(error)),
+        finalize(() => this.isLoadingSubject.next(false)))
+      );
+    // .subscribe((result: any) => {
+    //   if (result) {
+    //     console.log(result);
+    //   }
+    // });
+  }
+
   private handleError(errorRes: HttpErrorResponse) {
     let errorMessage = "An unknown error occured!";
     if (!errorRes.error || !errorRes.error.error) {
@@ -71,13 +89,4 @@ export class DataStorageService {
     // }
     return throwError(errorMessage);
   }
-
-  //gets time slots from backend. just need to update url to test
-  // fetchTimeSlots(x:string) {
-  //   return this.http.get<TimeInterval[]>("ec2linik:8181/api/appointments/timeslots/user/".concat(x)).pipe(
-  //     tap(slots => {
-  //       return slots;
-  //     })
-  //   );
-  // }
 }

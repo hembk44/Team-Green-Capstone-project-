@@ -14,14 +14,8 @@ import { Router } from "@angular/router";
 import { Appointment } from "../appointment-model/appointment.model";
 import { DateRange } from "../appointment-model/date-range.model";
 import { TimeInterval } from "../appointment-model/time-interval.model";
-// import { AppointmentService } from "../appointment-service/appointment.service";
 import { DataStorageService } from "../../shared/data-storage.service";
 import { ApiResponse } from "src/app/auth/api.response";
-
-// export interface DialogData {
-//   animal: string;
-//   name: string;
-// }
 
 @Component({
   selector: "app-appointment-create",
@@ -33,14 +27,6 @@ export class AppointmentCreateComponent implements OnInit {
   email = new FormControl("", [Validators.required, Validators.email]);
   appointmentData: Appointment;
   dateRangeArray: DateRange[] = [];
-
-  // appointmentDate: Date;
-  // startTime: string;
-  // endTime: string;
-  // timeInterval: number;
-  // animal: string;
-  // name: string;
-  // bird: string;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -73,11 +59,6 @@ export class AppointmentCreateComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       console.log(result);
       this.dateRangeArray = result;
-      // this.appointmentDate = result.date;
-      // console.log(this.appointmentDate);
-      // this.startTime = result.startTime;
-      // this.endTime = result.endTime;
-      // this.timeInterval = result.timeInterval;
     });
   }
 
@@ -90,21 +71,11 @@ export class AppointmentCreateComponent implements OnInit {
       dates: this.dateRangeArray
     };
 
-    // this.appointmentData = new Appointment(
-    //   appointmentFormValues.title,
-    //   appointmentFormValues.description,
-    //   [appointmentFormValues.email],
-    //   this.dateRangeArray
-    // );
     this.dataStorage.storeAppointment(obj).subscribe(result => {
       if (result) {
         this.dataStorage.fetchAppointment();
       }
     });
-
-    // this.appointmentService.addAppointment(this.appointmentData);
-    // console.log(this.appointmentService.getAppointments);
-    // console.log(this.appointmentData);
   }
 }
 
@@ -113,7 +84,6 @@ export class AppointmentCreateComponent implements OnInit {
   templateUrl: "date-timeInterval-dialog.html"
 })
 export class DialogDateTimeIntervalDialog implements OnInit {
-  // DateRangeFormData: FormGroup;
   date = new FormControl("");
   dateRangeData: DateRange;
   dateRangeDataArray: DateRange[] = [];
@@ -122,14 +92,10 @@ export class DialogDateTimeIntervalDialog implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     public dialogRef: MatDialogRef<DialogDateTimeIntervalDialog>,
-    public dialog: MatDialog // , // @Inject(MAT_DIALOG_DATA) public data: DialogData
+    public dialog: MatDialog
   ) {}
 
-  ngOnInit() {
-    // this.DateRangeFormData = this.formBuilder.group({
-    //   date: ["", Validators.required]
-    // });
-  }
+  ngOnInit() {}
 
   openTimeIntervalDialog(): void {
     const dialogRef = this.dialog.open(DialogTimeIntervalDialog, {
@@ -154,12 +120,6 @@ export class DialogDateTimeIntervalDialog implements OnInit {
   }
 
   saveDialogData() {
-    // console.log(this.date);
-    // this.dateRangeData = new DateRange(
-    //   this.date.value,
-    //   this.timeIntervalDataArray
-    // );
-    // console.log(this.dateRangeData);
     this.addDate();
     console.log("Date Array: " + this.dateRangeDataArray);
     this.dialogRef.close(this.dateRangeDataArray);
@@ -183,7 +143,7 @@ export class DialogTimeIntervalDialog implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    public dialogRef: MatDialogRef<DialogTimeIntervalDialog> // , // @Inject(MAT_DIALOG_DATA) public data: DialogData
+    public dialogRef: MatDialogRef<DialogTimeIntervalDialog>
   ) {}
 
   ngOnInit() {
