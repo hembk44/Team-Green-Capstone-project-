@@ -12,9 +12,9 @@ import { DataStorageService } from "../../shared/data-storage.service";
   styleUrls: ["./appointment-detail.component.css"]
 })
 export class AppointmentDetailComponent implements OnInit {
-  appointment: Appointment;
+  appointment: any;
   id: number;
-  timeSlots: TimeInterval[]; // = this.dataService.fetchTimeSlots(id);
+  // timeSlots: TimeInterval[]; // = this.dataService.fetchTimeSlots(id);
   constructor(
     // private appointmentService: AppointmentService,
     private route: ActivatedRoute,
@@ -25,7 +25,11 @@ export class AppointmentDetailComponent implements OnInit {
   ngOnInit() {
     this.route.params.subscribe((params: Params) => {
       this.id = +params["id"];
-      // this.appointment = this.appointmentService.getAppointment(this.id);
+      this.dataService.displayAppointmentDetails(this.id).subscribe(result => {
+        this.appointment = result.result;
+        console.log(this.appointment);
+      });
+      // console.log(this.appointment);
     });
   }
 

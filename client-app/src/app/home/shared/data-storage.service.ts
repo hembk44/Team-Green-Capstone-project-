@@ -9,15 +9,13 @@ import { Appointment } from "../appointment/appointment-model/appointment.model"
 import { TimeInterval } from '../appointment/appointment-model/time-interval.model';
 import { CalEvent } from '../calendar/events.model';
 import { EventService } from '../calendar/events.service';
-import { IAppointment } from '../appointment/appointment-interfaces/appointment';
 import { ICalEvent } from '../calendar/event-interface/event';
+// import { IAppointment } from "../appointment/appointment-interfaces/appointment";
 
 @Injectable({
   providedIn: "root"
 })
 export class DataStorageService {
-  private storeSubject: BehaviorSubject<any> = new BehaviorSubject<any>({});
-  public storeObservable: Observable<any> = this.storeSubject.asObservable();
   private isLoadingSubject: BehaviorSubject<boolean> = new BehaviorSubject<
     boolean
   >(false);
@@ -29,18 +27,14 @@ export class DataStorageService {
   private eventSubject: BehaviorSubject<any>=new BehaviorSubject<any>({});
 
   public apointmentList: Observable<
-    ApiResponse
+    Appointment[]
   > = this.appointmentSubject.asObservable();
 
   public eventList: Observable<ApiResponse> = this.eventSubject.asObservable();
 
   constructor(private http: HttpClient) {}
 
-  get store(): ApiResponse {
-    return this.storeSubject.value;
-  }
-
-  get appointmentLists(): IAppointment[] {
+  get appointmentLists(): Appointment[] {
     return this.appointmentSubject.value;
   }
 
@@ -49,27 +43,19 @@ export class DataStorageService {
   }
   // baseUrl = "localhost:8181/api/appointment/";
 
-  storeAppointment(appointment: Appointment) {
+  storeAppointment(obj: Object) {
     this.isLoadingSubject.next(true);
-    this.http
-      .post<Appointment>(
-        "http://localhost:8181/api/appointment/set",
-        appointment
-      )
+    return this.http
+      .post<Object>("http://localhost:8181/api/appointment/set", obj)
       .pipe(
         (map(data => data), catchError(error => throwError(error))),
         finalize(() => this.isLoadingSubject.next(false))
-      )
-      .subscribe((result: any) => {
-        if (result) {
-          this.storeSubject.next(result);
-        }
-      });
+      );
   }
 
   fetchAppointment() {
     this.isLoadingSubject.next(true);
-    return this.http
+    this.http
       .get<ApiResponse>(
         "http://localhost:8181/api/appointment/faculty/allAppointments"
       )
@@ -79,10 +65,28 @@ export class DataStorageService {
         finalize(() => this.isLoadingSubject.next(false)))
       )
       .subscribe((result: ApiResponse) => {
-        if (result.status == 200) {
-          this.eventSubject.next(result.result);
+        if (result.status == 200 && result.result) {
+          this.appointmentSubject.next(result.result);
         }
       });
+  }
+
+  displayAppointmentDetails(id: number) {
+    this.isLoadingSubject.next(true);
+    return this.http
+      .get<ApiResponse>(
+        "http://localhost:8181/api/appointment/timeslots/faculty/" + id
+      )
+      .pipe(
+        (map(data => data),
+        catchError(error => throwError(error)),
+        finalize(() => this.isLoadingSubject.next(false)))
+      );
+    // .subscribe((result: any) => {
+    //   if (result) {
+    //     console.log(result);
+    //   }
+    // });
   }
 
   private handleError(errorRes: HttpErrorResponse) {
@@ -126,17 +130,13 @@ export class DataStorageService {
       });
   }
 
-  storeEvent(event: CalEvent){
-    this.http
-      .post<any>(
-        "http://localhost:8181/api/event/set",
-        event
-      )
-      .pipe((map(data => data), catchError(error => throwError(error))))
-      .subscribe((result: any) => {
-        if (result) {
-          return this.storeSubject.next(result);
-        }
-      });
+  storeEvent(obj: Object){
+    this.isLoadingSubject.next(true);
+    return this.http
+      .post<Object>("http://localhost:8181/api/event/set", obj)
+      .pipe(
+        (map(data => data), catchError(error => throwError(error))),
+        finalize(() => this.isLoadingSubject.next(false))
+      );
   }
 }
