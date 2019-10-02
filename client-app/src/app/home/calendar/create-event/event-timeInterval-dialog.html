@@ -1,0 +1,76 @@
+<!-- <h1 mat-dialog-title>Hi {{ data.name }}</h1> -->
+<div mat-dialog-content>
+    <div class="example-container">
+      <!-- <mat-form-field>
+        <input
+          type="text"
+          matInput
+          placeholder="Choose a date"
+          [formControl]="date"
+        />
+      </mat-form-field> -->
+      <mat-form-field>
+        <input
+          matInput
+          [matDatepickerFilter]="myFilter"
+          [matDatepicker]="picker"
+          placeholder="Choose a date"
+          [formControl]="date"
+        />
+  
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker touchUi #picker></mat-datepicker>
+      </mat-form-field>
+  
+      <mat-toolbar>
+        <mat-toolbar-row>
+          <!-- <p>Please click on the side to select time interval</p>
+          <span class="example-spacer"></span> -->
+          <button
+            type="button"
+            class="primary"
+            mat-raised-button
+            (click)="openTimeIntervalDialog()"
+          >
+            select time interval
+          </button>
+        </mat-toolbar-row>
+        <!-- <mat-toolbar-row>
+            <button
+              type="button"
+              class="primary"
+              mat-raised-button
+              (click)="openDialog()"
+            >
+              Add date
+            </button>
+          </mat-toolbar-row> -->
+      </mat-toolbar>
+    </div>
+  </div>
+  <!-- <div><a style="cursor: pointer;">add date</a></div> -->
+  <div mat-dialog-actions>
+    <button mat-button (click)="onNoClick()">Cancel</button>
+    <button mat-button (click)="addDate()">Add Date</button>
+  
+    <button mat-button (click)="saveDialogData()" cdkFocusInitial>
+      Ok
+    </button>
+  </div>
+  <!-- <h1 mat-dialog-title>Hi {{ data.name }}</h1>
+  <div mat-dialog-content>
+    <p>What's your favorite animal?</p>
+    <mat-form-field>
+      <input matInput [(ngModel)]="data.animal" />
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput [(ngModel)]="data.bird" />
+    </mat-form-field>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-button (click)="onNoClick()">No Thanks</button>
+    <button mat-button [mat-dialog-close]="data.animal" cdkFocusInitial>
+      Ok
+    </button>
+  </div> -->
+  
