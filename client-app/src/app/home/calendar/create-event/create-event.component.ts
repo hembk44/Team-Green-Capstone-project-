@@ -79,13 +79,13 @@ export class CreateEventComponent implements OnInit {
   onSubmit() {
     const eventFormValues = this.eventForm.value;
 
-    this.eventData = new CalEvent(
-      eventFormValues.title,
-      eventFormValues.description,
-      eventFormValues.location,
-      ['andrew.moore9497@gmail.com'],
-      this.dateRangeArray
-    );
+    const obj = {
+      name: eventFormValues.title,
+      description: eventFormValues.description,
+      location: eventFormValues.location,
+      email: ['andrew.moore9497@gmail.com'],
+      eventdates: this.dateRangeArray
+    };
     this.dataStorage.storeEvent(this.eventData);
     this.dataStorage.isLoading.subscribe(loading => {
       if (!loading) {
