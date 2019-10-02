@@ -6,10 +6,7 @@ import { map, tap, catchError, finalize } from "rxjs/operators";
 import { throwError, Observable, BehaviorSubject } from "rxjs";
 import { ApiResponse } from "src/app/auth/api.response";
 import { Appointment } from "../appointment/appointment-model/appointment.model";
-import { TimeInterval } from '../appointment/appointment-model/time-interval.model';
 import { CalEvent } from '../calendar/events.model';
-import { EventService } from '../calendar/events.service';
-import { ICalEvent } from '../calendar/event-interface/event';
 // import { IAppointment } from "../appointment/appointment-interfaces/appointment";
 
 @Injectable({
@@ -30,7 +27,7 @@ export class DataStorageService {
     Appointment[]
   > = this.appointmentSubject.asObservable();
 
-  public eventList: Observable<ApiResponse> = this.eventSubject.asObservable();
+  public eventList: Observable<CalEvent[]> = this.eventSubject.asObservable();
 
   constructor(private http: HttpClient) {}
 
@@ -39,7 +36,7 @@ export class DataStorageService {
   }
 
   get eventsList(): CalEvent[]{
-    return this.eventSubject.value;
+      return this.eventSubject.value;
   }
   // baseUrl = "localhost:8181/api/appointment/";
 
@@ -114,7 +111,7 @@ export class DataStorageService {
 
   fetchEvents(){
     this.isLoadingSubject.next(true);
-    return this.http
+    this.http
       .get<ApiResponse>(
         "http://localhost:8181/api/event/faculty/allEvents"
       )
@@ -124,18 +121,19 @@ export class DataStorageService {
         finalize(() => this.isLoadingSubject.next(false)))
       )
       .subscribe((result: ApiResponse) => {
-        if (result.status == 200) {
-          this.appointmentSubject.next(result.result);
+        if (result.status == 200 && result.result) {
+          this.eventSubject.next(result.result);
         }
       });
   }
 
   storeEvent(obj: Object){
+    console.log(obj);
     this.isLoadingSubject.next(true);
     return this.http
       .post<Object>("http://localhost:8181/api/event/set", obj)
       .pipe(
-        (map(data => data), catchError(error => throwError(error))),
+        (map(data => data), catchError(error => throwError('there was an erorr'+error))),
         finalize(() => this.isLoadingSubject.next(false))
       );
   }
