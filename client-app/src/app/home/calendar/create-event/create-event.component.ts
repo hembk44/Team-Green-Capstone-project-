@@ -9,7 +9,6 @@ import { DateRange } from '../../appointment/appointment-model/date-range.model'
 import { MatDialog } from '@angular/material';
 import { DataStorageService } from '../../shared/data-storage.service';
 import { DialogDateTimeIntervalDialog } from '../../appointment/appointment-create/appointment-create.component';
-import { ICalEvent } from '../event-interface/event';
 
 @Component({
   selector: "app-create-event",
@@ -18,14 +17,13 @@ import { ICalEvent } from '../event-interface/event';
 })
 export class CreateEventComponent implements OnInit {
   eventForm: FormGroup;
-  calendars: Calendar[];
+  //calendars: Calendar[];
+  email = new FormControl("",[Validators.required, Validators.email]);
   dateRangeArray: DateRange[] = [];
-  eventData: CalEvent;
 
   constructor(
     private eventService: EventService,
     private router: Router,
-    private calendarService: CalendarService,
     private formBuilder: FormBuilder,
     public dialog: MatDialog,
     private dataStorage: DataStorageService
@@ -35,30 +33,17 @@ export class CreateEventComponent implements OnInit {
     this.eventForm = this.formBuilder.group({
       title: ["", Validators.required],
       description: ["", Validators.required],
-      location: [""]
+      location: [""],
+      email:this.email
     });
-    this.calendars = this.calendarService.getCalendars();
+    //this.calendars = this.calendarService.getCalendars();
   }
 
-  // initForm() {
-  //   let eventName = "";
-  //   let startDate = "";
-  //   let startTime = "";
-  //   let endDate = "";
-  //   let endTime = "";
-  //   let description = "";
-  //   let location = "";
-
-  //   this.eventForm = new FormGroup({
-  //     name: new FormControl(eventName),
-  //     "start-date": new FormControl(startDate),
-  //     "start-time": new FormControl(startTime),
-  //     "end-date": new FormControl(endDate),
-  //     "end-time": new FormControl(endTime),
-  //     description: new FormControl(description),
-  //     location: new FormControl(location)
-  //   });
-  // }
+  getErrorMessage(){
+    return this.email.hasError("email")
+    ? "Not a valid email"
+    : "";
+  }
 
   openDateRangeDialog(): void {
     const dialogRef = this.dialog.open(DialogDateTimeIntervalDialog, {
@@ -68,34 +53,41 @@ export class CreateEventComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       console.log(result);
       this.dateRangeArray = result;
-      // this.appointmentDate = result.date;
-      // console.log(this.appointmentDate);
-      // this.startTime = result.startTime;
-      // this.endTime = result.endTime;
-      // this.timeInterval = result.timeInterval;
     });
   }
 
   onSubmit() {
     const eventFormValues = this.eventForm.value;
-
-    const obj = {
+    // const obj = {
+    //   name: eventFormValues.title,
+    //   description: eventFormValues.description,
+    //   dates: this.dateRangeArray,
+    //   location: eventFormValues.location
+    // };
+    const obj = JSON.stringify({
       name: eventFormValues.title,
       description: eventFormValues.description,
-      location: eventFormValues.location,
-      email: ['andrew.moore9497@gmail.com'],
-      eventdates: this.dateRangeArray
-    };
-    this.dataStorage.storeEvent(this.eventData);
-    this.dataStorage.isLoading.subscribe(loading => {
-      if (!loading) {
-        this.dataStorage.fetchEvents();
-      }
+      eventdates: [
+          {
+              date: this.dateRangeArray[0].date,
+              eventtimes: [
+                  {
+                      startTime: this.dateRangeArray[0].times[0].startTime,
+                      endTime: this.dateRangeArray[0].times[0].endTime
+                  }
+              ]
+          }
+      ],
+      location: eventFormValues.location
+    })
+    
+    this.dataStorage.storeEvent(obj).subscribe(result => {
+      // if(result) {
+      //   this.dataStorage.fetchEvents();
+      // }
+      console.log(result);
     });
 
-    //this.eventService.addEvent(this.eventData);
-    this.dataStorage.storeEvent(this.eventData);
-
-    this.router.navigate(["home/calendar"]);
+    this.router.navigate(["home"]);
   }
 }
