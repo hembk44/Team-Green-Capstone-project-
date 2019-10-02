@@ -61,7 +61,8 @@ export class CreateEventComponent implements OnInit {
     const obj = {
       name: eventFormValues.title,
       description: eventFormValues.description,
-      dates: this.dateRangeArray
+      dates: this.dateRangeArray,
+      location: eventFormValues.location
     };
     
     this.dataStorage.storeEvent(obj).subscribe(result => {
@@ -70,6 +71,6 @@ export class CreateEventComponent implements OnInit {
       }
     });
 
-    this.router.navigate(["home/calendar"]);
+    this.router.navigate(["home"]);
   }
 }
