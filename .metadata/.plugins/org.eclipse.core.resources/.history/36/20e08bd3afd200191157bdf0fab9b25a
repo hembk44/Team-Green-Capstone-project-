@@ -1,5 +1,0 @@
-package com.csci4060.app.security;
-
-public class WebSecurityConfig {
-
-}
