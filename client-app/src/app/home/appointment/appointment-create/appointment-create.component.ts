@@ -83,20 +83,24 @@ export class AppointmentCreateComponent implements OnInit {
 
   onSubmit() {
     const appointmentFormValues = this.appointmentForm.value;
+    const obj = {
+      name: appointmentFormValues.title,
+      description: appointmentFormValues.description,
+      recepients: [appointmentFormValues.email],
+      dates: this.dateRangeArray
+    };
 
-    this.appointmentData = new Appointment(
-      appointmentFormValues.title,
-      appointmentFormValues.description,
-      [appointmentFormValues.email],
-      this.dateRangeArray
-    );
-    this.dataStorage
-      .storeAppointment(this.appointmentData)
-      .subscribe(result => {
-        if (result) {
-          this.dataStorage.fetchAppointment();
-        }
-      });
+    // this.appointmentData = new Appointment(
+    //   appointmentFormValues.title,
+    //   appointmentFormValues.description,
+    //   [appointmentFormValues.email],
+    //   this.dateRangeArray
+    // );
+    this.dataStorage.storeAppointment(obj).subscribe(result => {
+      if (result) {
+        this.dataStorage.fetchAppointment();
+      }
+    });
 
     // this.appointmentService.addAppointment(this.appointmentData);
     // console.log(this.appointmentService.getAppointments);

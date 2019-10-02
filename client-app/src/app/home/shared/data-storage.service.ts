@@ -30,13 +30,10 @@ export class DataStorageService {
   }
   // baseUrl = "localhost:8181/api/appointment/";
 
-  storeAppointment(appointment: Appointment) {
+  storeAppointment(obj: Object) {
     this.isLoadingSubject.next(true);
     return this.http
-      .post<Appointment>(
-        "http://localhost:8181/api/appointment/set",
-        appointment
-      )
+      .post<Object>("http://localhost:8181/api/appointment/set", obj)
       .pipe(
         (map(data => data), catchError(error => throwError(error))),
         finalize(() => this.isLoadingSubject.next(false))
