@@ -4,12 +4,14 @@ import {
   HttpHeaders,
   HttpErrorResponse
 } from "@angular/common/http";
-import { Observable, throwError } from "rxjs";
+import { Observable, throwError, BehaviorSubject } from "rxjs";
 import { catchError } from "rxjs/operators";
 
 import { AuthLoginInfo } from "./login-info";
 import { SignUpInfo } from "./signup-info";
 import { ApiResponse } from "./api.response";
+import { TokenStorageService } from "./token-storage.service";
+import { Router } from "@angular/router";
 
 const httpOptions = {
   headers: new HttpHeaders({ "Content-Type": "application/json" })
@@ -21,11 +23,31 @@ const httpOptions = {
 export class AuthService {
   private loginUrl = "http://localhost:8181/api/auth/signin";
   private signupUrl = "http://localhost:8181/api/auth/signup";
+  // private userRoleSubject: BehaviorSubject<any> = new BehaviorSubject<any>({});
+  // public userRole: Observable<string> = this.userRoleSubject.asObservable();
 
-  constructor(private http: HttpClient) {}
+  // get user(): string {
+  //   return this.userRoleSubject.value.role;
+  // }
 
-  attemptAuth(credentials: AuthLoginInfo): Observable<ApiResponse> {
-    return this.http.post<ApiResponse>(this.loginUrl, credentials, httpOptions);
+  constructor(
+    private http: HttpClient,
+    private tokenStorage: TokenStorageService,
+    private router: Router
+  ) {}
+
+  attemptAuth(credentials: AuthLoginInfo) {
+    this.http
+      .post<ApiResponse>(this.loginUrl, credentials, httpOptions)
+      .subscribe((data: ApiResponse) => {
+        if (data) {
+          this.tokenStorage.saveToken(data.result.accessToken);
+          // this.userRoleSubject.next(data.result);
+          this.router.navigate(["home"]);
+        }
+
+        //
+      });
   }
 
   signUp(info: SignUpInfo): Observable<string> {

@@ -1,13 +1,8 @@
 import { Component, OnInit, Inject } from "@angular/core";
-
-// import { AppointmentService } from "../appointment-service/appointment.service";
-// import { Appointment } from "../appointment-model/appointment.model";
-import { Subscription } from "rxjs";
 import { Router } from "@angular/router";
-// import { IAppointment } from "../appointment-interfaces/appointment";
 import { DataStorageService } from "../../shared/data-storage.service";
-import { IfStmt } from "@angular/compiler";
 import { Appointment } from "../appointment-model/appointment.model";
+import { AuthService } from "src/app/auth/auth.service";
 
 @Component({
   selector: "app-appointment-list",
@@ -17,18 +12,16 @@ import { Appointment } from "../appointment-model/appointment.model";
 export class AppointmentListComponent implements OnInit {
   appointments: Appointment[] = [];
   appointment: Appointment;
-  // subscription: Subscription;
+  currentRole: string;
   constructor(
     private router: Router,
     private dataStorage: DataStorageService
-  ) {}
+  ) // private role: AuthService
+  {}
 
   ngOnInit() {
-    // this.subscription = this.appointmentService.appointmentChanged.subscribe(
-    //   (newAppointments: Appointment[]) => {
-    //     this.appointments = newAppointments;
-    //   }
-    // );
+    // this.currentRole = this.role.user;
+    // console.log(this.role.user);
     console.log(this.dataStorage.fetchAppointment());
     this.dataStorage.fetchAppointment();
     this.dataStorage.isLoading.subscribe(loading => {
@@ -36,36 +29,8 @@ export class AppointmentListComponent implements OnInit {
         this.appointments = this.dataStorage.appointmentLists;
       }
     });
-
-    // this.dataStorage.fetchAppointment().subscribe(
-    //   response => {
-    //     this.appointments = <Appointment[]>response.result;
-    //     console.log(response.result);
-
-    // console.log(response.result[0].dates);
-    // console.log(this.appointments);
-    // console.log(this.appointments[0]);
-    //   },
-    //   err => console.log(err)
-    // );
   }
   create() {
     this.router.navigate(["home/appointment/type/create"]);
   }
-
-  // castJSON(jsonObj: any) {
-  //   var formattedJson = jsonObj.map(obj => {
-
-  //   })
-  // for (let obj of jsonObj) {
-  // this.appointment = <Appointment>obj;
-  // console.log(this.appointment);
-  // this.appointments.push(this.appointment);
-  // console.log(this.appointments);
-
-  // }
-  // }
-  // ngOnDestroy() {
-  //   this.subscription.unsubscribe();
-  // }
 }
