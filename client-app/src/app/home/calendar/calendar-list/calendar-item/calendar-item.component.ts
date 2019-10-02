@@ -7,8 +7,8 @@ import { Calendar } from '../calendar.model';
   styleUrls: ['./calendar-item.component.css']
 })
 export class CalendarItemComponent implements OnInit {
-  @Input()index: number;
-  @Input()calendar: Calendar;
+  @Input()index: number;//index of calendar in list
+  @Input()calendar: Calendar;//calendar object to show
 
   constructor() { }
 

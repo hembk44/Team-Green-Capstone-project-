@@ -10,13 +10,13 @@ import { EventService } from '../events.service';
 })
 export class CalendarListComponent implements OnInit {
 
-  private calendars: Calendar[];
+  private calendars: Calendar[];//list of calendars
 
   constructor(private calendarService: CalendarService,
     private eventService: EventService) { }
 
   ngOnInit() {
-    this.calendars = this.calendarService.getCalendars();
+    this.calendars = this.calendarService.getCalendars();//gets calendars from service
     //   {
     //     user: 'moorea1',
     //     name: 'main',
@@ -38,7 +38,7 @@ export class CalendarListComponent implements OnInit {
     // ];
   }
 
-
+  //toggle view of calendars
   toggleCalendar(index: number){
     this.calendars[index].shown = !this.calendars[index].shown;
     this.calendarService.setCalendars(this.calendars);
