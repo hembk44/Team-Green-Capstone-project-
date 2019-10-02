@@ -109,6 +109,7 @@ export class DataStorageService {
   //   );
   // }
 
+  //not returning calEvent type
   fetchEvents(){
     this.isLoadingSubject.next(true);
     this.http
@@ -117,23 +118,24 @@ export class DataStorageService {
       )
       .pipe(
         (map(data => data),
-        catchError(error => throwError(error)),
+        catchError(error => throwError('theres an errror'+error)),
         finalize(() => this.isLoadingSubject.next(false)))
       )
       .subscribe((result: ApiResponse) => {
         if (result.status == 200 && result.result) {
+          console.log('fetched');
           this.eventSubject.next(result.result);
         }
       });
   }
 
+  //error converting circular structure to JSON
   storeEvent(obj: Object){
-    console.log(obj);
     this.isLoadingSubject.next(true);
     return this.http
       .post<Object>("http://localhost:8181/api/event/set", obj)
       .pipe(
-        (map(data => data), catchError(error => throwError('there was an erorr'+error))),
+        (map(data => data), catchError(error => throwError(error))),
         finalize(() => this.isLoadingSubject.next(false))
       );
   }

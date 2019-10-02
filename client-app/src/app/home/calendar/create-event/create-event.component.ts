@@ -9,6 +9,9 @@ import { DateRange } from '../../appointment/appointment-model/date-range.model'
 import { MatDialog } from '@angular/material';
 import { DataStorageService } from '../../shared/data-storage.service';
 import { DialogDateTimeIntervalDialog } from '../../appointment/appointment-create/appointment-create.component';
+import { EventDate } from '../event-date.model';
+import { TimeInterval } from '../../appointment/appointment-model/time-interval.model';
+import { EventTime } from '../event-times.model';
 
 @Component({
   selector: "app-create-event",
@@ -18,15 +21,16 @@ import { DialogDateTimeIntervalDialog } from '../../appointment/appointment-crea
 export class CreateEventComponent implements OnInit {
   eventForm: FormGroup;
   //calendars: Calendar[];
+  eventData: CalEvent;
   email = new FormControl("",[Validators.required, Validators.email]);
   dateRangeArray: DateRange[] = [];
 
   constructor(
-    private eventService: EventService,
     private router: Router,
     private formBuilder: FormBuilder,
     public dialog: MatDialog,
-    private dataStorage: DataStorageService
+    private dataStorage: DataStorageService,
+    private eventService: EventService
   ) {}
 
   ngOnInit() {
@@ -40,9 +44,11 @@ export class CreateEventComponent implements OnInit {
   }
 
   getErrorMessage(){
-    return this.email.hasError("email")
-    ? "Not a valid email"
-    : "";
+    return this.email.hasError("required")
+      ? "You must enter a value"
+      : this.email.hasError("email")
+      ? "Not a valid email"
+      : "";
   }
 
   openDateRangeDialog(): void {
@@ -58,36 +64,44 @@ export class CreateEventComponent implements OnInit {
 
   onSubmit() {
     const eventFormValues = this.eventForm.value;
-    // const obj = {
-    //   name: eventFormValues.title,
-    //   description: eventFormValues.description,
-    //   dates: this.dateRangeArray,
-    //   location: eventFormValues.location
-    // };
-    const obj = JSON.stringify({
+    console.log(this.dateRangeArray[0]);
+    const eventDate = this.dateRangeArray[0].date;
+    const eventstart = this.dateRangeArray[0].times[0].startTime;
+    const eventEnd = this.dateRangeArray[0].times[0].endTime;
+    const eventtimes = new EventTime(eventstart,eventEnd);
+    const eventdaterange = new EventDate(eventDate,[eventtimes]);
+    const tempid = 8;
+
+    console.log(eventdaterange);
+
+    // const newEvent: CalEvent = new CalEvent(
+    //   11,
+    //   eventFormValues.title,
+    //   eventFormValues.description,
+    //   eventFormValues.location,
+    //   [eventFormValues.email],
+    //   [eventdaterange]
+    // );
+    // this.eventService.addEvent(newEvent);
+
+    const obj: Object = {
       name: eventFormValues.title,
       description: eventFormValues.description,
-      eventdates: [
-          {
-              date: this.dateRangeArray[0].date,
-              eventtimes: [
-                  {
-                      startTime: this.dateRangeArray[0].times[0].startTime,
-                      endTime: this.dateRangeArray[0].times[0].endTime
-                  }
-              ]
-          }
-      ],
+      eventdates: [eventdaterange],
+      recepients: [this.email],
       location: eventFormValues.location
-    })
+    }
+     
+    console.log(obj);
     
     this.dataStorage.storeEvent(obj).subscribe(result => {
-      // if(result) {
-      //   this.dataStorage.fetchEvents();
-      // }
+      console.log('event sent to backend');
+      if(result) {
+        this.dataStorage.fetchEvents();
+      }
       console.log(result);
     });
 
-    this.router.navigate(["home"]);
+    this.router.navigate(["home/calendar"]);
   }
 }

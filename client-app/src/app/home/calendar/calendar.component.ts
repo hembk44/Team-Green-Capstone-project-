@@ -26,22 +26,20 @@ export class CalendarComponent implements OnInit {
   CalendarView = CalendarView;
   activeDayIsOpen: boolean = false;
 
-  calEvents: CalEvent[];//list of events
+  calEvents: CalEvent[]=[];//list of events
 
   ngOnInit() {
     //this.calEvents=this.eventService.getEvents();
-    if(this.dataStorage.eventsList != undefined){
-      this.dataStorage.isLoading.subscribe(loading=>{
-        if(!loading){
-            this.calEvents = this.dataStorage.eventsList;
-        }
-      })
-    }
-
-    else{
-      this.calEvents = [];
-    }
-
+    console.log('start');
+    this.dataStorage.fetchEvents();
+    this.dataStorage.isLoading.subscribe(loading=>{
+      console.log('fetching')
+      if(!loading){
+          console.log('contacting data storage');
+          this.calEvents = this.dataStorage.eventsList;
+      }
+    })
+    console.log('events fetched');
   }
 
   //changes view of calendar to day, week, month

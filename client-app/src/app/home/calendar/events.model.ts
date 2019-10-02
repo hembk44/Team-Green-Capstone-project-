@@ -4,8 +4,8 @@ import { DateRange } from '../appointment/appointment-model/date-range.model';
 import { EventDate } from './event-date.model';
 
 export class CalEvent{
-    public start: Date;
-    public end: Date;
+    start: Date;
+    end: Date;
 
     constructor(
         public id: number,
@@ -13,9 +13,9 @@ export class CalEvent{
         public description: string,
         public location: string,
         public email: string[],
-        public dateRange: EventDate[]
+        public eventdates: EventDate[]
     ){
-        this.start = new Date(this.dateRange[0].date.toString().substring(0,15).concat(' ').concat(this.dateRange[0].times[0].start));
-        this.end = new Date(this.dateRange[this.dateRange.length - 1].date.toString().substring(0,14).concat(' ').concat(this.dateRange[this.dateRange.length - 1].times[this.dateRange[this.dateRange.length-1].times.length-1].end));
+        this.start = new Date(this.eventdates[0].date.toString().substring(0,15).concat(' ').concat(this.eventdates[0].eventtimes[0].startTime));
+        this.end = new Date(this.eventdates[this.eventdates.length - 1].date.toString().substring(0,14).concat(' ').concat(this.eventdates[this.eventdates.length - 1].eventtimes[this.eventdates[this.eventdates.length-1].eventtimes.length-1].endTime));
     }
 }

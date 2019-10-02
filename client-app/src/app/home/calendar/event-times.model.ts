@@ -1,6 +1,6 @@
 export class EventTime{
     constructor(
-        public start: string,
-        public end: string
+        public startTime: string,
+        public endTime: string
     ){}
 }
