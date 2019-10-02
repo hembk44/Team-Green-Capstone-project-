@@ -21,25 +21,41 @@ export class CalendarComponent implements OnInit {
 
   constructor(private router: Router, private dataStorage: DataStorageService, private eventService: EventService) {}
 
-  viewDate: Date = new Date();
+  viewDate: Date;
   view: CalendarView = CalendarView.Month;
   CalendarView = CalendarView;
   activeDayIsOpen: boolean = false;
 
   calEvents: CalEvent[]=[];//list of events
+  compatEvents: CompatibleEvent[]=[];
 
   ngOnInit() {
-    //this.calEvents=this.eventService.getEvents();
-    console.log('start');
+    this.viewDate = new Date();
     this.dataStorage.fetchEvents();
     this.dataStorage.isLoading.subscribe(loading=>{
-      console.log('fetching')
       if(!loading){
-          console.log('contacting data storage');
           this.calEvents = this.dataStorage.eventsList;
+          console.log(this.dataStorage.eventsList);
+          console.log(this.calEvents);
       }
-    })
-    console.log('events fetched');
+      console.log('test');
+      for(let event of this.calEvents){
+        console.log(event);
+        console.log(event.id);
+        console.log(event.name);
+        console.log(event.eventdates[0].eventtimes[0].endTime);
+        console.log(event.eventdates[0].date.toString().substring(0,15).concat(' ').concat(event.eventdates[0].eventtimes[0].startTime));
+        const ev = new CompatibleEvent(
+          event.id,
+          event.name,
+          new Date(event.eventdates[0].date.toString().substring(0,15).concat(' ').concat(event.eventdates[0].eventtimes[0].startTime)),
+          new Date(event.eventdates[event.eventdates.length - 1].date.toString().substring(0,15).concat(' ').concat(event.eventdates[event.eventdates.length - 1].eventtimes[event.eventdates[event.eventdates.length-1].eventtimes.length-1].endTime))
+        )
+        console.log(ev.start);
+        console.log(ev.end);
+        this.compatEvents.push(ev);
+      } 
+    });
   }
 
   //changes view of calendar to day, week, month
@@ -48,7 +64,7 @@ export class CalendarComponent implements OnInit {
   }
 
   // changes view date for list of events
-  dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
+  dayClicked({ date, events }: { date: Date; events: CalEvent[] }): void {
     if (isSameMonth(date, this.viewDate)) {
       this.viewDate = date;
     }

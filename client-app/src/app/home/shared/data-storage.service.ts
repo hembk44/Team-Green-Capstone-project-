@@ -23,9 +23,9 @@ export class DataStorageService {
 
   private eventSubject: BehaviorSubject<any>=new BehaviorSubject<any>({});
 
-  public apointmentList: Observable<
-    Appointment[]
-  > = this.appointmentSubject.asObservable();
+  // public apointmentList: Observable<
+  //   Appointment[]
+  // > = this.appointmentSubject.asObservable();
 
   public eventList: Observable<CalEvent[]> = this.eventSubject.asObservable();
 
@@ -118,12 +118,11 @@ export class DataStorageService {
       )
       .pipe(
         (map(data => data),
-        catchError(error => throwError('theres an errror'+error)),
+        catchError(error => throwError('theres an error'+error)),
         finalize(() => this.isLoadingSubject.next(false)))
       )
       .subscribe((result: ApiResponse) => {
         if (result.status == 200 && result.result) {
-          console.log('fetched');
           this.eventSubject.next(result.result);
         }
       });

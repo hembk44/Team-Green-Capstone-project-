@@ -6,10 +6,11 @@ import { Subject } from 'rxjs';
 import { DataStorageService } from '../shared/data-storage.service';
 import { DateRange } from '../appointment/appointment-model/date-range.model';
 import { TimeInterval } from '../appointment/appointment-model/time-interval.model';
+import { CompatibleEvent } from './compatible-events.model';
 
 @Injectable()
 export class EventService{
-    eventsChanged: Subject<CalEvent[]> = new Subject<CalEvent[]>();
+    eventsChanged: Subject<CompatibleEvent[]> = new Subject<CompatibleEvent[]>();
     constructor(
         private calendarService: CalendarService,
         private dataService: DataStorageService
@@ -25,7 +26,7 @@ export class EventService{
         times: [this.tempTimes]
     }
     
-    events: CalEvent[] = [
+    events: CompatibleEvent[] = [
         // new CalEvent(
         //     0,
         //     'test',
@@ -37,7 +38,7 @@ export class EventService{
     ]
     
 
-    tempEvents: CalEvent[] = this.events;
+    tempEvents: CompatibleEvent[] = this.events;
 
     // returns events
     getEvents(){
@@ -48,25 +49,23 @@ export class EventService{
         //         ev.push(event);
         //     }
         // }
-        if(this.events){
-            return this.events;
-        }
+        return this.events.slice();
     }
 
     //add events to list
-    addEvent(e: CalEvent){
+    addEvent(e: CompatibleEvent){
         this.events.push(e);
         this.updateEvents();
     }
 
     //change events list
-    setEvents(eventList: CalEvent[]){
+    setEvents(eventList: CompatibleEvent[]){
         this.events = eventList;
     }
 
     //updates list for hiding calendars
     updateEvents(){
-        const newEvents: CalEvent[]=[]
+        const newEvents: CompatibleEvent[]=[]
         // for(let event of this.events){
         //     if(event.calendar.shown){
         //         newEvents.push(event);
