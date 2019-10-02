@@ -22,7 +22,6 @@ import { EventService } from "./events.service";
 import { Router } from "@angular/router";
 import { CompatibleEvent } from './compatible-events.model';
 import { Time } from '@angular/common';
-import { ICalEvent } from './event-interface/event';
 import { DataStorageService } from '../shared/data-storage.service';
 
 @Component({

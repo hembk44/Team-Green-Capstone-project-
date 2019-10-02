@@ -9,7 +9,6 @@ import { Appointment } from "../appointment/appointment-model/appointment.model"
 import { TimeInterval } from '../appointment/appointment-model/time-interval.model';
 import { CalEvent } from '../calendar/events.model';
 import { EventService } from '../calendar/events.service';
-import { ICalEvent } from '../calendar/event-interface/event';
 // import { IAppointment } from "../appointment/appointment-interfaces/appointment";
 
 @Injectable({

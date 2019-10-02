@@ -9,7 +9,6 @@ import { DateRange } from '../../appointment/appointment-model/date-range.model'
 import { MatDialog } from '@angular/material';
 import { DataStorageService } from '../../shared/data-storage.service';
 import { DialogDateTimeIntervalDialog } from '../../appointment/appointment-create/appointment-create.component';
-import { ICalEvent } from '../event-interface/event';
 
 @Component({
   selector: "app-create-event",
