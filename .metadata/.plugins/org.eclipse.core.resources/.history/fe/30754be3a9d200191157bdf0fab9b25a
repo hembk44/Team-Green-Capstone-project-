@@ -1,0 +1,5 @@
+package com.csci4060.app.repository;
+
+public interface RoleRepository {
+
+}

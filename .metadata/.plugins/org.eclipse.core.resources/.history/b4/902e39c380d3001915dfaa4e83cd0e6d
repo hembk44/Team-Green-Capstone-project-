@@ -1,0 +1,14 @@
+package com.csci4060.app.message.response;
+
+import lombok.Data;
+
+@Data
+public class JwtResponse {
+
+	private String accessToken;
+	private String tokenType = "Bearer";
+	
+	public JwtResponse(String accessToken) {
+        this.accessToken = accessToken;
+    }
+}
