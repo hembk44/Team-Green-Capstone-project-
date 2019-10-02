@@ -1,27 +1,15 @@
 import {
   Component,
   OnInit,
-  ViewChild,
-  TemplateRef,
-  ChangeDetectionStrategy
 } from "@angular/core";
 import {
-  startOfDay,
-  endOfDay,
-  subDays,
-  addDays,
-  endOfMonth,
-  isSameDay,
   isSameMonth,
-  addHours
 } from "date-fns";
 import { CalendarEvent, CalendarView } from "angular-calendar";
-import { Subject, Subscription } from "rxjs";
 import { CalEvent } from "./events.model";
 import { EventService } from "./events.service";
 import { Router } from "@angular/router";
 import { CompatibleEvent } from './compatible-events.model';
-import { Time } from '@angular/common';
 import { DataStorageService } from '../shared/data-storage.service';
 
 @Component({
@@ -42,13 +30,13 @@ export class CalendarComponent implements OnInit {
   compatibleEvents: CompatibleEvent[] = [];
 
   ngOnInit() {
-    this.calEvents=this.eventService.getEvents();
-    //console.log(this.dataStorage.fetchEvents());
-    // this.dataStorage.isLoading.subscribe(loading=>{
-    //   if(!loading){
-    //     this.calEvents = this.dataStorage.eventsList;
-    //   }
-    // })
+    //this.calEvents=this.eventService.getEvents();
+    console.log(this.dataStorage.fetchEvents());
+    this.dataStorage.isLoading.subscribe(loading=>{
+      if(!loading){
+        this.calEvents = this.dataStorage.eventsList;
+      }
+    })
 
   }
 
