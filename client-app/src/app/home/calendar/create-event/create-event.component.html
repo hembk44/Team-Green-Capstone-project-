@@ -23,6 +23,15 @@
     />
   </mat-form-field>
 
+  <mat-form-field>
+    <input
+      matInput
+      placeholder="Recipient Email"
+      formControlName="email"
+    />
+    <mat-error *ngIf="email.invalid">{{ getErrorMessage() }}</mat-error>
+  </mat-form-field>
+
   <mat-toolbar>
     <mat-toolbar-row>
       <!-- <p>Please click on the side to select date and time interval</p> -->

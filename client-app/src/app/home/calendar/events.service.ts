@@ -16,8 +16,8 @@ export class EventService{
     ){}
     calendars = this.calendarService.getCalendars();
     tempTimes: TimeInterval = {
-        startTime: "1300",
-        endTime: "1400",
+        startTime: "1:00 PM",
+        endTime: "2:00 PM",
         interv: 60
     }
     tempDate: DateRange = {
@@ -25,15 +25,16 @@ export class EventService{
         times: [this.tempTimes]
     }
     
-    events: CalEvent[] = this.dataService.eventsList;
-        // list for testing
-        // {
-        //     title: "test event",
-        //     description: "this is a test",
-        //     location: "test location",
-        //     email: [],
-        //     dateRange: [this.tempDate]
-        // }
+    events: CalEvent[] = [
+        // new CalEvent(
+        //     0,
+        //     'test',
+        //     'test',
+        //     'test',
+        //     ['andrew.moore9497@gmail.com'],
+        //     [this.tempDate]
+        // )
+    ]
     
 
     tempEvents: CalEvent[] = this.events;
