@@ -16,6 +16,7 @@ export class DataStorageService {
     boolean
   >(false);
   public isLoading: Observable<boolean> = this.isLoadingSubject.asObservable();
+
   private appointmentSubject: BehaviorSubject<any> = new BehaviorSubject<any>(
     {}
   );
