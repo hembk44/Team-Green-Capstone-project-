@@ -13,8 +13,16 @@
     <!-- <p>{{ time[0].appointment}}</p> -->
     <div *ngIf="currentRole == 'ROLE_ADMIN'">
       <button mat-raised-button class="primary">
-        {{ time.startTime }} - {{ time.endTime }}
-      </button>
+        {{ time.startTime }} - {{ time.endTime }}</button
+      >&nbsp;&nbsp;
+      <span
+        >selected by:
+        <span *ngIf="time?.selectedBy?.name; else elseBlock">
+          {{ time.selectedBy.name }}</span
+        >
+        <ng-template #elseBlock>None</ng-template></span
+      >
+      <!-- <span>{{ time.selectedBy.email }}</span> -->
     </div>
     <div *ngIf="currentRole == 'ROLE_USER'">
       <button

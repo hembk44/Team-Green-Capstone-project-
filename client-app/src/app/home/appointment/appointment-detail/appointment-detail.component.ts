@@ -18,6 +18,7 @@ export class AppointmentDetailComponent implements OnInit {
   appointmentName: string;
   appointmentDesc: string;
   currentRole: string;
+  userSelect: string;
   // timeSlots: TimeInterval[]; // = this.dataService.fetchTimeSlots(id);
   constructor(
     // private appointmentService: AppointmentService,
@@ -39,8 +40,11 @@ export class AppointmentDetailComponent implements OnInit {
           .displayAppointmentDetails(this.id)
           .subscribe(result => {
             this.appointment = result.result;
+            this.userSelect = "none";
+            // console.log(result);
             this.appointmentName = this.appointment[0].appointment.name;
             this.appointmentDesc = this.appointment[0].appointment.description;
+            console.log(this.appointment[0].selectedBy);
             console.log(this.appointment);
           });
       } else {
