@@ -28,6 +28,8 @@ import {
 import { MatExpansionModule } from "@angular/material/expansion";
 import { MatMenuModule } from "@angular/material/menu";
 import { MatSelectModule } from "@angular/material/select";
+import { MatTooltipModule } from "@angular/material/tooltip";
+import { MatSnackBarModule } from "@angular/material/snack-bar";
 
 // import { DashboardComponent } from "./dashboard/dashboard.component";
 // import { CalendarComponent } from "./calendar/calendar.component";
@@ -59,7 +61,10 @@ import { ScheduledAppointmentComponent } from "./home/appointment/scheduled-appo
 import { AppointmentStartComponent } from "./home/appointment/appointment-start/appointment-start.component";
 import { AppointmentItemComponent } from "./home/appointment/appointment-item/appointment-item.component";
 import { AppointmentNavigationComponent } from "./home/appointment/appointment-navigation/appointment-navigation.component";
-import { AppointmentDetailComponent } from "./home/appointment/appointment-detail/appointment-detail.component";
+import {
+  AppointmentDetailComponent,
+  TimeSlotSnackComponent
+} from "./home/appointment/appointment-detail/appointment-detail.component";
 import { AppointmentListComponent } from "./home/appointment/appointment-list/appointment-list.component";
 import {
   AppointmentCreateComponent,
@@ -100,7 +105,8 @@ import { AuthInterceptor } from "./auth/auth-interceptor";
     DialogTimeIntervalDialog,
     CreateEventComponent,
     CalendarListComponent,
-    CalendarItemComponent
+    CalendarItemComponent,
+    TimeSlotSnackComponent
   ],
   imports: [
     BrowserModule,
@@ -126,12 +132,18 @@ import { AuthInterceptor } from "./auth/auth-interceptor";
     MatExpansionModule,
     MatMenuModule,
     MatSelectModule,
+    MatTooltipModule,
+    MatSnackBarModule,
     CalendarModule.forRoot({
       provide: DateAdapter,
       useFactory: adapterFactory
     })
   ],
-  entryComponents: [DialogDateTimeIntervalDialog, DialogTimeIntervalDialog],
+  entryComponents: [
+    DialogDateTimeIntervalDialog,
+    DialogTimeIntervalDialog,
+    TimeSlotSnackComponent
+  ],
   providers: [
     MatDatepickerModule,
     EventService,

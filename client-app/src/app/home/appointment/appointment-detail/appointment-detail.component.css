@@ -18,6 +18,10 @@
   color: #800029;
 }
 
+.example-tooltip-red {
+  background: #b71c1c;
+}
+
 /* .mat-menu-content:not(:empty) {
   background-color: blanchedalmond;
   color: #800029;

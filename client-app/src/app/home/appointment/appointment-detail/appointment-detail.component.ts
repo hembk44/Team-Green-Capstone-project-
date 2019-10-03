@@ -1,4 +1,5 @@
 import { Component, OnInit } from "@angular/core";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 import { ActivatedRoute, Router, Params } from "@angular/router";
 import { Appointment } from "../appointment-model/appointment.model";
@@ -26,7 +27,8 @@ export class AppointmentDetailComponent implements OnInit {
     private router: Router,
     private dataService: DataStorageService,
     private authService: AuthService,
-    private dataStorage: DataStorageService
+    private dataStorage: DataStorageService,
+    private _snackBar: MatSnackBar
   ) {}
 
   ngOnInit() {
@@ -65,6 +67,10 @@ export class AppointmentDetailComponent implements OnInit {
         console.log(result);
       }
     });
+    this._snackBar.openFromComponent(TimeSlotSnackComponent, {
+      duration: 5000
+    });
+    this.router.navigate(["./home/appointment/type"]);
   }
   onDeleteAppointment() {
     // this.appointmentService.deleteAppointment(this.id);
@@ -97,3 +103,17 @@ export class AppointmentDetailComponent implements OnInit {
     });
   }
 }
+
+@Component({
+  selector: "snack-bar-component-time-slot",
+  templateUrl: "snack-bar-component-time-slot.html",
+  styles: [
+    `
+      .time-slot {
+        color: #800029;
+        background-color: blanchedalmond;
+      }
+    `
+  ]
+})
+export class TimeSlotSnackComponent {}

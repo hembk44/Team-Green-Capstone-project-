@@ -11,6 +11,7 @@
   </p>
   <mat-card-content *ngFor="let time of appointment">
     <!-- <p>{{ time[0].appointment}}</p> -->
+<<<<<<< HEAD
     <button mat-raised-button class="primary" [matMenuTriggerFor]="menu">
       {{ time.startTime }} - {{ time.endTime }}
     </button>
@@ -18,6 +19,29 @@
       <button mat-menu-item (click)="confirmAppointment(time.startTime, time.endTime)">confirm</button>
       <button mat-menu-item>cancel</button>
     </mat-menu>
+=======
+    <div *ngIf="currentRole == 'ROLE_ADMIN'">
+      <button mat-raised-button class="primary">
+        {{ time.startTime }} - {{ time.endTime }}
+      </button>
+    </div>
+    <div *ngIf="currentRole == 'ROLE_USER'">
+      <button
+        mat-raised-button
+        class="primary"
+        [matMenuTriggerFor]="menu"
+        matTooltip="Please click to confirm"
+        matTooltipClass="example-tooltip-red"
+        aria-label="Button that shows a red tooltip"
+      >
+        {{ time.startTime }} - {{ time.endTime }}
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="onConfirm(time.id)">confirm</button>
+        <button mat-menu-item>cancel</button>
+      </mat-menu>
+    </div>
+>>>>>>> 998c3ca050991be550e811e0f80c03ddf3013669
 
     <!-- <p>End time: {{ time.endTime }}</p> -->
     <!-- <hr /> -->
@@ -40,6 +64,9 @@
     class="primary"
     [matMenuTriggerFor]="manage"
     *ngIf="currentRole == 'ROLE_ADMIN'"
+    matTooltip="Please click to delete or update"
+    matTooltipClass="example-tooltip-red"
+    aria-label="Button that shows a red tooltip"
   >
     Manage
   </button>

@@ -91,7 +91,7 @@ export class AppointmentCreateComponent implements OnInit {
         name: appointmentFormValues.title,
         description: appointmentFormValues.description,
         eventdates: [eventdaterate],
-        receipients: [''],
+        receipients: [this.email],
         location: 'unspecified location'
       }
       this.dataStorage.storeEvent(obj2).subscribe(result =>{
