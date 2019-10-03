@@ -17,7 +17,14 @@
       </button>
     </div>
     <div *ngIf="currentRole == 'ROLE_USER'">
-      <button mat-raised-button class="primary" [matMenuTriggerFor]="menu">
+      <button
+        mat-raised-button
+        class="primary"
+        [matMenuTriggerFor]="menu"
+        matTooltip="Please click to confirm"
+        matTooltipClass="example-tooltip-red"
+        aria-label="Button that shows a red tooltip"
+      >
         {{ time.startTime }} - {{ time.endTime }}
       </button>
       <mat-menu #menu="matMenu">

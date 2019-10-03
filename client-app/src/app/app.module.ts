@@ -28,6 +28,7 @@ import {
 import { MatExpansionModule } from "@angular/material/expansion";
 import { MatMenuModule } from "@angular/material/menu";
 import { MatSelectModule } from "@angular/material/select";
+import { MatTooltipModule } from "@angular/material/tooltip";
 
 // import { DashboardComponent } from "./dashboard/dashboard.component";
 // import { CalendarComponent } from "./calendar/calendar.component";
@@ -126,6 +127,7 @@ import { AuthInterceptor } from "./auth/auth-interceptor";
     MatExpansionModule,
     MatMenuModule,
     MatSelectModule,
+    MatTooltipModule,
     CalendarModule.forRoot({
       provide: DateAdapter,
       useFactory: adapterFactory
