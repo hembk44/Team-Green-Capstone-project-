@@ -16,6 +16,8 @@ import { DateRange } from "../appointment-model/date-range.model";
 import { TimeInterval } from "../appointment-model/time-interval.model";
 import { DataStorageService } from "../../shared/data-storage.service";
 import { ApiResponse } from "src/app/auth/api.response";
+import { EventTime } from '../../calendar/event-times.model';
+import { EventDate } from '../../calendar/event-date.model';
 
 @Component({
   selector: "app-appointment-create",
@@ -77,6 +79,26 @@ export class AppointmentCreateComponent implements OnInit {
         this.dataStorage.fetchAppointment();
       }
     });
+
+    for(let date of this.dateRangeArray){
+      const eventDate = date.date;
+      const eventstart = date.times[0].startTime;
+      const eventEnd = date.times[date.times.length-1].endTime;
+      const eventtimes = new EventTime(eventstart,eventEnd);
+      const eventdaterate = new EventDate(eventDate, [eventtimes]);
+      const obj2 = {
+        name: appointmentFormValues.title,
+        description: appointmentFormValues.description,
+        eventdates: [eventdaterate],
+        receipients: [''],
+        location: 'unspecified location'
+      }
+      this.dataStorage.storeEvent(obj2).subscribe(result =>{
+        if(result){
+          this.dataStorage.fetchEvents();
+        }
+      })
+    }
   }
 }
 
