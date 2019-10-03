@@ -69,9 +69,10 @@ export class AppointmentCreateComponent implements OnInit {
       name: appointmentFormValues.title,
       description: appointmentFormValues.description,
       recepients: [appointmentFormValues.email],
-      dates: this.dateRangeArray
+      location: "Hem",
+      appdates: this.dateRangeArray
     };
-
+    console.log(obj);
     this.dataStorage.storeAppointment(obj).subscribe(result => {
       if (result) {
         this.dataStorage.fetchAppointment();

@@ -23,7 +23,8 @@ export class AppointmentDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private dataService: DataStorageService,
-    private authService: AuthService
+    private authService: AuthService,
+    private dataStorage: DataStorageService
   ) {}
 
   ngOnInit() {
@@ -38,23 +39,31 @@ export class AppointmentDetailComponent implements OnInit {
             this.appointment = result.result;
             this.appointmentName = this.appointment[0].appointment.name;
             this.appointmentDesc = this.appointment[0].appointment.description;
-
+            console.log(this.appointment);
+          });
+      } else {
+        console.log("user data here!!!");
+        this.dataService
+          .displayUserAppointmentDetails(this.id)
+          .subscribe(result => {
+            this.appointment = result.result;
+            // this.appointmentName = this.appointment[0].appointment.name;
+            // this.appointmentDesc = this.appointment[0].appointment.description;
             console.log(this.appointment);
           });
       }
-      console.log("user data here!!!");
-      this.dataService
-        .displayUserAppointmentDetails(this.id)
-        .subscribe(result => {
-          this.appointment = result.result;
-          this.appointmentName = this.appointment[0].appointment.name;
-          this.appointmentDesc = this.appointment[0].appointment.description;
-
-          console.log(this.appointment);
-        });
     });
   }
 
+  onConfirm(id: number) {
+    // console.log(this.id);
+    this.dataStorage.userSelectTimeSlot(id).subscribe(result => {
+      if (result) {
+        // this.dataStorage.fetchAppointment();
+        console.log(result);
+      }
+    });
+  }
   onDeleteAppointment() {
     // this.appointmentService.deleteAppointment(this.id);
     this.router.navigate(["./appointment/type"]);

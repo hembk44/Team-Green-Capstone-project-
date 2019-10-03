@@ -49,6 +49,19 @@ export class DataStorageService {
       );
   }
 
+  userSelectTimeSlot(id: number) {
+    this.isLoadingSubject.next(true);
+    return this.http
+      .post<Object>(
+        "http://localhost:8181/api/appointment/timeslots/postSlot/" + id,
+        id
+      )
+      .pipe(
+        (map(data => data), catchError(error => throwError(error))),
+        finalize(() => this.isLoadingSubject.next(false))
+      );
+  }
+
   fetchAppointment() {
     this.isLoadingSubject.next(true);
     this.http
@@ -111,24 +124,17 @@ export class DataStorageService {
       );
   }
 
-  private handleError(errorRes: HttpErrorResponse) {
-    let errorMessage = "An unknown error occured!";
-    if (!errorRes.error || !errorRes.error.error) {
-      return throwError(errorMessage);
-    }
-    errorMessage = errorRes.error.error.message;
-
-    // switch (errorRes.error.error.message) {
-    //   case "...":
-    //     errorMessage = "...";
-    // }
-    return throwError(errorMessage);
-  }
+  // private handleError(errorRes: HttpErrorResponse) {
+  //   let errorMessage = "An unknown error occured!";
+  //   if (!errorRes.error || !errorRes.error.error) {
+  //     return throwError(errorMessage);
+  //   }
+  //   errorMessage = errorRes.error.error.message;
 
   fetchEvents() {
     this.isLoadingSubject.next(true);
     this.http
-      .get<ApiResponse>("http://localhost:8181/api/event/faculty/allEvents")
+      .get<ApiResponse>("http://localhost:8181/api/appointment/calendar/user")
       .pipe(
         (map(data => data),
         catchError(error => throwError("theres an error" + error)),
@@ -136,6 +142,7 @@ export class DataStorageService {
       )
       .subscribe((result: ApiResponse) => {
         if (result.status == 200 && result.result) {
+          console.log(result);
           console.log(result.result);
           this.eventSubject.next(result.result);
         }

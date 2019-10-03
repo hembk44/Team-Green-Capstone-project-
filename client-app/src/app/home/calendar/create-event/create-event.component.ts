@@ -1,17 +1,23 @@
 import { Component, OnInit } from "@angular/core";
-import { FormGroup, FormControl, FormArray, FormBuilder, Validators } from "@angular/forms";
+import {
+  FormGroup,
+  FormControl,
+  FormArray,
+  FormBuilder,
+  Validators
+} from "@angular/forms";
 import { CalEvent } from "../events.model";
 import { EventService } from "../events.service";
 import { Router } from "@angular/router";
 import { CalendarService } from "../calendar-list/calendar.service";
 import { Calendar } from "../calendar-list/calendar.model";
-import { DateRange } from '../../appointment/appointment-model/date-range.model';
-import { MatDialog } from '@angular/material';
-import { DataStorageService } from '../../shared/data-storage.service';
-import { DialogDateTimeIntervalDialog } from '../../appointment/appointment-create/appointment-create.component';
-import { EventDate } from '../event-date.model';
-import { TimeInterval } from '../../appointment/appointment-model/time-interval.model';
-import { EventTime } from '../event-times.model';
+import { DateRange } from "../../appointment/appointment-model/date-range.model";
+import { MatDialog } from "@angular/material";
+import { DataStorageService } from "../../shared/data-storage.service";
+import { DialogDateTimeIntervalDialog } from "../../appointment/appointment-create/appointment-create.component";
+import { EventDate } from "../event-date.model";
+import { TimeInterval } from "../../appointment/appointment-model/time-interval.model";
+import { EventTime } from "../event-times.model";
 
 @Component({
   selector: "app-create-event",
@@ -22,7 +28,7 @@ export class CreateEventComponent implements OnInit {
   eventForm: FormGroup;
   //calendars: Calendar[];
   eventData: CalEvent;
-  email = new FormControl("",[Validators.required, Validators.email]);
+  email = new FormControl("", [Validators.required, Validators.email]);
   dateRangeArray: DateRange[] = [];
 
   constructor(
@@ -38,12 +44,12 @@ export class CreateEventComponent implements OnInit {
       title: ["", Validators.required],
       description: ["", Validators.required],
       location: [""],
-      email:this.email
+      email: this.email
     });
     //this.calendars = this.calendarService.getCalendars();
   }
 
-  getErrorMessage(){
+  getErrorMessage() {
     return this.email.hasError("required")
       ? "You must enter a value"
       : this.email.hasError("email")
@@ -65,10 +71,10 @@ export class CreateEventComponent implements OnInit {
   onSubmit() {
     const eventFormValues = this.eventForm.value;
     const eventDate = this.dateRangeArray[0].date;
-    const eventstart = this.dateRangeArray[0].times[0].startTime;
-    const eventEnd = this.dateRangeArray[0].times[0].endTime;
-    const eventtimes = new EventTime(eventstart,eventEnd);
-    const eventdaterange = new EventDate(eventDate,[eventtimes]);
+    const eventstart = this.dateRangeArray[0].apptimes[0].startTime;
+    const eventEnd = this.dateRangeArray[0].apptimes[0].endTime;
+    const eventtimes = new EventTime(eventstart, eventEnd);
+    const eventdaterange = new EventDate(eventDate, [eventtimes]);
     const tempid = 8;
 
     console.log(eventdaterange);
@@ -89,10 +95,10 @@ export class CreateEventComponent implements OnInit {
       eventdates: [eventdaterange],
       recepients: [eventFormValues.email],
       location: eventFormValues.location
-    }
-    
-    this.dataStorage.storeEvent(obj).subscribe(result =>{ 
-      if(result) {
+    };
+
+    this.dataStorage.storeEvent(obj).subscribe(result => {
+      if (result) {
         this.dataStorage.fetchEvents();
       }
     });
