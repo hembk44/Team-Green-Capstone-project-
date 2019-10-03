@@ -23,12 +23,12 @@ const httpOptions = {
 export class AuthService {
   private loginUrl = "http://localhost:8181/api/auth/signin";
   private signupUrl = "http://localhost:8181/api/auth/signup";
-  // private userRoleSubject: BehaviorSubject<any> = new BehaviorSubject<any>({});
-  // public userRole: Observable<string> = this.userRoleSubject.asObservable();
+  private userRoleSubject: BehaviorSubject<any> = new BehaviorSubject<any>({});
+  public userRole: Observable<string> = this.userRoleSubject.asObservable();
 
-  // get user(): string {
-  //   return this.userRoleSubject.value.role;
-  // }
+  get user(): string {
+    return this.userRoleSubject.value;
+  }
 
   constructor(
     private http: HttpClient,
@@ -41,12 +41,13 @@ export class AuthService {
       .post<ApiResponse>(this.loginUrl, credentials, httpOptions)
       .subscribe((data: ApiResponse) => {
         if (data) {
+          console.log(data);
+          console.log(data.result);
           this.tokenStorage.saveToken(data.result.accessToken);
-          // this.userRoleSubject.next(data.result);
+          this.userRoleSubject.next(data.result.role);
+          console.log(data.result.role);
           this.router.navigate(["home"]);
         }
-
-        //
       });
   }
 

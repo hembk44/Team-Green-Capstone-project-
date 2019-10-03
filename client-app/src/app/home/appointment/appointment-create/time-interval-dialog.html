@@ -1,6 +1,70 @@
 <!-- <h1 mat-dialog-title>Hi {{ data.name }}</h1> -->
 <div mat-dialog-content [formGroup]="TimeIntervalFormData">
   <div class="example-container">
+    <!-- <mat-form-field>
+      <mat-label>Favorite animal</mat-label>
+      <mat-select formControlName="startTime" required>
+        <mat-option>--</mat-option>
+        <mat-option>a </mat-option>
+      </mat-select>
+      <mat-error *ngIf="TimeIntervalFormData.controls['startTime'].hasError('required')"
+        >Please choose an animal</mat-error
+      >
+      <mat-hint>{{ animalControl.value?.sound }}</mat-hint>
+    </mat-form-field> -->
+
+    <!-- <mat-select name="time">
+      
+        <mat-option value="01:00">01.00AM</mat-option>
+        <mat-option value="01:30">01.30AM</mat-option>
+        <mat-option value="02:00">02.00AM</mat-option>
+        <mat-option value="02:30">02.30AM</mat-option>
+        <mat-option value="03:00">03.00AM</mat-option>
+        <mat-option value="03:30">03.30AM</mat-option>
+        <mat-option value="04:00">04.00AM</mat-option>
+        <mat-option value="04:30">04.30AM</mat-option>
+        <mat-option value="05:00">05.00AM</mat-option>
+        <mat-option value="05:30">05.30AM</mat-option>
+        <mat-option value="06:00">06.00AM</mat-option>
+        <mat-option value="06:30">06.30AM</mat-option>
+        <mat-option value="07:00">07.00AM</mat-option>
+        <mat-option value="07:30">07.30AM</mat-option>
+        <mat-option value="08:00">08.00AM</mat-option>
+        <mat-option value="08:30">08.30AM</mat-option>
+        <mat-option value="09:00">09.00AM</mat-option>
+        <mat-option value="09:30">09.30AM</mat-option>
+        <mat-option value="10:00">10.00AM</mat-option>
+        <mat-option value="10:30">10.30AM</mat-option>
+        <mat-option value="11:00">11.00AM</mat-option>
+        <mat-option value="11:30">11.30AM</mat-option>
+        <mat-option value="00:00">12.00AM</mat-option>
+        <mat-option value="00:30">12.30AM</mat-option>
+        
+        <mat-option value="13:00">01.00PM</mat-option>
+        <mat-option value="13:30">01.30PM</mat-option>
+        <mat-option value="14:00">02.00PM</mat-option>
+        <mat-option value="14:30">02.30PM</mat-option>
+        <mat-option value="15:00">03.00PM</mat-option>
+        <mat-option value="15:30">03.30PM</mat-option>
+        <mat-option value="16:00">04.00PM</mat-option>
+        <mat-option value="16:30">04.30PM</mat-option>
+        <mat-option value="17:00">05.00PM</mat-option>
+        <mat-option value="17:30">05.30PM</mat-option>
+        <mat-option value="18:00">06.00PM</mat-option>
+        <mat-option value="18:30">06.30PM</mat-option>
+        <mat-option value="19:00">07.00PM</mat-option>
+        <mat-option value="19:30">07.30PM</mat-option>
+        <mat-option value="20:00">08.00PM</mat-option>
+        <mat-option value="20:30">08.30PM</mat-option>
+        <mat-option value="21:00">09.00PM</mat-option>
+        <mat-option value="21:30">09.30PM</mat-option>
+        <mat-option value="22:00">10.00PM</mat-option>
+        <mat-option value="22:30">10.30PM</mat-option>
+        <mat-option value="23:00">11.00PM</mat-option>
+        <mat-option value="23:30">11.30PM</mat-option>
+        <mat-option value="12:00">12.00PM</mat-option>
+        <mat-option value="12:30">12.30PM</mat-option>
+    </mat-select> -->
     <mat-form-field>
       <input
         type="text"
