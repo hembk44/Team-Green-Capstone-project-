@@ -6,16 +6,25 @@
   <h5>{{ appointmentName }}</h5>
   <p>{{ appointmentDesc }}</p>
   <!-- <h4>time slots:</h4> -->
-
+  <p *ngIf="currentRole == 'ROLE_USER'">
+    Please select any one of the time slots below:
+  </p>
   <mat-card-content *ngFor="let time of appointment">
     <!-- <p>{{ time[0].appointment}}</p> -->
-    <button mat-raised-button class="primary" [matMenuTriggerFor]="menu">
-      {{ time.startTime }} - {{ time.endTime }}
-    </button>
-    <mat-menu #menu="matMenu">
-      <button mat-menu-item>confirm</button>
-      <button mat-menu-item>cancel</button>
-    </mat-menu>
+    <div *ngIf="currentRole == 'ROLE_ADMIN'">
+      <button mat-raised-button class="primary">
+        {{ time.startTime }} - {{ time.endTime }}
+      </button>
+    </div>
+    <div *ngIf="currentRole == 'ROLE_USER'">
+      <button mat-raised-button class="primary" [matMenuTriggerFor]="menu">
+        {{ time.startTime }} - {{ time.endTime }}
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="onConfirm(time.id)">confirm</button>
+        <button mat-menu-item>cancel</button>
+      </mat-menu>
+    </div>
 
     <!-- <p>End time: {{ time.endTime }}</p> -->
     <!-- <hr /> -->
@@ -33,7 +42,12 @@
     </p> -->
   </mat-card-content>
 
-  <button mat-raised-button class="primary" [matMenuTriggerFor]="manage">
+  <button
+    mat-raised-button
+    class="primary"
+    [matMenuTriggerFor]="manage"
+    *ngIf="currentRole == 'ROLE_ADMIN'"
+  >
     Manage
   </button>
   <mat-menu #manage="matMenu">
