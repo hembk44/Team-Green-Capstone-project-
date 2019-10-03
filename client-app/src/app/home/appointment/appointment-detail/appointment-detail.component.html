@@ -11,20 +11,13 @@
   </p>
   <mat-card-content *ngFor="let time of appointment">
     <!-- <p>{{ time[0].appointment}}</p> -->
-    <div *ngIf="currentRole == 'ROLE_ADMIN'">
-      <button mat-raised-button class="primary">
-        {{ time.startTime }} - {{ time.endTime }}
-      </button>
-    </div>
-    <div *ngIf="currentRole == 'ROLE_USER'">
-      <button mat-raised-button class="primary" [matMenuTriggerFor]="menu">
-        {{ time.startTime }} - {{ time.endTime }}
-      </button>
-      <mat-menu #menu="matMenu">
-        <button mat-menu-item (click)="onConfirm(time.id)">confirm</button>
-        <button mat-menu-item>cancel</button>
-      </mat-menu>
-    </div>
+    <button mat-raised-button class="primary" [matMenuTriggerFor]="menu">
+      {{ time.startTime }} - {{ time.endTime }}
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item (click)="confirmAppointment(time.startTime, time.endTime)">confirm</button>
+      <button mat-menu-item>cancel</button>
+    </mat-menu>
 
     <!-- <p>End time: {{ time.endTime }}</p> -->
     <!-- <hr /> -->
