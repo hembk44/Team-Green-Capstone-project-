@@ -11,6 +11,7 @@ import { EventService } from "./events.service";
 import { Router } from "@angular/router";
 import { CompatibleEvent } from './compatible-events.model';
 import { DataStorageService } from '../shared/data-storage.service';
+import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
   selector: "app-calendar",
@@ -19,39 +20,68 @@ import { DataStorageService } from '../shared/data-storage.service';
 })
 export class CalendarComponent implements OnInit {
 
-  constructor(private router: Router, private dataStorage: DataStorageService, private eventService: EventService) {}
+  constructor(private router: Router, private dataStorage: DataStorageService, private eventService: EventService,private authService: AuthService) {}
 
   viewDate: Date;
   view: CalendarView = CalendarView.Month;
   CalendarView = CalendarView;
   activeDayIsOpen: boolean = false;
+  role = this.authService.user;
 
   calEvents: CalEvent[]=[];//list of events
   compatEvents: CompatibleEvent[]=[];
+  apptEvents: any[] = [];
 
   ngOnInit() {
     this.viewDate = new Date();
-    this.dataStorage.fetchEvents();
+    this.compatEvents = [];
+    // this.dataStorage.fetchEvents();
+    // this.dataStorage.isLoading.subscribe(loading=>{
+    //   if(!loading){
+    //       this.calEvents = this.dataStorage.eventsList;
+    //       console.log(this.calEvents);
+    //   }
+    //   for(let event of this.calEvents){
+    //     const dateString = event.eventdates[0].date.toString();
+    //     const endString = event.eventdates[event.eventdates.length-1].date.toString();
+    //     const startTimes = event.eventdates[0].eventtimes[0].startTime;
+    //     const endTimes = event.eventdates[event.eventdates.length - 1].eventtimes[0].endTime;
+    //     const ev = new CompatibleEvent(
+    //       event.name,
+    //       new Date(dateString.substring(5,7).concat('/').concat(dateString.substring(8,10)).concat('/').concat(dateString.substring(0,4)).concat(' ').concat(startTimes)),
+    //       new Date(endString.substring(5,7).concat('/').concat(dateString.substring(8,10)).concat('/').concat(dateString.substring(0,4)).concat(' ').concat(endTimes)),
+    //       event.id,
+    //     )
+    //     this.compatEvents.push(ev);
+    //   } 
+    // });
+    //console.log(this.compatEvents);
+    this.dataStorage.fetchUserAppointment();
     this.dataStorage.isLoading.subscribe(loading=>{
-      this.compatEvents = []
       if(!loading){
-          this.calEvents = this.dataStorage.eventsList;
-          console.log(this.calEvents);
+        console.log('getting shit from db');
+        this.apptEvents = this.dataStorage.appointmentLists;
+        console.log(this.apptEvents);
       }
-      for(let event of this.calEvents){
-        const dateString = event.eventdates[0].date.toString();
-        const endString = event.eventdates[event.eventdates.length-1].date.toString();
-        const startTimes = event.eventdates[0].eventtimes[0].startTime;
-        const endTimes = event.eventdates[event.eventdates.length - 1].eventtimes[0].endTime;
-        const ev = new CompatibleEvent(
-          event.id,
-          event.name,
-          new Date(dateString.substring(5,7).concat('/').concat(dateString.substring(8,10)).concat('/').concat(dateString.substring(0,4)).concat(' ').concat(startTimes)),
-          new Date(endString.substring(5,7).concat('/').concat(dateString.substring(8,10)).concat('/').concat(dateString.substring(0,4)).concat(' ').concat(endTimes))
-        )
+      for(let appt of this.apptEvents){
+        const title = appt.appointmentName;
+        const id = appt.id
+        const startTime = appt.startTime;
+        const endTime = appt.endTime;
+        const date = appt.date;
+        const start = new Date(date.substring(5,7).concat('/').concat(date.substring(8,10)).concat('/').concat(date.substring(0,4)).concat(' ').concat(startTime));
+        const end = new Date(date.substring(5,7).concat('/').concat(date.substring(8,10)).concat('/').concat(date.substring(0,4)).concat(' ').concat(endTime));
+        const ev: CompatibleEvent = new CompatibleEvent(
+          title,
+          start,
+          end
+        );
         this.compatEvents.push(ev);
-      } 
-    });
+        console.log(ev);
+      }
+    })
+    
+    console.log(this.compatEvents);
   }
 
   //changes view of calendar to day, week, month

@@ -2,7 +2,7 @@
   mat-stroked-button
   color="primary"
   (click)="create()"
-  *ngIf="currentRole == 'ROLE_ADMIN'"
+  *ngIf="currentRole == 'ROLE_ADMIN' || currentRole == 'ROLE_PM'"
 >
   Create Appointment
 </button>
