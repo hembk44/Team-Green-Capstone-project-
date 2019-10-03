@@ -69,20 +69,20 @@
         <mwl-calendar-month-view
           *ngSwitchCase="'month'"
           [viewDate]="viewDate"
-          [events]="calEvents"
+          [events]="compatEvents"
           (dayClicked)="dayClicked($event.day)"
         >
         </mwl-calendar-month-view>
         <mwl-calendar-week-view
           *ngSwitchCase="'week'"
           [viewDate]="viewDate"
-          [events]="calEvents"
+          [events]="compatEvents"
           (eventClicked)="eventClicked($event.event)"
         >
         </mwl-calendar-week-view>
         <mwl-calendar-day-view
           [viewDate]="viewDate"
-          [events]="calEvents"
+          [events]="compatEvents"
           *ngSwitchCase="'day'"
           (eventClicked)="eventClicked($event.event)"
         >
@@ -94,7 +94,7 @@
   <div class="col-3 side-view bg-white" *ngIf="view === CalendarView.Month">
     <h4 class="sticky-top bg-white mt-4">{{ viewDate.toDateString() }}</h4>
     <hr />
-    <div *ngFor="let event of calEvents">
+    <div *ngFor="let event of compatEvents">
       <div
         class="event-wrapper"
         *ngIf="

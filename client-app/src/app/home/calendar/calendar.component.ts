@@ -21,27 +21,37 @@ export class CalendarComponent implements OnInit {
 
   constructor(private router: Router, private dataStorage: DataStorageService, private eventService: EventService) {}
 
-  viewDate: Date = new Date();
+  viewDate: Date;
   view: CalendarView = CalendarView.Month;
   CalendarView = CalendarView;
   activeDayIsOpen: boolean = false;
 
-  calEvents: CalEvent[];//list of events
+  calEvents: CalEvent[]=[];//list of events
+  compatEvents: CompatibleEvent[]=[];
 
   ngOnInit() {
-    //this.calEvents=this.eventService.getEvents();
-    if(this.dataStorage.eventsList != undefined){
-      this.dataStorage.isLoading.subscribe(loading=>{
-        if(!loading){
-            this.calEvents = this.dataStorage.eventsList;
-        }
-      })
-    }
-
-    else{
-      this.calEvents = [];
-    }
-
+    this.viewDate = new Date();
+    this.dataStorage.fetchEvents();
+    this.dataStorage.isLoading.subscribe(loading=>{
+      this.compatEvents = []
+      if(!loading){
+          this.calEvents = this.dataStorage.eventsList;
+          console.log(this.calEvents);
+      }
+      for(let event of this.calEvents){
+        const dateString = event.eventdates[0].date.toString();
+        const endString = event.eventdates[event.eventdates.length-1].date.toString();
+        const startTimes = event.eventdates[0].eventtimes[0].startTime;
+        const endTimes = event.eventdates[event.eventdates.length - 1].eventtimes[0].endTime;
+        const ev = new CompatibleEvent(
+          event.id,
+          event.name,
+          new Date(dateString.substring(5,7).concat('/').concat(dateString.substring(8,10)).concat('/').concat(dateString.substring(0,4)).concat(' ').concat(startTimes)),
+          new Date(endString.substring(5,7).concat('/').concat(dateString.substring(8,10)).concat('/').concat(dateString.substring(0,4)).concat(' ').concat(endTimes))
+        )
+        this.compatEvents.push(ev);
+      } 
+    });
   }
 
   //changes view of calendar to day, week, month
@@ -50,7 +60,7 @@ export class CalendarComponent implements OnInit {
   }
 
   // changes view date for list of events
-  dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
+  dayClicked({ date, events }: { date: Date; events: CalEvent[] }): void {
     if (isSameMonth(date, this.viewDate)) {
       this.viewDate = date;
     }
