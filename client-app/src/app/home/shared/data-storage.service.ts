@@ -6,6 +6,7 @@ import { throwError, Observable, BehaviorSubject } from "rxjs";
 import { ApiResponse } from "src/app/auth/api.response";
 import { Appointment } from "../appointment/appointment-model/appointment.model";
 import { CalEvent } from "../calendar/events.model";
+import { AuthService } from 'src/app/auth/auth.service';
 
 @Injectable({
   providedIn: "root"
@@ -28,7 +29,7 @@ export class DataStorageService {
 
   public eventList: Observable<CalEvent[]> = this.eventSubject.asObservable();
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private authService: AuthService) {}
 
   get appointmentLists(): Appointment[] {
     return this.appointmentSubject.value;
@@ -130,11 +131,16 @@ export class DataStorageService {
   //     return throwError(errorMessage);
   //   }
   //   errorMessage = errorRes.error.error.message;
-
+  eventAPI: string = '';
   fetchEvents() {
     this.isLoadingSubject.next(true);
+    if(this.authService.user === "ROLE_USER"){
+      this.eventAPI = 'http://localhost:8181/api/event/user/allEvents'
+    }else{
+      this.eventAPI = 'http://localhost:8181/api/event/faculty/allEvents'
+    }
     this.http
-      .get<ApiResponse>("http://localhost:8181/api/appointment/calendar/user")
+      .get<ApiResponse>(this.eventAPI)
       .pipe(
         (map(data => data),
         catchError(error => throwError("theres an error" + error)),
