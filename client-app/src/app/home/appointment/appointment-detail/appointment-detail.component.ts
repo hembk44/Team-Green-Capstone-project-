@@ -80,28 +80,28 @@ export class AppointmentDetailComponent implements OnInit {
     console.log("updated");
   }
 
-  confirmAppointment(start: string, end: string){
-    const name = this.appointmentName;
-    const date = this.appointment[0].appointment.date;
-    const eventTimes = new EventTime(start,end);
-    const evDR = new EventDate(date, [eventTimes]);
-    const desc = this.appointmentDesc;
-    const loc = 'unspecified location';
+//   confirmAppointment(start: string, end: string){
+//     const name = this.appointmentName;
+//     const date = this.appointment[0].appointment.date;
+//     const eventTimes = new EventTime(start,end);
+//     const evDR = new EventDate(date, [eventTimes]);
+//     const desc = this.appointmentDesc;
+//     const loc = 'unspecified location';
 
-    const obj = {
-      name: name,
-      description: desc,
-      eventdates: [evDR],
-      recepients: [''],
-      location: loc
-    }
+//     const obj = {
+//       name: name,
+//       description: desc,
+//       eventdates: [evDR],
+//       recepients: [''],
+//       location: loc
+//     }
 
-    this.dataService.storeEvent(obj).subscribe(result =>{ 
-      if(result) {
-        this.dataService.fetchEvents();
-      }
-    });
-  }
+//     this.dataService.storeEvent(obj).subscribe(result =>{ 
+//       if(result) {
+//         this.dataService.fetchEvents();
+//       }
+//     });
+//   }
 }
 
 @Component({

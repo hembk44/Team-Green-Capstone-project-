@@ -81,25 +81,34 @@ export class AppointmentCreateComponent implements OnInit {
       }
     });
 
-    for(let date of this.dateRangeArray){
-      const eventDate = date.date;
-      const eventstart = date.apptimes[0].startTime;
-      const eventEnd = date.apptimes[date.apptimes.length-1].endTime;
-      const eventtimes = new EventTime(eventstart,eventEnd);
-      const eventdaterate = new EventDate(eventDate, [eventtimes]);
-      const obj2 = {
-        name: appointmentFormValues.title,
-        description: appointmentFormValues.description,
-        eventdates: [eventdaterate],
-        receipients: [this.email],
-        location: 'unspecified location'
-      }
-      this.dataStorage.storeEvent(obj2).subscribe(result =>{
-        if(result){
-          this.dataStorage.fetchEvents();
-        }
-      })
-    }
+    // console.log('sending to calendar')
+    // console.log(this.dateRangeArray);
+    // for(let date of this.dateRangeArray){
+    //   console.log(date);
+    //   const eventDate = date.date;
+    //   console.log(eventDate);
+    //   const eventstart = date.apptimes[0].startTime.substring(0,5).concat(' ').concat(date.apptimes[0].startTime.substring(5,7));
+    //   console.log(eventstart);
+    //   const eventEnd = date.apptimes[date.apptimes.length-1].endTime.substring(0,5).concat(' ').concat(date.apptimes[date.apptimes.length-1].endTime.substring(5,7));
+    //   console.log(eventEnd)
+    //   const eventtimes = new EventTime(eventstart,eventEnd);
+    //   console.log(eventtimes);
+    //   const eventdaterate = new EventDate(eventDate, [eventtimes]);
+    //   console.log(eventdaterate);
+    //   const obj2 = {
+    //     name: appointmentFormValues.title,
+    //     description: appointmentFormValues.description,
+    //     eventdates: [eventdaterate],
+    //     receipients: [this.email],
+    //     location: 'unspecified location'
+    //   }
+    //   console.log(obj2);
+    //   this.dataStorage.storeEvent(obj2).subscribe(result =>{
+    //     if(result){
+    //       this.dataStorage.fetchEvents();
+    //     }
+    //   })
+    // }
   }
 }
 
