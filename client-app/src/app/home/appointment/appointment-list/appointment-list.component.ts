@@ -15,20 +15,29 @@ export class AppointmentListComponent implements OnInit {
   currentRole: string;
   constructor(
     private router: Router,
-    private dataStorage: DataStorageService
-  ) // private role: AuthService
-  {}
+    private dataStorage: DataStorageService,
+    private role: AuthService
+  ) {}
 
   ngOnInit() {
-    // this.currentRole = this.role.user;
-    // console.log(this.role.user);
+    this.currentRole = this.role.user;
+    console.log(this.role.user);
     console.log(this.dataStorage.fetchAppointment());
-    this.dataStorage.fetchAppointment();
-    this.dataStorage.isLoading.subscribe(loading => {
-      if (!loading) {
-        this.appointments = this.dataStorage.appointmentLists;
-      }
-    });
+    if (this.currentRole === "ROLE_USER") {
+      this.dataStorage.fetchUserAppointment();
+      this.dataStorage.isLoading.subscribe(loading => {
+        if (!loading) {
+          this.appointments = this.dataStorage.appointmentLists;
+        }
+      });
+    } else {
+      this.dataStorage.fetchAppointment();
+      this.dataStorage.isLoading.subscribe(loading => {
+        if (!loading) {
+          this.appointments = this.dataStorage.appointmentLists;
+        }
+      });
+    }
   }
   create() {
     this.router.navigate(["home/appointment/type/create"]);

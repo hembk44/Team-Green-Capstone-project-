@@ -61,6 +61,7 @@ export class AppointmentCreateComponent implements OnInit {
       this.dateRangeArray = result;
     });
   }
+  y;
 
   onSubmit() {
     const appointmentFormValues = this.appointmentForm.value;

@@ -1,14 +1,14 @@
-<!-- <button
+<button
   mat-stroked-button
   color="primary"
   (click)="create()"
-  *ngIf="currentRole == 'admin'"
+  *ngIf="currentRole == 'ROLE_ADMIN'"
 >
   Create Appointment
-</button> -->
-<button mat-stroked-button color="primary" (click)="create()">
-  Create Appointment
 </button>
+<!-- <button mat-stroked-button class="primary" (click)="create()">
+  Create Appointment
+</button> -->
 
 <app-appointment-item
   *ngFor="let appointment of appointments"

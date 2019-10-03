@@ -1,7 +1,7 @@
-import { Optional } from '@angular/core';
-import { Calendar } from './calendar-list/calendar.model';
-import { DateRange } from '../appointment/appointment-model/date-range.model';
-import { EventDate } from './event-date.model';
+import { Optional } from "@angular/core";
+import { Calendar } from "./calendar-list/calendar.model";
+import { DateRange } from "../appointment/appointment-model/date-range.model";
+import { EventDate } from "./event-date.model";
 
 export class CalEvent{
 

@@ -7,8 +7,24 @@
   border: #800029 solid 1px;
 }
 
+.primary {
+  color: #800029;
+  background-color: blanchedalmond;
+  /* width: 10%; */
+}
+
+.mat-menu-item:hover:not([disabled]) {
+  background: rgba(255, 235, 205, 1);
+  color: #800029;
+}
+
+/* .mat-menu-content:not(:empty) {
+  background-color: blanchedalmond;
+  color: #800029;
+} */
+
 .mat-expansion-panel {
-  margin-right: 250px;
+  margin-right: 400px;
   /* border: #800029 solid 1px; */
 
 }
