@@ -33,7 +33,7 @@ export class AppointmentListComponent implements OnInit {
     } else {
       console.log("admin data here!!!");
 
-      // this.dataStorage.fetchAppointment();
+      this.dataStorage.fetchAppointment();
       this.dataStorage.isLoading.subscribe(loading => {
         if (!loading) {
           this.appointments = this.dataStorage.appointmentLists;

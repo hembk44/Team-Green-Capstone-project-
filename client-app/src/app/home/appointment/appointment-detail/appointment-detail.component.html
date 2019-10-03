@@ -54,6 +54,9 @@
     class="primary"
     [matMenuTriggerFor]="manage"
     *ngIf="currentRole == 'ROLE_ADMIN'"
+    matTooltip="Please click to delete or update"
+    matTooltipClass="example-tooltip-red"
+    aria-label="Button that shows a red tooltip"
   >
     Manage
   </button>
