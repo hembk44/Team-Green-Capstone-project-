@@ -2,10 +2,10 @@ import { TimeInterval } from "./time-interval.model";
 
 export class DateRange {
   public date: string;
-  public times: TimeInterval[];
+  public apptimes: TimeInterval[];
 
   constructor(appointmentDate: string, timeInterval: TimeInterval[]) {
     this.date = appointmentDate;
-    this.times = timeInterval;
+    this.apptimes = timeInterval;
   }
 }

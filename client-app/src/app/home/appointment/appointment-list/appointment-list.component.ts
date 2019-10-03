@@ -22,8 +22,8 @@ export class AppointmentListComponent implements OnInit {
   ngOnInit() {
     this.currentRole = this.role.user;
     console.log(this.role.user);
-    console.log(this.dataStorage.fetchAppointment());
     if (this.currentRole === "ROLE_USER") {
+      console.log("user data here!!!");
       this.dataStorage.fetchUserAppointment();
       this.dataStorage.isLoading.subscribe(loading => {
         if (!loading) {
@@ -31,7 +31,9 @@ export class AppointmentListComponent implements OnInit {
         }
       });
     } else {
-      this.dataStorage.fetchAppointment();
+      console.log("admin data here!!!");
+
+      // this.dataStorage.fetchAppointment();
       this.dataStorage.isLoading.subscribe(loading => {
         if (!loading) {
           this.appointments = this.dataStorage.appointmentLists;
