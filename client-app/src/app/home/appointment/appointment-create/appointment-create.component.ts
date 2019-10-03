@@ -83,8 +83,8 @@ export class AppointmentCreateComponent implements OnInit {
 
     for(let date of this.dateRangeArray){
       const eventDate = date.date;
-      const eventstart = date.times[0].startTime;
-      const eventEnd = date.times[date.times.length-1].endTime;
+      const eventstart = date.apptimes[0].startTime;
+      const eventEnd = date.apptimes[date.apptimes.length-1].endTime;
       const eventtimes = new EventTime(eventstart,eventEnd);
       const eventdaterate = new EventDate(eventDate, [eventtimes]);
       const obj2 = {
