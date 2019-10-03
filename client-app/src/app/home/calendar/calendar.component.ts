@@ -31,6 +31,7 @@ export class CalendarComponent implements OnInit {
 
   ngOnInit() {
     this.viewDate = new Date();
+    this.compatEvents = [];
     this.dataStorage.fetchEvents();
     this.dataStorage.isLoading.subscribe(loading=>{
       this.compatEvents = []

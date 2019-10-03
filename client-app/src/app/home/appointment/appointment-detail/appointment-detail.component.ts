@@ -5,6 +5,8 @@ import { Appointment } from "../appointment-model/appointment.model";
 import { TimeInterval } from "../appointment-model/time-interval.model";
 import { DataStorageService } from "../../shared/data-storage.service";
 import { AuthService } from "src/app/auth/auth.service";
+import { EventTime } from '../../calendar/event-times.model';
+import { EventDate } from '../../calendar/event-date.model';
 
 @Component({
   selector: "app-appointment-detail",
@@ -61,5 +63,28 @@ export class AppointmentDetailComponent implements OnInit {
   }
   onUpdateAppointment() {
     console.log("updated");
+  }
+
+  confirmAppointment(start: string, end: string){
+    const name = this.appointmentName;
+    const date = this.appointment[0].appointment.date;
+    const eventTimes = new EventTime(start,end);
+    const evDR = new EventDate(date, [eventTimes]);
+    const desc = this.appointmentDesc;
+    const loc = 'unspecified location';
+
+    const obj = {
+      name: name,
+      description: desc,
+      eventdates: [evDR],
+      recepients: [''],
+      location: loc
+    }
+
+    this.dataService.storeEvent(obj).subscribe(result =>{ 
+      if(result) {
+        this.dataService.fetchEvents();
+      }
+    });
   }
 }
