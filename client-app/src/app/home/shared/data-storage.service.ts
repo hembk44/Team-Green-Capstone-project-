@@ -125,14 +125,13 @@ export class DataStorageService {
     return throwError(errorMessage);
   }
 
-
   fetchEvents() {
     this.isLoadingSubject.next(true);
     this.http
       .get<ApiResponse>("http://localhost:8181/api/event/faculty/allEvents")
       .pipe(
         (map(data => data),
-        catchError(error => throwError('theres an error'+error)),
+        catchError(error => throwError("theres an error" + error)),
         finalize(() => this.isLoadingSubject.next(false)))
       )
       .subscribe((result: ApiResponse) => {
@@ -144,7 +143,7 @@ export class DataStorageService {
   }
 
   //error converting circular structure to JSON
-  storeEvent(obj: Object){
+  storeEvent(obj: Object) {
     this.isLoadingSubject.next(true);
     return this.http
       .post<Object>("http://localhost:8181/api/event/set", obj)
