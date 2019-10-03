@@ -123,6 +123,7 @@ export class DataStorageService {
       )
       .subscribe((result: ApiResponse) => {
         if (result.status == 200 && result.result) {
+          console.log(result.result);
           this.eventSubject.next(result.result);
         }
       });

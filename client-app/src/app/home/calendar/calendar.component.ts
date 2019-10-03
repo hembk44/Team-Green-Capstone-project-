@@ -33,26 +33,22 @@ export class CalendarComponent implements OnInit {
     this.viewDate = new Date();
     this.dataStorage.fetchEvents();
     this.dataStorage.isLoading.subscribe(loading=>{
+      this.compatEvents = []
       if(!loading){
           this.calEvents = this.dataStorage.eventsList;
-          console.log(this.dataStorage.eventsList);
           console.log(this.calEvents);
       }
-      console.log('test');
       for(let event of this.calEvents){
-        console.log(event);
-        console.log(event.id);
-        console.log(event.name);
-        console.log(event.eventdates[0].eventtimes[0].endTime);
-        console.log(event.eventdates[0].date.toString().substring(0,15).concat(' ').concat(event.eventdates[0].eventtimes[0].startTime));
+        const dateString = event.eventdates[0].date.toString();
+        const endString = event.eventdates[event.eventdates.length-1].date.toString();
+        const startTimes = event.eventdates[0].eventtimes[0].startTime;
+        const endTimes = event.eventdates[event.eventdates.length - 1].eventtimes[0].endTime;
         const ev = new CompatibleEvent(
           event.id,
           event.name,
-          new Date(event.eventdates[0].date.toString().substring(0,15).concat(' ').concat(event.eventdates[0].eventtimes[0].startTime)),
-          new Date(event.eventdates[event.eventdates.length - 1].date.toString().substring(0,15).concat(' ').concat(event.eventdates[event.eventdates.length - 1].eventtimes[event.eventdates[event.eventdates.length-1].eventtimes.length-1].endTime))
+          new Date(dateString.substring(5,7).concat('/').concat(dateString.substring(8,10)).concat('/').concat(dateString.substring(0,4)).concat(' ').concat(startTimes)),
+          new Date(endString.substring(5,7).concat('/').concat(dateString.substring(8,10)).concat('/').concat(dateString.substring(0,4)).concat(' ').concat(endTimes))
         )
-        console.log(ev.start);
-        console.log(ev.end);
         this.compatEvents.push(ev);
       } 
     });

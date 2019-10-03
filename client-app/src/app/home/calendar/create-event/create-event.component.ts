@@ -64,7 +64,6 @@ export class CreateEventComponent implements OnInit {
 
   onSubmit() {
     const eventFormValues = this.eventForm.value;
-    console.log(this.dateRangeArray[0]);
     const eventDate = this.dateRangeArray[0].date;
     const eventstart = this.dateRangeArray[0].times[0].startTime;
     const eventEnd = this.dateRangeArray[0].times[0].endTime;
@@ -84,22 +83,18 @@ export class CreateEventComponent implements OnInit {
     // );
     // this.eventService.addEvent(newEvent);
 
-    const obj: Object = {
+    const obj = {
       name: eventFormValues.title,
       description: eventFormValues.description,
       eventdates: [eventdaterange],
-      recepients: [this.email],
+      recepients: [eventFormValues.email],
       location: eventFormValues.location
     }
-     
-    console.log(obj);
     
-    this.dataStorage.storeEvent(obj).subscribe(result => {
-      console.log('event sent to backend');
+    this.dataStorage.storeEvent(obj).subscribe(result =>{ 
       if(result) {
         this.dataStorage.fetchEvents();
       }
-      console.log(result);
     });
 
     this.router.navigate(["home/calendar"]);
