@@ -131,13 +131,6 @@ export class DataStorageService {
   //   }
   //   errorMessage = errorRes.error.error.message;
 
-  // switch (errorRes.error.error.message) {
-  //   case "...":
-  //     errorMessage = "...";
-  // }
-  //   return throwError(errorMessage);
-  // }
-
   fetchEvents() {
     this.isLoadingSubject.next(true);
     this.http
