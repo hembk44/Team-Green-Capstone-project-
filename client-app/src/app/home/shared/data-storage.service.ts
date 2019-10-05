@@ -6,7 +6,7 @@ import { throwError, Observable, BehaviorSubject } from "rxjs";
 import { ApiResponse } from "src/app/auth/api.response";
 import { Appointment } from "../appointment/appointment-model/appointment.model";
 import { CalEvent } from "../calendar/events.model";
-import { AuthService } from 'src/app/auth/auth.service';
+import { AuthService } from "src/app/auth/auth.service";
 
 @Injectable({
   providedIn: "root"
@@ -84,21 +84,15 @@ export class DataStorageService {
   fetchUserAppointment() {
     this.isLoadingSubject.next(true);
     this.http
-      .get<ApiResponse>(
-        "http://localhost:8181/api/appointment/calendar/user"
-      )
+      .get<ApiResponse>("http://localhost:8181/api/appointment/calendar/user")
       .pipe(
         (map(data => data),
-        catchError(error => throwError('there was an error'+error)),
+        catchError(error => throwError("there was an error" + error)),
         finalize(() => this.isLoadingSubject.next(false)))
       )
       .subscribe((result: ApiResponse) => {
         if (result.status == 200 && result.result) {
-<<<<<<< HEAD
-          console.log(result);
-=======
           console.log(result.result);
->>>>>>> 20f00fa968e5b52532aa32d0c2ce7de8b05618ab
           this.appointmentSubject.next(result.result);
         }
       });
@@ -136,13 +130,13 @@ export class DataStorageService {
   //     return throwError(errorMessage);
   //   }
   //   errorMessage = errorRes.error.error.message;
-  eventAPI: string = '';
+  eventAPI: string = "";
   fetchEvents() {
     this.isLoadingSubject.next(true);
-    if(this.authService.user === "ROLE_USER"){
-      this.eventAPI = 'http://localhost:8181/api/event/user/allEvents'
-    }else{
-      this.eventAPI = 'http://localhost:8181/api/event/faculty/allEvents'
+    if (this.authService.user === "ROLE_USER") {
+      this.eventAPI = "http://localhost:8181/api/event/user/allEvents";
+    } else {
+      this.eventAPI = "http://localhost:8181/api/event/faculty/allEvents";
     }
     this.http
       .get<ApiResponse>(this.eventAPI)
