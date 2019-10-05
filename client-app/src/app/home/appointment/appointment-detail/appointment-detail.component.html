@@ -11,6 +11,7 @@
   </p>
   <mat-card-content *ngFor="let time of appointment">
     <!-- <p>{{ time[0].appointment}}</p> -->
+    
     <div *ngIf="currentRole == 'ROLE_ADMIN'">
       <button mat-raised-button class="primary">
         {{ time.startTime }} - {{ time.endTime }}</button
