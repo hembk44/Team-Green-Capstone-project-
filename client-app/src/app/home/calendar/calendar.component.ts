@@ -56,7 +56,7 @@ export class CalendarComponent implements OnInit {
     //   } 
     // });
     //console.log(this.compatEvents);
-    this.dataStorage.fetchUserAppointment();
+    this.dataStorage.fetchUserAppointmentForCal();
     this.dataStorage.isLoading.subscribe(loading=>{
       if(!loading){
         console.log('getting shit from db');
