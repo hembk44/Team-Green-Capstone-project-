@@ -84,6 +84,25 @@ export class DataStorageService {
   fetchUserAppointment() {
     this.isLoadingSubject.next(true);
     this.http
+      .get<ApiResponse>(
+        "http://localhost:8181/api/appointment/user/allAppointments"
+      )
+      .pipe(
+        (map(data => data),
+        catchError(error => throwError("there was an error" + error)),
+        finalize(() => this.isLoadingSubject.next(false)))
+      )
+      .subscribe((result: ApiResponse) => {
+        if (result.status == 200 && result.result) {
+          console.log(result.result);
+          this.appointmentSubject.next(result.result);
+        }
+      });
+  }
+
+  fetchUserAppointmentForCal() {
+    this.isLoadingSubject.next(true);
+    this.http
       .get<ApiResponse>("http://localhost:8181/api/appointment/calendar/user")
       .pipe(
         (map(data => data),

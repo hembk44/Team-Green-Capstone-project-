@@ -1,17 +1,12 @@
-import {
-  Component,
-  OnInit,
-} from "@angular/core";
-import {
-  isSameMonth,
-} from "date-fns";
+import { Component, OnInit } from "@angular/core";
+import { isSameMonth } from "date-fns";
 import { CalendarEvent, CalendarView } from "angular-calendar";
 import { CalEvent } from "./events.model";
 import { EventService } from "./events.service";
 import { Router } from "@angular/router";
-import { CompatibleEvent } from './compatible-events.model';
-import { DataStorageService } from '../shared/data-storage.service';
-import { AuthService } from 'src/app/auth/auth.service';
+import { CompatibleEvent } from "./compatible-events.model";
+import { DataStorageService } from "../shared/data-storage.service";
+import { AuthService } from "src/app/auth/auth.service";
 
 @Component({
   selector: "app-calendar",
@@ -19,8 +14,12 @@ import { AuthService } from 'src/app/auth/auth.service';
   styleUrls: ["./calendar.component.css"]
 })
 export class CalendarComponent implements OnInit {
-
-  constructor(private router: Router, private dataStorage: DataStorageService, private eventService: EventService,private authService: AuthService) {}
+  constructor(
+    private router: Router,
+    private dataStorage: DataStorageService,
+    private eventService: EventService,
+    private authService: AuthService
+  ) {}
 
   viewDate: Date;
   view: CalendarView = CalendarView.Month;
@@ -28,8 +27,8 @@ export class CalendarComponent implements OnInit {
   activeDayIsOpen: boolean = false;
   role = this.authService.user;
 
-  calEvents: CalEvent[]=[];//list of events
-  compatEvents: CompatibleEvent[]=[];
+  calEvents: CalEvent[] = []; //list of events
+  compatEvents: CompatibleEvent[] = [];
   apptEvents: any[] = [];
 
   ngOnInit() {
@@ -53,34 +52,48 @@ export class CalendarComponent implements OnInit {
     //       event.id,
     //     )
     //     this.compatEvents.push(ev);
-    //   } 
+    //   }
     // });
     //console.log(this.compatEvents);
-    this.dataStorage.fetchUserAppointment();
-    this.dataStorage.isLoading.subscribe(loading=>{
-      if(!loading){
-        console.log('getting shit from db');
+    this.dataStorage.fetchUserAppointmentForCal();
+    this.dataStorage.isLoading.subscribe(loading => {
+      if (!loading) {
+        console.log("getting shit from db");
         this.apptEvents = this.dataStorage.appointmentLists;
         console.log(this.apptEvents);
       }
-      for(let appt of this.apptEvents){
+      for (let appt of this.apptEvents) {
         const title = appt.appointmentName;
-        const id = appt.id
+        const id = appt.id;
         const startTime = appt.startTime;
         const endTime = appt.endTime;
         const date = appt.date;
-        const start = new Date(date.substring(5,7).concat('/').concat(date.substring(8,10)).concat('/').concat(date.substring(0,4)).concat(' ').concat(startTime));
-        const end = new Date(date.substring(5,7).concat('/').concat(date.substring(8,10)).concat('/').concat(date.substring(0,4)).concat(' ').concat(endTime));
-        const ev: CompatibleEvent = new CompatibleEvent(
-          title,
-          start,
-          end
+        const start = new Date(
+          date
+            .substring(5, 7)
+            .concat("/")
+            .concat(date.substring(8, 10))
+            .concat("/")
+            .concat(date.substring(0, 4))
+            .concat(" ")
+            .concat(startTime)
         );
+        const end = new Date(
+          date
+            .substring(5, 7)
+            .concat("/")
+            .concat(date.substring(8, 10))
+            .concat("/")
+            .concat(date.substring(0, 4))
+            .concat(" ")
+            .concat(endTime)
+        );
+        const ev: CompatibleEvent = new CompatibleEvent(title, start, end);
         this.compatEvents.push(ev);
         console.log(ev);
       }
-    })
-    
+    });
+
     console.log(this.compatEvents);
   }
 
