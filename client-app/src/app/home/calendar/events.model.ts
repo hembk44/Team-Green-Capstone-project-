@@ -1,16 +1,15 @@
-import { Optional } from "@angular/core";
-import { Calendar } from "./calendar-list/calendar.model";
-import { DateRange } from "../appointment/appointment-model/date-range.model";
-import { EventDate } from "./event-date.model";
+import { Color } from './colors.model';
 
 export class CalEvent{
 
     constructor(
         public id: number,
-        public name:string,
+        public title:string,
         public description: string,
         public location: string,
-        public eventdates: EventDate[],
+        public start: Date,
+        public end: Date,
+        public colors: Color,
         public email?: string[]
     ){}
 }

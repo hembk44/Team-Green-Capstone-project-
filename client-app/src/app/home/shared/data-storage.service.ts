@@ -175,7 +175,6 @@ export class DataStorageService {
       });
   }
 
-  //error converting circular structure to JSON
   storeEvent(obj: Object) {
     this.isLoadingSubject.next(true);
     return this.http

@@ -6,3 +6,7 @@
 .cal-month-view .cal-event{
     opacity: 0%;
 }
+
+.events-list{
+    overflow-y: auto;
+}

@@ -94,7 +94,7 @@
   <div class="col-3 side-view bg-white" *ngIf="view === CalendarView.Month">
     <h4 class="sticky-top bg-white mt-4">{{ viewDate.toDateString() }}</h4>
     <hr />
-    <div *ngFor="let event of compatEvents">
+    <div *ngFor="let event of compatEvents" class="events-list">
       <div
         class="event-wrapper"
         *ngIf="
@@ -120,7 +120,7 @@
     <div class="row" *ngIf="this.role !== 'ROLE_USER'">
       <h3 class="mt-3 ml-3">
         <button class="btn btn-secondary pull-right" (click)="createEvent()">
-          Create Event
+          Create
         </button>
       </h3>
     </div>
