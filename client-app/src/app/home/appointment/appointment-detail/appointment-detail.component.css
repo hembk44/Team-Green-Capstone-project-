@@ -1,0 +1,24 @@
+.example-card {
+  max-width: 400px;
+  height: 400px;
+  margin: 20px;
+  /* background: #BD955A; */
+  color: #800029;
+  border: #800029 solid 1px;
+}
+
+.mat-expansion-panel {
+  margin-right: 250px;
+  /* border: #800029 solid 1px; */
+
+}
+
+.mat-expansion-panel-header {
+  padding: 0 10px;
+  /* font-size: 25px; */
+  /* background-color: aqua; */
+}
+
+.mat-expansion-panel:not(.mat-expanded) .mat-expansion-panel-header:hover:not([aria-disabled=true]) {
+  background: rgba(241, 3, 3, 0.04);
+}
