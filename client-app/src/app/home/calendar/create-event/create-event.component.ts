@@ -80,7 +80,7 @@ export class CreateEventComponent implements OnInit {
     console.log(this.primaryColor);
     console.log(this.secondaryColor);
     const startDate = eventFormValues.startDate.toLocaleDateString().concat(' ').concat(eventFormValues.startTime);
-    const endDate = eventFormValues.startDate.toLocaleDateString().concat(' ').concat(eventFormValues.endTime);
+    const endDate = eventFormValues.endDate.toLocaleDateString().concat(' ').concat(eventFormValues.endTime);
 
     const obj = {
       name: eventFormValues.title,
