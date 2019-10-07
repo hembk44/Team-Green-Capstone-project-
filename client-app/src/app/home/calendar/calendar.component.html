@@ -1,4 +1,7 @@
 <!-- Calendar Navigation -->
+<button mat-raised-button matTooltip="Create Event" (click)="createEvent()" class="create-button top-row">
+  <mat-icon>add</mat-icon><span>Create</span>
+</button>
     <button
       mwlCalendarPreviousView
       mat-icon-button
@@ -64,10 +67,6 @@
       Day
     </button>
   </mat-menu>
-
-  <button mat-raised-button matTooltip="Create Event" (click)="createEvent()" class="create-button top-row">
-      <mat-icon>add</mat-icon><span>Create</span>
-    </button>
 <hr>
 <!-- Calendar -->
 <div [ngSwitch]="view" class="calendar">
