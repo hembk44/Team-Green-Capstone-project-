@@ -1,0 +1,132 @@
+<div class="row">
+  <div class="col-12">
+    <div class="col-9">
+      <div class="row justify-content-center">
+        <div class="col-md-3 mt-3">
+          <!-- Calendar Navigation -->
+          <div class="btn-group">
+            <div
+              class="btn btn-secondary"
+              mwlCalendarPreviousView
+              [view]="view"
+              [(viewDate)]="viewDate"
+            >
+              Previous
+            </div>
+            <div
+              class="btn btn-outline-dark"
+              mwlCalendarToday
+              [(viewDate)]="viewDate"
+            >
+              Today
+            </div>
+            <div
+              class="btn btn-secondary"
+              mwlCalendarNextView
+              [view]="view"
+              [(viewDate)]="viewDate"
+            >
+              Next
+            </div>
+          </div>
+        </div>
+
+        <!-- View Title (September 2019, October 1-7, etc.) -->
+        <div class="col-md-3 align-self-center">
+          <h4>{{ viewDate | calendarDate: view + "ViewTitle":"en" }}</h4>
+        </div>
+
+        <!-- View Switcher for Month, Week, and Day Views -->
+        <div class="col-md-3 mb-3 mt-3">
+          <div class="btn-group">
+            <div
+              class="btn btn-secondary"
+              (click)="setView(CalendarView.Month)"
+              [class.active]="view === CalendarView.Month"
+            >
+              Month
+            </div>
+            <div
+              class="btn btn-secondary"
+              (click)="setView(CalendarView.Week)"
+              [class.active]="view === CalendarView.Week"
+            >
+              Week
+            </div>
+            <div
+              class="btn btn-secondary"
+              (click)="setView(CalendarView.Day)"
+              [class.active]="view === CalendarView.Day"
+            >
+              Day
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Calendar -->
+      <div [ngSwitch]="view" class="col-md-12">
+        <mwl-calendar-month-view
+          *ngSwitchCase="'month'"
+          [viewDate]="viewDate"
+          [events]="compatEvents"
+          (dayClicked)="dayClicked($event.day)"
+        >
+        </mwl-calendar-month-view>
+        <mwl-calendar-week-view
+          *ngSwitchCase="'week'"
+          [viewDate]="viewDate"
+          [events]="compatEvents"
+          (eventClicked)="eventClicked($event.event)"
+        >
+        </mwl-calendar-week-view>
+        <mwl-calendar-day-view
+          [viewDate]="viewDate"
+          [events]="compatEvents"
+          *ngSwitchCase="'day'"
+          (eventClicked)="eventClicked($event.event)"
+        >
+        </mwl-calendar-day-view>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-3 side-view bg-white" *ngIf="view === CalendarView.Month">
+    <h4 class="sticky-top bg-white mt-4">{{ viewDate.toDateString() }}</h4>
+    <hr />
+    <div *ngFor="let event of compatEvents">
+      <div
+        class="event-wrapper"
+        *ngIf="
+          event.start.toDateString() === viewDate.toDateString() ||
+          (event.start.getDate() <= viewDate.getDate() &&
+            event.end.getDate() >= viewDate.getDate())
+        "
+      >
+        <h5>{{ event.title }}</h5>
+        <p class="ml-2 small">
+          <span *ngIf="event.start.getDate() != event.end.getDate()">{{
+            event.start.toLocaleDateString()
+          }}</span>
+          {{ event.start.toLocaleTimeString() }} -
+          <span *ngIf="event.start.getDate() != event.end.getDate()">{{
+            event.end.toLocaleDateString()
+          }}</span>
+          {{ event.end.toLocaleTimeString() }}
+        </p>
+      </div>
+    </div>
+    <!-- Button for event creation form -->
+    <div class="row" *ngIf="this.role !== 'ROLE_USER'">
+      <h3 class="mt-3 ml-3">
+        <button class="btn btn-secondary pull-right" (click)="createEvent()">
+          Create Event
+        </button>
+      </h3>
+    </div>
+  </div>
+
+  <!-- <div class="col-3 bg-white">
+    <app-calendar-list></app-calendar-list>
+  </div> -->
+</div>

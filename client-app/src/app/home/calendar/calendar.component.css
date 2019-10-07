@@ -1,0 +1,8 @@
+.side-view{
+    position:absolute;
+    right:0;
+    top:5em;
+}
+.cal-month-view .cal-event{
+    opacity: 0%;
+}

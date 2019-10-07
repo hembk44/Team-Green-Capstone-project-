@@ -1,0 +1,45 @@
+.example-card {
+  max-width: 400px;
+  height: 400px;
+  margin: 20px;
+  /* background: #BD955A; */
+  color: #800029;
+  border: #800029 solid 1px;
+}
+
+.primary {
+  color: #800029;
+  border: #800029 solid 1px;
+  /* background-color: blanchedalmond; */
+  /* width: 10%; */
+}
+
+.mat-menu-item:hover:not([disabled]) {
+  background: rgba(255, 235, 205, 1);
+  color: #800029;
+}
+
+.example-tooltip-red {
+  background: #b71c1c;
+}
+
+/* .mat-menu-content:not(:empty) {
+  background-color: blanchedalmond;
+  color: #800029;
+} */
+
+.mat-expansion-panel {
+  margin-right: 400px;
+  /* border: #800029 solid 1px; */
+
+}
+
+.mat-expansion-panel-header {
+  padding: 0 10px;
+  /* font-size: 25px; */
+  /* background-color: aqua; */
+}
+
+.mat-expansion-panel:not(.mat-expanded) .mat-expansion-panel-header:hover:not([aria-disabled=true]) {
+  background: rgba(241, 3, 3, 0.04);
+}

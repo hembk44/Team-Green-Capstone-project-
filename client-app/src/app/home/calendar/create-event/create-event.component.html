@@ -1,0 +1,69 @@
+<form
+  class="example-container"
+  [formGroup]="eventForm"
+  (ngSubmit)="onSubmit()"
+>
+  <mat-form-field>
+    <input matInput placeholder="Event Title" formControlName="title" />
+  </mat-form-field>
+
+  <mat-form-field>
+    <textarea
+      matInput
+      placeholder="Event Description"
+      formControlName="description"
+    ></textarea>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input
+      matInput
+      placeholder="Event Location"
+      formControlName="location"
+    />
+  </mat-form-field>
+
+  <mat-form-field>
+    <input
+      matInput
+      placeholder="Recipient Email"
+      formControlName="email"
+    />
+    <mat-error *ngIf="email.invalid">{{ getErrorMessage() }}</mat-error>
+  </mat-form-field>
+
+  <mat-toolbar>
+    <mat-toolbar-row>
+      <!-- <p>Please click on the side to select date and time interval</p> -->
+      <span class="example-spacer"></span>
+      <button
+        type="button"
+        class="primary"
+        mat-raised-button
+        (click)="openDateRangeDialog()"
+      >
+        Add date and time
+      </button>
+    </mat-toolbar-row>
+    <!-- <mat-toolbar-row>
+      <button
+        type="button"
+        class="primary"
+        mat-raised-button
+        (click)="openDialog()"
+      >
+        Add date
+      </button>
+    </mat-toolbar-row> -->
+  </mat-toolbar>
+  <mat-divider></mat-divider>
+
+  <mat-toolbar>
+    <mat-toolbar-row>
+      <span class="example-spacer"></span>
+      <button type="submit" mat-raised-button class="primary">
+        Create Event
+      </button>
+    </mat-toolbar-row>
+  </mat-toolbar>
+</form>
