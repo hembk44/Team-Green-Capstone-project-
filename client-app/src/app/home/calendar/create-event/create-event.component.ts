@@ -30,6 +30,8 @@ export class CreateEventComponent implements OnInit {
   eventData: CalEvent;
   email = new FormControl("", [Validators.email]);
   dateRangeArray: EventDate[] = [];
+  primaryColor: string='';
+  secondaryColor: string='';
 
   constructor(
     private router: Router,
@@ -37,16 +39,21 @@ export class CreateEventComponent implements OnInit {
     public dialog: MatDialog,
     private dataStorage: DataStorageService,
     private eventService: EventService,
-    private ref: MatDialogRef<CreateEventComponent>
   ) {}
 
   ngOnInit() {
-    this.eventForm = this.formBuilder.group({
-      title: ["", Validators.required],
-      description: ["", Validators.required],
-      location: [""],
-      email: this.email
-    });
+    this.eventForm = new FormGroup({
+      title: new FormControl(),
+      description: new FormControl(),
+      location: new FormControl(),
+      email: this.email,
+      startDate: new FormControl(),
+      startTime: new FormControl(),
+      endDate: new FormControl(),
+      endTime: new FormControl(),
+      primary: new FormControl(),
+      secondary: new FormControl()
+    })
     //this.calendars = this.calendarService.getCalendars();
   }
 
@@ -69,33 +76,43 @@ export class CreateEventComponent implements OnInit {
 
   onSubmit() {
     const eventFormValues = this.eventForm.value;
-    const eventDate = this.dateRangeArray[0].date;
-    const eventstart = this.dateRangeArray[0].eventtimes[0].startTime;
-    const eventEnd = this.dateRangeArray[0].eventtimes[0].endTime;
-    const eventtimes = new EventTime(eventstart, eventEnd);
-    const eventdaterange = new EventDate(eventDate, [eventtimes]);
-    const tempid = 8;
-
-    console.log(eventdaterange);
+    console.log(eventFormValues.startDate.toLocaleDateString());
+    console.log(this.primaryColor);
+    console.log(this.secondaryColor);
+    const startDate = eventFormValues.startDate.toLocaleDateString().concat(' ').concat(eventFormValues.startTime);
+    const endDate = eventFormValues.startDate.toLocaleDateString().concat(' ').concat(eventFormValues.endTime);
 
     const obj = {
       name: eventFormValues.title,
       description: eventFormValues.description,
-      eventdates: [eventdaterange],
-      recepients: [eventFormValues.email],
-      location: eventFormValues.location
+      start: startDate,
+      end: endDate,
+      email: [eventFormValues.email],
+      location: eventFormValues.location,
+      colors: {
+        primary: this.primaryColor,
+        secondary: this.secondaryColor
+      }
     };
 
-    this.dataStorage.storeEvent(obj).subscribe(result => {
-      if (result) {
-        this.dataStorage.fetchEvents();
-      }
-    });
+    console.log(obj);
+
+    // this.dataStorage.storeEvent(obj).subscribe(result => {
+    //   if (result) {
+    //     this.dataStorage.fetchEvents();
+    //   }
+    // });
 
     this.router.navigate(["home/calendar"]);
   }
+  setPrimary(color:string){
+    this.primaryColor=color;
+  }
+  setSecondary(color:string){
+    this.secondaryColor=color;
+  }
   onNoClick(){
-    this.ref.close();
+    this.router.navigate(["home/calendar"]);
   }
 }
 
@@ -104,7 +121,10 @@ export class CreateEventComponent implements OnInit {
   templateUrl: "event-timeInterval-dialog.html"
 })
 export class EventTimeDialog{
-  date = new FormControl("");
+  startdate = new FormControl();
+  enddate = new FormControl
+  startDate = new Date().toLocaleDateString();
+  endDate = new Date().toLocaleDateString();
   dateData: EventDate;
   dateDataArray: EventDate[]=[];
   eventTimeArray: EventTime[]=[];
@@ -126,11 +146,12 @@ export class EventTimeDialog{
 
   addDate(){
     this.dateData = new EventDate(
-      this.date.value,
+      this.startdate.value,
       this.eventTimeArray
     )
     this.dateDataArray.push(this.dateData);
-    this.date.setValue("");
+    this.startdate.setValue(this.startDate);
+    this.enddate.setValue(this.enddate);
   }
 
   onNoClick():void{
@@ -160,10 +181,10 @@ export class EventTimeIntervalDialog implements OnInit{
   ){}
 
   ngOnInit(){
-    this.timeIntervalFormData = this.formBuilder.group({
-      startTime: ["", Validators.required],
-      endTime: ["", Validators.required]
-    });
+    this.timeIntervalFormData = new FormGroup({
+      startTime: new FormControl(),
+      endTime: new FormControl()
+    })
   }
   addTimeInterval(){
     const timeIntervalDataValues = this.timeIntervalFormData.value;

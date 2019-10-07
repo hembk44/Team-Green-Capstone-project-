@@ -53,6 +53,7 @@ import { MatSnackBarModule } from "@angular/material/snack-bar";
 // import { CalendarService } from "./calendar/calendar-list/calendar.service";
 // import { CalendarItemComponent } from "./calendar/calendar-list/calendar-item/calendar-item.component";
 import { VerticalNavigationComponent } from "./home/vertical-navigation/vertical-navigation.component";
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { DashboardComponent } from "./home/dashboard/dashboard.component";
 import { CalendarComponent } from "./home/calendar/calendar.component";
 import { AppointmentComponent } from "./home/appointment/appointment/appointment.component";
@@ -74,6 +75,7 @@ import {
 import { CreateEventComponent, EventTimeDialog, EventTimeIntervalDialog } from "./home/calendar/create-event/create-event.component";
 import { CalendarListComponent } from "./home/calendar/calendar-list/calendar-list.component";
 import { CalendarItemComponent } from "./home/calendar/calendar-list/calendar-item/calendar-item.component";
+import { ColorPickerModule } from 'ngx-color-picker';
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { EventService } from "./home/calendar/events.service";
 import { CalendarService } from "./home/calendar/calendar-list/calendar.service";
@@ -116,8 +118,10 @@ import { AuthInterceptor } from "./auth/auth-interceptor";
     FormsModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    ColorPickerModule,
     LayoutModule,
     MatToolbarModule,
+    NgxMaterialTimepickerModule,
     MatButtonModule,
     MatSidenavModule,
     MatIconModule,

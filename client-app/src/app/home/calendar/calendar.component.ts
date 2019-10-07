@@ -108,8 +108,9 @@ export class CalendarComponent implements OnInit {
 
   // navigates to event creation form
   createEvent() {
-    const dialogRef = this.dialog.open(CreateEventComponent, {
-      width:"600px"
-    })
+    // const dialogRef = this.dialog.open(CreateEventComponent, {
+    //   width:"600px"
+    // })
+    this.router.navigate(["home/create-event"]);
   }
 }
