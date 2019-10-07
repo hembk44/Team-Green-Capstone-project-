@@ -71,7 +71,7 @@ import {
   DialogDateTimeIntervalDialog,
   DialogTimeIntervalDialog
 } from "./home/appointment/appointment-create/appointment-create.component";
-import { CreateEventComponent } from "./home/calendar/create-event/create-event.component";
+import { CreateEventComponent, EventTimeDialog, EventTimeIntervalDialog } from "./home/calendar/create-event/create-event.component";
 import { CalendarListComponent } from "./home/calendar/calendar-list/calendar-list.component";
 import { CalendarItemComponent } from "./home/calendar/calendar-list/calendar-item/calendar-item.component";
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
@@ -103,6 +103,8 @@ import { AuthInterceptor } from "./auth/auth-interceptor";
     AppointmentCreateComponent,
     DialogDateTimeIntervalDialog,
     DialogTimeIntervalDialog,
+    EventTimeDialog,
+    EventTimeIntervalDialog,
     CreateEventComponent,
     CalendarListComponent,
     CalendarItemComponent,
@@ -142,6 +144,8 @@ import { AuthInterceptor } from "./auth/auth-interceptor";
   entryComponents: [
     DialogDateTimeIntervalDialog,
     DialogTimeIntervalDialog,
+    EventTimeDialog,
+    EventTimeIntervalDialog,
     TimeSlotSnackComponent
   ],
   providers: [

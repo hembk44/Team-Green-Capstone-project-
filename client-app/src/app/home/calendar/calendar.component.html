@@ -65,6 +65,10 @@
     </button>
   </mat-menu>
 
+  <button mat-raised-button matTooltip="Create Event" (click)="createEvent()" class="create-button top-row">
+      <mat-icon>add</mat-icon><span>Create</span>
+    </button>
+<hr>
 <!-- Calendar -->
 <div [ngSwitch]="view" class="calendar">
   <mwl-calendar-month-view
@@ -120,9 +124,6 @@
 
   <!-- Button for event creation form -->
   <hr>
-  <button mat-icon-button (click)="createEvent()" class="create-button">
-    <mat-icon>add</mat-icon><span>Create Event</span>
-  </button>
 </div>
 
 <!-- <div class="col-3 bg-white">

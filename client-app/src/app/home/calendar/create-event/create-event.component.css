@@ -12,6 +12,10 @@
   .example-container>* {
     width: 100%;
   }
+
+  .cancel-button{
+    margin-left:20px;
+  }
   
   .example-spacer {
     flex: 1 1 auto;

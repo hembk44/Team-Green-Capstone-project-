@@ -39,7 +39,6 @@
 .top-row{
     display:inline-block;
     margin-top:10px;
-    margin-bottom:15px;
 }
 
 .events-list{
@@ -51,7 +50,9 @@
 }
 
 .create-button{
-    margin-left:6px;
+    margin-left:10%;
+    background-color: rgb(25, 204, 25);
+    color:white;
 }
 
 /* .events-list{

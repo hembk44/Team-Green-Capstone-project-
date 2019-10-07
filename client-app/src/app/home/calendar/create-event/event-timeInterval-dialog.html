@@ -12,7 +12,6 @@
       <mat-form-field>
         <input
           matInput
-          [matDatepickerFilter]="myFilter"
           [matDatepicker]="picker"
           placeholder="Choose a date"
           [formControl]="date"
@@ -30,7 +29,7 @@
             type="button"
             class="primary"
             mat-raised-button
-            (click)="openTimeIntervalDialog()"
+            (click)="openTimeDialog()"
           >
             select time interval
           </button>

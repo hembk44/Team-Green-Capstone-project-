@@ -12,6 +12,8 @@ import { Router } from "@angular/router";
 import { CompatibleEvent } from './compatible-events.model';
 import { DataStorageService } from '../shared/data-storage.service';
 import { AuthService } from 'src/app/auth/auth.service';
+import { MatDialog } from '@angular/material/dialog';
+import { CreateEventComponent } from './create-event/create-event.component';
 
 @Component({
   selector: "app-calendar",
@@ -20,7 +22,11 @@ import { AuthService } from 'src/app/auth/auth.service';
 })
 export class CalendarComponent implements OnInit {
 
-  constructor(private router: Router, private dataStorage: DataStorageService, private eventService: EventService,private authService: AuthService) {}
+  constructor(private router: Router, 
+    private dataStorage: DataStorageService, 
+    private eventService: EventService,
+    private authService: AuthService,
+    private dialog: MatDialog) {}
 
   viewDate: Date;
   view: CalendarView = CalendarView.Month;
@@ -102,6 +108,8 @@ export class CalendarComponent implements OnInit {
 
   // navigates to event creation form
   createEvent() {
-    this.router.navigate(["home/create-event"]);
+    const dialogRef = this.dialog.open(CreateEventComponent, {
+      width:"600px"
+    })
   }
 }
