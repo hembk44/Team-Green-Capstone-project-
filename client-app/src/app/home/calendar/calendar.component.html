@@ -1,18 +1,23 @@
-<!-- Calendar Navigation -->
 <div class="wrapper" fxLayout fxLayoutAlign="space-evenly">
+  <!-- Left side of calendar view -->
   <div fxFlex="15%" class="left-view">
+    <!-- Create Button -->
     <button mat-raised-button matTooltip="Create Event" (click)="createEvent()" class="create-button top-row">
       <mat-icon>add</mat-icon><span>Create</span>
     </button>
+    <!-- Small Calendar -->
     <mat-calendar [(selected)]="viewDate"></mat-calendar>
     <hr>
+    <!-- List of user calendars -->
     <div class="cal-list">
       <p id="cal-heading">Your Calendars</p>
       <app-calendar-list></app-calendar-list>
     </div>
   </div>
+  <!-- Calendar heading -->
   <div [ngSwitch]="view" fxFlex="70%">
-    <div class="top-row-wrap" fxLayout fxLayoutAlign="space-evently">
+    <div class="top-row-wrap" fxLayout fxLayoutAlign="space-between">
+      <!-- Calendar navigation buttons -->
       <div class="cal-navigation" fxFlex="15%">
         <button
           mwlCalendarPreviousView
@@ -83,6 +88,7 @@
     <hr>
   </div>
     <!-- Calendar -->
+    <!-- Month View -->
       <mwl-calendar-month-view
         *ngSwitchCase="'month'"
         [viewDate]="viewDate"
@@ -90,6 +96,7 @@
         (dayClicked)="dayClicked($event.day)"
       >
       </mwl-calendar-month-view>
+      <!-- Week View -->
       <mwl-calendar-week-view
         *ngSwitchCase="'week'"
         [viewDate]="viewDate"
@@ -97,6 +104,7 @@
         (eventClicked)="eventClicked($event.event)"
       >
       </mwl-calendar-week-view>
+      <!-- Day View -->
       <mwl-calendar-day-view
         [viewDate]="viewDate"
         [events]="compatEvents"
@@ -106,6 +114,7 @@
       </mwl-calendar-day-view>
   </div>
 
+  <!-- List of events for the right side during month view -->
   <div *ngIf="view === CalendarView.Month" fxLayout="15%" fxFlexOrder="3" class="right-view">
     <h4 class="day-title">{{ viewDate.toDateString() }}</h4>
     <hr>
