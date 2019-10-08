@@ -56,8 +56,7 @@ export class CreateEventComponent implements OnInit {
       primary: new FormControl(),
       secondary: new FormControl(),
       allDay: new FormControl()
-    })
-    //this.calendars = this.calendarService.getCalendars();
+    });
   }
 
   getErrorMessage() {
