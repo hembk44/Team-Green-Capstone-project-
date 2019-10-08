@@ -33,6 +33,7 @@ export class CalendarComponent implements OnInit {
   CalendarView = CalendarView;
   activeDayIsOpen: boolean = false;
   role = this.authService.user;
+  panelOpen=false;
 
   calEvents: CalEvent[]=[];//list of events
   compatEvents: CompatibleEvent[]=[];

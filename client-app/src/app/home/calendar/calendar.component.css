@@ -1,16 +1,24 @@
-.side-view{
-    position:fixed;
-    right:0;
-    top:64px;
+.wrapper{
+    width:100%;
+}
+.right-view{
     margin:0;
-    padding:0;
-    width:15%;
-    height:90%;
-    background-color:white;
-    border-left:solid 1pt darkgrey;
+    height:88vh;
+}
+.left-view{
+    margin:0;
+    height:88vh;
 }
 .cal-month-view .cal-event{
     opacity: 0%;
+}
+#cal-heading{
+    font-weight:bold;
+    margin-left:5px;
+}
+
+.spacer{
+    flex: 1 1 auto;
 }
 
 .today-button{
@@ -28,12 +36,9 @@
 }
 
 .calendar{
-    width:85%;
+    width:70%;
     margin:0;
-}
-.cal-title{
-    margin-left:20%;
-    margin-right: 20%;
+    align-items: center;
 }
 
 .top-row{
@@ -47,13 +52,11 @@
 
 .day-title{
     margin-left:6px;
+    margin-right:6px;
 }
 
 .create-button{
     background-color: rgb(25, 204, 25);
+    margin-left:5px;
     color:white;
 }
-
-/* .events-list{
-    overflow-y: auto;
-} */

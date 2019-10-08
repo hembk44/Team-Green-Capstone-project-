@@ -7,11 +7,14 @@
       <input matInput placeholder="Event Title" formControlName="title" />
     </mat-form-field><br>
 
-    <mat-form-field>
+    <mat-form-field style="width:100%;">
       <textarea
         matInput
+        cdkTextareaAutosize
+        cdkAutosizeMinRows="2"
+        cdkAutosizeMaxRows="5"
         placeholder="Event Description"
-        cols="100"
+        cols="50"
         formControlName="description"
       ></textarea>
     </mat-form-field><br>
@@ -32,10 +35,9 @@
       />
       <mat-error *ngIf="email.invalid">{{ getErrorMessage() }}</mat-error>
     </mat-form-field><br>
-    <mat-form-field>
+    <mat-form-field id="end-date">
       <input
       matInput
-      id="start-date"
       placeholder="Start Date"
       formControlName="startDate"
       [matDatepicker]="startpicker">
@@ -50,10 +52,9 @@
       [ngxTimepicker]="starttime">
       <ngx-material-timepicker #starttime [minutesGap]="5"></ngx-material-timepicker>
     </mat-form-field><br>
-    <mat-form-field>
+    <mat-form-field id="end-date">
       <input
       matInput
-      id="end-date"
       placeholder="End Date"
       formControlName="endDate"
       [matDatepicker]="endpicker">
@@ -68,7 +69,7 @@
       [ngxTimepicker]="endtime">
       <ngx-material-timepicker #endtime [minutesGap]="5"></ngx-material-timepicker>
     </mat-form-field><br>
-    <mat-form-field>
+    <mat-form-field id="primary-color">
       <input
       matInput
       formControlName="primary"

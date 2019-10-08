@@ -8,8 +8,10 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 // import { VerticalNavigationComponent } from "./vertical-navigation/vertical-navigation.component";
 import { LayoutModule } from "@angular/cdk/layout";
+import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatButtonModule } from "@angular/material/button";
+import { MatCheckboxModule } from '@angular/material/checkbox'
 import { MatSidenavModule } from "@angular/material/sidenav";
 import { MatIconModule } from "@angular/material/icon";
 import { MatListModule } from "@angular/material/list";
@@ -116,6 +118,7 @@ import { EventDetailComponent } from './home/calendar/event-detail/event-detail.
   ],
   imports: [
     BrowserModule,
+    FlexLayoutModule,
     ReactiveFormsModule,
     FormsModule,
     AppRoutingModule,
@@ -128,6 +131,7 @@ import { EventDetailComponent } from './home/calendar/event-detail/event-detail.
     MatSidenavModule,
     MatIconModule,
     MatListModule,
+    MatCheckboxModule,
     MatTabsModule,
     MatGridListModule,
     MatCardModule,
