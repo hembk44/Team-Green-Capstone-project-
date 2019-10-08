@@ -32,6 +32,8 @@ export class CreateEventComponent implements OnInit {
   dateRangeArray: EventDate[] = [];
   primaryColor: string='';
   secondaryColor: string='';
+  allDay=false;
+  obj: Object;
 
   constructor(
     private router: Router,
@@ -52,7 +54,8 @@ export class CreateEventComponent implements OnInit {
       endDate: new FormControl(),
       endTime: new FormControl(),
       primary: new FormControl(),
-      secondary: new FormControl()
+      secondary: new FormControl(),
+      allDay: new FormControl()
     })
     //this.calendars = this.calendarService.getCalendars();
   }
@@ -74,6 +77,11 @@ export class CreateEventComponent implements OnInit {
     });
   }
 
+  allday(){
+    this.allDay=!this.allDay;
+    console.log(this.allDay);
+  }
+
   onSubmit() {
     const eventFormValues = this.eventForm.value;
     console.log(eventFormValues.startDate.toLocaleDateString());
@@ -82,20 +90,37 @@ export class CreateEventComponent implements OnInit {
     const startDate = eventFormValues.startDate.toLocaleDateString().concat(' ').concat(eventFormValues.startTime);
     const endDate = eventFormValues.endDate.toLocaleDateString().concat(' ').concat(eventFormValues.endTime);
 
-    const obj = {
-      name: eventFormValues.title,
-      description: eventFormValues.description,
-      start: startDate,
-      end: endDate,
-      email: [eventFormValues.email],
-      location: eventFormValues.location,
-      colors: {
-        primary: this.primaryColor,
-        secondary: this.secondaryColor
-      }
-    };
+    if(!this.allDay){
+      this.obj = {
+        name: eventFormValues.title,
+        description: eventFormValues.description,
+        start: startDate,
+        end: endDate,
+        email: [eventFormValues.email],
+        location: eventFormValues.location,
+        colors: {
+          primary: this.primaryColor,
+          secondary: this.secondaryColor
+        },
+        allDay: this.allDay
+      };
+    }else{
+      this.obj = {
+        name: eventFormValues.title,
+        description: eventFormValues.description,
+        start: eventFormValues.startDate,
+        end: eventFormValues.endDate,
+        email: [eventFormValues.email],
+        location: eventFormValues.location,
+        colors: {
+          primary: this.primaryColor,
+          secondary: this.secondaryColor
+        },
+        allDay: this.allDay
+      };
+    }
 
-    console.log(obj);
+    console.log(this.obj);
 
     // this.dataStorage.storeEvent(obj).subscribe(result => {
     //   if (result) {

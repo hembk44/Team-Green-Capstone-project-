@@ -44,7 +44,7 @@
       <mat-datepicker-toggle matSuffix [for]="startpicker"></mat-datepicker-toggle>
       <mat-datepicker touchUi #startpicker></mat-datepicker>
     </mat-form-field>
-    <mat-form-field>
+    <mat-form-field *ngIf="!allDay">
       <input
       matInput
       formControlName="startTime"
@@ -61,7 +61,7 @@
       <mat-datepicker-toggle matSuffix [for]="endpicker"></mat-datepicker-toggle>
       <mat-datepicker touchUi #endpicker></mat-datepicker>
     </mat-form-field>
-    <mat-form-field>
+    <mat-form-field *ngIf="!allDay">
       <input
       matInput
       formControlName="endTime"
@@ -90,7 +90,8 @@
       (colorPickerClose)="setSecondary(color2)"
       [cpOKButton]="true"
       [(colorPicker)]="color2">
-    </mat-form-field>
+    </mat-form-field><br>
+    <mat-checkbox formControlName="allDay" (click)="allday()">All Day</mat-checkbox>
 
     <!-- <mat-toolbar>
       <mat-toolbar-row>
