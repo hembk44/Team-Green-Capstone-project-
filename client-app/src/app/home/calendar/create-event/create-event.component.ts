@@ -87,8 +87,8 @@ export class CreateEventComponent implements OnInit {
     console.log(eventFormValues.startDate.toLocaleDateString());
     console.log(this.primaryColor);
     console.log(this.secondaryColor);
-    const startDate = eventFormValues.startDate.toLocaleDateString().concat(' ').concat(eventFormValues.startTime);
-    const endDate = eventFormValues.endDate.toLocaleDateString().concat(' ').concat(eventFormValues.endTime);
+    const startDate = eventFormValues.startDate.toDateString().concat(' ').concat(eventFormValues.startTime);
+    const endDate = eventFormValues.endDate.toDateString().concat(' ').concat(eventFormValues.endTime);
 
     if(!this.allDay){
       this.obj = {
@@ -108,8 +108,8 @@ export class CreateEventComponent implements OnInit {
       this.obj = {
         name: eventFormValues.title,
         description: eventFormValues.description,
-        start: eventFormValues.startDate,
-        end: eventFormValues.endDate,
+        start: eventFormValues.startDate.toString(),
+        end: eventFormValues.endDate.toString(),
         email: [eventFormValues.email],
         location: eventFormValues.location,
         colors: {
