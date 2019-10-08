@@ -83,6 +83,7 @@ import { LoginComponent } from "./login/login.component";
 import { RegisterComponent } from "./register/register.component";
 import { LoadingSpinnerComponent } from "./loading-spinner/loading-spinner.component";
 import { AuthInterceptor } from "./auth/auth-interceptor";
+import { EventDetailComponent } from './home/calendar/event-detail/event-detail.component';
 
 @NgModule({
   declarations: [
@@ -110,7 +111,8 @@ import { AuthInterceptor } from "./auth/auth-interceptor";
     CreateEventComponent,
     CalendarListComponent,
     CalendarItemComponent,
-    TimeSlotSnackComponent
+    TimeSlotSnackComponent,
+    EventDetailComponent
   ],
   imports: [
     BrowserModule,
