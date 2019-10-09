@@ -16,8 +16,8 @@ import { DateRange } from "../appointment-model/date-range.model";
 import { TimeInterval } from "../appointment-model/time-interval.model";
 import { DataStorageService } from "../../shared/data-storage.service";
 import { ApiResponse } from "src/app/auth/api.response";
-import { EventTime } from '../../calendar/event-times.model';
-import { EventDate } from '../../calendar/event-date.model';
+import { EventTime } from "../../calendar/event-times.model";
+import { EventDate } from "../../calendar/event-date.model";
 
 @Component({
   selector: "app-appointment-create",
@@ -47,7 +47,7 @@ export class AppointmentCreateComponent implements OnInit {
 
   getErrorMessage() {
     return this.email.hasError("required")
-      ? "You must enter a value"
+      ? "You must enter a valid email address"
       : this.email.hasError("email")
       ? "Not a valid email"
       : "";

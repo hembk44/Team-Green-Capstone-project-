@@ -1,4 +1,4 @@
-.error {
+/* .error {
   color: red
 }
 
@@ -33,5 +33,36 @@
   background-repeat: no-repeat;
   background-position: center;
   background-attachment: scroll;
-    /* opacity:0.4; */
+  opacity:0.4;
+} */
+
+.primary {
+  color: white;
+  background-color: #800029
+    /* border: #800029 solid 1px; */
+    /* background-color: blanchedalmond; */
+    /* width: 10%; */
 }
+
+.example-card {
+  box-shadow: 3px 3px 0px 1px #BD955A;
+  border: 2px solid #800029;
+  width: 250px;
+  margin: 30px auto;
+  padding: 20px;
+
+  /* padding-top: 20px; */
+}
+
+.example-full-width {
+  width: 100%;
+}
+
+/* .container {
+  background-image: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), url(https://webservices.ulm.edu/apps/system/files/logos/ulm_academic_maroon_white.png);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-attachment: scroll;
+  opacity: 0.4;
+} */
