@@ -27,7 +27,8 @@ export class AuthGuard implements CanActivate {
     | Observable<boolean | UrlTree> {
     if (this.tokenStorageService.tokenExists) {
       return true;
+    } else {
+      return this.router.createUrlTree(["/login"]);
     }
-    return this.router.createUrlTree(["/login"]);
   }
 }

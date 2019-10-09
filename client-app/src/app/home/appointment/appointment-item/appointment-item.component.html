@@ -1,28 +1,37 @@
-<mat-list [routerLink]="[id]" style="cursor: pointer;">
+<!-- <mat-list [routerLink]="[id]" style="cursor: pointer;">
   <h4 mat-subheader>{{ appointment.name }}</h4>
-  <mat-list-item>
-    <!-- <mat-icon mat-list-icon>assignment</mat-icon> -->
-    <h3 mat-line>{{ appointment.description }}</h3>
-    <p mat-line>Appointment Dates</p>
-    <!-- <div mat-line *ngFor="let date of dates"> -->
-    <p mat-line *ngFor="let date of dates">{{ date.date }}</p>
-    <!-- <p mat-line>{{ date.times }}</p> -->
-    <!-- <div mat-line *ngFor="let time of date.times">
+  <mat-list-item> -->
+<!-- <mat-icon mat-list-icon>assignment</mat-icon> -->
+<!-- <h3 mat-line>{{ appointment.description }}</h3>
+    <p mat-line>Appointment Dates</p> -->
+<!-- <div mat-line *ngFor="let date of dates"> -->
+<!-- <p mat-line *ngFor="let date of dates">{{ date.date }}</p> -->
+<!-- <p mat-line>{{ date.times }}</p> -->
+<!-- <div mat-line *ngFor="let time of date.times">
         <p mat-line>{{ time.startTime }}</p>
         <p mat-line>{{ time.endTime }}</p>
         <p mat-line>{{ time.interv }}</p> -->
-    <!-- <p mat-line>{{ date.times }}</p> -->
+<!-- <p mat-line>{{ date.times }}</p> -->
 
-    <!-- <br /> -->
-    <!-- </div> -->
-    <!-- <br /> -->
-    <!-- </div> -->
+<!-- <br /> -->
+<!-- </div> -->
+<!-- <br /> -->
+<!-- </div> -->
 
-    <!-- <p mat-line>
+<!-- <p mat-line>
       {{ appointment.dateRange[0].appointmentDate | date }}
     </p>
     <p mat-line></p> -->
 
-    <!-- <p mat-line> {{folder.updated | date}} </p> -->
-  </mat-list-item>
-</mat-list>
+<!-- <p mat-line> {{folder.updated | date}} </p> -->
+<!-- </mat-list-item>
+</mat-list> -->
+
+<mat-card class="example-card" [routerLink]="[id]" style="cursor: pointer;">
+  <mat-card-content>
+    <p>
+      {{ appointment.name }}
+    </p>
+    <p>{{ appointment.description }}</p>
+  </mat-card-content>
+</mat-card>
