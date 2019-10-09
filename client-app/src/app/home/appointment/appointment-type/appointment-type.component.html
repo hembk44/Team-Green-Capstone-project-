@@ -11,11 +11,12 @@
   class="container"
   fxLayout
   fxLayout.xs="column"
+  fxLayout.sm="column"
   fxLayoutAlign="flex-start"
   fxLayoutGap="10px"
   fxLayoutGap.xs="0"
 >
-  <div fxFlex="60%"><app-appointment-list></app-appointment-list></div>
-  <div class="item item-2" fxFlex="40%"><router-outlet></router-outlet></div>
+  <div fxFlex="20%"><app-appointment-list></app-appointment-list></div>
+  <div fxFlex="50%"><router-outlet></router-outlet></div>
   <!-- <div class="item item-3" fxFlex>Item 3</div> -->
 </div>
