@@ -17,32 +17,11 @@ export class CalendarListComponent implements OnInit {
 
   ngOnInit() {
     this.calendars = this.calendarService.getCalendars();//gets calendars from service
-    //   {
-    //     user: 'moorea1',
-    //     name: 'main',
-    //     createdBy: 'moorea1',
-    //     shown:true
-    //   },
-    //   {
-    //       user: 'moorea1',
-    //       name: 'appointments',
-    //       createdBy: 'moorea1',
-    //       shown:true
-    //   },
-    //   {
-    //       user: 'moorea1',
-    //       name: 'CSCI4060',
-    //       createdBy: 'moorea1',
-    //       shown: true
-    //   }
-    // ];
   }
 
   //toggle view of calendars
   toggleCalendar(index: number){
-    this.calendars[index].shown = !this.calendars[index].shown;
-    this.calendarService.setCalendars(this.calendars);
-    this.eventService.updateEvents();
+    console.log(index);
   }
 
 }

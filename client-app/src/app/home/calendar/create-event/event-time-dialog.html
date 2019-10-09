@@ -3,16 +3,17 @@
     <div class="example-container">
       <mat-form-field>
         <input
-          type="time"
           matInput
+          [ngxTimepicker] = "startpicker"
           placeholder="Start Time"
           formControlName="startTime"
         />
+        <ngx-material-timepicker #startpicker [enableKeyboardInput]="true"></ngx-material-timepicker>
       </mat-form-field>
   
       <mat-form-field>
         <input
-          type="time"
+          matInput
           matInput
           placeholder="End Time"
           formControlName="endTime"

@@ -1,9 +1,8 @@
-<div class="form-check" >
+<div>
     <app-calendar-item 
-    *ngFor="let cal of calendars; let i = index"
-    [index]="i"
+    *ngFor="let cal of calendars"
     [calendar]="cal"
-    (click)="toggleCalendar(i)"
+    (click)="toggleCalendar(cal.id)"
     class="calendar-item"
     ></app-calendar-item>
 </div>

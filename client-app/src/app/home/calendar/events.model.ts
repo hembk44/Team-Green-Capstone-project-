@@ -9,7 +9,8 @@ export class CalEvent{
         public location: string,
         public start: Date,
         public end: Date,
-        public colors: Color,
-        public email?: string[]
+        public color: Color,
+        public allDay: boolean,
+        public email?: string[],
     ){}
 }
