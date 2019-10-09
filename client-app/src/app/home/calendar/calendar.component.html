@@ -150,16 +150,23 @@
           (event.start.getDate() <= viewDate.getDate() &&
             event.end.getDate() >= viewDate.getDate())">
           <h5>{{ event.title }}</h5>
-          <p>
-            <span *ngIf="event.start.getDate() != event.end.getDate()">{{
-              event.start.toLocaleDateString()
-            }}</span>
-            {{ event.start.toLocaleTimeString() }} -
-            <span *ngIf="event.start.getDate() != event.end.getDate()">{{
-              event.end.toLocaleDateString()
-            }}</span>
-            {{ event.end.toLocaleTimeString() }}
-          </p>
+          <div class="event-times" *ngIf="!event.allDay">
+            <p>
+              <span *ngIf="event.start.getDate() != event.end.getDate()">{{
+                event.start.toLocaleDateString()
+              }}</span>
+              {{ event.start.toLocaleTimeString() }} -
+              <span *ngIf="event.start.getDate() != event.end.getDate()">{{
+                event.end.toLocaleDateString()
+              }}</span>
+              {{ event.end.toLocaleTimeString() }}
+            </p>
+          </div>
+          <div class="event-times" *ngIf="event.allDay">
+            <p>
+              {{ event.start.toLocaleDateString() }} - {{ event.end.toLocaleDateString() }}
+            </p>
+          </div>
         </div>
       </div>
     </div>

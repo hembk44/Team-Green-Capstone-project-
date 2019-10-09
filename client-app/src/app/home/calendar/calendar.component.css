@@ -6,6 +6,7 @@
 .right-view{
     margin-top:10px;
     margin-left:10px;
+    padding-left:5px;
     height:88vh;
     border-left:0.5pt solid darkgrey;
 }
