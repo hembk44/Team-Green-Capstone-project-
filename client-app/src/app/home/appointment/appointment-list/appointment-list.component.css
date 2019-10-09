@@ -1,5 +1,6 @@
 .primary {
   color: #800029;
-  background-color: blanchedalmond;
+  border: #800029 solid 1px;
+  /* background-color: blanchedalmond; */
   /* width: 10%; */
 }

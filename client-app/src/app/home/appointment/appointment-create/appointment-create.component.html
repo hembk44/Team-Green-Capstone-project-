@@ -27,7 +27,7 @@
 
   <mat-toolbar>
     <mat-toolbar-row>
-      <p>Please click on the side to select date and time interval</p>
+      <p>Please select date and time interval:</p>
       <span class="example-spacer"></span>
       <button
         type="button"
@@ -35,7 +35,7 @@
         mat-raised-button
         (click)="openDateRangeDialog()"
       >
-        click
+        click to select date and time
       </button>
     </mat-toolbar-row>
     <!-- <mat-toolbar-row>
@@ -54,6 +54,7 @@
   <mat-toolbar>
     <mat-toolbar-row>
       <span class="example-spacer"></span>
+      <button mat-raised-button color="warn">Cancel</button> &nbsp; &nbsp;
       <button type="submit" mat-raised-button class="primary">
         Create Appointment
       </button>
