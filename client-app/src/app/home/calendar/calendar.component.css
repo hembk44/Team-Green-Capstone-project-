@@ -4,11 +4,12 @@
     background-color:white;
 }
 .right-view{
-    margin:0;
+    margin-top:10px;
+    margin-left:10px;
     height:88vh;
+    border-left:0.5pt solid darkgrey;
 }
 .left-view{
-    margin:0;
     height:88vh;
 }
 .cal-month-view .cal-event{
@@ -61,4 +62,15 @@
     background-color: rgb(25, 204, 25);
     margin-left:5px;
     color:white;
+}
+
+.side-nav-toggle{
+    background-color:white;
+}
+.toggle-button{
+    vertical-align: middle;
+    color: darkgrey;
+}
+.close-button{
+    color:darkgrey;
 }

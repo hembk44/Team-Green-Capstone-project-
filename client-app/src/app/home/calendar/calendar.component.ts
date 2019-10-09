@@ -66,9 +66,7 @@ export class CalendarComponent implements OnInit {
     //this.dataStorage.fetchUserAppointmentForCal();
     this.dataStorage.isLoading.subscribe(loading=>{
       if(!loading){
-        console.log('getting shit from db');
         this.apptEvents = this.dataStorage.appointmentLists;
-        console.log(this.apptEvents);
       }
       for(let appt of this.apptEvents){
         const title = appt.appointmentName;
@@ -84,11 +82,8 @@ export class CalendarComponent implements OnInit {
           end
         );
         this.compatEvents.push(ev);
-        console.log(ev);
       }
     })
-    
-    console.log(this.compatEvents);
   }
 
   //changes view of calendar to day, week, month
