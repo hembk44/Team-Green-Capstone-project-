@@ -139,7 +139,7 @@
   </div>
 
   <!-- List of events for the right side during month view -->
-  <div *ngIf="view === CalendarView.Month" class="right-view">
+  <div *ngIf="view === CalendarView.Month" class="right-view" fxFlex="15%">
     <h4 class="day-title">{{ viewDate.toLocaleDateString() }}</h4><hr>
     <div class="events-list">
       <div *ngFor="let event of compatEvents">
