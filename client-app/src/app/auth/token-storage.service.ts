@@ -13,27 +13,27 @@ export class TokenStorageService {
   constructor() {}
 
   signOut() {
-    window.sessionStorage.clear();
+    window.localStorage.clear();
     this.tokenExists = false;
   }
 
   public saveToken(token: string) {
-    window.sessionStorage.removeItem(TOKEN_KEY);
-    window.sessionStorage.setItem(TOKEN_KEY, token);
+    window.localStorage.removeItem(TOKEN_KEY);
+    window.localStorage.setItem(TOKEN_KEY, token);
     this.tokenExists = true;
   }
 
   public getToken(): string {
-    return sessionStorage.getItem(TOKEN_KEY);
+    return localStorage.getItem(TOKEN_KEY);
   }
 
   public saveUsername(username: string) {
-    window.sessionStorage.removeItem(USERNAME_KEY);
-    window.sessionStorage.setItem(USERNAME_KEY, username);
+    window.localStorage.removeItem(USERNAME_KEY);
+    window.localStorage.setItem(USERNAME_KEY, username);
   }
 
   public getUsername(): string {
-    return sessionStorage.getItem(USERNAME_KEY);
+    return localStorage.getItem(USERNAME_KEY);
   }
 
   // public saveAuthorities(authorities: string[]) {
