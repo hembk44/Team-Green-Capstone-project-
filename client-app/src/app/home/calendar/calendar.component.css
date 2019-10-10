@@ -17,8 +17,10 @@
     opacity: 0%;
 }
 #cal-heading{
+    font-size:1rem;
     font-weight:bold;
-    margin-left:5px;
+    height:3em;
+    background-color:white;
 }
 
 .spacer{
@@ -62,8 +64,12 @@
 .day-title{
     margin-left:6px;
     margin-right:6px;
+    margin-top:15px;
 }
-
+.menutoggle{
+    height:2em;
+    background-color:white;
+}
 .create-button{
     background-color: rgb(25, 204, 25);
     margin-left:5px;
