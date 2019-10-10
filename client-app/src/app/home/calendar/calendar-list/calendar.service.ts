@@ -16,7 +16,7 @@ export class CalendarService{
                 description: "This is a test",
                 location: "Test Location",
                 start: new Date(),
-                end: new Date("10/10/2019"),
+                end: new Date("10/11/2019"),
                 color: {
                     primary: "#800029",
                     secondary: "#f2968f"
@@ -29,7 +29,7 @@ export class CalendarService{
                 description: "This is a test",
                 location: "Test Location",
                 start: new Date(),
-                end: new Date("10/9/2019 4:00 PM"),
+                end: new Date("10/11/2019 4:00 PM"),
                 color: {
                     primary: "#800029",
                     secondary: "#f2968f"
@@ -61,7 +61,7 @@ export class CalendarService{
                 description: "This is a test",
                 location: "Test Location",
                 start: new Date(),
-                end: new Date("10/9/2019 4:00 PM"),
+                end: new Date("10/10/2019 4:00 PM"),
                 color: {
                     primary: "#800029",
                     secondary: "#f2968f"

@@ -72,7 +72,7 @@
       </div>
         
       <!-- View Title (September 2019, October 1-7, etc.) -->
-      <h4 class="top-row cal-title">{{ viewDate | calendarDate: view + "ViewTitle":"en" }}</h4>
+      <h3 class="top-row cal-title">{{ viewDate | calendarDate: view + "ViewTitle":"en" }}</h3>
 
       <!-- View Switcher for Month, Week, and Day Views -->
       <div class="view-menu" class="top-row">
@@ -149,17 +149,17 @@
           event.start.toDateString() === viewDate.toDateString() ||
           (event.start.getDate() <= viewDate.getDate() &&
             event.end.getDate() >= viewDate.getDate())">
-          <h5>{{ event.title }}</h5>
+          <h4>{{ event.title }}</h4>
           <div class="event-times" *ngIf="!event.allDay">
             <p>
               <span *ngIf="event.start.getDate() != event.end.getDate()">{{
                 event.start.toLocaleDateString()
-              }}</span>
-              {{ event.start.toLocaleTimeString() }} -
+              }},</span>
+              {{ event.start.toLocaleTimeString([], {hour: '2-digit',  minute:'2-digit'}) }} -
               <span *ngIf="event.start.getDate() != event.end.getDate()">{{
                 event.end.toLocaleDateString()
-              }}</span>
-              {{ event.end.toLocaleTimeString() }}
+              }},</span>
+              {{ event.end.toLocaleTimeString([], {hour: '2-digit',  minute:'2-digit'}) }}
             </p>
           </div>
           <div class="event-times" *ngIf="event.allDay">

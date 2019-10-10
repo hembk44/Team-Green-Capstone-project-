@@ -48,7 +48,7 @@ export class CalendarComponent implements OnInit {
     this.compatEvents = this.calService.getEvents();
     this.subscription = this.calService.eventsChanged.subscribe(
       (events: CalEvent[]) => {
-        this.compatEvents = events;
+        this.compatEvents = events.sort((a, b) => (a.start > b.start) ? 1 : -1);
       }
     )
     // this.dataStorage.fetchEvents();
@@ -93,6 +93,7 @@ export class CalendarComponent implements OnInit {
     //     this.compatEvents.push(ev);
     //   }
     // })
+    this.compatEvents.sort((a, b) => (a.start > b.start) ? 1 : -1);
   }
 
   //changes view of calendar to day, week, month
