@@ -15,6 +15,8 @@ import { AuthService } from 'src/app/auth/auth.service';
 import { MatDialog } from '@angular/material/dialog';
 import { CreateEventComponent } from './create-event/create-event.component';
 import { CalendarService } from './calendar-list/calendar.service';
+import { Subscription } from 'rxjs/internal/Subscription';
+import { EventDetailComponent } from './event-detail/event-detail.component';
 
 @Component({
   selector: "app-calendar",
@@ -36,6 +38,7 @@ export class CalendarComponent implements OnInit {
   activeDayIsOpen: boolean = false;
   role = this.authService.user;
   panelOpen=false;
+  subscription: Subscription;
 
   calEvents: CalEvent[]=[];//list of events
   compatEvents: CalEvent[]=[];
@@ -44,6 +47,11 @@ export class CalendarComponent implements OnInit {
   ngOnInit() {
     this.viewDate = new Date();
     this.compatEvents = this.calService.getEvents();
+    this.subscription = this.calService.eventsChanged.subscribe(
+      (events: CalEvent[]) => {
+        this.compatEvents = events.sort((a, b) => (a.start > b.start) ? 1 : -1);
+      }
+    )
     // this.dataStorage.fetchEvents();
     // this.dataStorage.isLoading.subscribe(loading=>{
     //   if(!loading){
@@ -86,6 +94,7 @@ export class CalendarComponent implements OnInit {
     //     this.compatEvents.push(ev);
     //   }
     // })
+    this.compatEvents.sort((a, b) => (a.start > b.start) ? 1 : -1);
   }
 
   //changes view of calendar to day, week, month
@@ -101,7 +110,11 @@ export class CalendarComponent implements OnInit {
   }
 
   eventClicked(event: CompatibleEvent) {
-    console.log(event);
+    this.dialog.open(EventDetailComponent, {
+      width: "400px",
+      data: event.id
+    })
+    // this.router.navigate(["home/event", event.id]);
   }
 
   // navigates to event creation form

@@ -1,15 +1,17 @@
 <div class="wrapper" fxLayout fxLayoutAlign="center">
   <mat-sidenav-container>
     <mat-sidenav #calDrawer mode="side" opened="true">
-      <button
-      type="button"
-      mat-icon-button
-      (click)="calDrawer.toggle()"
-      matTooltip="Toggle Menu"
-      class="close-button">
-        <mat-icon *ngIf="calDrawer.opened">clear</mat-icon>
-      </button>
-      
+      <mat-toolbar class="menutoggle">
+        <span class="spacer"></span>
+        <button
+        type="button"
+        mat-icon-button
+        (click)="calDrawer.toggle()"
+        matTooltip="Toggle Menu"
+        class="close-button">
+          <mat-icon *ngIf="calDrawer.opened">clear</mat-icon>
+        </button>
+      </mat-toolbar>
       <!-- Left side of calendar view -->
       <div class="left-view">
         <!-- Small Calendar -->
@@ -17,7 +19,7 @@
         <hr>
         <!-- List of user calendars -->
         <div class="cal-list">
-          <p id="cal-heading">Your Calendars</p>
+          <mat-toolbar id="cal-heading"><p>Your Calendars</p><span class="spacer"></span><mat-icon matTooltip="New Calendar" style="cursor:pointer">add</mat-icon></mat-toolbar>
           <app-calendar-list></app-calendar-list>
         </div>
       </div>
@@ -72,7 +74,7 @@
       </div>
         
       <!-- View Title (September 2019, October 1-7, etc.) -->
-      <h4 class="top-row cal-title">{{ viewDate | calendarDate: view + "ViewTitle":"en" }}</h4>
+      <h3 class="top-row cal-title">{{ viewDate | calendarDate: view + "ViewTitle":"en" }}</h3>
 
       <!-- View Switcher for Month, Week, and Day Views -->
       <div class="view-menu" class="top-row">
@@ -136,10 +138,11 @@
         (eventClicked)="eventClicked($event.event)"
       >
       </mwl-calendar-day-view>
+
   </div>
 
   <!-- List of events for the right side during month view -->
-  <div *ngIf="view === CalendarView.Month" class="right-view">
+  <div *ngIf="view === CalendarView.Month" class="right-view" fxFlex="15%">
     <h4 class="day-title">{{ viewDate.toLocaleDateString() }}</h4><hr>
     <div class="events-list">
       <div *ngFor="let event of compatEvents">
@@ -148,18 +151,19 @@
         *ngIf="
           event.start.toDateString() === viewDate.toDateString() ||
           (event.start.getDate() <= viewDate.getDate() &&
-            event.end.getDate() >= viewDate.getDate())">
-          <h5>{{ event.title }}</h5>
+            event.end.getDate() >= viewDate.getDate())"
+          (click)="eventClicked(event)">
+          <h4>{{ event.title }}</h4>
           <div class="event-times" *ngIf="!event.allDay">
             <p>
               <span *ngIf="event.start.getDate() != event.end.getDate()">{{
                 event.start.toLocaleDateString()
-              }}</span>
-              {{ event.start.toLocaleTimeString() }} -
+              }},</span>
+              {{ event.start.toLocaleTimeString([], {hour: '2-digit',  minute:'2-digit'}) }} -
               <span *ngIf="event.start.getDate() != event.end.getDate()">{{
                 event.end.toLocaleDateString()
-              }}</span>
-              {{ event.end.toLocaleTimeString() }}
+              }},</span>
+              {{ event.end.toLocaleTimeString([], {hour: '2-digit',  minute:'2-digit'}) }}
             </p>
           </div>
           <div class="event-times" *ngIf="event.allDay">

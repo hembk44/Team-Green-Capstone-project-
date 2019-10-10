@@ -99,7 +99,7 @@ export class CreateEventComponent implements OnInit {
         location: eventFormValues.location,
         colors: {
           primary: this.primaryColor,
-          secondary: this.secondaryColor
+          secondary: this.primaryColor
         },
         allDay: this.allDay
       };

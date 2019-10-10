@@ -20,8 +20,8 @@ export class CalendarListComponent implements OnInit {
   }
 
   //toggle view of calendars
-  toggleCalendar(index: number){
-    console.log(index);
+  toggleCalendar(cal: Calendar){
+    this.calendarService.toggleCalendar(cal);
   }
 
 }
