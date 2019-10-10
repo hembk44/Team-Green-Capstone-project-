@@ -114,7 +114,8 @@ export class AppointmentCreateComponent implements OnInit {
 
 @Component({
   selector: "dialog-date-timeInterval-dialog",
-  templateUrl: "date-timeInterval-dialog.html"
+  templateUrl: "date-timeInterval-dialog.html",
+  styleUrls: ["./appointment-create.component.css"]
 })
 export class DialogDateTimeIntervalDialog implements OnInit {
   date = new FormControl("");
@@ -167,7 +168,9 @@ export class DialogDateTimeIntervalDialog implements OnInit {
 
 @Component({
   selector: "dialog-time-interval-dialog",
-  templateUrl: "time-interval-dialog.html"
+  templateUrl: "time-interval-dialog.html",
+
+  styleUrls: ["./appointment-create.component.css"]
 })
 export class DialogTimeIntervalDialog implements OnInit {
   TimeIntervalFormData: FormGroup;

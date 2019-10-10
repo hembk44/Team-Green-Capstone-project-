@@ -27,6 +27,8 @@ export class AuthService {
   public userRole: Observable<string> = this.userRoleSubject.asObservable();
 
   get user(): string {
+    this.userRoleSubject.next(this.tokenStorage.getAuthority());
+
     return this.userRoleSubject.value;
   }
 
@@ -44,7 +46,9 @@ export class AuthService {
           console.log(data);
           console.log(data.result);
           this.tokenStorage.saveToken(data.result.accessToken);
-          this.userRoleSubject.next(data.result.role);
+          this.tokenStorage.saveUsername(data.result.username);
+          this.tokenStorage.saveAuthority(data.result.role);
+          this.userRoleSubject.next(this.tokenStorage.getAuthority());
           console.log(data.result.role);
           this.router.navigate(["home"]);
         }
@@ -69,5 +73,9 @@ export class AuthService {
     //     errorMessage = "...";
     // }
     return throwError(errorMessage);
+  }
+
+  isUserLoggedIn() {
+    return !!this.tokenStorage.getToken();
   }
 }

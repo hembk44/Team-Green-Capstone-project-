@@ -1,6 +1,6 @@
 <!-- <h1 mat-dialog-title>Hi {{ data.name }}</h1> -->
 <div mat-dialog-content [formGroup]="TimeIntervalFormData">
-  <div class="example-container">
+  <div>
     <!-- <mat-form-field>
       <mat-label>Favorite animal</mat-label>
       <mat-select formControlName="startTime" required>
@@ -95,9 +95,15 @@
 </div>
 <!-- <div><a style="cursor: pointer;">add date</a></div> -->
 <div mat-dialog-actions>
-  <button mat-button (click)="onNoClick()">Cancel</button>
-  <button mat-button (click)="addTimeInterval()">Add time</button>
-  <button mat-button (click)="saveDialogData()" cdkFocusInitial>
+  <!-- <button mat-button (click)="onNoClick()">Cancel</button> -->
+  <button type="button" mat-raised-button (click)="onNoClick()" color="warn">
+    Cancel
+  </button>
+
+  <button mat-button class="primary" (click)="addTimeInterval()">
+    Add time
+  </button>
+  <button mat-button class="primary" (click)="saveDialogData()" cdkFocusInitial>
     Ok
   </button>
 </div>

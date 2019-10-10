@@ -1,6 +1,6 @@
 <!-- <h1 mat-dialog-title>Hi {{ data.name }}</h1> -->
 <div mat-dialog-content>
-  <div class="example-container">
+  <div>
     <!-- <mat-form-field>
       <input
         type="text"
@@ -50,10 +50,14 @@
 </div>
 <!-- <div><a style="cursor: pointer;">add date</a></div> -->
 <div mat-dialog-actions>
-  <button mat-button (click)="onNoClick()">Cancel</button>
-  <button mat-button (click)="addDate()">Add Date</button>
+  <!-- <button mat-button color="warn" (click)="onNoClick()">Cancel</button> -->
+  <button type="button" mat-raised-button (click)="onNoClick()" color="warn">
+    Cancel
+  </button>
 
-  <button mat-button (click)="saveDialogData()" cdkFocusInitial>
+  <button mat-button class="primary" (click)="addDate()">Add Date</button>
+
+  <button mat-button class="primary" (click)="saveDialogData()" cdkFocusInitial>
     Ok
   </button>
 </div>

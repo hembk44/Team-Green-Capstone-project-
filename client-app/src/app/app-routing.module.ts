@@ -18,7 +18,6 @@ import { DashboardComponent } from "./home/dashboard/dashboard.component";
 import { CalendarComponent } from "./home/calendar/calendar.component";
 import { CreateEventComponent } from "./home/calendar/create-event/create-event.component";
 import { AppointmentComponent } from "./home/appointment/appointment/appointment.component";
-import { AppointmentStartComponent } from "./home/appointment/appointment-start/appointment-start.component";
 import { AppointmentTypeComponent } from "./home/appointment/appointment-type/appointment-type.component";
 import { AppointmentCreateComponent } from "./home/appointment/appointment-create/appointment-create.component";
 import { AppointmentDetailComponent } from "./home/appointment/appointment-detail/appointment-detail.component";
