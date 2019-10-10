@@ -16,7 +16,12 @@ export class EventDetailComponent implements OnInit {
   constructor(private calService: CalendarService,
     private route: ActivatedRoute,
     private ref: MatDialogRef<EventDetailComponent>,
-    @Inject(MAT_DIALOG_DATA)public data: number) { }
+    @Inject(MAT_DIALOG_DATA)public data: number) { 
+      ref.backdropClick().subscribe(() => {
+        // Close the dialog
+        ref.close();
+      })
+    }
 
   ngOnInit() {
     this.id = this.data
@@ -27,6 +32,10 @@ export class EventDetailComponent implements OnInit {
   }
 
   close(){
+    this.ref.close();
+  }
+
+  onNoClick(){
     this.ref.close();
   }
 

@@ -74,14 +74,15 @@
       matInput
       formControlName="primary"
       [style.background]="color"
-      placeholder="Primary Color"
+      placeholder="Event Color"
       [cpOutputFormat]="'hex'"
       (colorPickerClose)="setPrimary(color)"
       [cpPosition]="'top-right'"
+      [cpPresetColors]="['#5484ed','#a4bdfc','#46d6db','#7ae7bf','#51b749','#fbd75b','#ffb878','#ff887c','#dc2127','#dbadff','#e1e1e1']"
       [cpOKButton]="true"
       [(colorPicker)]="color">
     </mat-form-field>
-    <mat-form-field>
+    <!-- <mat-form-field>
       <input
       matInput
       formControlName="secondary"
@@ -90,9 +91,10 @@
       [cpOutputFormat]="'hex'"
       (colorPickerClose)="setSecondary(color2)"
       [cpPosition]="'top-right'"
+      [cpPresetColors]="['#5484ed','#a4bdfc','#46d6db','#7ae7bf','#51b749','#fbd75b','#ffb878','#ff887c','#dc2127','#dbadff','#e1e1e1']"
       [cpOKButton]="true"
       [(colorPicker)]="color2">
-    </mat-form-field><br>
+    </mat-form-field><br> -->
     <mat-checkbox formControlName="allDay" (click)="allday()">All Day</mat-checkbox>
 
     <!-- <mat-toolbar>
