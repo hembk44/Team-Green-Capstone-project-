@@ -52,7 +52,7 @@ const routes: Routes = [
         path: "appointment",
         component: AppointmentComponent,
         children: [
-          { path: "", component: AppointmentStartComponent },
+          { path: "", component: AppointmentTypeComponent },
           {
             path: "type",
             component: AppointmentTypeComponent,

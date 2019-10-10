@@ -1,11 +1,45 @@
 <mat-toolbar>
   <mat-toolbar-row>
-    <button mat-stroked-button class="primary" (click)="navigateToType()">
-      Appointment Types
+    <button
+      mat-stroked-button
+      class="primary"
+      [matMenuTriggerFor]="type"
+      aria-label="Example icon-button with a menu"
+      (click)="navigateToType()"
+    >
+      Appointment Types <mat-icon>expand_more </mat-icon>
     </button>
+    <mat-menu #type="matMenu">
+      <button mat-menu-item>
+        <mat-icon>assignment_returned</mat-icon>
+        <span>Appointments received</span>
+      </button>
+      <button mat-menu-item>
+        <mat-icon>assignment_turned_in</mat-icon>
+        <span>Appointments sent</span>
+      </button>
+    </mat-menu>
     &nbsp; &nbsp;
-    <button mat-stroked-button class="primary" (click)="navigateToScheduled()">
-      Scheduled Appointment
+    <button
+      mat-stroked-button
+      class="primary"
+      [matMenuTriggerFor]="schedule"
+      aria-label="Example icon-button with a menu"
+      (click)="navigateToScheduled()"
+    >
+      Scheduled Appointment <mat-icon>expand_more </mat-icon>
     </button>
+
+    <mat-menu #schedule="matMenu">
+      <button mat-menu-item>
+        <mat-icon>schedule</mat-icon>
+
+        <span>For you</span>
+      </button>
+      <button mat-menu-item>
+        <mat-icon>schedule</mat-icon>
+        <span>For others</span>
+      </button>
+    </mat-menu>
   </mat-toolbar-row>
 </mat-toolbar>

@@ -14,6 +14,10 @@ import { DataStorageService } from '../shared/data-storage.service';
 import { AuthService } from 'src/app/auth/auth.service';
 import { MatDialog } from '@angular/material/dialog';
 import { CreateEventComponent } from './create-event/create-event.component';
+<<<<<<< HEAD
+=======
+import { CalendarService } from './calendar-list/calendar.service';
+>>>>>>> rohan/beta-demo
 
 @Component({
   selector: "app-calendar",
@@ -26,21 +30,27 @@ export class CalendarComponent implements OnInit {
     private dataStorage: DataStorageService, 
     private eventService: EventService,
     private authService: AuthService,
+<<<<<<< HEAD
     private dialog: MatDialog) {}
+=======
+    private dialog: MatDialog,
+    private calService: CalendarService) {}
+>>>>>>> rohan/beta-demo
 
   viewDate: Date;
   view: CalendarView = CalendarView.Month;
   CalendarView = CalendarView;
   activeDayIsOpen: boolean = false;
   role = this.authService.user;
+  panelOpen=false;
 
   calEvents: CalEvent[]=[];//list of events
-  compatEvents: CompatibleEvent[]=[];
-  apptEvents: any[] = [];
+  compatEvents: CalEvent[]=[];
+  //apptEvents: any[] = [];
 
   ngOnInit() {
     this.viewDate = new Date();
-    this.compatEvents = [];
+    this.compatEvents = this.calService.getEvents();
     // this.dataStorage.fetchEvents();
     // this.dataStorage.isLoading.subscribe(loading=>{
     //   if(!loading){
@@ -63,6 +73,7 @@ export class CalendarComponent implements OnInit {
     // });
     //console.log(this.compatEvents);
     //this.dataStorage.fetchUserAppointmentForCal();
+<<<<<<< HEAD
     this.dataStorage.isLoading.subscribe(loading=>{
       if(!loading){
         console.log('getting shit from db');
@@ -88,6 +99,28 @@ export class CalendarComponent implements OnInit {
     })
     
     console.log(this.compatEvents);
+=======
+    // this.dataStorage.isLoading.subscribe(loading=>{
+    //   if(!loading){
+    //     this.apptEvents = this.dataStorage.appointmentLists;
+    //   }
+    //   for(let appt of this.apptEvents){
+    //     const title = appt.appointmentName;
+    //     const id = appt.id
+    //     const startTime = appt.startTime;
+    //     const endTime = appt.endTime;
+    //     const date = appt.date;
+    //     const start = new Date(date.substring(5,7).concat('/').concat(date.substring(8,10)).concat('/').concat(date.substring(0,4)).concat(' ').concat(startTime));
+    //     const end = new Date(date.substring(5,7).concat('/').concat(date.substring(8,10)).concat('/').concat(date.substring(0,4)).concat(' ').concat(endTime));
+    //     const ev: CompatibleEvent = new CompatibleEvent(
+    //       title,
+    //       start,
+    //       end
+    //     );
+    //     this.compatEvents.push(ev);
+    //   }
+    // })
+>>>>>>> rohan/beta-demo
   }
 
   //changes view of calendar to day, week, month
@@ -108,8 +141,15 @@ export class CalendarComponent implements OnInit {
 
   // navigates to event creation form
   createEvent() {
+<<<<<<< HEAD
     const dialogRef = this.dialog.open(CreateEventComponent, {
       width:"600px"
     })
+=======
+    // const dialogRef = this.dialog.open(CreateEventComponent, {
+    //   width:"600px"
+    // })
+    this.router.navigate(["home/create-event"]);
+>>>>>>> rohan/beta-demo
   }
 }

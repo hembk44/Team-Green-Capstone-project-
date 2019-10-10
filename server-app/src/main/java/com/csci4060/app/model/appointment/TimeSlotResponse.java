@@ -1,10 +1,6 @@
 package com.csci4060.app.model.appointment;
 
 import java.time.LocalTime;
-import java.util.Date;
-
-import com.csci4060.app.model.User;
-
 import lombok.Data;
 
 @Data

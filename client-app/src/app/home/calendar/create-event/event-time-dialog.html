@@ -3,16 +3,25 @@
     <div class="example-container">
       <mat-form-field>
         <input
+<<<<<<< HEAD
           type="time"
+=======
+>>>>>>> rohan/beta-demo
           matInput
+          [ngxTimepicker] = "startpicker"
           placeholder="Start Time"
           formControlName="startTime"
         />
+        <ngx-material-timepicker #startpicker [enableKeyboardInput]="true"></ngx-material-timepicker>
       </mat-form-field>
   
       <mat-form-field>
         <input
+<<<<<<< HEAD
           type="time"
+=======
+          matInput
+>>>>>>> rohan/beta-demo
           matInput
           placeholder="End Time"
           formControlName="endTime"

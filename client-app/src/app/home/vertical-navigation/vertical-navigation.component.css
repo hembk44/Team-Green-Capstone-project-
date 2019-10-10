@@ -5,7 +5,7 @@
 
 .sidenav-container {
   height: 100%;
-  margin: 10px
+  /* margin: 10px */
 }
 
 .sidenav {
@@ -23,7 +23,7 @@
 }
 
 .mat-toolbar.mat-primary {
-  background: #BD955A;
+  background: blanchedalmond;
   color: #800029;
   z-index: 999999;
 }
@@ -35,10 +35,15 @@
 }
 
 .mat-raised-button {
-  color: #BD955A;
+  color: blanchedalmond;
   background: #800029;
 }
 
 .example-spacer {
   flex: 1 1 auto;
+}
+
+.mat-menu-item:hover:not([disabled]) {
+  background: rgba(255, 235, 205, 1);
+  color: #800029;
 }
