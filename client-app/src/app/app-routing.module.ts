@@ -22,6 +22,7 @@ import { AppointmentTypeComponent } from "./home/appointment/appointment-type/ap
 import { AppointmentCreateComponent } from "./home/appointment/appointment-create/appointment-create.component";
 import { AppointmentDetailComponent } from "./home/appointment/appointment-detail/appointment-detail.component";
 import { ScheduledAppointmentComponent } from "./home/appointment/scheduled-appointment/scheduled-appointment.component";
+import { EventDetailComponent } from './home/calendar/event-detail/event-detail.component';
 
 const routes: Routes = [
   {
@@ -46,6 +47,7 @@ const routes: Routes = [
     children: [
       { path: "dashboard", component: DashboardComponent },
       { path: "calendar", component: CalendarComponent },
+      { path: "event/:id", component: EventDetailComponent },
       { path: "create-event", component: CreateEventComponent },
       {
         path: "appointment",

@@ -9,6 +9,7 @@ import { Calendar } from '../calendar.model';
 export class CalendarItemComponent implements OnInit {
   @Input()index: number;//index of calendar in list
   @Input()calendar: Calendar;//calendar object to show
+  checked = true;
 
   constructor() { }
 

@@ -17,8 +17,10 @@
     opacity: 0%;
 }
 #cal-heading{
+    font-size:1rem;
     font-weight:bold;
-    margin-left:5px;
+    height:3em;
+    background-color:white;
 }
 
 .spacer{
@@ -54,11 +56,20 @@
     height:40%;
 }
 
+.event-wrapper:hover{
+    cursor: pointer;
+    background-color: rgba(216, 214, 214, 0.514);
+}
+
 .day-title{
     margin-left:6px;
     margin-right:6px;
+    margin-top:15px;
 }
-
+.menutoggle{
+    height:2em;
+    background-color:white;
+}
 .create-button{
     background-color: rgb(25, 204, 25);
     margin-left:5px;
@@ -74,4 +85,7 @@
 }
 .close-button{
     color:darkgrey;
+}
+.event-times{
+    font-size:0.8em;
 }

@@ -66,7 +66,8 @@ import { LoginComponent } from "./login/login.component";
 import { RegisterComponent } from "./register/register.component";
 import { LoadingSpinnerComponent } from "./loading-spinner/loading-spinner.component";
 import { AuthInterceptor } from "./auth/auth-interceptor";
-import { EventDetailComponent } from "./home/calendar/event-detail/event-detail.component";
+import { EventDetailComponent } from './home/calendar/event-detail/event-detail.component';
+import { CalendarCreateComponent } from './home/calendar/calendar-create/calendar-create.component';
 
 @NgModule({
   declarations: [
@@ -94,7 +95,8 @@ import { EventDetailComponent } from "./home/calendar/event-detail/event-detail.
     CalendarListComponent,
     CalendarItemComponent,
     TimeSlotSnackComponent,
-    EventDetailComponent
+    EventDetailComponent,
+    CalendarCreateComponent
   ],
   imports: [
     BrowserModule,
