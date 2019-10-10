@@ -27,7 +27,11 @@
 <!-- </mat-list-item>
 </mat-list> -->
 
-<mat-card class="example-card" [routerLink]="[id]" style="cursor: pointer;">
+<mat-card
+  class="example-card"
+  (click)="showDetails(id)"
+  style="cursor: pointer;"
+>
   <mat-card-content>
     <p>
       {{ appointment.name }}
