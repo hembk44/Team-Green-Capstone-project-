@@ -1,10 +1,9 @@
 package com.csci4060.app.controller;
 
 import java.util.HashSet;
-<<<<<<< HEAD
-=======
+
 import java.util.List;
->>>>>>> hemsBaral/alpha-demo
+
 import java.util.Set;
 
 import javax.validation.Valid;
@@ -15,10 +14,8 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-<<<<<<< HEAD
-=======
 import org.springframework.security.core.GrantedAuthority;
->>>>>>> hemsBaral/alpha-demo
+
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -88,25 +85,29 @@ public class AuthRestAPIs {
 		
 		User user = userService.findByUsername(loginRequest.getUsername());
 		
-		//if(user.isVerified()) {
+
+		if(user.isVerified()) {
+
 			Authentication authentication = authenticationManager.authenticate(
 					new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 			String jwt = jwtProvider.generateJwtToken(authentication);
-<<<<<<< HEAD
-			return new APIresponse(HttpStatus.OK.value(), "Successful", new JwtResponse(jwt, loginRequest.getUsername()));
-=======
+
 			
 			String role = "";
-			List<GrantedAuthority> authorities= (List<GrantedAuthority>) authentication.getAuthorities();
-			for(GrantedAuthority roles:authorities) {
-				role = roles.toString();
+			
+			@SuppressWarnings("unchecked")
+			List<GrantedAuthority> authorities = (List<GrantedAuthority>) authentication.getAuthorities();
+			
+			for(GrantedAuthority authority: authorities) {
+				role = authority.toString();
 			}
+			
 			return new APIresponse(HttpStatus.OK.value(), "Successful", new JwtResponse(jwt, loginRequest.getUsername(),role));
->>>>>>> hemsBaral/alpha-demo
-		//}
+		}
 		
-		//return new APIresponse(HttpStatus.FORBIDDEN.value(), "Please click on the verification link to login", null);
+		return new APIresponse(HttpStatus.FORBIDDEN.value(), "Please click on the verification link to login", null);
+
 	}
 
 	@PostMapping("/signup")

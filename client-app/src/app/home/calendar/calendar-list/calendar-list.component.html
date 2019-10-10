@@ -1,0 +1,9 @@
+<div class="form-check" >
+    <app-calendar-item 
+    *ngFor="let cal of calendars; let i = index"
+    [index]="i"
+    [calendar]="cal"
+    (click)="toggleCalendar(i)"
+    class="calendar-item"
+    ></app-calendar-item>
+</div>

@@ -69,12 +69,18 @@ public class AppointmentController {
 
 		List<User> recepientList = new ArrayList<User>();
 
-		List<String> recepientsEmailList = appointmentDummy.getRecepients();
-		for (String each : recepientsEmailList) {
+		List<String> emailFromDummy = appointmentDummy.getRecepients();
+		
+		List<String> recepientsEmailList = new ArrayList<String>();
+		
+		for (String each : emailFromDummy) {
 			User recepient = userService.findByEmail(each);
-			recepientList.add(recepient);
+			if(recepient != null) {
+				recepientList.add(recepient);
+				recepientsEmailList.add(each);
+			}
 		}
-
+		
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
 		String creatorUsername = "";
@@ -119,18 +125,22 @@ public class AppointmentController {
 			}
 		}
 
-		SimpleMailMessage mailMessage = new SimpleMailMessage();
 
-		String[] emails = recepientsEmailList.toArray(new String[recepientsEmailList.size()]);
+		if(!recepientsEmailList.isEmpty()) {
+			SimpleMailMessage mailMessage = new SimpleMailMessage();
 
-		mailMessage.setTo(emails);
-		mailMessage.setSubject("Appointment Information");
-		mailMessage.setFrom("ulmautoemail@gmail.com");
-		mailMessage.setText(
-				"A faculty has set an appointment for you. Please log in to you ULM communication app and register for the appointment. "
-						+ "Thank you!");
+			String[] emails = recepientsEmailList.toArray(new String[recepientsEmailList.size()]);
 
-		emailSenderService.sendEmail(mailMessage);
+			mailMessage.setTo(emails);
+			mailMessage.setSubject("Appointment Information");
+			mailMessage.setFrom("ulmautoemail@gmail.com");
+			mailMessage.setText(
+					"A faculty has set an appointment for you. Please log in to you ULM communication app and register for the appointment. "
+							+ "Thank you!");
+
+			emailSenderService.sendEmail(mailMessage);
+		}
+		
 
 		return new APIresponse(HttpStatus.CREATED.value(), "Appointment created successfully", appointment);
 	}
@@ -240,9 +250,11 @@ public class AppointmentController {
 		return new APIresponse(HttpStatus.OK.value(), "Time slots successfully sent.", slotsFromAppointment);
 	}
 
-	@PostMapping(path = "timeslots/postSlot/{id}", produces = "application/json")
+
+	@PostMapping(path = "timeslots/postSlot", produces = "application/json")
 	@PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
-	public APIresponse postSlots(@PathVariable("id") Long timeSlotsId) {
+	public APIresponse postSlots(@RequestBody TimeSlotResponse timeSlotResponse) {
+
 
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -254,7 +266,8 @@ public class AppointmentController {
 
 		User selectedBy = userService.findByUsername(username);
 
-		TimeSlots slotToRemove = timeSlotsService.findById(timeSlotsId);
+
+		TimeSlots slotToRemove = timeSlotsService.findById(timeSlotResponse.getId());
 		slotToRemove.setSelectedBy(selectedBy);
 		timeSlotsService.save(slotToRemove);
 
