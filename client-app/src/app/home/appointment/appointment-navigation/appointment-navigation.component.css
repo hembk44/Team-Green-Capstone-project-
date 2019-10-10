@@ -4,3 +4,8 @@
   /* background-color: blanchedalmond; */
   /* width: 10%; */
 }
+
+.mat-menu-item:hover:not([disabled]) {
+  background: rgba(255, 235, 205, 1);
+  color: #800029;
+}
