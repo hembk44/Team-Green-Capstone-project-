@@ -1,0 +1,6 @@
+.close-button{
+    color: darkgrey;
+    justify-self: end;
+    cursor:pointer;
+    margin-bottom: 10px;
+}

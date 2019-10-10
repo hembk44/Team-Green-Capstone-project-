@@ -16,6 +16,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { CreateEventComponent } from './create-event/create-event.component';
 import { CalendarService } from './calendar-list/calendar.service';
 import { Subscription } from 'rxjs/internal/Subscription';
+import { EventDetailComponent } from './event-detail/event-detail.component';
 
 @Component({
   selector: "app-calendar",
@@ -109,7 +110,11 @@ export class CalendarComponent implements OnInit {
   }
 
   eventClicked(event: CompatibleEvent) {
-    console.log(event);
+    this.dialog.open(EventDetailComponent, {
+      width: "400px",
+      data: event.id
+    })
+    // this.router.navigate(["home/event", event.id]);
   }
 
   // navigates to event creation form

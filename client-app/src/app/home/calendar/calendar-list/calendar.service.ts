@@ -111,4 +111,8 @@ export class CalendarService{
         cal.shown = !cal.shown;
         this.updateEvents();
     }
+    getEvent(id: number){
+        const event = this.events.find(event => event.id === id);
+        return event;
+    }
 }

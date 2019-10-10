@@ -1,1 +1,9 @@
-<p>event-detail works!</p>
+<mat-icon (click)="close()" class="close-button" matTooltip="Close">clear</mat-icon>
+
+<h2 mat-dialog-content>{{ event.title }}</h2>
+<div mat-dialog-content>
+    <p>{{ event.start.toLocaleString([], {month:'2-digit', day:'2-digit', year:'2-digit', hour: '2-digit',  minute:'2-digit'}) }} - 
+        {{event.end.toLocaleString([], {month:'2-digit', day:'2-digit', year:'2-digit', hour: '2-digit',  minute:'2-digit'}) }}</p>
+    <p><b>Location:</b> {{ event.location }}</p>
+    <p><b>Description:</b> {{ event.description }}</p>  
+</div>

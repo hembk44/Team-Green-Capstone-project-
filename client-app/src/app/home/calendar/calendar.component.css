@@ -54,6 +54,11 @@
     height:40%;
 }
 
+.event-wrapper:hover{
+    cursor: pointer;
+    background-color: rgba(216, 214, 214, 0.514);
+}
+
 .day-title{
     margin-left:6px;
     margin-right:6px;

@@ -148,7 +148,8 @@
         *ngIf="
           event.start.toDateString() === viewDate.toDateString() ||
           (event.start.getDate() <= viewDate.getDate() &&
-            event.end.getDate() >= viewDate.getDate())">
+            event.end.getDate() >= viewDate.getDate())"
+          (click)="eventClicked(event)">
           <h4>{{ event.title }}</h4>
           <div class="event-times" *ngIf="!event.allDay">
             <p>
