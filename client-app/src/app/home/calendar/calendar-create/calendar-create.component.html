@@ -1,1 +1,11 @@
-<p>calendar-create works!</p>
+<mat-toolbar class="top-detail-row">
+    <span class="spacer"></span><mat-icon (click)="close()" class="close-button" matTooltip="Close">clear</mat-icon>
+</mat-toolbar>
+<div mat-dialog-content>
+    <form formGroup="calForm">
+        <mat-form-field>
+            <input matInput formControlName="name" placeholder="Calendar Name">
+        </mat-form-field>
+        <button formControlName="recipients" mat-raised-button>Add Recipients</button>
+    </form>
+</div>
