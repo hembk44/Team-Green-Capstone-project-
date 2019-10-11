@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Calendar } from '../calendar.model';
+import { CalendarService } from '../calendar.service';
 
 @Component({
   selector: 'app-calendar-item',
@@ -11,10 +12,13 @@ export class CalendarItemComponent implements OnInit {
   @Input()calendar: Calendar;//calendar object to show
   checked = true;
 
-  constructor() { }
+  constructor(private calService: CalendarService) { }
 
   ngOnInit() {
   }
   
+  toggleCal(){
+    this.calService.toggleCalendar(this.calendar);
+  }
 
 }

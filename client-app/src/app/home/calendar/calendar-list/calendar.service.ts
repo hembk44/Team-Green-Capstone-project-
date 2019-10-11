@@ -70,7 +70,7 @@ export class CalendarService{
                 allDay: false
             }],
             shown: true,
-            createdBy: "student"
+            createdBy: "moorea1"
         }
     ];
     events: CalEvent[] = [];

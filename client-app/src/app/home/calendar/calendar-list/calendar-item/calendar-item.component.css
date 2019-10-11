@@ -1,3 +1,16 @@
 .cal-item{
-    margin-left:5px;
+    height: 2em;
+    background-color: white;
+    font-size: 0.8em;
+}
+.cal-menu{
+    opacity: 0;
+    cursor:pointer;
+}
+
+.cal-item:hover .cal-menu{
+    opacity: 100;
+}
+.spacer{
+    flex: 1 1 auto;
 }
