@@ -18,6 +18,7 @@ import { DialogDateTimeIntervalDialog } from "../../appointment/appointment-crea
 import { EventDate } from "../event-date.model";
 import { TimeInterval } from "../../appointment/appointment-model/time-interval.model";
 import { EventTime } from "../event-times.model";
+import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
   selector: "app-create-event",
@@ -33,30 +34,39 @@ export class CreateEventComponent implements OnInit {
   primaryColor: string='';
   secondaryColor: string='';
   allDay=false;
+  calendars: Calendar[];
   obj: Object;
+  username: string;
+  selectedCal: number;
+  defaultTime: Date = new Date();
 
   constructor(
     private router: Router,
     private formBuilder: FormBuilder,
+    private authService: AuthService,
     public dialog: MatDialog,
     private dataStorage: DataStorageService,
-    private eventService: EventService,
+    private calService: CalendarService,
   ) {}
 
   ngOnInit() {
     this.eventForm = new FormGroup({
       title: new FormControl(),
-      description: new FormControl(),
+      description: new FormControl(""),
       location: new FormControl(),
       email: this.email,
-      startDate: new FormControl(),
+      startDate: new FormControl(new Date()),
       startTime: new FormControl(),
-      endDate: new FormControl(),
+      endDate: new FormControl(new Date()),
       endTime: new FormControl(),
       primary: new FormControl(),
-      secondary: new FormControl(),
-      allDay: new FormControl()
+      allDay: new FormControl(),
+      calendar: new FormControl()
     });
+    this.defaultTime.setHours(this.defaultTime.getHours()+1);
+    this.defaultTime.setMinutes(0);
+    this.username=this.authService.username;
+    this.calendars=this.calService.getCalendars2(this.username);
   }
 
   getErrorMessage() {
@@ -137,6 +147,10 @@ export class CreateEventComponent implements OnInit {
   }
   onNoClick(){
     this.router.navigate(["home/calendar"]);
+  }
+  selectCalendar(id: number){
+    this.selectedCal = id;
+    console.log(this.selectedCal);
   }
 }
 

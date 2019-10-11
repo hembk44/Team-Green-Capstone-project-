@@ -17,10 +17,6 @@ export class EventDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private ref: MatDialogRef<EventDetailComponent>,
     @Inject(MAT_DIALOG_DATA)public data: number) { 
-      ref.backdropClick().subscribe(() => {
-        // Close the dialog
-        ref.close();
-      })
     }
 
   ngOnInit() {

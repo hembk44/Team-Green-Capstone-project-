@@ -17,6 +17,7 @@ import { CreateEventComponent } from './create-event/create-event.component';
 import { CalendarService } from './calendar-list/calendar.service';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { EventDetailComponent } from './event-detail/event-detail.component';
+import { CalendarCreateComponent } from './calendar-create/calendar-create.component';
 
 @Component({
   selector: "app-calendar",
@@ -123,5 +124,11 @@ export class CalendarComponent implements OnInit {
     //   width:"600px"
     // })
     this.router.navigate(["home/create-event"]);
+  }
+
+  newCal(){
+    this.dialog.open(CalendarCreateComponent, {
+      width:"400px"
+    });
   }
 }

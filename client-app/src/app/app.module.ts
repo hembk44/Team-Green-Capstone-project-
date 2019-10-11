@@ -61,7 +61,7 @@ import {
   EventTimeIntervalDialog
 } from "./home/calendar/create-event/create-event.component";
 import { CalendarListComponent } from "./home/calendar/calendar-list/calendar-list.component";
-import { CalendarItemComponent } from "./home/calendar/calendar-list/calendar-item/calendar-item.component";
+import { CalendarItemComponent, CalRename, DeleteConfirm } from "./home/calendar/calendar-list/calendar-item/calendar-item.component";
 import { ColorPickerModule } from "ngx-color-picker";
 import { EventService } from "./home/calendar/events.service";
 import { CalendarService } from "./home/calendar/calendar-list/calendar.service";
@@ -100,6 +100,8 @@ import { GroupComponent } from './home/group/group.component';
     TimeSlotSnackComponent,
     EventDetailComponent,
     CalendarCreateComponent,
+    CalRename,
+    DeleteConfirm,
     AppointmentStartComponent,
     AppointmentSentComponent,
     AppointmentReceivedComponent,
@@ -145,7 +147,10 @@ import { GroupComponent } from './home/group/group.component';
     DialogTimeIntervalDialog,
     EventTimeDialog,
     EventTimeIntervalDialog,
-    TimeSlotSnackComponent
+    TimeSlotSnackComponent,
+    CalendarCreateComponent,
+    CalRename,
+    DeleteConfirm
   ],
   providers: [
     MatDatepickerModule,
