@@ -1,6 +1,7 @@
 package com.csci4060.app.services.implementation;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -53,8 +54,11 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
 
 	@Override
 	public User findByEmail(String email) {
-		return userRepo.findByEmailIgnoreCase(email)
-				.orElseThrow(()->new UsernameNotFoundException("User not found with -> email:"+email));
+		Optional<User> optUser = userRepo.findByEmailIgnoreCase(email);
+		if(optUser.isPresent()) {
+			return optUser.get();
+		}
+		return null;
 	}
 
 	@Override

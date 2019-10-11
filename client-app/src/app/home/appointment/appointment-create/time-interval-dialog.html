@@ -1,7 +1,8 @@
 <!-- <h1 mat-dialog-title>Hi {{ data.name }}</h1> -->
 <div mat-dialog-content [formGroup]="TimeIntervalFormData">
   <div class="example-container">
-    <!-- <mat-form-field>
+    <div>
+      <!-- <mat-form-field>
       <mat-label>Favorite animal</mat-label>
       <mat-select formControlName="startTime" required>
         <mat-option>--</mat-option>
@@ -13,7 +14,7 @@
       <mat-hint>{{ animalControl.value?.sound }}</mat-hint>
     </mat-form-field> -->
 
-    <!-- <mat-select name="time">
+      <!-- <mat-select name="time">
       
         <mat-option value="01:00">01.00AM</mat-option>
         <mat-option value="01:30">01.30AM</mat-option>
@@ -65,39 +66,51 @@
         <mat-option value="12:00">12.00PM</mat-option>
         <mat-option value="12:30">12.30PM</mat-option>
     </mat-select> -->
-    <mat-form-field>
-      <input
-        type="text"
-        matInput
-        placeholder="Start Time"
-        formControlName="startTime"
-      />
-    </mat-form-field>
+      <mat-form-field>
+        <input
+          type="text"
+          matInput
+          placeholder="Start Time"
+          formControlName="startTime"
+        />
+      </mat-form-field>
 
-    <mat-form-field>
-      <input
-        type="text"
-        matInput
-        placeholder="End Time"
-        formControlName="endTime"
-      />
-    </mat-form-field>
+      <mat-form-field>
+        <input
+          type="text"
+          matInput
+          placeholder="End Time"
+          formControlName="endTime"
+        />
+      </mat-form-field>
 
-    <mat-form-field>
-      <input
-        type="number"
-        matInput
-        placeholder="Time Interval Duration"
-        formControlName="timeInterval"
-      />
-    </mat-form-field>
+      <mat-form-field>
+        <input
+          type="number"
+          matInput
+          placeholder="Time Interval Duration"
+          formControlName="timeInterval"
+        />
+      </mat-form-field>
+    </div>
   </div>
-</div>
-<!-- <div><a style="cursor: pointer;">add date</a></div> -->
-<div mat-dialog-actions>
-  <button mat-button (click)="onNoClick()">Cancel</button>
-  <button mat-button (click)="addTimeInterval()">Add time</button>
-  <button mat-button (click)="saveDialogData()" cdkFocusInitial>
-    Ok
-  </button>
+  <!-- <div><a style="cursor: pointer;">add date</a></div> -->
+  <div mat-dialog-actions>
+    <!-- <button mat-button (click)="onNoClick()">Cancel</button> -->
+    <button type="button" mat-raised-button (click)="onNoClick()" color="warn">
+      Cancel
+    </button>
+
+    <button mat-button class="primary" (click)="addTimeInterval()">
+      Add time
+    </button>
+    <button
+      mat-button
+      class="primary"
+      (click)="saveDialogData()"
+      cdkFocusInitial
+    >
+      Ok
+    </button>
+  </div>
 </div>

@@ -1,19 +1,17 @@
-import {
-  Component,
-  OnInit,
-} from "@angular/core";
-import {
-  isSameMonth,
-} from "date-fns";
+import { Component, OnInit } from "@angular/core";
+import { isSameMonth } from "date-fns";
 import { CalendarEvent, CalendarView } from "angular-calendar";
 import { CalEvent } from "./events.model";
 import { EventService } from "./events.service";
 import { Router } from "@angular/router";
-import { CompatibleEvent } from './compatible-events.model';
-import { DataStorageService } from '../shared/data-storage.service';
-import { AuthService } from 'src/app/auth/auth.service';
-import { MatDialog } from '@angular/material/dialog';
-import { CreateEventComponent } from './create-event/create-event.component';
+import { CompatibleEvent } from "./compatible-events.model";
+import { DataStorageService } from "../shared/data-storage.service";
+import { AuthService } from "src/app/auth/auth.service";
+import { MatDialog } from "@angular/material/dialog";
+import { CreateEventComponent } from "./create-event/create-event.component";
+import { CalendarService } from "./calendar-list/calendar.service";
+import { Subscription } from "rxjs/internal/Subscription";
+import { EventDetailComponent } from "./event-detail/event-detail.component";
 
 @Component({
   selector: "app-calendar",
@@ -21,26 +19,35 @@ import { CreateEventComponent } from './create-event/create-event.component';
   styleUrls: ["./calendar.component.css"]
 })
 export class CalendarComponent implements OnInit {
-
-  constructor(private router: Router, 
-    private dataStorage: DataStorageService, 
+  constructor(
+    private router: Router,
+    private dataStorage: DataStorageService,
     private eventService: EventService,
     private authService: AuthService,
-    private dialog: MatDialog) {}
+    private dialog: MatDialog,
+    private calService: CalendarService
+  ) {}
 
   viewDate: Date;
   view: CalendarView = CalendarView.Month;
   CalendarView = CalendarView;
   activeDayIsOpen: boolean = false;
   role = this.authService.user;
+  panelOpen = false;
+  subscription: Subscription;
 
-  calEvents: CalEvent[]=[];//list of events
-  compatEvents: CompatibleEvent[]=[];
-  apptEvents: any[] = [];
+  calEvents: CalEvent[] = []; //list of events
+  compatEvents: CalEvent[] = [];
+  //apptEvents: any[] = [];
 
   ngOnInit() {
     this.viewDate = new Date();
-    this.compatEvents = [];
+    this.compatEvents = this.calService.getEvents();
+    this.subscription = this.calService.eventsChanged.subscribe(
+      (events: CalEvent[]) => {
+        this.compatEvents = events.sort((a, b) => (a.start > b.start ? 1 : -1));
+      }
+    );
     // this.dataStorage.fetchEvents();
     // this.dataStorage.isLoading.subscribe(loading=>{
     //   if(!loading){
@@ -59,35 +66,31 @@ export class CalendarComponent implements OnInit {
     //       event.id,
     //     )
     //     this.compatEvents.push(ev);
-    //   } 
+    //   }
     // });
     //console.log(this.compatEvents);
     //this.dataStorage.fetchUserAppointmentForCal();
-    this.dataStorage.isLoading.subscribe(loading=>{
-      if(!loading){
-        console.log('getting shit from db');
-        this.apptEvents = this.dataStorage.appointmentLists;
-        console.log(this.apptEvents);
-      }
-      for(let appt of this.apptEvents){
-        const title = appt.appointmentName;
-        const id = appt.id
-        const startTime = appt.startTime;
-        const endTime = appt.endTime;
-        const date = appt.date;
-        const start = new Date(date.substring(5,7).concat('/').concat(date.substring(8,10)).concat('/').concat(date.substring(0,4)).concat(' ').concat(startTime));
-        const end = new Date(date.substring(5,7).concat('/').concat(date.substring(8,10)).concat('/').concat(date.substring(0,4)).concat(' ').concat(endTime));
-        const ev: CompatibleEvent = new CompatibleEvent(
-          title,
-          start,
-          end
-        );
-        this.compatEvents.push(ev);
-        console.log(ev);
-      }
-    })
-    
-    console.log(this.compatEvents);
+    // this.dataStorage.isLoading.subscribe(loading=>{
+    //   if(!loading){
+    //     this.apptEvents = this.dataStorage.appointmentLists;
+    //   }
+    //   for(let appt of this.apptEvents){
+    //     const title = appt.appointmentName;
+    //     const id = appt.id
+    //     const startTime = appt.startTime;
+    //     const endTime = appt.endTime;
+    //     const date = appt.date;
+    //     const start = new Date(date.substring(5,7).concat('/').concat(date.substring(8,10)).concat('/').concat(date.substring(0,4)).concat(' ').concat(startTime));
+    //     const end = new Date(date.substring(5,7).concat('/').concat(date.substring(8,10)).concat('/').concat(date.substring(0,4)).concat(' ').concat(endTime));
+    //     const ev: CompatibleEvent = new CompatibleEvent(
+    //       title,
+    //       start,
+    //       end
+    //     );
+    //     this.compatEvents.push(ev);
+    //   }
+    // })
+    this.compatEvents.sort((a, b) => (a.start > b.start ? 1 : -1));
   }
 
   //changes view of calendar to day, week, month
@@ -103,13 +106,18 @@ export class CalendarComponent implements OnInit {
   }
 
   eventClicked(event: CompatibleEvent) {
-    console.log(event);
+    this.dialog.open(EventDetailComponent, {
+      width: "400px",
+      data: event.id
+    });
+    // this.router.navigate(["home/event", event.id]);
   }
 
   // navigates to event creation form
   createEvent() {
-    const dialogRef = this.dialog.open(CreateEventComponent, {
-      width:"600px"
-    })
+    // const dialogRef = this.dialog.open(CreateEventComponent, {
+    //   width:"600px"
+    // })
+    this.router.navigate(["home/create-event"]);
   }
 }

@@ -34,7 +34,7 @@ export class LoginComponent implements OnInit {
     //   this.roles = this.tokenStorage.getAuthorities();
     // }
     this.loginForm = this.formBuilder.group({
-      username: ["", Validators.required],
+      email: ["", Validators.required],
       password: ["", Validators.required]
     });
   }
@@ -46,7 +46,7 @@ export class LoginComponent implements OnInit {
       return;
     }
     const loginPayload = {
-      username: loginFormValues.username,
+      username: loginFormValues.email,
       password: loginFormValues.password
       // username: this.loginForm.controls.username.value,
       // password: this.loginForm.controls.password.value

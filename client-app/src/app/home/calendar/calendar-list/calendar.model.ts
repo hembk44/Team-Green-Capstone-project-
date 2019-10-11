@@ -1,12 +1,12 @@
-import { CalEvent } from '../events.model';
+import { CalEvent } from "../events.model";
 
-export class Calendar{
-    constructor(
-        public id: number,
-        public users: string[],
-        public name: string,
-        public events: CalEvent[],
-        public createdBy: string,
-        public shown: boolean
-    ){}
+export class Calendar {
+  constructor(
+    public id: number,
+    public name: string,
+    public events: CalEvent[],
+    public createdBy: string,
+    public shown: boolean,
+    public users?: string[]
+  ) {}
 }

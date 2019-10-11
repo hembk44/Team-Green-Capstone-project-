@@ -18,11 +18,11 @@ import { DashboardComponent } from "./home/dashboard/dashboard.component";
 import { CalendarComponent } from "./home/calendar/calendar.component";
 import { CreateEventComponent } from "./home/calendar/create-event/create-event.component";
 import { AppointmentComponent } from "./home/appointment/appointment/appointment.component";
-import { AppointmentStartComponent } from "./home/appointment/appointment-start/appointment-start.component";
 import { AppointmentTypeComponent } from "./home/appointment/appointment-type/appointment-type.component";
 import { AppointmentCreateComponent } from "./home/appointment/appointment-create/appointment-create.component";
 import { AppointmentDetailComponent } from "./home/appointment/appointment-detail/appointment-detail.component";
 import { ScheduledAppointmentComponent } from "./home/appointment/scheduled-appointment/scheduled-appointment.component";
+import { EventDetailComponent } from './home/calendar/event-detail/event-detail.component';
 
 const routes: Routes = [
   {
@@ -47,12 +47,13 @@ const routes: Routes = [
     children: [
       { path: "dashboard", component: DashboardComponent },
       { path: "calendar", component: CalendarComponent },
+      { path: "event/:id", component: EventDetailComponent },
       { path: "create-event", component: CreateEventComponent },
       {
         path: "appointment",
         component: AppointmentComponent,
         children: [
-          { path: "", component: AppointmentStartComponent },
+          { path: "", component: AppointmentTypeComponent },
           {
             path: "type",
             component: AppointmentTypeComponent,

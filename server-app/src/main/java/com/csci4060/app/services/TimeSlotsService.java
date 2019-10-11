@@ -1,8 +1,6 @@
 package com.csci4060.app.services;
 
 import java.util.List;
-import java.util.Optional;
-
 import com.csci4060.app.model.User;
 import com.csci4060.app.model.appointment.Appointment;
 import com.csci4060.app.model.appointment.TimeSlots;

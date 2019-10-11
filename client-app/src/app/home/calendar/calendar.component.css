@@ -1,60 +1,103 @@
-.side-view{
-    position:fixed;
-    right:0;
-    top:64px;
-    margin:0;
-    padding:0;
-    width:15%;
-    height:90%;
-    background-color:white;
-    border-left:solid 1pt darkgrey;
-}
-.cal-month-view .cal-event{
-    opacity: 0%;
+.wrapper {
+  width: 100%;
+  height: 90%;
+  background-color: white;
 }
 
-.today-button{
-    color:#800029;
-}
-.today-button:hover{
-    background-color:darkgrey
-}
-.view-button{
-    color: #800029;
-    text-transform: capitalize;
-}
-.view-button:hover{
-    background-color:darkgrey
+.right-view {
+  margin-top: 10px;
+  margin-left: 10px;
+  padding-left: 5px;
+  height: 88vh;
+  border-left: 0.5pt solid darkgrey;
 }
 
-.calendar{
-    width:85%;
-    margin:0;
-}
-.cal-title{
-    margin-left:20%;
-    margin-right: 20%;
+.left-view {
+  height: 88vh;
 }
 
-.top-row{
-    display:inline-block;
-    margin-top:10px;
+.cal-month-view .cal-event {
+  opacity: 0%;
 }
 
-.events-list{
-    height:40%;
+#cal-heading {
+  font-size: 1rem;
+  font-weight: bold;
+  height: 3em;
+  background-color: white;
 }
 
-.day-title{
-    margin-left:6px;
+.spacer {
+  flex: 1 1 auto;
 }
 
-.create-button{
-    margin-left:10%;
-    background-color: rgb(25, 204, 25);
-    color:white;
+.today-button {
+  color: #800029;
 }
 
-/* .events-list{
-    overflow-y: auto;
-} */
+.today-button:hover {
+  background-color: darkgrey
+}
+
+.view-button {
+  color: #800029;
+  text-transform: capitalize;
+}
+
+.view-button:hover {
+  background-color: darkgrey
+}
+
+.calendar {
+  width: 70%;
+  margin: 0;
+  align-items: center;
+}
+
+.top-row {
+  display: inline-block;
+  margin-top: 10px;
+}
+
+.events-list {
+  height: 40%;
+}
+
+.event-wrapper:hover {
+  cursor: pointer;
+  background-color: rgba(216, 214, 214, 0.514);
+}
+
+.day-title {
+  margin-left: 6px;
+  margin-right: 6px;
+  margin-top: 15px;
+}
+
+.menutoggle {
+  height: 2em;
+  background-color: white;
+}
+
+.create-button {
+  background-color: rgb(25, 204, 25);
+  margin-left: 5px;
+  color: white;
+}
+
+.side-nav-toggle {
+  background-color: white;
+}
+
+.toggle-button {
+  vertical-align: middle;
+  color: darkgrey;
+}
+
+.close-button {
+  color: darkgrey;
+}
+
+.event-times {
+  font-size: 0.8em;
+}

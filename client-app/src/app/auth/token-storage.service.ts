@@ -3,37 +3,47 @@ import { Injectable } from "@angular/core";
 const TOKEN_KEY = "AuthToken";
 const USERNAME_KEY = "AuthUsername";
 // const AUTHORITIES_KEY = "AuthAuthorities";
+const AUTHORITY_KEY = "AuthAuthorities";
 
 @Injectable({
   providedIn: "root"
 })
 export class TokenStorageService {
   // private roles: Array<string> = [];
-  tokenExists: boolean;
+  // tokenExists: boolean;
   constructor() {}
 
   signOut() {
-    window.sessionStorage.clear();
-    this.tokenExists = false;
+    window.localStorage.clear();
+    // this.tokenExists = false;
   }
 
   public saveToken(token: string) {
-    window.sessionStorage.removeItem(TOKEN_KEY);
-    window.sessionStorage.setItem(TOKEN_KEY, token);
-    this.tokenExists = true;
+    window.localStorage.removeItem(TOKEN_KEY);
+    window.localStorage.setItem(TOKEN_KEY, token);
+    // this.tokenExists = true;
   }
 
   public getToken(): string {
-    return sessionStorage.getItem(TOKEN_KEY);
+    return localStorage.getItem(TOKEN_KEY);
   }
 
   public saveUsername(username: string) {
-    window.sessionStorage.removeItem(USERNAME_KEY);
-    window.sessionStorage.setItem(USERNAME_KEY, username);
+    window.localStorage.removeItem(USERNAME_KEY);
+    window.localStorage.setItem(USERNAME_KEY, username);
   }
 
   public getUsername(): string {
-    return sessionStorage.getItem(USERNAME_KEY);
+    return localStorage.getItem(USERNAME_KEY);
+  }
+
+  public saveAuthority(authority: string) {
+    window.localStorage.removeItem(AUTHORITY_KEY);
+    window.localStorage.setItem(AUTHORITY_KEY, authority);
+  }
+
+  public getAuthority(): string {
+    return localStorage.getItem(AUTHORITY_KEY);
   }
 
   // public saveAuthorities(authorities: string[]) {

@@ -1,0 +1,16 @@
+<mat-toolbar class="top-detail-row">
+    <span class="spacer"></span><mat-icon (click)="close()" class="close-button" matTooltip="Close">clear</mat-icon>
+</mat-toolbar>
+
+<h2 mat-dialog-content>{{ event.title }}</h2>
+<div mat-dialog-content>
+    <p>{{ event.start.toLocaleString([], {month:'2-digit', day:'2-digit', year:'2-digit', hour: '2-digit',  minute:'2-digit'}) }} - 
+        {{event.end.toLocaleString([], {month:'2-digit', day:'2-digit', year:'2-digit', hour: '2-digit',  minute:'2-digit'}) }}</p>
+    <p><b>Location:</b> {{ event.location }}</p>
+    <p><b>Description:</b> {{ event.description }}</p>
+    <button mat-raised-button [matMenuTriggerFor]="menu" class="options-button">Options</button> 
+    <mat-menu #menu>
+        <button mat-menu-item>Edit Event</button>
+        <button mat-menu-item>Delete</button>
+    </mat-menu>
+</div>

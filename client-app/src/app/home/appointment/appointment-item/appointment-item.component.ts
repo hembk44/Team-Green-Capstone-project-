@@ -1,10 +1,7 @@
 import { Component, OnInit, Input } from "@angular/core";
-// import { Appointment } from "../appointment-model/appointment.model";
-import { Identifiers } from "@angular/compiler";
 import { Appointment } from "../appointment-model/appointment.model";
 import { DateRange } from "../appointment-model/date-range.model";
-// import { IAppointment } from "../appointment-interfaces/appointment";
-// import { IAppointmentDate } from "../appointment-interfaces/appointment-date";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-appointment-item",
@@ -16,7 +13,10 @@ export class AppointmentItemComponent implements OnInit {
   @Input() id: number;
   @Input() dates: DateRange[];
 
-  constructor() {}
+  constructor(private router: Router) {}
 
   ngOnInit() {}
+  showDetails(index: number) {
+    this.router.navigate(["home/appointment/type", index]);
+  }
 }
