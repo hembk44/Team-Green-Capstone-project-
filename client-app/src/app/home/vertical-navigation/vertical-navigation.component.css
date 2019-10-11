@@ -47,3 +47,8 @@
   background: rgba(255, 235, 205, 1);
   color: #800029;
 }
+
+.mat-nav-list .mat-list-item:hover {
+  background: rgba(255, 235, 205, 1);
+  color: #800029;
+}

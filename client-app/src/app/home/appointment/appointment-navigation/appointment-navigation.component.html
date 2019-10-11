@@ -9,13 +9,13 @@
       Appointment Types <mat-icon>expand_more </mat-icon>
     </button>
     <mat-menu #type="matMenu">
-      <button mat-menu-item>
+      <button mat-menu-item (click)="navigateToReceive()">
         <span
           ><mat-icon class="icon-hover">assignment_returned</mat-icon>
           Appointments received</span
         >
       </button>
-      <button mat-menu-item (click)="navigateToType()">
+      <button mat-menu-item (click)="navigateToSent()">
         <mat-icon>assignment_turned_in</mat-icon>
         <span>Appointments sent</span>
       </button>

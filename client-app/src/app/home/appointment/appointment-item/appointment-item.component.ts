@@ -17,6 +17,6 @@ export class AppointmentItemComponent implements OnInit {
 
   ngOnInit() {}
   showDetails(index: number) {
-    this.router.navigate(["home/appointment/type", index]);
+    this.router.navigate(["home/appointment/sent", index]);
   }
 }
