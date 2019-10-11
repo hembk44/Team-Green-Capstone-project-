@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.csci4060.app.configuration.jwt.JwtProvider;
 import com.csci4060.app.model.APIresponse;
@@ -171,5 +173,27 @@ public class AuthRestAPIs {
         	return new APIresponse(HttpStatus.UNAUTHORIZED.value(),"Verficication token is not in the database", null);
         }
 	}
+	
+//	@PostMapping("/verifyEmail")
+//	public APIresponse verifyEmail(String email) {
+//		String baseUrl = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
+//		
+//		User user = userService.findByEmail(email);
+//		if(user != null) {
+//			ConfirmationToken token = new ConfirmationToken(user);
+//			confirmationTokenService.save(token);
+//			
+//			SimpleMailMessage mailMessage = new SimpleMailMessage();
+//			mailMessage.setTo(email);
+//			mailMessage.setSubject("Verify Email");
+//			mailMessage.setFrom("ulmautoemail@gmail.com");
+//			mailMessage.setText("To confirm your account, please click here : "
+//					+ baseUrl + "api/auth/"+token.getConfirmationToken());
+//
+//			emailSenderService.sendEmail(mailMessage);
+//			
+//		}
+//		return null;
+//	}
 
 }
