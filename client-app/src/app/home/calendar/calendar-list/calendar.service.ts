@@ -6,6 +6,7 @@ import { Subject } from 'rxjs/internal/Subject';
 @Injectable()
 export class CalendarService{
     eventsChanged = new Subject<CalEvent[]>();
+    newCals: Calendar[] = [];
     calendars: Calendar[]=[
         {
             id: 1,
@@ -15,7 +16,7 @@ export class CalendarService{
                 title: "The best event",
                 description: "This is a test",
                 location: "Test Location",
-                start: new Date(),
+                start: new Date("10/11/2019"),
                 end: new Date("10/11/2019"),
                 color: {
                     primary: "#800029",
@@ -28,7 +29,7 @@ export class CalendarService{
                 title: "The best event 2",
                 description: "This is a test",
                 location: "Test Location",
-                start: new Date(),
+                start: new Date("10/11/2019 2:00 PM"),
                 end: new Date("10/11/2019 4:00 PM"),
                 color: {
                     primary: "#800029",
@@ -47,8 +48,8 @@ export class CalendarService{
                 title: "The best event 3",
                 description: "This is a test",
                 location: "Test Location",
-                start: new Date(),
-                end: new Date("10/10/2019"),
+                start: new Date("10/11/2019"),
+                end: new Date("10/11/2019"),
                 color: {
                     primary: "#800029",
                     secondary: "#f2968f"
@@ -60,7 +61,7 @@ export class CalendarService{
                 title: "The best event 4",
                 description: "This is a test",
                 location: "Test Location",
-                start: new Date(),
+                start: new Date("10/10/2019 1:00 PM"),
                 end: new Date("10/10/2019 4:00 PM"),
                 color: {
                     primary: "#800029",
@@ -69,13 +70,23 @@ export class CalendarService{
                 allDay: false
             }],
             shown: true,
-            createdBy: "moorea1"
+            createdBy: "student"
         }
     ];
     events: CalEvent[] = [];
     //returns calendars
     getCalendars(){
         return this.calendars.slice();
+    }
+
+    getCalendars2(name: string){
+        this.newCals = [];
+        for(let cal of this.calendars){
+            if(cal.createdBy === name){
+                this.newCals.push(cal);
+            }
+        }
+        return this.newCals;
     }
 
     //sets calendar list
@@ -114,5 +125,8 @@ export class CalendarService{
     getEvent(id: number){
         const event = this.events.find(event => event.id === id);
         return event;
+    }
+    addEvent(event: CalEvent){
+        this.events.push(event);
     }
 }
