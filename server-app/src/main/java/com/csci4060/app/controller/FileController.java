@@ -2,6 +2,7 @@ package com.csci4060.app.controller;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -52,7 +53,7 @@ public class FileController {
 
 	@Autowired
 	private EmailSenderService emailSenderService;
-	
+
 	@Autowired
 	PasswordEncoder encoder;
 
@@ -67,33 +68,35 @@ public class FileController {
 
 		List<User> students = fileReadService.readFile(file);
 
+		List<String> newUsersEmailList = new ArrayList<>();
+
 		if (students != null) {
 
 			for (User user : students) {
-				/*
-				 * //Everyone will receive the same email saying that their username is their warhawks email 
-				 * and they need to set password. We will send them a link to ui where they can enter their
-				 * email and password. But only those people whose email is in the database that we got from
-				 * excel file can sign up. After they enter their username and password, we will find the user from the
-				 * email and set the password to new password. We will also send them email saying that their password 
-				 * has changed. Right now, college outlook is blocking mass email sent from for loop.
-				 */				if (!userService.existsByUsername(user.getUsername())) {
-					SimpleMailMessage mailMessage = new SimpleMailMessage();
-					System.out.println(user.getEmail());
-					mailMessage.setTo(user.getEmail());
-					mailMessage.setSubject("Registration Complete!");
-					mailMessage.setFrom("ulmautoemail@gmail.com");
-					mailMessage.setText(
-							"You have been registered for the ulm communication app. Please log in with the given credentials below:\n"
-									+ "username: " + user.getEmail()+ "\n" 
-									+ "password: " + user.getPassword()
-									);
-					emailSenderService.sendEmail(mailMessage);
-					
-					user.setPassword(encoder.encode(user.getPassword()));
+
+				if (!userService.existsByUsername(user.getUsername())) {
+					newUsersEmailList.add(user.getEmail());
 					userService.save(user);
 				}
 			}
+
+			if (!newUsersEmailList.isEmpty()) {
+				SimpleMailMessage mailMessage = new SimpleMailMessage();
+
+				String[] newUsersEmailArray = newUsersEmailList.toArray(new String[newUsersEmailList.size()]);
+
+				mailMessage.setTo(newUsersEmailArray);
+				mailMessage.setSubject("Registration Complete");
+				mailMessage.setFrom("ulmautoemail@gmail.com");
+				mailMessage.setText(
+						"Congratulations! You have been successfully registered to ULM Communication App. Your "
+						+ "username is your warhawks email address and your password is your cwid. Please change your "
+						+ "password as soon as possible to secure your account. Click on the following link to login "
+						+ "to your account.");
+
+				emailSenderService.sendEmail(mailMessage);
+			}
+
 			UploadFileResponse response = new UploadFileResponse(fileName, fileDownloadUri, file.getContentType(),
 					file.getSize());
 
