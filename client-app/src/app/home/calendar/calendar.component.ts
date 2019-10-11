@@ -127,8 +127,8 @@ export class CalendarComponent implements OnInit {
   }
 
   newCal(){
-    // this.dialog.open(CalendarCreateComponent, {
-    //   width: "400px"
-    // })
+    this.dialog.open(CalendarCreateComponent, {
+      width:"400px"
+    });
   }
 }

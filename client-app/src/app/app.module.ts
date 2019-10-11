@@ -138,7 +138,8 @@ import { CalendarCreateComponent } from './home/calendar/calendar-create/calenda
     DialogTimeIntervalDialog,
     EventTimeDialog,
     EventTimeIntervalDialog,
-    TimeSlotSnackComponent
+    TimeSlotSnackComponent,
+    CalendarCreateComponent
   ],
   providers: [
     MatDatepickerModule,
