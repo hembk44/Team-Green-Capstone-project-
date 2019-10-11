@@ -33,14 +33,14 @@
       />
     </mat-form-field><br>
 
-    <mat-form-field>
+    <!-- <mat-form-field>
       <input
         matInput
         placeholder="Recipient Email"
         formControlName="email"
       />
       <mat-error *ngIf="email.invalid">{{ getErrorMessage() }}</mat-error>
-    </mat-form-field><br>
+    </mat-form-field><br> -->
     <mat-form-field id="end-date">
       <input
       matInput
@@ -112,6 +112,9 @@
 
     <mat-toolbar>
       <mat-toolbar-row>
+        <button type="button" mat-raised-button color="primary">
+          Add Recipients
+        </button>
         <span class="example-spacer"></span>
         <button type="submit" mat-raised-button class="primary">
           Confirm
