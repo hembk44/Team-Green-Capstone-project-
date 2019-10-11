@@ -10,8 +10,12 @@ export class AppointmentNavigationComponent implements OnInit {
   constructor(private router: Router) {}
 
   ngOnInit() {}
-  navigateToType() {
-    this.router.navigate(["/home/appointment/type"]);
+  navigateToSent() {
+    this.router.navigate(["/home/appointment/sent"]);
+  }
+
+  navigateToReceive() {
+    this.router.navigate(["/home/appointment/received"]);
   }
 
   navigateToScheduled() {

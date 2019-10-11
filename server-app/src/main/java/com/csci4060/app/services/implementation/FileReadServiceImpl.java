@@ -7,7 +7,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -55,26 +54,28 @@ public class FileReadServiceImpl implements FileReadService {
 
 				if (isRowEmpty(row) == false) {
 
-					String password = RandomStringUtils.random(8, true, true);
-					System.out.println(password);
+//					String password = RandomStringUtils.random(8, true, true);
+//					System.out.println(password);
 
 					String name = "";
 					String username = "";
+					String password = "";
 					String email = "";
 					
 					if (!row.getCell(0).getStringCellValue().isEmpty() && !row.getCell(1).getStringCellValue().isEmpty()
-							&& !row.getCell(5).getStringCellValue().isEmpty()) {
+							&& !row.getCell(2).getStringCellValue().isEmpty() && !row.getCell(5).getStringCellValue().isEmpty()) {
 						
 						name = row.getCell(0).getStringCellValue() + " " + row.getCell(1).getStringCellValue().toString();
 						username = row.getCell(5).getStringCellValue().toString();
+						password = row.getCell(2).getStringCellValue().toString();
 						email = row.getCell(5).getStringCellValue().toString();
-						User student = new User(name, username, email, password, true);
+						User student = new User(name, username, email, encoder.encode(password), true);
 
 						student.setRoles(role);
 
 						students.add(student);
 					} else {
-						throw new FileReadException("First name, last name and email must not be empty.");
+						throw new FileReadException("First name, last name, cwid and email must not be empty.");
 					}
 				}
 			}

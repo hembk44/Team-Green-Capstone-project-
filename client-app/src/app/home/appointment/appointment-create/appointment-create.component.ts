@@ -44,7 +44,9 @@ export class AppointmentCreateComponent implements OnInit {
       email: this.email
     });
   }
-
+  cancel() {
+    this.router.navigate(["/home/appointment/sent"]);
+  }
   getErrorMessage() {
     return this.email.hasError("required")
       ? "You must enter a valid email address"
