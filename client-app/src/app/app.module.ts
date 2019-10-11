@@ -57,7 +57,7 @@ import {
   EventTimeIntervalDialog
 } from "./home/calendar/create-event/create-event.component";
 import { CalendarListComponent } from "./home/calendar/calendar-list/calendar-list.component";
-import { CalendarItemComponent } from "./home/calendar/calendar-list/calendar-item/calendar-item.component";
+import { CalendarItemComponent, CalRename, DeleteConfirm } from "./home/calendar/calendar-list/calendar-item/calendar-item.component";
 import { ColorPickerModule } from "ngx-color-picker";
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { EventService } from "./home/calendar/events.service";
@@ -96,7 +96,9 @@ import { CalendarCreateComponent } from './home/calendar/calendar-create/calenda
     CalendarItemComponent,
     TimeSlotSnackComponent,
     EventDetailComponent,
-    CalendarCreateComponent
+    CalendarCreateComponent,
+    CalRename,
+    DeleteConfirm
   ],
   imports: [
     BrowserModule,
@@ -139,7 +141,9 @@ import { CalendarCreateComponent } from './home/calendar/calendar-create/calenda
     EventTimeDialog,
     EventTimeIntervalDialog,
     TimeSlotSnackComponent,
-    CalendarCreateComponent
+    CalendarCreateComponent,
+    CalRename,
+    DeleteConfirm
   ],
   providers: [
     MatDatepickerModule,

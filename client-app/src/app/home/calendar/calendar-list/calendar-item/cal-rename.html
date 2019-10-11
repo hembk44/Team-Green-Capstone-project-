@@ -1,0 +1,11 @@
+<mat-toolbar class="top-detail-row">
+    <span class="spacer"></span><mat-icon (click)="close()" class="close-button" matTooltip="Close">clear</mat-icon>
+</mat-toolbar>
+<div mat-dialog-content>
+    <form formGroup="nameForm" ngSubmit="onSubmit()">
+        <mat-form-field>
+            <input matInput formControlName="name" placeholder="New Name">
+        </mat-form-field><br><span class="spacer"></span>
+        <button mat-raised-button type="submit" class="submit">Save</button> 
+    </form>
+</div>

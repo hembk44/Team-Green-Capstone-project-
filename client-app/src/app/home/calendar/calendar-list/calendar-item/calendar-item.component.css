@@ -8,6 +8,18 @@
     cursor:pointer;
 }
 
+div{
+    padding-bottom: 10px;
+}
+
+mat-toolbar{
+    background-color: white;
+    height: 1em;
+}
+.close-button{
+    cursor: pointer;
+}
+
 .cal-item:hover .cal-menu{
     opacity: 100;
 }
