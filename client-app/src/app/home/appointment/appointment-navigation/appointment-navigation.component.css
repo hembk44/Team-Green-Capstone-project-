@@ -1,16 +1,16 @@
 .primary {
   color: #800029;
   border: #800029 solid 1px;
-  /* background-color: blanchedalmond; */
-  /* width: 10%; */
+
 }
 
 .mat-menu-item:hover:not([disabled]) {
-  background: rgba(255, 235, 205, 1);
-  color: #800029;
+  color: white;
+  background: #800029;
 }
 
-.icon-hover:hover {
-  background: rgba(255, 235, 205, 1);
-  color: #800029;
+
+.mat-menu-item .mat-icon-no-color,
+.mat-menu-item-submenu-trigger::after {
+  color: inherit;
 }

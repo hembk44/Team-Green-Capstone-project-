@@ -5,14 +5,14 @@
       class="primary"
       [matMenuTriggerFor]="type"
       aria-label="Example icon-button with a menu"
+      matTooltip="Click to check sent and received appointments"
     >
       Appointment Types <mat-icon>expand_more </mat-icon>
     </button>
     <mat-menu #type="matMenu">
       <button mat-menu-item (click)="navigateToReceive()">
         <span
-          ><mat-icon class="icon-hover">assignment_returned</mat-icon>
-          Appointments received</span
+          ><mat-icon>assignment_returned</mat-icon> Appointments received</span
         >
       </button>
       <button mat-menu-item (click)="navigateToSent()">
@@ -26,6 +26,7 @@
       class="primary"
       [matMenuTriggerFor]="schedule"
       aria-label="Example icon-button with a menu"
+      matTooltip="Click to see your all scheduled appointments"
       (click)="navigateToScheduled()"
     >
       Scheduled Appointment <mat-icon>expand_more </mat-icon>
