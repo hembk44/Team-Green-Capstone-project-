@@ -20,6 +20,8 @@ import com.csci4060.app.configuration.fileStorage.FileReadException;
 import com.csci4060.app.model.Role;
 import com.csci4060.app.model.RoleName;
 import com.csci4060.app.model.User;
+import com.csci4060.app.model.authentication.ConfirmationToken;
+import com.csci4060.app.services.ConfirmationTokenService;
 import com.csci4060.app.services.FileReadService;
 import com.csci4060.app.services.RoleService;
 
@@ -32,6 +34,8 @@ public class FileReadServiceImpl implements FileReadService {
 	@Autowired
 	RoleService roleService;
 
+	
+	
 	@Override
 	public List<User> readFile(MultipartFile file) throws IOException {
 		@SuppressWarnings("resource")
@@ -70,6 +74,8 @@ public class FileReadServiceImpl implements FileReadService {
 						password = row.getCell(2).getStringCellValue().toString();
 						email = row.getCell(5).getStringCellValue().toString();
 						User student = new User(name, username, email, encoder.encode(password), true);
+						
+						
 
 						student.setRoles(role);
 
