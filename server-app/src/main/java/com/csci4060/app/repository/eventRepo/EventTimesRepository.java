@@ -1,4 +1,4 @@
-package com.csci4060.app.repository.event;
+package com.csci4060.app.repository.eventRepo;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

@@ -3,6 +3,7 @@ package com.csci4060.app.controller;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -31,6 +32,7 @@ import com.csci4060.app.configuration.fileStorage.FileReadException;
 import com.csci4060.app.model.APIresponse;
 import com.csci4060.app.model.UploadFileResponse;
 import com.csci4060.app.model.User;
+import com.csci4060.app.model.calendar.Calendar;
 import com.csci4060.app.services.EmailSenderService;
 import com.csci4060.app.services.FileReadService;
 import com.csci4060.app.services.FileStorageService;
@@ -76,6 +78,11 @@ public class FileController {
 
 				if (!userService.existsByUsername(user.getUsername())) {
 					newUsersEmailList.add(user.getEmail());
+					
+					new Calendar("Main Calendar", null, null, user, true, true);
+					new Calendar("Appointment Calendar", null, null, user, true, true);
+					new Calendar("Special Event Calendar", null, null, user,true, true);
+					
 					userService.save(user);
 				}
 			}
@@ -90,9 +97,9 @@ public class FileController {
 				mailMessage.setFrom("ulmautoemail@gmail.com");
 				mailMessage.setText(
 						"Congratulations! You have been successfully registered to ULM Communication App. Your "
-						+ "username is your warhawks email address and your password is your cwid. Please change your "
-						+ "password as soon as possible to secure your account. Click on the following link to login "
-						+ "to your account.");
+								+ "username is your warhawks email address and your password is your cwid. Please change your "
+								+ "password as soon as possible to secure your account. Click on the following link to login "
+								+ "to your account.");
 
 				emailSenderService.sendEmail(mailMessage);
 			}

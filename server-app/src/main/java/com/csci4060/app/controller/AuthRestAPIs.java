@@ -1,7 +1,9 @@
 package com.csci4060.app.controller;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -34,6 +36,7 @@ import com.csci4060.app.model.authentication.ConfirmationToken;
 import com.csci4060.app.model.authentication.JwtResponse;
 import com.csci4060.app.model.authentication.LoginForm;
 import com.csci4060.app.model.authentication.SignUpForm;
+import com.csci4060.app.model.calendar.Calendar;
 import com.csci4060.app.services.ConfirmationTokenService;
 import com.csci4060.app.services.EmailSenderService;
 import com.csci4060.app.services.RoleService;
@@ -64,9 +67,9 @@ public class AuthRestAPIs {
 	@Autowired
 	UserService userService;
 
-	@Autowired 
+	@Autowired
 	RoleService roleService;
-	
+
 	@Autowired
 	ConfirmationTokenService confirmationTokenService;
 
@@ -81,27 +84,28 @@ public class AuthRestAPIs {
 
 	@PostMapping("/signin")
 	public APIresponse authenticateUser(@Valid @RequestBody LoginForm loginRequest) {
-		
+
 		User user = userService.findByUsername(loginRequest.getUsername());
-		
-		if(user.isVerified()) {
+
+		if (user.isVerified()) {
 			Authentication authentication = authenticationManager.authenticate(
 					new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 			String jwt = jwtProvider.generateJwtToken(authentication);
-			
+
 			String role = "";
-			
+
 			@SuppressWarnings("unchecked")
 			List<GrantedAuthority> authorities = (List<GrantedAuthority>) authentication.getAuthorities();
-			
-			for(GrantedAuthority authority: authorities) {
+
+			for (GrantedAuthority authority : authorities) {
 				role = authority.toString();
 			}
-			
-			return new APIresponse(HttpStatus.OK.value(), "Successful", new JwtResponse(jwt, loginRequest.getUsername(),role));
+
+			return new APIresponse(HttpStatus.OK.value(), "Successful",
+					new JwtResponse(jwt, loginRequest.getUsername(), role));
 		}
-		
+
 		return new APIresponse(HttpStatus.FORBIDDEN.value(), "Please click on the verification link to login", null);
 	}
 
@@ -115,6 +119,7 @@ public class AuthRestAPIs {
 			return new APIresponse(HttpStatus.BAD_REQUEST.value(), "Fail -> Email is already in use!", null);
 		}
 
+		
 		// Creating user's account
 		User user = new User(signUpRequest.getName(), signUpRequest.getUsername(), signUpRequest.getEmail(),
 				encoder.encode(signUpRequest.getPassword()), signUpRequest.isVerified());
@@ -137,63 +142,76 @@ public class AuthRestAPIs {
 		}
 
 		user.setRoles(roles);
+		
+		new Calendar("Main Calendar", null, null, user, true, true);
+		new Calendar("Appointment Calendar", null, null, user, true, true);
+		new Calendar("Special Event Calendar", null, null, user,true, true);
+		
 		userService.save(user);
-		
-		ConfirmationToken confirmationToken = new ConfirmationToken(user);
-		
-		confirmationTokenService.save(confirmationToken);
 
-		SimpleMailMessage mailMessage = new SimpleMailMessage();
-		mailMessage.setTo(user.getEmail());
-		mailMessage.setSubject("Complete Registration!");
-		mailMessage.setFrom("ulmautoemail@gmail.com");
-		mailMessage.setText("To confirm your account, please click here : "
-				+ "http://localhost:8181/api/auth/confirm-account/" + confirmationToken.getConfirmationToken());
+//		ConfirmationToken confirmationToken = new ConfirmationToken(user);
+//
+//		confirmationTokenService.save(confirmationToken);
+//
+//		SimpleMailMessage mailMessage = new SimpleMailMessage();
+//		mailMessage.setTo(user.getEmail());
+//		mailMessage.setSubject("Complete Registration!");
+//		mailMessage.setFrom("ulmautoemail@gmail.com");
+//		mailMessage.setText("To confirm your account, please click here : "
+//				+ "http://localhost:8181/api/auth/confirm-account/" + confirmationToken.getConfirmationToken());
+//
+//		emailSenderService.sendEmail(mailMessage);
 
-		emailSenderService.sendEmail(mailMessage);
-
-		return new APIresponse(HttpStatus.OK.value(), "Verification code has been sent to you email address. Please click it to register successfully.", null);
+		return new APIresponse(HttpStatus.OK.value(),
+				"Verification code has been sent to you email address. Please click it to register successfully.",
+				null);
 	}
 
 	@GetMapping("/confirm-account/{token}")
-	public APIresponse confirmUserAccout(@PathVariable("token") String confirmationToken) {
+	public String confirmUserAccout(@PathVariable("token") String confirmationToken) {
 		ConfirmationToken token = confirmationTokenService.findByConfirmationToken(confirmationToken);
-		
-		if(token != null)
-        {
-            User user = userService.findByEmail(token.getUser().getEmail());
-            
-            user.setVerified(true);
-            
-            userService.save(user);
-            return new APIresponse(HttpStatus.OK.value(),"User registered successfully!", null);
-        }
-        else
-        {
-        	return new APIresponse(HttpStatus.UNAUTHORIZED.value(),"Verficication token is not in the database", null);
-        }
+
+		if (token != null) {
+			return "emailVerification.html";
+		} else {
+			return null;
+		}
 	}
-	
-//	@PostMapping("/verifyEmail")
-//	public APIresponse verifyEmail(String email) {
+
+	@PostMapping("/delete/{email}")
+	public void deleteUser(@PathVariable("email") String email) {
+		
+		userService.delete(email);
+		
+		
+	}
+//	@PostMapping(path = "verifyEmail", produces = "application/json")
+//	public APIresponse verifyEmail(@RequestBody Map<String,String> emailJson) {
+//		
+//		String email = emailJson.get(email);
+//		System.out.println("The email is: "+ emailJson.get(email));
+//		
 //		String baseUrl = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
 //		
 //		User user = userService.findByEmail(email);
-//		if(user != null) {
+//		System.out.println(user);
+//		if (user != null) {
 //			ConfirmationToken token = new ConfirmationToken(user);
 //			confirmationTokenService.save(token);
-//			
+//
 //			SimpleMailMessage mailMessage = new SimpleMailMessage();
 //			mailMessage.setTo(email);
 //			mailMessage.setSubject("Verify Email");
 //			mailMessage.setFrom("ulmautoemail@gmail.com");
-//			mailMessage.setText("To confirm your account, please click here : "
-//					+ baseUrl + "api/auth/"+token.getConfirmationToken());
+//			mailMessage.setText("To confirm your account, please click here : " + baseUrl + "api/auth/confirm-account/"
+//					+ token.getConfirmationToken());
 //
 //			emailSenderService.sendEmail(mailMessage);
-//			
+//
+//			return new APIresponse(HttpStatus.OK.value(), "VerificationToken has been sent for " + user.getUsername(),
+//					null);
 //		}
-//		return null;
+//		return new APIresponse(HttpStatus.UNAUTHORIZED.value(), "User email is not in the database", null);
 //	}
 
 }
