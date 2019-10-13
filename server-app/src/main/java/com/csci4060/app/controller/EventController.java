@@ -19,14 +19,10 @@ import com.csci4060.app.model.APIresponse;
 import com.csci4060.app.model.User;
 import com.csci4060.app.model.calendar.Calendar;
 import com.csci4060.app.model.event.Event;
-import com.csci4060.app.model.event.EventDate;
 import com.csci4060.app.model.event.EventDummy;
-import com.csci4060.app.model.event.EventTime;
 import com.csci4060.app.services.CalendarService;
 import com.csci4060.app.services.EmailSenderService;
-import com.csci4060.app.services.EventDateService;
 import com.csci4060.app.services.EventService;
-import com.csci4060.app.services.EventTimeService;
 import com.csci4060.app.services.UserService;
 
 @RestController
@@ -39,12 +35,6 @@ public class EventController {
 
 	@Autowired
 	EventService eventService;
-
-	@Autowired
-	EventDateService eventDateService;
-
-	@Autowired
-	EventTimeService eventTimeService;
 
 	@Autowired
 	private EmailSenderService emailSenderService;

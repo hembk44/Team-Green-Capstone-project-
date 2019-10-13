@@ -33,6 +33,7 @@ import com.csci4060.app.model.APIresponse;
 import com.csci4060.app.model.UploadFileResponse;
 import com.csci4060.app.model.User;
 import com.csci4060.app.model.calendar.Calendar;
+import com.csci4060.app.services.CalendarService;
 import com.csci4060.app.services.EmailSenderService;
 import com.csci4060.app.services.FileReadService;
 import com.csci4060.app.services.FileStorageService;
@@ -59,6 +60,9 @@ public class FileController {
 	@Autowired
 	PasswordEncoder encoder;
 
+	@Autowired
+	CalendarService calendarService;
+
 	@PostMapping("/uploadStudents")
 	@PreAuthorize("hasRole('ADMIN')")
 	public APIresponse uploadFile(@RequestParam("file") MultipartFile file) throws IOException {
@@ -78,12 +82,11 @@ public class FileController {
 
 				if (!userService.existsByUsername(user.getUsername())) {
 					newUsersEmailList.add(user.getEmail());
-					
-					new Calendar("Main Calendar", null, null, user, true, true);
-					new Calendar("Appointment Calendar", null, null, user, true, true);
-					new Calendar("Special Event Calendar", null, null, user,true, true);
-					
 					userService.save(user);
+					calendarService.save(new Calendar("Main Calendar", null, null, user, true, true));
+					calendarService.save(new Calendar("Appointment Calendar", null, null, user, true, true));
+					calendarService.save(new Calendar("Special Event Calendar", null, null, user, true, true));
+
 				}
 			}
 

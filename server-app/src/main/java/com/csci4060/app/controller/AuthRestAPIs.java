@@ -37,6 +37,7 @@ import com.csci4060.app.model.authentication.JwtResponse;
 import com.csci4060.app.model.authentication.LoginForm;
 import com.csci4060.app.model.authentication.SignUpForm;
 import com.csci4060.app.model.calendar.Calendar;
+import com.csci4060.app.services.CalendarService;
 import com.csci4060.app.services.ConfirmationTokenService;
 import com.csci4060.app.services.EmailSenderService;
 import com.csci4060.app.services.RoleService;
@@ -81,6 +82,9 @@ public class AuthRestAPIs {
 
 	@Autowired
 	JwtProvider jwtProvider;
+	
+	@Autowired
+	CalendarService calendarService;
 
 	@PostMapping("/signin")
 	public APIresponse authenticateUser(@Valid @RequestBody LoginForm loginRequest) {
@@ -143,11 +147,13 @@ public class AuthRestAPIs {
 
 		user.setRoles(roles);
 		
-		new Calendar("Main Calendar", null, null, user, true, true);
-		new Calendar("Appointment Calendar", null, null, user, true, true);
-		new Calendar("Special Event Calendar", null, null, user,true, true);
-		
 		userService.save(user);
+		
+		calendarService.save(new Calendar("Main Calendar", null, null, user, true, true));
+		calendarService.save(new Calendar("Appointment Calendar", null, null, user, true, true));
+		calendarService.save(new Calendar("Special Event Calendar", null, null, user, true, true));
+		
+		
 
 //		ConfirmationToken confirmationToken = new ConfirmationToken(user);
 //

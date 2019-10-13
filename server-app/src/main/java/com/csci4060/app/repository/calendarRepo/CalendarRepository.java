@@ -6,4 +6,5 @@ import com.csci4060.app.model.calendar.Calendar;
 
 public interface CalendarRepository extends JpaRepository<Calendar, Long>{
 
+	Calendar save(Calendar calendar);
 }
