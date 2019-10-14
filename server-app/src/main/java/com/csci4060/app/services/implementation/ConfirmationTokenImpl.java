@@ -1,5 +1,7 @@
 package com.csci4060.app.services.implementation;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,8 +17,11 @@ public class ConfirmationTokenImpl implements ConfirmationTokenService{
 	
 	@Override
 	public ConfirmationToken findByConfirmationToken(String confirmationToken) {
-		return confirmationTokenRepo.findByConfirmationToken(confirmationToken)
-				.orElseThrow(() -> new RuntimeException("Fail! -> The confirmation token doesn not exists. Please try again."));
+		Optional<ConfirmationToken> token = confirmationTokenRepo.findByConfirmationToken(confirmationToken);
+		if(token.isPresent()) {
+			return token.get();
+		}
+		return null;
 	}
 	@Override
 	public ConfirmationToken save(ConfirmationToken token) {
