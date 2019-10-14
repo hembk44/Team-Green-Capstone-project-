@@ -38,7 +38,7 @@
   </mat-sidenav-container>
   <!-- Calendar heading -->
   <div [ngSwitch]="view" fxFlex="70%">
-    <div class="top-row-wrap">
+    <mat-toolbar class="top-row-wrap">
       <!-- Create Button -->
       <button mat-raised-button matTooltip="Create Event" (click)="createEvent()" class="create-button top-row">
           <mat-icon>add</mat-icon><span>Create</span>
@@ -72,10 +72,10 @@
           <mat-icon>keyboard_arrow_right</mat-icon>
         </button>
       </div>
-        
+        <span class="spacer"></span>
       <!-- View Title (September 2019, October 1-7, etc.) -->
       <h3 class="top-row cal-title">{{ viewDate | calendarDate: view + "ViewTitle":"en" }}</h3>
-
+      <span class="spacer"></span>
       <!-- View Switcher for Month, Week, and Day Views -->
       <div class="view-menu" class="top-row">
         <button mat-raised-button [matMenuTriggerFor]="menu" class="view-button top-row">
@@ -112,7 +112,7 @@
         </mat-menu>
       </div>
     <hr>
-  </div>
+    </mat-toolbar>
     <!-- Calendar -->
     <!-- Month View -->
       <mwl-calendar-month-view

@@ -77,8 +77,9 @@
       placeholder="End Time"
       aria-label="default time"
       [value]="defaultTime.toLocaleTimeString([], {hour: '2-digit',  minute:'2-digit'})"
-      [ngxTimepicker]="endtime">
-      <ngx-material-timepicker #endtime [minutesGap]="5"></ngx-material-timepicker>
+      [ngxTimepicker]="endtime"
+      readonly>
+      <ngx-material-timepicker #endtime [minutesGap]="5" [appendToInput]="true"></ngx-material-timepicker>
     </mat-form-field><br>
     <mat-form-field id="primary-color">
       <input
