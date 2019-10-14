@@ -45,10 +45,10 @@
     background-color:darkgrey
 }
 
-.calendar{
-    width:70%;
-    margin:0;
-    align-items: center;
+#calendar{
+    margin-top: 5px;
+    margin-left: 5px;
+    margin-right: 5px;
 }
 
 .top-row{

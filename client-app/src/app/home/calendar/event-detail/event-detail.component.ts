@@ -16,15 +16,15 @@ export class EventDetailComponent implements OnInit {
   constructor(private calService: CalendarService,
     private route: ActivatedRoute,
     private ref: MatDialogRef<EventDetailComponent>,
-    @Inject(MAT_DIALOG_DATA)public data: number) { 
+    @Inject(MAT_DIALOG_DATA)public data: CalEvent) { 
     }
 
   ngOnInit() {
-    this.id = this.data
-    // this.route.params.subscribe((params: Params)=>{
-    //   this.id = +params['id'];
-    // })
-    this.event = this.calService.getEvent(this.id);
+    this.event = this.data;
+    console.log(this.event);
+    if(this.event.allDay){
+      this.event.end = this.event.start;
+    }
   }
 
   close(){

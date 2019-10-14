@@ -18,10 +18,8 @@ export class CalendarService{
                 location: "Test Location",
                 start: new Date("10/11/2019"),
                 end: new Date("10/11/2019"),
-                color: {
-                    primary: "#800029",
-                    secondary: "#f2968f"
-                },
+                backgroundColor: "#800029",
+                borderColor: "#800029",
                 allDay: true
             },
             {
@@ -31,10 +29,8 @@ export class CalendarService{
                 location: "Test Location",
                 start: new Date("10/11/2019 2:00 PM"),
                 end: new Date("10/11/2019 4:00 PM"),
-                color: {
-                    primary: "#800029",
-                    secondary: "#f2968f"
-                },
+                backgroundColor: "#800029",
+                borderColor: "#800029",
                 allDay: false
             }],
             shown: true,
@@ -48,12 +44,10 @@ export class CalendarService{
                 title: "The best event 3",
                 description: "This is a test",
                 location: "Test Location",
-                start: new Date("10/11/2019"),
-                end: new Date("10/11/2019"),
-                color: {
-                    primary: "#800029",
-                    secondary: "#f2968f"
-                },
+                start: new Date("10/12/2019"),
+                end: new Date("10/12/2019"),
+                backgroundColor: "#800029",
+                borderColor: "#800029",
                 allDay: true
             },
             {
@@ -61,12 +55,10 @@ export class CalendarService{
                 title: "The best event 4",
                 description: "This is a test",
                 location: "Test Location",
-                start: new Date("10/10/2019 1:00 PM"),
-                end: new Date("10/10/2019 4:00 PM"),
-                color: {
-                    primary: "#800029",
-                    secondary: "#f2968f"
-                },
+                start: new Date("10/31/2019 1:00 PM"),
+                end: new Date("10/31/2019 4:00 PM"),
+                backgroundColor: "#800029",
+                borderColor: "#800029",
                 allDay: false
             }],
             shown: true,

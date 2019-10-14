@@ -1,7 +1,10 @@
-<div class="wrapper" fxLayout fxLayoutAlign="center">
+<div class="wrapper" fxLayoutAlign="center">
   <mat-sidenav-container>
     <mat-sidenav #calDrawer mode="side" opened="true">
       <mat-toolbar class="menutoggle">
+        <button mat-raised-button matTooltip="Create Event" (click)="createEvent()" class="create-button top-row">
+          <mat-icon>add</mat-icon><span>Create</span>
+        </button>
         <span class="spacer"></span>
         <button
         type="button"
@@ -36,15 +39,29 @@
       </button>
     </mat-sidenav-content>
   </mat-sidenav-container>
+
+  <full-calendar 
+    id="calendar"
+    fxFlex="85%"
+    defaultView="dayGridMonth" 
+    [plugins]="calendarPlugins" 
+    [events]="compatEvents"
+    [header]="{
+      left: 'prev today next',
+      center: 'title',
+      right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+    }"
+    [height]="650"
+    (eventClick)="eventClicked($event.event)"></full-calendar>
   <!-- Calendar heading -->
-  <div [ngSwitch]="view" fxFlex="70%">
-    <mat-toolbar class="top-row-wrap">
+  <!-- <div [ngSwitch]="view" fxFlex="70%">
+    <mat-toolbar class="top-row-wrap"> -->
       <!-- Create Button -->
-      <button mat-raised-button matTooltip="Create Event" (click)="createEvent()" class="create-button top-row">
+      <!-- <button mat-raised-button matTooltip="Create Event" (click)="createEvent()" class="create-button top-row">
           <mat-icon>add</mat-icon><span>Create</span>
-        </button>
+        </button> -->
       <!-- Calendar navigation buttons -->
-      <div class="cal-navigation top-row">
+      <!-- <div class="cal-navigation top-row">
         <button
           mwlCalendarPreviousView
           mat-icon-button
@@ -72,12 +89,12 @@
           <mat-icon>keyboard_arrow_right</mat-icon>
         </button>
       </div>
-        <span class="spacer"></span>
+        <span class="spacer"></span> -->
       <!-- View Title (September 2019, October 1-7, etc.) -->
-      <h3 class="top-row cal-title">{{ viewDate | calendarDate: view + "ViewTitle":"en" }}</h3>
-      <span class="spacer"></span>
+      <!-- <h3 class="top-row cal-title">{{ viewDate | calendarDate: view + "ViewTitle":"en" }}</h3>
+      <span class="spacer"></span> -->
       <!-- View Switcher for Month, Week, and Day Views -->
-      <div class="view-menu" class="top-row">
+      <!-- <div class="view-menu" class="top-row">
         <button mat-raised-button [matMenuTriggerFor]="menu" class="view-button top-row">
         {{ view }} <mat-icon>arrow_drop_down</mat-icon>
         </button>
@@ -111,27 +128,27 @@
           </button>
         </mat-menu>
       </div>
-    <hr>
-    </mat-toolbar>
+    <hr> -->
+    <!-- </mat-toolbar> -->
     <!-- Calendar -->
     <!-- Month View -->
-      <mwl-calendar-month-view
+      <!-- <mwl-calendar-month-view
         *ngSwitchCase="'month'"
         [viewDate]="viewDate"
         [events]="compatEvents"
         (dayClicked)="dayClicked($event.day)"
       >
-      </mwl-calendar-month-view>
+      </mwl-calendar-month-view> -->
       <!-- Week View -->
-      <mwl-calendar-week-view
+      <!-- <mwl-calendar-week-view
         *ngSwitchCase="'week'"
         [viewDate]="viewDate"
         [events]="compatEvents"
         (eventClicked)="eventClicked($event.event)"
       >
-      </mwl-calendar-week-view>
+      </mwl-calendar-week-view> -->
       <!-- Day View -->
-      <mwl-calendar-day-view
+      <!-- <mwl-calendar-day-view
         [viewDate]="viewDate"
         [events]="compatEvents"
         *ngSwitchCase="'day'"
@@ -139,10 +156,10 @@
       >
       </mwl-calendar-day-view>
 
-  </div>
+  </div> -->
 
   <!-- List of events for the right side during month view -->
-  <div *ngIf="view === CalendarView.Month" class="right-view" fxFlex="15%">
+  <!-- <div *ngIf="view === CalendarView.Month" class="right-view" fxFlex="15%">
     <h2 class="day-title">{{ viewDate.toLocaleDateString() }}</h2><hr>
     <div class="events-list">
       <div *ngFor="let event of compatEvents">
@@ -174,6 +191,6 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
 </div>
 

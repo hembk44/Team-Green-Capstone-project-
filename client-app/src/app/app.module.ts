@@ -61,6 +61,7 @@ import {
   EventTimeIntervalDialog
 } from "./home/calendar/create-event/create-event.component";
 import { CalendarListComponent } from "./home/calendar/calendar-list/calendar-list.component";
+import { FullCalendarModule } from '@fullcalendar/angular';
 import { CalendarItemComponent, CalRename, DeleteConfirm } from "./home/calendar/calendar-list/calendar-item/calendar-item.component";
 import { ColorPickerModule } from "ngx-color-picker";
 import { EventService } from "./home/calendar/events.service";
@@ -140,12 +141,14 @@ import { GroupComponent } from './home/group/group.component';
     CalendarModule.forRoot({
       provide: DateAdapter,
       useFactory: adapterFactory
-    })
+    }),
+    FullCalendarModule
   ],
   entryComponents: [
     DialogDateTimeIntervalDialog,
     DialogTimeIntervalDialog,
     EventTimeDialog,
+    EventDetailComponent,
     EventTimeIntervalDialog,
     TimeSlotSnackComponent,
     CalendarCreateComponent,

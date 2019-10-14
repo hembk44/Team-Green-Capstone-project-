@@ -11,6 +11,9 @@ import { EventService } from "./events.service";
 import { Router } from "@angular/router";
 import { CompatibleEvent } from './compatible-events.model';
 import { DataStorageService } from '../shared/data-storage.service';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import timeGridPlugin from '@fullcalendar/timegrid';
+import listPlugin from '@fullcalendar/list';
 import { AuthService } from 'src/app/auth/auth.service';
 import { MatDialog } from '@angular/material/dialog';
 import { CreateEventComponent } from './create-event/create-event.component';
@@ -40,6 +43,7 @@ export class CalendarComponent implements OnInit {
   role = this.authService.user;
   panelOpen=false;
   subscription: Subscription;
+  calendarPlugins = [dayGridPlugin,timeGridPlugin,listPlugin];
 
   calEvents: CalEvent[]=[];//list of events
   compatEvents: CalEvent[]=[];
@@ -113,8 +117,9 @@ export class CalendarComponent implements OnInit {
   eventClicked(event: CalEvent) {
     this.dialog.open(EventDetailComponent, {
       width: "400px",
-      data: event.id
+      data: event
     })
+    console.log(event);
     // this.router.navigate(["home/event", event.id]);
   }
 

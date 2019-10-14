@@ -6,8 +6,8 @@
 <div mat-dialog-content>
     <p>{{ event.start.toLocaleString([], {month:'2-digit', day:'2-digit', year:'2-digit', hour: '2-digit',  minute:'2-digit'}) }} - 
         {{event.end.toLocaleString([], {month:'2-digit', day:'2-digit', year:'2-digit', hour: '2-digit',  minute:'2-digit'}) }}</p>
-    <p><b>Location:</b> {{ event.location }}</p>
-    <p><b>Description:</b> {{ event.description }}</p>
+    <p><b>Location:</b> {{ event.extendedProps.location }}</p>
+    <p><b>Description:</b> {{ event.extendedProps.description }}</p>
     <button mat-raised-button [matMenuTriggerFor]="menu" class="options-button">Options</button> 
     <mat-menu #menu>
         <button mat-menu-item>Edit Event</button>

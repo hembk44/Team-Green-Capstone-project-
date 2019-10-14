@@ -119,13 +119,11 @@ export class CreateEventComponent implements OnInit {
         name: eventFormValues.title,
         description: eventFormValues.description,
         start: eventFormValues.startDate.toString(),
-        end: eventFormValues.endDate.toString(),
+        end: eventFormValues.endDate.setHours(eventFormValues.endDate.getHours()+1).toString(),
         email: [eventFormValues.email],
         location: eventFormValues.location,
-        colors: {
-          primary: this.primaryColor,
-          secondary: this.secondaryColor
-        },
+        backgroundColor: this.primaryColor,
+        borderColor: this.primaryColor,
         allDay: this.allDay
       };
     }
