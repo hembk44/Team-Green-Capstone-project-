@@ -3,7 +3,6 @@ package com.csci4060.app.controller;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -110,7 +109,7 @@ public class FileController {
 			UploadFileResponse response = new UploadFileResponse(fileName, fileDownloadUri, file.getContentType(),
 					file.getSize());
 
-			return new APIresponse(HttpStatus.OK.value(), "File was succesfully uploaded", response);
+			return new APIresponse(HttpStatus.CREATED.value(), "File was succesfully uploaded", response);
 		}
 
 		throw new FileReadException("The file is empty. Please upload a new file.");
