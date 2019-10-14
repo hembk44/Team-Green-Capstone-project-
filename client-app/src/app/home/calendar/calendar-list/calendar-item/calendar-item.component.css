@@ -15,6 +15,7 @@ div{
 mat-toolbar{
     background-color: white;
     height: 1em;
+    margin-top: 15px;
 }
 .close-button{
     cursor: pointer;

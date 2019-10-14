@@ -101,6 +101,7 @@ export class CreateEventComponent implements OnInit {
 
     if(!this.allDay){
       this.obj = {
+        id: this.selectedCal,
         name: eventFormValues.title,
         description: eventFormValues.description,
         start: startDate,

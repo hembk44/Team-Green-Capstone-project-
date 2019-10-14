@@ -28,7 +28,6 @@ export class CalendarCreateComponent implements OnInit {
   onSubmit(){
     const obj = {
       name: this.calForm.value['name'],
-      recipients: this.calForm.value['recipients']
     }
     console.log(obj);
   }
