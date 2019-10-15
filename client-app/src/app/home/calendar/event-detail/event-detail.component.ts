@@ -22,9 +22,6 @@ export class EventDetailComponent implements OnInit {
   ngOnInit() {
     this.event = this.data;
     console.log(this.event);
-    if(this.event.allDay){
-      this.event.end = this.event.start;
-    }
   }
 
   close(){
