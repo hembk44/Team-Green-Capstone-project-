@@ -1,12 +1,12 @@
 <mat-toolbar class="cal-item">
     <mat-checkbox style="cursor:pointer" [(ngModel)]="checked" color="primary" (click)="toggleCal()">{{calendar.name}}</mat-checkbox>
     <span class="spacer"></span>
-    <mat-icon class="cal-menu" matTooltip="Calendar Options" [matMenuTriggerFor]="options" *ngIf="calendar.createdBy.username === username">more_vert</mat-icon>
+    <mat-icon class="cal-menu" matTooltip="Calendar Options" [matMenuTriggerFor]="options" *ngIf="calendar.createdBy === username">more_vert</mat-icon>
     <mat-menu #options>
         <button
         mat-menu-item
         (click)="renameCal()"
-        *ngIf="!calendar.default">
+        *ngIf="!calendar.defaultCalendar">
             Rename
         </button>
         <button
@@ -16,7 +16,7 @@
         <button
         mat-menu-item
         (click)="deleteCal()"
-        *ngIf="!calendar.default">
+        *ngIf="!calendar.defaultCalendar">
             Delete
         </button>
     </mat-menu><br>

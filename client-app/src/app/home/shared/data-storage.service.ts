@@ -6,13 +6,9 @@ import { throwError, Observable, BehaviorSubject } from "rxjs";
 import { ApiResponse } from "src/app/auth/api.response";
 import { Appointment } from "../appointment/appointment-model/appointment.model";
 import { CalEvent } from "../calendar/events.model";
-<<<<<<< HEAD
 import { AuthService } from 'src/app/auth/auth.service';
 import { Calendar } from '../calendar/calendar-list/calendar.model';
 import { CalendarService } from '../calendar/calendar-list/calendar.service';
-=======
-import { AuthService } from "src/app/auth/auth.service";
->>>>>>> 4bb379b0055869b3db5d0a73b4ab54ae17f90b38
 
 @Injectable({
   providedIn: "root"

@@ -50,12 +50,8 @@ export class CreateEventComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.dataStorage.fetchCalendars();
-    this.dataStorage.isLoading.subscribe(loading => {
-      if(!loading){
-        this.calendars=this.calService.getCalendars().filter(cal => cal.createdBy.username === this.username);
-      }
-    });
+    this.calendars=this.calService.getCalendars().filter(cal => cal.createdBy.username === this.username);
+    console.log(this.calendars);
     this.eventForm = new FormGroup({
       title: new FormControl(),
       description: new FormControl(""),
