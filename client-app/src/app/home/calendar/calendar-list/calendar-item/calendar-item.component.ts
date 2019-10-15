@@ -4,6 +4,7 @@ import { CalendarService } from '../calendar.service';
 import { AuthService } from 'src/app/auth/auth.service';
 import { MatDialogRef, MatDialog, MAT_DIALOG_DATA } from '@angular/material';
 import { FormGroup, FormControl } from '@angular/forms';
+import { ShareCalendarComponent } from '../../share-calendar/share-calendar.component';
 
 @Component({
   selector: 'app-calendar-item',
@@ -40,6 +41,13 @@ export class CalendarItemComponent implements OnInit {
       width:"500px",
       data: this.calendar
     })
+  }
+
+  shareCal(){
+    this.dialog.open(ShareCalendarComponent, {
+      width: "500px",
+      data: this.calendar
+    });
   }
 
 }

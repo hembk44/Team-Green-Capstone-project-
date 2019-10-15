@@ -207,4 +207,23 @@ export class DataStorageService {
       this.calService.setCalendars(result.result);
     });
   }
+
+  newCalendar(obj: Object){
+    this.isLoadingSubject.next(true);
+    return this.http.post<Object>('http://localhost:8181/api/calendar/create', obj)
+    .pipe(
+      (map(data=>data), catchError(error => throwError(error)),
+      finalize(()=> this.isLoadingSubject.next(false)))
+    );
+  }
+
+  shareCalenar(obj: Object){
+    this.isLoadingSubject.next(true);
+    return this.http.post<Object>('http://localhost:8181/api/calendar/share', obj)
+    .pipe(
+      (map(data=>data), catchError(error => throwError(error)),
+      finalize(()=>this.isLoadingSubject.next(false)))
+    );
+  }
+
 }
