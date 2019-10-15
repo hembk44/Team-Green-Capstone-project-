@@ -1,7 +1,11 @@
 package com.csci4060.app.controller;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.security.sasl.AuthenticationException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.mail.SimpleMailMessage;
@@ -44,7 +48,7 @@ public class EventController {
 
 	@PostMapping(path = "/set", consumes = "application/json")
 	@PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
-	public APIresponse setEvent(@RequestBody EventDummy eventDummy) {
+	public APIresponse setEvent(@RequestBody EventDummy eventDummy) throws FileNotFoundException, AuthenticationException {
 
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -55,56 +59,70 @@ public class EventController {
 		}
 
 		User createdBy = userService.findByUsername(creatorUsername);
-		
+
 		List<User> recipientList = new ArrayList<User>();
 
 		List<String> recepientsEmailList = eventDummy.getRecipients();
-		
+
 		for (String each : recepientsEmailList) {
-			
+
 			User recipient = userService.findByEmail(each);
-			
-			if(recipient != null) {
+
+			if (recipient != null) {
 				recipientList.add(recipient);
 			}
 		}
-		
+
 		Event event = new Event(eventDummy.getTitle(), eventDummy.getDescription(), eventDummy.getLocation(),
 				recipientList, eventDummy.getStart(), eventDummy.getEnd(), createdBy, eventDummy.getAllDay());
 
-		//eventService.save(event);
+		eventService.save(event);
+		
+		Long newEventId = event.getId();
+		System.out.println(newEventId);
 		
 		Calendar calendar = calendarService.findById(eventDummy.getCalendarId());
-		
-		if(calendar.getCreatedBy() == createdBy) {
-			calendar.getEvents().add(event);
-			calendarService.save(calendar);
+
+		if (calendar == null) {
+			throw new FileNotFoundException("Calendar with given id is not present in the database");
 		}
+
+		if (calendar.getCreatedBy() == createdBy) {
+			calendar.getEvents().add(eventService.findById(newEventId));
+			calendarService.save(calendar);
+		}else {
+			throw new AuthenticationException("You are not allowed to create an event for this calendar");
+		}
+
+		String eventCreatorCalendarName = calendar.getName();
 		
 
 		if (!recipientList.isEmpty()) {
-			
-			for (User person: recipientList) {
-				Calendar mainCalendar = calendarService.findByNameAndCreatedBy("Main Calendar", person);
-				mainCalendar.getEvents().add(event);
-				
-				System.out.println(mainCalendar.getEvents());
-				
-				calendarService.save(mainCalendar);
+
+			for (User sharedToPerson : recipientList) {
+				Calendar recipientCalendar = calendarService.findByNameAndCreatedBy(eventCreatorCalendarName, sharedToPerson);
+
+				if (recipientCalendar == null) {
+					recipientCalendar = calendarService.findByNameAndCreatedBy("Main Calendar", sharedToPerson);
+				}
+
+				recipientCalendar.getEvents().add(eventService.findById(newEventId));
+				calendarService.save(recipientCalendar);
+
 			}
-			
-			SimpleMailMessage mailMessage = new SimpleMailMessage();
 
-			String[] emails = recepientsEmailList.toArray(new String[recepientsEmailList.size()]);
-
-			mailMessage.setTo(emails);
-			mailMessage.setSubject("Event Information");
-			mailMessage.setFrom("ulmautoemail@gmail.com");
-			mailMessage.setText(
-					"A faculty has set an event for you. Please log in to you ULM communication app and register for the event. "
-							+ "Thank you!");
-
-			emailSenderService.sendEmail(mailMessage);
+//			SimpleMailMessage mailMessage = new SimpleMailMessage();
+//
+//			String[] emails = recepientsEmailList.toArray(new String[recepientsEmailList.size()]);
+//
+//			mailMessage.setTo(emails);
+//			mailMessage.setSubject("Event Information");
+//			mailMessage.setFrom("ulmautoemail@gmail.com");
+//			mailMessage.setText(
+//					"A faculty has set an event for you. Please log in to you ULM communication app and register for the event. "
+//							+ "Thank you!");
+//
+//			emailSenderService.sendEmail(mailMessage);
 		}
 
 		return new APIresponse(HttpStatus.CREATED.value(), "event created successfully", event);
@@ -149,5 +167,44 @@ public class EventController {
 		return new APIresponse(HttpStatus.OK.value(), "All events successfully sent.", events);
 
 	}
+	
+	@PostMapping(path = "/test", consumes = "application/json")
+	@PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
+	public Calendar test(@RequestBody EventDummy eventDummy) {
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		String creatorUsername = "";
+
+		if (principal instanceof UserDetails) {
+			creatorUsername = ((UserDetails) principal).getUsername();
+		}
+
+		User createdBy = userService.findByUsername(creatorUsername);
+
+		List<User> recipientList = new ArrayList<User>();
+
+		List<String> recepientsEmailList = eventDummy.getRecipients();
+
+		for (String each : recepientsEmailList) {
+
+			User recipient = userService.findByEmail(each);
+
+			if (recipient != null) {
+				recipientList.add(recipient);
+			}
+		}
+		Event event = new Event(eventDummy.getTitle(), eventDummy.getDescription(), eventDummy.getLocation(),
+				recipientList, eventDummy.getStart(), eventDummy.getEnd(), createdBy, eventDummy.getAllDay());
+		eventService.save(event);
+		Calendar c1 = calendarService.findById(eventDummy.getCalendarId());
+		c1.getEvents().add(event);
+		calendarService.save(c1);
+		
+		Calendar c2 = calendarService.findById((long) 1);
+		c2.getEvents().add(event);
+		
+		return c2;
+	}
+	
 
 }

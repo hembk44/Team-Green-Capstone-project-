@@ -12,6 +12,7 @@ import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 
 import com.csci4060.app.model.User;
+import com.csci4060.app.model.calendar.Calendar;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
@@ -23,7 +24,7 @@ public class Event {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-
+	
 	@NotNull
 	String title;
 	

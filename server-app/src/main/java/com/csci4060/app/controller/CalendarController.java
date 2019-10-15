@@ -1,5 +1,6 @@
 package com.csci4060.app.controller;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,7 +72,7 @@ public class CalendarController {
 
 		CalendarResponse response = new CalendarResponse(calendar.getId(), calendar.getName(), calendar.getEvents(),
 				createdBy.getUsername(), calendar.isShown(), calendar.isDefaultCalendar());
-		
+
 		return new APIresponse(HttpStatus.CREATED.value(),
 				"Calendar with name " + calendarName + " has been succesfully created", response);
 
@@ -117,30 +118,31 @@ public class CalendarController {
 
 	@PostMapping(path = "/share", produces = "application/json")
 	@PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
-	public APIresponse shareCalendar(@RequestBody CalendarShare calendarShare) {
+	public APIresponse shareCalendar(@RequestBody CalendarShare calendarShare) throws FileNotFoundException {
 
 		Calendar calendar = calendarService.findById(calendarShare.getCalendarId());
-		
+
 		List<String> emailsFromJson = calendarShare.getRecipients();
 		List<String> sharedWithList = new ArrayList<String>();
 
-		CalendarResponse response = null;
+		if (calendar == null) {
+			throw new FileNotFoundException("Calendar with the given id is not present in the database");
+		}
 
-		if (calendar != null) {
-			for (String email : emailsFromJson) {
+		for (String email : emailsFromJson) {
 
-				User user = userService.findByEmail(email);
-				if (user != null && calendar.getCreatedBy() != user) {
-					sharedWithList.add(email);
-					calendar.getShareduser().add(user);
-					calendarService.save(calendar);
-				}
-
+			User personToShare = userService.findByEmail(email);
+			if (personToShare != null && calendar.getCreatedBy() != personToShare) {
+				sharedWithList.add(email);
+				calendar.getShareduser().add(personToShare);
+				calendarService.save(calendar);
 			}
 
-			response = new CalendarResponse(calendar.getId(), calendar.getName(), calendar.getEvents(),
-					calendar.getCreatedBy().getEmail(), calendar.isShown(), calendar.isDefaultCalendar());
 		}
+
+		CalendarResponse response = new CalendarResponse(calendar.getId(), calendar.getName(), calendar.getEvents(),
+				calendar.getCreatedBy().getEmail(), calendar.isShown(), calendar.isDefaultCalendar());
+
 		return new APIresponse(HttpStatus.OK.value(),
 				"Calendar " + calendar.getName() + " has been shared to users: " + sharedWithList, response);
 	}
