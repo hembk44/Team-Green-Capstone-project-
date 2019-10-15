@@ -6,9 +6,13 @@ import { throwError, Observable, BehaviorSubject } from "rxjs";
 import { ApiResponse } from "src/app/auth/api.response";
 import { Appointment } from "../appointment/appointment-model/appointment.model";
 import { CalEvent } from "../calendar/events.model";
+<<<<<<< HEAD
 import { AuthService } from 'src/app/auth/auth.service';
 import { Calendar } from '../calendar/calendar-list/calendar.model';
 import { CalendarService } from '../calendar/calendar-list/calendar.service';
+=======
+import { AuthService } from "src/app/auth/auth.service";
+>>>>>>> 4bb379b0055869b3db5d0a73b4ab54ae17f90b38
 
 @Injectable({
   providedIn: "root"
@@ -83,6 +87,8 @@ export class DataStorageService {
         finalize(() => this.isLoadingSubject.next(false)))
       )
       .subscribe((result: ApiResponse) => {
+        console.log("Faculty appointments!");
+        console.log(result.result);
         if (result.status == 200 && result.result) {
           this.appointmentSubject.next(result.result);
         }
@@ -97,7 +103,7 @@ export class DataStorageService {
       )
       .pipe(
         (map(data => data),
-        catchError(error => throwError('there was an error'+error)),
+        catchError(error => throwError("there was an error" + error)),
         finalize(() => this.isLoadingSubject.next(false)))
       )
       .subscribe((result: ApiResponse) => {
@@ -111,12 +117,10 @@ export class DataStorageService {
   fetchUserAppointmentForCal() {
     this.isLoadingSubject.next(true);
     this.http
-      .get<ApiResponse>(
-        "http://localhost:8181/api/appointment/calendar/user"
-      )
+      .get<ApiResponse>("http://localhost:8181/api/appointment/calendar/user")
       .pipe(
         (map(data => data),
-        catchError(error => throwError('there was an error'+error)),
+        catchError(error => throwError("there was an error" + error)),
         finalize(() => this.isLoadingSubject.next(false)))
       )
       .subscribe((result: ApiResponse) => {
@@ -159,13 +163,13 @@ export class DataStorageService {
   //     return throwError(errorMessage);
   //   }
   //   errorMessage = errorRes.error.error.message;
-  eventAPI: string = '';
+  eventAPI: string = "";
   fetchEvents() {
     this.isLoadingSubject.next(true);
-    if(this.authService.user === "ROLE_USER"){
-      this.eventAPI = 'http://localhost:8181/api/event/user/allEvents'
-    }else{
-      this.eventAPI = 'http://localhost:8181/api/event/faculty/allEvents'
+    if (this.authService.user === "ROLE_USER") {
+      this.eventAPI = "http://localhost:8181/api/event/user/allEvents";
+    } else {
+      this.eventAPI = "http://localhost:8181/api/event/faculty/allEvents";
     }
     this.http
       .get<ApiResponse>(this.eventAPI)

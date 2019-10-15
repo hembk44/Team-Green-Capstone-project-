@@ -1,8 +1,3 @@
-.logout {
-  float: right;
-  color: red;
-}
-
 .sidenav-container {
   height: 100%;
   /* margin: 10px */
@@ -32,6 +27,10 @@
   color: #800029;
   /* background-color: #BD955A; */
 
+}
+
+.maroon {
+  color: #800029;
 }
 
 .mat-raised-button {

@@ -13,4 +13,6 @@ public interface CalendarRepository extends JpaRepository<Calendar, Long>{
 	Optional<List<Calendar>> findAllByCreatedBy(User user);
 	
 	Optional<List<Calendar>> findAllByShareduser(User user);
+	
+	Optional<Calendar> findByNameAndCreatedBy(String name, User user);
 }
