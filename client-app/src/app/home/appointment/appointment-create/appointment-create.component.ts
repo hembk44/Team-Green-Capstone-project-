@@ -29,6 +29,7 @@ export class AppointmentCreateComponent implements OnInit {
   email = new FormControl("", [Validators.required, Validators.email]);
   appointmentData: Appointment;
   dateRangeArray: DateRange[] = [];
+  emails: string[] = [];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -46,6 +47,12 @@ export class AppointmentCreateComponent implements OnInit {
   }
   cancel() {
     this.router.navigate(["/home/appointment/sent"]);
+  }
+
+  addEmails() {
+    this.emails.push(this.appointmentForm.value.email);
+    console.log(this.emails);
+    this.email.reset();
   }
   getErrorMessage() {
     return this.email.hasError("required")
@@ -72,7 +79,7 @@ export class AppointmentCreateComponent implements OnInit {
     const obj = {
       name: appointmentFormValues.title,
       description: appointmentFormValues.description,
-      recepients: [appointmentFormValues.email],
+      recepients: this.emails,
       location: "Hem",
       appdates: this.dateRangeArray
     };
