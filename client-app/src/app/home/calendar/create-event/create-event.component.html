@@ -3,7 +3,7 @@
   [formGroup]="eventForm"
   (ngSubmit)="onSubmit()"
   >
-    <mat-form-field class="cal-select">
+    <mat-form-field class="cal-select" required>
       <mat-label>Select Calendar</mat-label>
       <mat-select formControlName="calendar" [disableOptionCentering]="true">
         <mat-option *ngFor="let cal of calendars" [value]="cal.name" (click)="selectCalendar(cal.id)">{{ cal.name }}</mat-option>
@@ -76,7 +76,7 @@
       formControlName="endTime"
       placeholder="End Time"
       aria-label="default time"
-      [value]="defaultTime.toLocaleTimeString([], {hour: '2-digit',  minute:'2-digit'})"
+      [value]="defaultTime2.toLocaleTimeString([], {hour: '2-digit',  minute:'2-digit'})"
       [ngxTimepicker]="endtime"
       readonly>
       <ngx-material-timepicker #endtime [minutesGap]="5" [appendToInput]="true"></ngx-material-timepicker>
@@ -93,6 +93,12 @@
       [cpPresetColors]="['#5484ed','#a4bdfc','#46d6db','#7ae7bf','#51b749','#fbd75b','#ffb878','#ff887c','#dc2127','#dbadff','#585858']"
       [cpOKButton]="true"
       [(colorPicker)]="color">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput
+      formControlName="email"
+      placeholder="Recipient Email">
+      <mat-error *ngIf="email.invalid">{{ getErrorMessage() }}</mat-error>
     </mat-form-field>
     <mat-checkbox formControlName="allDay" (click)="allday()" color="primary">All Day</mat-checkbox>
 
@@ -113,9 +119,9 @@
 
     <mat-toolbar>
       <mat-toolbar-row>
-        <button type="button" mat-raised-button color="primary">
+        <!-- <button type="button" mat-raised-button color="primary">
           Add Recipients
-        </button>
+        </button> -->
         <span class="example-spacer"></span>
         <button type="submit" mat-raised-button class="primary">
           Confirm

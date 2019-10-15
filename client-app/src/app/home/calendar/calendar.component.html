@@ -24,7 +24,8 @@
         <div class="cal-list">
           <mat-toolbar id="cal-heading"><p>Your Calendars</p><span class="spacer"></span><mat-icon matTooltip="New Calendar" style="cursor:pointer" (click)="newCal()">add</mat-icon></mat-toolbar>
           <app-calendar-list></app-calendar-list>
-        </div>
+        </div><hr>
+        <!-- <mat-checkbox color="primary" (click)="toggleWeekends()" [checked]="!weekends" style="margin-left:5px">Show Weekends</mat-checkbox> -->
       </div>
     </mat-sidenav>
     <mat-sidenav-content class="side-nav-toggle" *ngIf="!calDrawer.opened">
@@ -43,15 +44,16 @@
   <full-calendar 
     id="calendar"
     fxFlex="85%"
-    defaultView="dayGridMonth" 
+    defaultView="timeGridWeek" 
     [plugins]="calendarPlugins" 
     [events]="compatEvents"
     [header]="{
-      left: 'prev today next',
+      left: 'prev,today,next',
       center: 'title',
       right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
     }"
     [height]="650"
+    [weekends]="weekends"
     (eventClick)="eventClicked($event.event)"></full-calendar>
   <!-- Calendar heading -->
   <!-- <div [ngSwitch]="view" fxFlex="70%">

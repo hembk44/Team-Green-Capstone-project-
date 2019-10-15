@@ -21,6 +21,7 @@ export class CalendarItemComponent implements OnInit {
     private dialog: MatDialog) { }
 
   ngOnInit() {
+    console.log(this.calendar);
     this.username = this.authService.username;
   }
   

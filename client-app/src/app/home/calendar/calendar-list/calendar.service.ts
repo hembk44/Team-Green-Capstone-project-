@@ -7,64 +7,64 @@ import { Subject } from 'rxjs/internal/Subject';
 export class CalendarService{
     eventsChanged = new Subject<CalEvent[]>();
     newCals: Calendar[] = [];
-    calendars: Calendar[]=[
-        {
-            id: 1,
-            name: "Main",
-            events: [{
-                id: 0,
-                title: "The best event",
-                description: "This is a test",
-                location: "Test Location",
-                start: new Date("10/11/2019"),
-                end: new Date("10/11/2019"),
-                backgroundColor: "#800029",
-                borderColor: "#800029",
-                allDay: true
-            },
-            {
-                id: 1,
-                title: "The best event 2",
-                description: "This is a test",
-                location: "Test Location",
-                start: new Date("10/11/2019 2:00 PM"),
-                end: new Date("10/11/2019 4:00 PM"),
-                backgroundColor: "#800029",
-                borderColor: "#800029",
-                allDay: false
-            }],
-            shown: true,
-            createdBy: "moorea1"
-        },
-        {
-            id: 2,
-            name: "Main 2",
-            events: [{
-                id: 3,
-                title: "The best event 3",
-                description: "This is a test",
-                location: "Test Location",
-                start: new Date("10/12/2019"),
-                end: new Date("10/12/2019"),
-                backgroundColor: "#800029",
-                borderColor: "#800029",
-                allDay: true
-            },
-            {
-                id: 4,
-                title: "The best event 4",
-                description: "This is a test",
-                location: "Test Location",
-                start: new Date("10/31/2019 1:00 PM"),
-                end: new Date("10/31/2019 4:00 PM"),
-                backgroundColor: "#800029",
-                borderColor: "#800029",
-                allDay: false
-            }],
-            shown: true,
-            createdBy: "student"
-        }
-    ];
+    calendars: Calendar[]=[];
+    //     {
+    //         id: 1,
+    //         name: "Main",
+    //         events: [{
+    //             id: 0,
+    //             title: "The best event",
+    //             description: "This is a test",
+    //             location: "Test Location",
+    //             start: new Date("10/11/2019"),
+    //             end: new Date("10/11/2019"),
+    //             backgroundColor: "#800029",
+    //             borderColor: "#800029",
+    //             allDay: true
+    //         },
+    //         {
+    //             id: 1,
+    //             title: "The best event 2",
+    //             description: "This is a test",
+    //             location: "Test Location",
+    //             start: new Date("10/11/2019 2:00 PM"),
+    //             end: new Date("10/11/2019 4:00 PM"),
+    //             backgroundColor: "#800029",
+    //             borderColor: "#800029",
+    //             allDay: false
+    //         }],
+    //         shown: true,
+    //         createdBy: "moorea1"
+    //     },
+    //     {
+    //         id: 2,
+    //         name: "Main 2",
+    //         events: [{
+    //             id: 3,
+    //             title: "The best event 3",
+    //             description: "This is a test",
+    //             location: "Test Location",
+    //             start: new Date("10/12/2019"),
+    //             end: new Date("10/12/2019"),
+    //             backgroundColor: "#800029",
+    //             borderColor: "#800029",
+    //             allDay: true
+    //         },
+    //         {
+    //             id: 4,
+    //             title: "The best event 4",
+    //             description: "This is a test",
+    //             location: "Test Location",
+    //             start: new Date("10/31/2019 1:00 PM"),
+    //             end: new Date("10/31/2019 4:00 PM"),
+    //             backgroundColor: "#800029",
+    //             borderColor: "#800029",
+    //             allDay: false
+    //         }],
+    //         shown: true,
+    //         createdBy: "student"
+    //     }
+    // ];
     events: CalEvent[] = [];
     //returns calendars
     getCalendars(){
@@ -74,7 +74,7 @@ export class CalendarService{
     getCalendars2(name: string){
         this.newCals = [];
         for(let cal of this.calendars){
-            if(cal.createdBy === name){
+            if(cal.createdBy.username === name){
                 this.newCals.push(cal);
             }
         }
@@ -83,7 +83,9 @@ export class CalendarService{
 
     //sets calendar list
     setCalendars(cals: Calendar[]){
+        console.log(cals);
         this.calendars = cals;
+        console.log(this.calendars);
     }
 
     getEvents(){

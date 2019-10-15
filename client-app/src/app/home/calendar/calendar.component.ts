@@ -44,12 +44,14 @@ export class CalendarComponent implements OnInit {
   panelOpen=false;
   subscription: Subscription;
   calendarPlugins = [dayGridPlugin,timeGridPlugin,listPlugin];
+  weekends: boolean;
 
   calEvents: CalEvent[]=[];//list of events
   compatEvents: CalEvent[]=[];
   //apptEvents: any[] = [];
 
   ngOnInit() {
+    this.dataStorage.fetchCalendars();
     this.viewDate = new Date();
     this.compatEvents = this.calService.getEvents();
     this.subscription = this.calService.eventsChanged.subscribe(
@@ -129,6 +131,10 @@ export class CalendarComponent implements OnInit {
     //   width:"600px"
     // })
     this.router.navigate(["home/create-event"]);
+  }
+
+  toggleWeekends(){
+    this.weekends =! this.weekends;
   }
 
   newCal(){
