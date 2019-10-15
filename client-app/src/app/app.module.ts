@@ -64,6 +64,7 @@ import {
   EventTimeIntervalDialog
 } from "./home/calendar/create-event/create-event.component";
 import { CalendarListComponent } from "./home/calendar/calendar-list/calendar-list.component";
+import { FullCalendarModule } from "@fullcalendar/angular";
 import {
   CalendarItemComponent,
   CalRename,
@@ -79,6 +80,7 @@ import { AuthInterceptor } from "./auth/auth-interceptor";
 import { EventDetailComponent } from "./home/calendar/event-detail/event-detail.component";
 import { CalendarCreateComponent } from "./home/calendar/calendar-create/calendar-create.component";
 import { GroupComponent } from "./home/group/group.component";
+import { ShareCalendarComponent } from "./home/calendar/share-calendar/share-calendar.component";
 
 @NgModule({
   declarations: [
@@ -112,7 +114,8 @@ import { GroupComponent } from "./home/group/group.component";
     AppointmentStartComponent,
     AppointmentSentComponent,
     AppointmentReceivedComponent,
-    GroupComponent
+    GroupComponent,
+    ShareCalendarComponent
   ],
   imports: [
     BrowserModule,
@@ -147,17 +150,20 @@ import { GroupComponent } from "./home/group/group.component";
     CalendarModule.forRoot({
       provide: DateAdapter,
       useFactory: adapterFactory
-    })
+    }),
+    FullCalendarModule
   ],
   entryComponents: [
     DialogDateTimeIntervalDialog,
     DialogTimeIntervalDialog,
     EventTimeDialog,
+    EventDetailComponent,
     EventTimeIntervalDialog,
     TimeSlotSnackComponent,
     CalendarCreateComponent,
     CalRename,
-    DeleteConfirm
+    DeleteConfirm,
+    ShareCalendarComponent
   ],
   providers: [
     MatDatepickerModule,

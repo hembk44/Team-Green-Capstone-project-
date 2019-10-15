@@ -2,14 +2,15 @@
     <span class="spacer"></span><mat-icon (click)="close()" class="close-button" matTooltip="Close">clear</mat-icon>
 </mat-toolbar>
 <div mat-dialog-content>
-    <form formGroup="calForm" ngSubmit="onSubmit()">
+    <form [formGroup]="calForm" (ngSubmit)="onSubmit()">
         <mat-form-field>
             <input matInput formControlName="name" placeholder="Calendar Name">
         </mat-form-field><br>
+        <mat-form-field>
+            <input matInput formControlName="recipients" placeholder="Recipient Email">
+        </mat-form-field>
         <mat-toolbar>
-            <button formControlName="recipients" mat-raised-button>Add Recipients</button><span class="spacer"></span>
             <button mat-raised-button type="submit" class="submit">Save</button>    
-        </mat-toolbar>
-        
+        </mat-toolbar>  
     </form>
 </div>

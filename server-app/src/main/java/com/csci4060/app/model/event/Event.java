@@ -3,6 +3,7 @@ package com.csci4060.app.model.event;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -32,7 +33,7 @@ public class Event {
 	String location;
 
 	@JsonIgnore
-	@ManyToMany(targetEntity = User.class)
+	@ManyToMany(targetEntity = User.class, fetch = FetchType.LAZY)
 	List<User> recipients;
 	
 	@NotNull
@@ -42,7 +43,7 @@ public class Event {
 	String end;
 	
 	@JsonIgnore
-	@OneToOne(targetEntity = User.class)
+	@OneToOne(targetEntity = User.class, fetch = FetchType.LAZY)
 	User createdBy;
 	
 	Boolean allDay;

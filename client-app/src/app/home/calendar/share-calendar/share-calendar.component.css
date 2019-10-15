@@ -1,0 +1,18 @@
+.spacer{
+    flex: 1 1 auto;
+}
+mat-toolbar{
+    height: 2em;
+    background-color: white;
+}
+div{
+    margin-bottom: 10px;
+}
+.submit{
+    background-color: rgb(25, 204, 25);
+    color: white;
+}
+.close-button{
+    color: darkgrey;
+    cursor:pointer;
+}

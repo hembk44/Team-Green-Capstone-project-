@@ -8,6 +8,6 @@ import lombok.Data;
 public class CalendarShare {
 
 	Long calendarId;
-	List<String> emails; 
+	List<String> recipients; 
 	
 }

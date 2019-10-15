@@ -1,9 +1,10 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Inject } from '@angular/core';
 import { Calendar } from '../calendar.model';
 import { CalendarService } from '../calendar.service';
 import { AuthService } from 'src/app/auth/auth.service';
-import { MatDialogRef, MatDialog } from '@angular/material';
+import { MatDialogRef, MatDialog, MAT_DIALOG_DATA } from '@angular/material';
 import { FormGroup, FormControl } from '@angular/forms';
+import { ShareCalendarComponent } from '../../share-calendar/share-calendar.component';
 
 @Component({
   selector: 'app-calendar-item',
@@ -21,6 +22,7 @@ export class CalendarItemComponent implements OnInit {
     private dialog: MatDialog) { }
 
   ngOnInit() {
+    console.log(this.calendar);
     this.username = this.authService.username;
   }
   
@@ -30,14 +32,22 @@ export class CalendarItemComponent implements OnInit {
 
   deleteCal(){
     this.dialog.open(DeleteConfirm, {
-      width: "500px"
+      width: "250px"
     })
   }
 
   renameCal(){
     this.dialog.open(CalRename, {
-      width:"500px"
+      width:"500px",
+      data: this.calendar
     })
+  }
+
+  shareCal(){
+    this.dialog.open(ShareCalendarComponent, {
+      width: "500px",
+      data: this.calendar
+    });
   }
 
 }
@@ -49,13 +59,16 @@ export class CalendarItemComponent implements OnInit {
 })
 export class CalRename implements OnInit{
   nameForm: FormGroup;
+  cal: Calendar;
   constructor (
-    private ref: MatDialogRef<CalRename>
+    private ref: MatDialogRef<CalRename>,
+    @Inject(MAT_DIALOG_DATA)public data: Calendar
   ){}
   ngOnInit(){
     this.nameForm = new FormGroup({
       name: new FormControl()
     })
+    this.cal = this.data;
   }
   onSubmit(){
     const obj = {

@@ -54,4 +54,15 @@ public class CalendarServiceImpl implements CalendarService {
 		return null;
 	}
 
+	@Override
+	public Calendar findByNameAndCreatedBy(String name, User user) {
+	
+		Optional<Calendar> optCalendar = calendarRepo.findByNameAndCreatedBy(name, user);
+		
+		if(optCalendar.isPresent()) {
+			return optCalendar.get();
+		}
+		return null;
+ 	}
+
 }
