@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -29,27 +30,28 @@ public class Calendar {
 	@NotNull
 	String name;
 	
-	@OneToMany(targetEntity = Event.class, cascade = CascadeType.ALL)
+	@ManyToMany(targetEntity = Event.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	List<Event> events;
 	
 	@JsonIgnore
 	@ManyToMany(targetEntity = User.class)
 	List<User> shareduser;
 	
+	@JsonIgnore
 	@ManyToOne(targetEntity = User.class)
 	User createdBy;
 	
 	boolean shown;
 	
-	boolean isDefault;
+	boolean isDefaultCalendar;
 	
-	public Calendar(String name, List<Event> events, List<User> shareduser, User createdBy, boolean shown, boolean isDefault) {
+	public Calendar(String name, List<Event> events, List<User> shareduser, User createdBy, boolean shown, boolean isDefaultCalendar) {
 		this.name = name;
 		this.events = events;
 		this.shareduser = shareduser;
 		this.createdBy = createdBy;
 		this.shown = shown;
-		this.isDefault = isDefault;
+		this.isDefaultCalendar = isDefaultCalendar;
 	}
 
 	public Calendar() {

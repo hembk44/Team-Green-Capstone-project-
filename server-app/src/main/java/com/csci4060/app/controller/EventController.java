@@ -46,15 +46,6 @@ public class EventController {
 	@PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
 	public APIresponse setEvent(@RequestBody EventDummy eventDummy) {
 
-		List<User> recipientList = new ArrayList<User>();
-
-		List<String> recepientsEmailList = eventDummy.getRecipients();
-		
-		for (String each : recepientsEmailList) {
-			User recipient = userService.findByEmail(each);
-			recipientList.add(recipient);
-		}
-
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
 		String creatorUsername = "";
@@ -64,19 +55,44 @@ public class EventController {
 		}
 
 		User createdBy = userService.findByUsername(creatorUsername);
+		
+		List<User> recipientList = new ArrayList<User>();
 
+		List<String> recepientsEmailList = eventDummy.getRecipients();
+		
+		for (String each : recepientsEmailList) {
+			
+			User recipient = userService.findByEmail(each);
+			
+			if(recipient != null) {
+				recipientList.add(recipient);
+			}
+		}
+		
 		Event event = new Event(eventDummy.getTitle(), eventDummy.getDescription(), eventDummy.getLocation(),
 				recipientList, eventDummy.getStart(), eventDummy.getEnd(), createdBy, eventDummy.getAllDay());
 
-//		eventService.save(event);
-
+		//eventService.save(event);
+		
 		Calendar calendar = calendarService.findById(eventDummy.getCalendarId());
 		
-		calendar.getEvents().add(event);
+		if(calendar.getCreatedBy() == createdBy) {
+			calendar.getEvents().add(event);
+			calendarService.save(calendar);
+		}
 		
-		calendarService.save(calendar);
 
-		if (recipientList != null) {
+		if (!recipientList.isEmpty()) {
+			
+			for (User person: recipientList) {
+				Calendar mainCalendar = calendarService.findByNameAndCreatedBy("Main Calendar", person);
+				mainCalendar.getEvents().add(event);
+				
+				System.out.println(mainCalendar.getEvents());
+				
+				calendarService.save(mainCalendar);
+			}
+			
 			SimpleMailMessage mailMessage = new SimpleMailMessage();
 
 			String[] emails = recepientsEmailList.toArray(new String[recepientsEmailList.size()]);

@@ -14,4 +14,6 @@ public interface CalendarService {
 	List<Calendar> findAllByCreatedBy(User user);
 	
 	List<Calendar> findAllByShareduser(User user); 
+	
+	Calendar findByNameAndCreatedBy(String name, User user);
 }
