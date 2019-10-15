@@ -6,7 +6,9 @@ import { throwError, Observable, BehaviorSubject } from "rxjs";
 import { ApiResponse } from "src/app/auth/api.response";
 import { Appointment } from "../appointment/appointment-model/appointment.model";
 import { CalEvent } from "../calendar/events.model";
-import { AuthService } from "src/app/auth/auth.service";
+import { AuthService } from 'src/app/auth/auth.service';
+import { Calendar } from '../calendar/calendar-list/calendar.model';
+import { CalendarService } from '../calendar/calendar-list/calendar.service';
 
 @Injectable({
   providedIn: "root"
@@ -23,13 +25,15 @@ export class DataStorageService {
 
   private eventSubject: BehaviorSubject<any> = new BehaviorSubject<any>({});
 
+  private calSubject: BehaviorSubject<any> = new BehaviorSubject<any>({});
+
   // public apointmentList: Observable<
   //   Appointment[]
   // > = this.appointmentSubject.asObservable();
 
   public eventList: Observable<CalEvent[]> = this.eventSubject.asObservable();
 
-  constructor(private http: HttpClient, private authService: AuthService) {}
+  constructor(private http: HttpClient, private authService: AuthService, private calService: CalendarService) {}
 
   get appointmentLists(): Appointment[] {
     return this.appointmentSubject.value;
@@ -37,6 +41,10 @@ export class DataStorageService {
 
   get eventsList(): CalEvent[] {
     return this.eventSubject.value;
+  }
+
+  get calendars(): Calendar[]{
+    return this.calSubject.value
   }
   // baseUrl = "localhost:8181/api/appointment/";
 
@@ -184,4 +192,38 @@ export class DataStorageService {
         finalize(() => this.isLoadingSubject.next(false))
       );
   }
+
+  fetchCalendars(){
+    this.isLoadingSubject.next(true);
+    this.http.get<ApiResponse>('http://localhost:8181/api/calendar/allCalendars')
+    .pipe(
+      (map(data=>data),
+      catchError(error => throwError(error)),
+      finalize(() => this.isLoadingSubject.next(false)))
+    )
+    .subscribe((result: ApiResponse)=>{
+      console.log(result.result);
+      this.calSubject.next(result.result);
+      this.calService.setCalendars(result.result);
+    });
+  }
+
+  newCalendar(obj: Object){
+    this.isLoadingSubject.next(true);
+    return this.http.post<Object>('http://localhost:8181/api/calendar/create', obj)
+    .pipe(
+      (map(data=>data), catchError(error => throwError(error)),
+      finalize(()=> this.isLoadingSubject.next(false)))
+    );
+  }
+
+  shareCalenar(obj: Object){
+    this.isLoadingSubject.next(true);
+    return this.http.post<Object>('http://localhost:8181/api/calendar/share', obj)
+    .pipe(
+      (map(data=>data), catchError(error => throwError(error)),
+      finalize(()=>this.isLoadingSubject.next(false)))
+    );
+  }
+
 }

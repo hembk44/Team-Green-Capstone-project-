@@ -5,16 +5,19 @@
     <mat-menu #options>
         <button
         mat-menu-item
-        (click)="renameCal()">
+        (click)="renameCal()"
+        *ngIf="!calendar.defaultCalendar">
             Rename
         </button>
         <button
-        mat-menu-item>
+        mat-menu-item
+        (click)="shareCal()">
             Share
         </button>
         <button
         mat-menu-item
-        (click)="deleteCal()">
+        (click)="deleteCal()"
+        *ngIf="!calendar.defaultCalendar">
             Delete
         </button>
     </mat-menu><br>

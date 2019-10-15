@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material';
 import { FormGroup, FormControl } from '@angular/forms';
+import { DataStorageService } from '../../shared/data-storage.service';
 
 @Component({
   selector: 'app-calendar-create',
@@ -11,7 +12,8 @@ export class CalendarCreateComponent implements OnInit {
   calForm: FormGroup;
 
   constructor(
-    private ref: MatDialogRef<CalendarCreateComponent>
+    private ref: MatDialogRef<CalendarCreateComponent>,
+    private dataStorage: DataStorageService
   ) { }
 
   ngOnInit() {
@@ -28,9 +30,15 @@ export class CalendarCreateComponent implements OnInit {
   onSubmit(){
     const obj = {
       name: this.calForm.value['name'],
-      recipients: this.calForm.value['recipients']
+      recipients: [this.calForm.value['recipients']]
     }
-    console.log(obj);
+    this.dataStorage.newCalendar(obj).subscribe(result => {
+      console.log(obj);
+      if (result) {
+        this.dataStorage.fetchCalendars();
+      }
+    });
+    this.ref.close();
   }
 
 }
