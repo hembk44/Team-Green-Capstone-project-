@@ -5,9 +5,8 @@ import java.util.List;
 import lombok.Data;
 
 @Data
-public class CalendarShare {
+public class CalendarCreate {
 
-	Long calendarId;
-	List<String> recipients; 
-	
+	String name;
+	List<String> recipients;
 }
