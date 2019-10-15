@@ -51,10 +51,10 @@
       <mat-datepicker touchUi #startpicker></mat-datepicker>
     </mat-form-field>
     <mat-form-field *ngIf="!allDay">
+      <mat-label>Start Time</mat-label>
       <input
       matInput
       formControlName="startTime"
-      placeholder="Start Time"
       aria-label="default time"
       [value]="defaultTime.toLocaleTimeString([], {hour: '2-digit',  minute:'2-digit'})"
       [ngxTimepicker]="starttime"
@@ -71,10 +71,10 @@
       <mat-datepicker touchUi #endpicker></mat-datepicker>
     </mat-form-field>
     <mat-form-field *ngIf="!allDay">
+      <mat-label>End Time</mat-label>
       <input
       matInput
       formControlName="endTime"
-      placeholder="End Time"
       aria-label="default time"
       [value]="defaultTime2.toLocaleTimeString([], {hour: '2-digit',  minute:'2-digit'})"
       [ngxTimepicker]="endtime"
@@ -86,13 +86,19 @@
       matInput
       formControlName="primary"
       [style.background]="color"
+      [style.color]="'white'"
       placeholder="Event Color"
       [cpOutputFormat]="'hex'"
       (colorPickerClose)="setPrimary(color)"
       [cpPosition]="'top-right'"
       [cpPresetColors]="['#5484ed','#a4bdfc','#46d6db','#7ae7bf','#51b749','#fbd75b','#ffb878','#ff887c','#dc2127','#dbadff','#585858']"
       [cpOKButton]="true"
-      [(colorPicker)]="color">
+      [cpColorMode] = "'presets'"
+      [cpPresetLabel]="'Event Color'"
+      [value]="color"
+      [cpFallbackColor]="'#5484ed'"
+      [(colorPicker)]="color"
+      readonly>
     </mat-form-field>
     <mat-form-field>
       <input matInput
