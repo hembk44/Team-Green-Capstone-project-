@@ -7,9 +7,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.poi.xssf.usermodel.XSSFCell;
-import org.apache.poi.xssf.usermodel.XSSFRow;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.DataFormatter;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -38,9 +41,12 @@ public class FileReadServiceImpl implements FileReadService {
 	
 	@Override
 	public List<User> readFile(MultipartFile file) throws IOException {
+
 		@SuppressWarnings("resource")
-		XSSFWorkbook workbook = new XSSFWorkbook(file.getInputStream());
-		XSSFSheet worksheet = workbook.getSheetAt(0);
+		Workbook workbook = new XSSFWorkbook(file.getInputStream());
+		Sheet worksheet = workbook.getSheetAt(0);
+
+		DataFormatter formatter = new DataFormatter();
 
 		if (isSheetFull(worksheet) == true) {
 			// check cell name before writing the following code
@@ -54,25 +60,31 @@ public class FileReadServiceImpl implements FileReadService {
 
 			for (int i = 1; i <= worksheet.getLastRowNum(); i++) {
 
-				XSSFRow row = worksheet.getRow(i);
+				Row row = worksheet.getRow(i);
 
 				if (isRowEmpty(row) == false) {
 
-//					String password = RandomStringUtils.random(8, true, true);
-//					System.out.println(password);
+					Cell firstNameCell = row.getCell(0);
+					Cell lastNameCell = row.getCell(1);
+					Cell usernameCell = row.getCell(5);
+					Cell passwordCell = row.getCell(2);
+					Cell emailCell = row.getCell(5);
 
-					String name = "";
-					String username = "";
-					String password = "";
-					String email = "";
-					
-					if (!row.getCell(0).getStringCellValue().isEmpty() && !row.getCell(1).getStringCellValue().isEmpty()
-							&& !row.getCell(2).getStringCellValue().isEmpty() && !row.getCell(5).getStringCellValue().isEmpty()) {
-						
-						name = row.getCell(0).getStringCellValue() + " " + row.getCell(1).getStringCellValue().toString();
-						username = row.getCell(5).getStringCellValue().toString();
-						password = row.getCell(2).getStringCellValue().toString();
-						email = row.getCell(5).getStringCellValue().toString();
+					List<Cell> cellList = new ArrayList<>();
+					cellList.add(firstNameCell);
+					cellList.add(lastNameCell);
+					cellList.add(usernameCell);
+					cellList.add(passwordCell);
+					cellList.add(emailCell);
+
+					if (isCellEmpty(cellList) == false) {
+
+						String name = formatter.formatCellValue(row.getCell(0)) + " "
+								+ formatter.formatCellValue(row.getCell(1));
+						String username = formatter.formatCellValue(row.getCell(5));
+						String password = formatter.formatCellValue(row.getCell(2));
+						String email = formatter.formatCellValue(row.getCell(5));
+
 						User student = new User(name, username, email, encoder.encode(password), true);
 						
 						
@@ -91,13 +103,13 @@ public class FileReadServiceImpl implements FileReadService {
 		return null;
 	}
 
-	public boolean isSheetFull(XSSFSheet worksheet) {
+	public boolean isSheetFull(Sheet worksheet) {
 		Iterator<?> rows = worksheet.rowIterator();
 		while (rows.hasNext()) {
-			XSSFRow row = (XSSFRow) rows.next();
+			Row row = (Row) rows.next();
 			Iterator<?> cells = row.cellIterator();
 			while (cells.hasNext()) {
-				XSSFCell cell = (XSSFCell) cells.next();
+				Cell cell = (Cell) cells.next();
 				if (!cell.getStringCellValue().isEmpty()) {
 					return true;
 				}
@@ -106,13 +118,24 @@ public class FileReadServiceImpl implements FileReadService {
 		return false;
 	}
 
-	public boolean isRowEmpty(XSSFRow row) {
+	public boolean isRowEmpty(Row row) {
 		if (row == null || row.getLastCellNum() <= 0) {
 			return true;
 		}
-		XSSFCell cell = row.getCell((int) row.getFirstCellNum());
+		Cell cell = row.getCell((int) row.getFirstCellNum());
 		if (cell == null || "".equals(cell.getRichStringCellValue().getString())) {
 			return true;
+		}
+		return false;
+	}
+
+	public boolean isCellEmpty(List<Cell> cellList) {
+
+		for (Cell cell : cellList) {
+			if ((cell == null) || (cell.getCellType() == CellType.BLANK)
+					|| (cell.getCellType() == CellType.STRING && cell.getStringCellValue().trim().isEmpty())) {
+				return true;
+			}
 		}
 		return false;
 	}

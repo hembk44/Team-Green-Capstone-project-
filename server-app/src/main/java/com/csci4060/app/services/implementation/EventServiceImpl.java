@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.csci4060.app.model.User;
 import com.csci4060.app.model.event.Event;
-import com.csci4060.app.repository.event.EventRepository;
+import com.csci4060.app.repository.eventRepo.EventRepository;
 import com.csci4060.app.services.EventService;
 
 @Service(value = "EventService")
@@ -23,7 +23,7 @@ public class EventServiceImpl implements EventService {
 
 	@Override
 	public List<Event> findAllByRecepients(User user) {
-		return eventRepo.findAllByRecepients(user)
+		return eventRepo.findAllByRecipients(user)
 				.orElseThrow(() -> new RuntimeException("Fail! -> This user does not have any Events."));
 	}
 

@@ -17,14 +17,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.csci4060.app.model.APIresponse;
 import com.csci4060.app.model.User;
+import com.csci4060.app.model.calendar.Calendar;
 import com.csci4060.app.model.event.Event;
-import com.csci4060.app.model.event.EventDate;
 import com.csci4060.app.model.event.EventDummy;
-import com.csci4060.app.model.event.EventTime;
+import com.csci4060.app.services.CalendarService;
 import com.csci4060.app.services.EmailSenderService;
-import com.csci4060.app.services.EventDateService;
 import com.csci4060.app.services.EventService;
-import com.csci4060.app.services.EventTimeService;
 import com.csci4060.app.services.UserService;
 
 @RestController
@@ -39,24 +37,22 @@ public class EventController {
 	EventService eventService;
 
 	@Autowired
-	EventDateService eventDateService;
-
-	@Autowired
-	EventTimeService eventTimeService;
-
-	@Autowired
 	private EmailSenderService emailSenderService;
 
+	@Autowired
+	CalendarService calendarService;
+
 	@PostMapping(path = "/set", consumes = "application/json")
-	@PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
+	@PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
 	public APIresponse setEvent(@RequestBody EventDummy eventDummy) {
 
-		List<User> recepientList = new ArrayList<User>();
+		List<User> recipientList = new ArrayList<User>();
 
-		List<String> recepientsEmailList = eventDummy.getRecepients();
+		List<String> recepientsEmailList = eventDummy.getRecipients();
+		
 		for (String each : recepientsEmailList) {
-			User recepient = userService.findByEmail(each);
-			recepientList.add(recepient);
+			User recipient = userService.findByEmail(each);
+			recipientList.add(recipient);
 		}
 
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -69,37 +65,31 @@ public class EventController {
 
 		User createdBy = userService.findByUsername(creatorUsername);
 
-		Event event = new Event(eventDummy.getName(), eventDummy.getDescription(),
-				eventDummy.getEventdates(), recepientList, createdBy,eventDummy.getLocation());
+		Event event = new Event(eventDummy.getTitle(), eventDummy.getDescription(), eventDummy.getLocation(),
+				recipientList, eventDummy.getStart(), eventDummy.getEnd(), createdBy, eventDummy.getAllDay());
 
-		eventService.save(event);
+//		eventService.save(event);
 
-		List<EventDate> dates = event.getEventdates();
+		Calendar calendar = calendarService.findById(eventDummy.getCalendarId());
+		
+		calendar.getEvents().add(event);
+		
+		calendarService.save(calendar);
 
-		for (EventDate date : dates) {
+		if (recipientList != null) {
+			SimpleMailMessage mailMessage = new SimpleMailMessage();
 
-			eventDateService.save(date);
+			String[] emails = recepientsEmailList.toArray(new String[recepientsEmailList.size()]);
 
-			List<EventTime> times = date.getEventtimes();
+			mailMessage.setTo(emails);
+			mailMessage.setSubject("Event Information");
+			mailMessage.setFrom("ulmautoemail@gmail.com");
+			mailMessage.setText(
+					"A faculty has set an event for you. Please log in to you ULM communication app and register for the event. "
+							+ "Thank you!");
 
-			for (EventTime time : times) {
-
-				eventTimeService.save(time);
-			}
+			emailSenderService.sendEmail(mailMessage);
 		}
-
-		SimpleMailMessage mailMessage = new SimpleMailMessage();
-
-		String[] emails = recepientsEmailList.toArray(new String[recepientsEmailList.size()]);
-
-		mailMessage.setTo(emails);
-		mailMessage.setSubject("Event Information");
-		mailMessage.setFrom("ulmautoemail@gmail.com");
-		mailMessage.setText(
-				"A faculty has set an event for you. Please log in to you ULM communication app and register for the event. "
-						+ "Thank you!");
-
-		emailSenderService.sendEmail(mailMessage);
 
 		return new APIresponse(HttpStatus.CREATED.value(), "event created successfully", event);
 	}

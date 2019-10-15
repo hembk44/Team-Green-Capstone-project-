@@ -2,14 +2,13 @@ package com.csci4060.app.model.event;
 
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.validation.constraints.NotNull;
 
 import com.csci4060.app.model.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -24,36 +23,40 @@ public class Event {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	String name;
+	@NotNull
+	String title;
+	
 	String description;
 
-	@OneToMany(targetEntity = EventDate.class, cascade = CascadeType.ALL)
-	List<EventDate> eventdates;
+	@NotNull
+	String location;
 
 	@JsonIgnore
 	@ManyToMany(targetEntity = User.class)
-	List<User> recepients;
+	List<User> recipients;
+	
+	@NotNull
+	String start;
+	
+	@NotNull
+	String end;
 	
 	@JsonIgnore
 	@OneToOne(targetEntity = User.class)
 	User createdBy;
 	
-	String location;
-	
-	public Event(String name, String description, List<EventDate> dates, List<User> recepients, User createdBy, String location) {
-		this.name = name;
-		this.description = description;
-		this.eventdates = dates;
-		this. recepients = recepients;
-		this.createdBy = createdBy;
-		this.location = location;
-	}
+	Boolean allDay;
 
-	public Event(String name, String description, List<EventDate> dates, String location) {
-		this.name = name;
+	
+	public Event(String title, String description, String location, List<User> recipients, String start, String end, User createdBy, Boolean allDay) {
+		this.title = title;
 		this.description = description;
-		this.eventdates = dates;
 		this.location = location;
+		this. recipients = recipients;
+		this.start = start;
+		this.end = end;
+		this.createdBy = createdBy;
+		this.allDay = allDay;
 	}
 
 	public Event() {
