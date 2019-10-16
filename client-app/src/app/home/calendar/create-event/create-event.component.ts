@@ -50,7 +50,7 @@ export class CreateEventComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.calendars=this.calService.getCalendars().filter(cal => cal.createdBy.username === this.username);
+    this.calendars=this.calService.getCalendars().filter(cal => cal.createdBy === this.username);
     console.log(this.calendars);
     this.eventForm = new FormGroup({
       title: new FormControl(),

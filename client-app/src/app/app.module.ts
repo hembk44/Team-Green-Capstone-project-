@@ -81,6 +81,7 @@ import { EventDetailComponent } from "./home/calendar/event-detail/event-detail.
 import { CalendarCreateComponent } from "./home/calendar/calendar-create/calendar-create.component";
 import { GroupComponent } from "./home/group/group.component";
 import { ShareCalendarComponent } from "./home/calendar/share-calendar/share-calendar.component";
+import { EditEventComponent } from './home/calendar/create-event/edit-event/edit-event.component';
 
 @NgModule({
   declarations: [
@@ -115,7 +116,8 @@ import { ShareCalendarComponent } from "./home/calendar/share-calendar/share-cal
     AppointmentSentComponent,
     AppointmentReceivedComponent,
     GroupComponent,
-    ShareCalendarComponent
+    ShareCalendarComponent,
+    EditEventComponent
   ],
   imports: [
     BrowserModule,

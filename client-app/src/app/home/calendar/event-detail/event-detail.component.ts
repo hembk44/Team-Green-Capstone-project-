@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { CalendarService } from '../calendar-list/calendar.service';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { CalEvent } from '../events.model';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
@@ -14,7 +14,7 @@ export class EventDetailComponent implements OnInit {
   event: CalEvent;
 
   constructor(private calService: CalendarService,
-    private route: ActivatedRoute,
+    private router: Router,
     private ref: MatDialogRef<EventDetailComponent>,
     @Inject(MAT_DIALOG_DATA)public data: CalEvent) { 
     }
@@ -30,6 +30,15 @@ export class EventDetailComponent implements OnInit {
 
   onNoClick(){
     this.ref.close();
+  }
+
+  editEvent(){
+    this.ref.close();
+    this.router.navigate(["home/edit-event", this.event.id])
+  }
+
+  deleteEvent(){
+
   }
 
 }
