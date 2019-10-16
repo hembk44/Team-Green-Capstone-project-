@@ -32,7 +32,8 @@ public class ConfirmationTokenImpl implements ConfirmationTokenService{
 	}
 	
 	@Override
-	public void deleteByConfirmationToken(String token) {
+	public void delete(ConfirmationToken token) {
+		confirmationTokenRepo.delete(token);
 	}
 	
 

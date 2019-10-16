@@ -115,7 +115,7 @@ public class AuthRestAPIs {
 			}
 			
 			return new APIresponse(HttpStatus.OK.value(), "Successful", new JwtResponse(jwt, loginRequest.getUsername(),role));
-		}
+		    }
 		
 		return new APIresponse(HttpStatus.FORBIDDEN.value(), "Please click on the verification link to login", null);
 
@@ -280,7 +280,7 @@ public class AuthRestAPIs {
             resetUser.setPassword(encoder.encode(requestParams.get("password")));
             userService.save(resetUser);
             
-            confirmationTokenService.deleteByConfirmationToken(resetToken.getConfirmationToken());
+            confirmationTokenService.delete(resetToken);
           
             //redir.addFlashAttribute("successMessage", "You have successfully reset your password. You may now login.");
             //modelAndView.addObject("successMessage", "You have successfully reset your password. You may now login.");

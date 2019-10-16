@@ -8,5 +8,5 @@ public interface ConfirmationTokenService {
 	ConfirmationToken findByConfirmationToken(String confirmationToken);
 	ConfirmationToken save(ConfirmationToken token);
 	ConfirmationToken findByUser(User user);
-	void deleteByConfirmationToken(String token);
+	void delete(ConfirmationToken token);
 }
