@@ -6,6 +6,8 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 // import { CovalentLayoutModule } from "@covalent/core/layout";
 // import { CovalentStepsModule } from "@covalent/core/steps";
 
+import { MaterialFileInputModule } from "ngx-material-file-input";
+
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
@@ -83,6 +85,8 @@ import { GroupComponent } from "./home/group/group.component";
 import { ShareCalendarComponent } from "./home/calendar/share-calendar/share-calendar.component";
 import { EditEventComponent } from './home/calendar/create-event/edit-event/edit-event.component';
 
+import { RegisterUsersComponent } from "./home/register-users/register-users.component";
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -119,6 +123,7 @@ import { EditEventComponent } from './home/calendar/create-event/edit-event/edit
     ShareCalendarComponent,
     EditEventComponent,
     EventDeleteConfirm
+    RegisterUsersComponent
   ],
   imports: [
     BrowserModule,
@@ -150,6 +155,7 @@ import { EditEventComponent } from './home/calendar/create-event/edit-event/edit
     MatSelectModule,
     MatTooltipModule,
     MatSnackBarModule,
+    MaterialFileInputModule,
     CalendarModule.forRoot({
       provide: DateAdapter,
       useFactory: adapterFactory

@@ -28,6 +28,7 @@ import { AppointmentSentComponent } from "./home/appointment/appointment-types/a
 import { AppointmentReceivedComponent } from "./home/appointment/appointment-types/appointment-received/appointment-received.component";
 import { GroupComponent } from "./home/group/group.component";
 import { EditEventComponent } from './home/calendar/create-event/edit-event/edit-event.component';
+import { RegisterUsersComponent } from "./home/register-users/register-users.component";
 
 const routes: Routes = [
   {
@@ -76,10 +77,13 @@ const routes: Routes = [
           },
           { path: "received", component: AppointmentReceivedComponent },
 
+          { path: "scheduled", component: ScheduledAppointmentComponent },
+          { path: "scheduled", component: ScheduledAppointmentComponent },
           { path: "scheduled", component: ScheduledAppointmentComponent }
         ]
       },
-      { path: "group", component: GroupComponent }
+      { path: "group", component: GroupComponent },
+      { path: "register-users", component: RegisterUsersComponent }
     ]
   }
   // { path: "dashboard", component: DashboardComponent },

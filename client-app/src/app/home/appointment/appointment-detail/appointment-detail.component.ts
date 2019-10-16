@@ -70,11 +70,11 @@ export class AppointmentDetailComponent implements OnInit {
     this._snackBar.openFromComponent(TimeSlotSnackComponent, {
       duration: 5000
     });
-    this.router.navigate(["./home/appointment/type"]);
+    this.router.navigate(["./home/appointment/sent"]);
   }
   onDeleteAppointment() {
     // this.appointmentService.deleteAppointment(this.id);
-    this.router.navigate(["./appointment/type"]);
+    // this.router.navigate(["./appointment/type"]);
   }
   onUpdateAppointment() {
     console.log("updated");

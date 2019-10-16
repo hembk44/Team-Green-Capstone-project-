@@ -76,6 +76,7 @@ export class AppointmentCreateComponent implements OnInit {
 
   onSubmit() {
     const appointmentFormValues = this.appointmentForm.value;
+    this.emails.push(this.appointmentForm.value.email);
     const obj = {
       name: appointmentFormValues.title,
       description: appointmentFormValues.description,
@@ -86,6 +87,8 @@ export class AppointmentCreateComponent implements OnInit {
     console.log(obj);
     this.dataStorage.storeAppointment(obj).subscribe(result => {
       if (result) {
+        console.log(result);
+
         this.dataStorage.fetchAppointment();
       }
     });
