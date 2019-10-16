@@ -1,6 +1,8 @@
 package com.csci4060.app.services.implementation;
 
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,22 +24,35 @@ public class TimeSlotsServiceImpl implements TimeSlotsService {
 	}
 
 	@Override
-	public List<TimeSlots> findByAppointment(Appointment appointment) {
-		return timeSlotsRepo.findByAppointment(appointment)
-				.orElseThrow(() -> new RuntimeException("Fail! -> There are no timeslots for this appointment."));
+	public List<TimeSlots> findAllByAppointment(Appointment appointment) {
+
+		Optional<List<TimeSlots>> optTimeSlots = timeSlotsRepo.findAllByAppointment(appointment);
+
+		if (optTimeSlots.isPresent()) {
+			return optTimeSlots.get();
+		}
+		return null;
 	}
 
 	@Override
 	public TimeSlots findById(Long id) {
-		return timeSlotsRepo.findById(id)
-				.orElseThrow(() -> new RuntimeException("Fail! -> Time slot with given id does not exist."));
+		Optional<TimeSlots> optTimeSlot = timeSlotsRepo.findById(id);
+
+		if (optTimeSlot.isPresent()) {
+			return optTimeSlot.get();
+		}
+		return null;
 	}
 
 	@Override
-	public List<TimeSlots> findBySelectedBy(User selectedBy) {
-		
-		return timeSlotsRepo.findBySelectedBy(selectedBy)
-				.orElseThrow(() -> new RuntimeException("Fail! -> There are no timeslots for this appointment."));
+	public List<TimeSlots> findAllBySelectedBy(User selectedBy) {
+
+		Optional<List<TimeSlots>> optTimeSlots = timeSlotsRepo.findAllBySelectedBy(selectedBy);
+
+		if (optTimeSlots.isPresent()) {
+			return optTimeSlots.get();
+		}
+		return null;
 	}
 
 }

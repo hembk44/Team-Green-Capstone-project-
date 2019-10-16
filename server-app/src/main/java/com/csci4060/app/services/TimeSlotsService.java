@@ -9,9 +9,9 @@ public interface TimeSlotsService {
 
 	TimeSlots save(TimeSlots slots);
 	
-	List<TimeSlots> findByAppointment(Appointment appointment);
+	List<TimeSlots> findAllByAppointment(Appointment appointment);
 	
 	TimeSlots findById(Long id);
-	List<TimeSlots> findBySelectedBy(User selectedBy);
+	List<TimeSlots> findAllBySelectedBy(User selectedBy);
  
 }

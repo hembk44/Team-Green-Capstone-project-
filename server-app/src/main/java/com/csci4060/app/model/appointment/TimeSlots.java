@@ -1,7 +1,5 @@
 package com.csci4060.app.model.appointment;
 
-import java.time.LocalTime;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,8 +20,8 @@ public class TimeSlots {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
-	private LocalTime startTime;
-	private LocalTime endTime;
+	private String startTime;
+	private String endTime;
 	
 	@JsonIgnore
 	@ManyToOne(targetEntity = AppointmentDate.class)
@@ -35,7 +33,7 @@ public class TimeSlots {
 	@OneToOne(targetEntity = User.class)
 	private User selectedBy;
 	
-	public TimeSlots(LocalTime startTime, LocalTime endTime, AppointmentDate date, Appointment appointment, User selectedBy) {
+	public TimeSlots(String startTime, String endTime, AppointmentDate date, Appointment appointment, User selectedBy) {
 		this.startTime = startTime;
 		this.endTime = endTime;
 		this.appdates = date;
