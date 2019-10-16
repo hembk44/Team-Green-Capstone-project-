@@ -3,6 +3,9 @@ import { NgModule } from "@angular/core";
 import { ReactiveFormsModule, FormsModule } from "@angular/forms";
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 
+// import { CovalentLayoutModule } from "@covalent/core/layout";
+// import { CovalentStepsModule } from "@covalent/core/steps";
+
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
@@ -61,8 +64,12 @@ import {
   EventTimeIntervalDialog
 } from "./home/calendar/create-event/create-event.component";
 import { CalendarListComponent } from "./home/calendar/calendar-list/calendar-list.component";
-import { FullCalendarModule } from '@fullcalendar/angular';
-import { CalendarItemComponent, CalRename, DeleteConfirm } from "./home/calendar/calendar-list/calendar-item/calendar-item.component";
+import { FullCalendarModule } from "@fullcalendar/angular";
+import {
+  CalendarItemComponent,
+  CalRename,
+  DeleteConfirm
+} from "./home/calendar/calendar-list/calendar-item/calendar-item.component";
 import { ColorPickerModule } from "ngx-color-picker";
 import { EventService } from "./home/calendar/events.service";
 import { CalendarService } from "./home/calendar/calendar-list/calendar.service";
@@ -72,8 +79,8 @@ import { LoadingSpinnerComponent } from "./loading-spinner/loading-spinner.compo
 import { AuthInterceptor } from "./auth/auth-interceptor";
 import { EventDetailComponent } from "./home/calendar/event-detail/event-detail.component";
 import { CalendarCreateComponent } from "./home/calendar/calendar-create/calendar-create.component";
-import { GroupComponent } from './home/group/group.component';
-import { ShareCalendarComponent } from './home/calendar/share-calendar/share-calendar.component';
+import { GroupComponent } from "./home/group/group.component";
+import { ShareCalendarComponent } from "./home/calendar/share-calendar/share-calendar.component";
 
 @NgModule({
   declarations: [
