@@ -3,6 +3,7 @@ package com.csci4060.app.model.calendar;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -27,7 +28,7 @@ public class Calendar {
 	@NotNull
 	String name;
 	
-	@ManyToMany(targetEntity = Event.class)
+	@ManyToMany(targetEntity = Event.class, fetch = FetchType.LAZY)
 	List<Event> events;
 	
 	@JsonIgnore

@@ -14,4 +14,6 @@ public interface EventService {
 	List<Event> findAllByCreatedBy(User user);
 
 	Event findById(Long id);
+	
+	Event findByTimeSlotId(Long timeSlotId);
 }

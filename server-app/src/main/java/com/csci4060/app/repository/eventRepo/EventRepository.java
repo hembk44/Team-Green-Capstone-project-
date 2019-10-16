@@ -15,4 +15,6 @@ public interface EventRepository extends JpaRepository<Event,Long>{
 	Optional<List<Event>> findAllByCreatedBy(User createdBy);
 	
 	Optional<Event> findById(Long id);
+	
+	Optional<Event> findByTimeSlotId(Long timeSlotId);
 }
