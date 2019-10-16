@@ -13,7 +13,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -96,9 +95,6 @@ public class EventController {
 			throw new AuthenticationException("You are not allowed to create an event for this calendar");
 		}
 
-		String eventCreatorCalendarName = calendar.getName();
-		System.out.println("Name of calendar where the event is set is " + eventCreatorCalendarName);
-
 		if (!recipientList.isEmpty()) {
 
 			for (User sharedToPerson : recipientList) {
@@ -127,46 +123,6 @@ public class EventController {
 		}
 
 		return new APIresponse(HttpStatus.CREATED.value(), "event created successfully", event);
-	}
-
-	@GetMapping(path = "faculty/allEvents")
-	@PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
-	public APIresponse getFacultyEvents() {
-
-		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-		String username = "";
-
-		if (principal instanceof UserDetails) {
-			username = ((UserDetails) principal).getUsername();
-		}
-
-		User user = userService.findByUsername(username);
-
-		List<Event> events = eventService.findAllByCreatedBy(user);
-
-		return new APIresponse(HttpStatus.OK.value(), "All events successfully sent.", events);
-
-	}
-
-	@GetMapping(path = "user/allEvents")
-	@PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
-	public APIresponse getStudentEvents() {
-
-		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-		String username = "";
-
-		if (principal instanceof UserDetails) {
-			username = ((UserDetails) principal).getUsername();
-		}
-
-		User user = userService.findByUsername(username);
-
-		List<Event> events = eventService.findAllByRecepients(user);
-
-		return new APIresponse(HttpStatus.OK.value(), "All events successfully sent.", events);
-
 	}
 
 }

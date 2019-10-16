@@ -8,6 +8,7 @@ import javax.security.sasl.AuthenticationException;
 
 import org.apache.commons.collections4.ListUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -42,6 +43,7 @@ public class CalendarController {
 	@PostMapping(path = "/create", produces = "application/json")
 	@PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
 	public APIresponse createCalendar(@RequestBody CalendarCreate calendarCreate) {
+
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
 		String username = "";
@@ -53,6 +55,11 @@ public class CalendarController {
 		User createdBy = userService.findByUsername(username);
 
 		String calendarName = calendarCreate.getName();
+
+		if (calendarService.findByNameAndCreatedBy(calendarName, createdBy) != null) {
+			throw new DuplicateKeyException(
+					"Calendar with name " + calendarName + " already exists.Please choose a different name.");
+		}
 
 		List<String> calendarRecipients = calendarCreate.getRecipients();
 		List<String> realRecipients = new ArrayList<String>();
@@ -120,7 +127,8 @@ public class CalendarController {
 
 	@PostMapping(path = "/share", produces = "application/json")
 	@PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
-	public APIresponse shareCalendar(@RequestBody CalendarShare calendarShare) throws FileNotFoundException, AuthenticationException {
+	public APIresponse shareCalendar(@RequestBody CalendarShare calendarShare)
+			throws FileNotFoundException, AuthenticationException {
 
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -131,17 +139,17 @@ public class CalendarController {
 		}
 
 		User user = userService.findByUsername(username);
-		
+
 		Calendar calendar = calendarService.findById(calendarShare.getCalendarId());
-		
+
 		if (calendar == null) {
 			throw new FileNotFoundException("Calendar with the given id is not present in the database");
 		}
-		
-		if(calendar.getCreatedBy() != user) {
+
+		if (calendar.getCreatedBy() != user) {
 			throw new AuthenticationException("You are not allowed to share this calendar.");
 		}
-		
+
 		List<String> emailsFromJson = calendarShare.getRecipients();
 		List<String> sharedWithList = new ArrayList<String>();
 
@@ -149,12 +157,12 @@ public class CalendarController {
 
 			User personToShare = userService.findByEmail(email);
 			if (personToShare != null && calendar.getCreatedBy() != personToShare) {
-				if(!calendar.getShareduser().contains(personToShare)) {
+				if (!calendar.getShareduser().contains(personToShare)) {
 					sharedWithList.add(email);
 					calendar.getShareduser().add(personToShare);
 					calendarService.save(calendar);
 				}
-				
+
 			}
 
 		}
