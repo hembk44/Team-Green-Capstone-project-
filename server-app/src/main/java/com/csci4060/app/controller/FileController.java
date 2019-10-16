@@ -31,8 +31,13 @@ import com.csci4060.app.configuration.fileStorage.FileReadException;
 import com.csci4060.app.model.APIresponse;
 import com.csci4060.app.model.UploadFileResponse;
 import com.csci4060.app.model.User;
+
+import com.csci4060.app.model.authentication.ConfirmationToken;
+import com.csci4060.app.services.ConfirmationTokenService;
+
 import com.csci4060.app.model.calendar.Calendar;
 import com.csci4060.app.services.CalendarService;
+
 import com.csci4060.app.services.EmailSenderService;
 import com.csci4060.app.services.FileReadService;
 import com.csci4060.app.services.FileStorageService;
@@ -56,6 +61,9 @@ public class FileController {
 	@Autowired
 	private EmailSenderService emailSenderService;
 
+	@Autowired
+	ConfirmationTokenService confirmationTokenService;
+	
 	@Autowired
 	PasswordEncoder encoder;
 
@@ -82,6 +90,7 @@ public class FileController {
 				if (!userService.existsByUsername(user.getUsername())) {
 					newUsersEmailList.add(user.getEmail());
 					userService.save(user);
+          
 					calendarService.save(new Calendar("Main", null, null, user, true, true));
 					calendarService.save(new Calendar("Appointment", null, null, user, true, true));
 					calendarService.save(new Calendar("Shared Event", null, null, user, true, true));

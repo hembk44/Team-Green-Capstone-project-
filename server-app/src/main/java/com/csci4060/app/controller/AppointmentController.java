@@ -150,7 +150,8 @@ public class AppointmentController {
 			}
 		}
 
-		if (!recepientsEmailList.isEmpty()) {
+
+		if (!recepientsEmailList.isEmpty(){
 			SimpleMailMessage mailMessage = new SimpleMailMessage();
 
 			String[] emails = recepientsEmailList.toArray(new String[recepientsEmailList.size()]);
@@ -163,7 +164,7 @@ public class AppointmentController {
 							+ "Thank you!");
 
 			emailSenderService.sendEmail(mailMessage);
-		}
+    }
 
 		return new APIresponse(HttpStatus.CREATED.value(), "Appointment created successfully", appointment);
 	}
@@ -273,9 +274,11 @@ public class AppointmentController {
 		return new APIresponse(HttpStatus.OK.value(), "Time slots successfully sent.", slotsFromAppointment);
 	}
 
+
 	@PostMapping(path = "timeslots/postSlot/{timeSlotId}", produces = "application/json")
 	@PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
 	public APIresponse postSlots(@PathVariable("timeSlotId") long id) {
+
 
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -292,7 +295,7 @@ public class AppointmentController {
 		if(slotToRemove == null) {
 			throw new ResourceAccessException("There is no timeslot with given id "+ id+ " in the database");
 		}
-		
+	
 		slotToRemove.setSelectedBy(selectedBy);
 		timeSlotsService.save(slotToRemove);
 		

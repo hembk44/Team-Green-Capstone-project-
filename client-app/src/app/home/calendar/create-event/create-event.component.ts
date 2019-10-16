@@ -30,10 +30,13 @@ export class CreateEventComponent implements OnInit {
   eventData: CalEvent;
   email = new FormControl("", [Validators.email]);
   dateRangeArray: EventDate[] = [];
+<<<<<<< HEAD
+=======
   primaryColor: string='';
   secondaryColor: string='';
   allDay=false;
   obj: Object;
+>>>>>>> rohan/beta-demo
 
   constructor(
     private router: Router,
@@ -41,6 +44,10 @@ export class CreateEventComponent implements OnInit {
     public dialog: MatDialog,
     private dataStorage: DataStorageService,
     private eventService: EventService,
+<<<<<<< HEAD
+    private ref: MatDialogRef<CreateEventComponent>
+=======
+>>>>>>> rohan/beta-demo
   ) {}
 
   ngOnInit() {
@@ -83,6 +90,33 @@ export class CreateEventComponent implements OnInit {
 
   onSubmit() {
     const eventFormValues = this.eventForm.value;
+<<<<<<< HEAD
+    const eventDate = this.dateRangeArray[0].date;
+    const eventstart = this.dateRangeArray[0].eventtimes[0].startTime;
+    const eventEnd = this.dateRangeArray[0].eventtimes[0].endTime;
+    const eventtimes = new EventTime(eventstart, eventEnd);
+    const eventdaterange = new EventDate(eventDate, [eventtimes]);
+    const tempid = 8;
+
+    console.log(eventdaterange);
+
+    const obj = {
+      name: eventFormValues.title,
+      description: eventFormValues.description,
+      eventdates: [eventdaterange],
+      recepients: [eventFormValues.email],
+      location: eventFormValues.location
+    };
+
+    this.dataStorage.storeEvent(obj).subscribe(result => {
+      if (result) {
+        this.dataStorage.fetchEvents();
+      }
+    });
+
+    this.router.navigate(["home/calendar"]);
+  }
+=======
     console.log(eventFormValues.startDate.toLocaleDateString());
     console.log(this.primaryColor);
     console.log(this.secondaryColor);
@@ -135,6 +169,7 @@ export class CreateEventComponent implements OnInit {
   setSecondary(color:string){
     this.secondaryColor=color;
   }
+>>>>>>> rohan/beta-demo
   onNoClick(){
     this.router.navigate(["home/calendar"]);
   }

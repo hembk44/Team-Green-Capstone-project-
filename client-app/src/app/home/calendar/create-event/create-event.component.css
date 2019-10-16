@@ -12,10 +12,13 @@
   .example-container>* {
     width: 100%;
   }
+<<<<<<< HEAD
+=======
 
   #start-date,#end-date,#primary-color{
     margin-right:2em;
   }
+>>>>>>> rohan/beta-demo
 
   .cancel-button{
     margin-left:20px;

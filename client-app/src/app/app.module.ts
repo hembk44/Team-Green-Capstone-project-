@@ -51,11 +51,15 @@ import {
   DialogDateTimeIntervalDialog,
   DialogTimeIntervalDialog
 } from "./home/appointment/appointment-create/appointment-create.component";
+<<<<<<< HEAD
+import { CreateEventComponent, EventTimeDialog, EventTimeIntervalDialog } from "./home/calendar/create-event/create-event.component";
+=======
 import {
   CreateEventComponent,
   EventTimeDialog,
   EventTimeIntervalDialog
 } from "./home/calendar/create-event/create-event.component";
+>>>>>>> rohan/beta-demo
 import { CalendarListComponent } from "./home/calendar/calendar-list/calendar-list.component";
 import { CalendarItemComponent } from "./home/calendar/calendar-list/calendar-item/calendar-item.component";
 import { ColorPickerModule } from "ngx-color-picker";
