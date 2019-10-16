@@ -1,10 +1,14 @@
 package com.csci4060.app.controller;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.security.sasl.AuthenticationException;
+
 import org.apache.commons.collections4.ListUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -39,6 +43,7 @@ public class CalendarController {
 	@PostMapping(path = "/create", produces = "application/json")
 	@PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
 	public APIresponse createCalendar(@RequestBody CalendarCreate calendarCreate) {
+
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
 		String username = "";
@@ -50,6 +55,11 @@ public class CalendarController {
 		User createdBy = userService.findByUsername(username);
 
 		String calendarName = calendarCreate.getName();
+
+		if (calendarService.findByNameAndCreatedBy(calendarName, createdBy) != null) {
+			throw new DuplicateKeyException(
+					"Calendar with name " + calendarName + " already exists.Please choose a different name.");
+		}
 
 		List<String> calendarRecipients = calendarCreate.getRecipients();
 		List<String> realRecipients = new ArrayList<String>();
@@ -71,7 +81,7 @@ public class CalendarController {
 
 		CalendarResponse response = new CalendarResponse(calendar.getId(), calendar.getName(), calendar.getEvents(),
 				createdBy.getUsername(), calendar.isShown(), calendar.isDefaultCalendar());
-		
+
 		return new APIresponse(HttpStatus.CREATED.value(),
 				"Calendar with name " + calendarName + " has been succesfully created", response);
 
@@ -117,30 +127,49 @@ public class CalendarController {
 
 	@PostMapping(path = "/share", produces = "application/json")
 	@PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
-	public APIresponse shareCalendar(@RequestBody CalendarShare calendarShare) {
+	public APIresponse shareCalendar(@RequestBody CalendarShare calendarShare)
+			throws FileNotFoundException, AuthenticationException {
+
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		String username = "";
+
+		if (principal instanceof UserDetails) {
+			username = ((UserDetails) principal).getUsername();
+		}
+
+		User user = userService.findByUsername(username);
 
 		Calendar calendar = calendarService.findById(calendarShare.getCalendarId());
-		
+
+		if (calendar == null) {
+			throw new FileNotFoundException("Calendar with the given id is not present in the database");
+		}
+
+		if (calendar.getCreatedBy() != user) {
+			throw new AuthenticationException("You are not allowed to share this calendar.");
+		}
+
 		List<String> emailsFromJson = calendarShare.getRecipients();
 		List<String> sharedWithList = new ArrayList<String>();
 
-		CalendarResponse response = null;
+		for (String email : emailsFromJson) {
 
-		if (calendar != null) {
-			for (String email : emailsFromJson) {
-
-				User user = userService.findByEmail(email);
-				if (user != null && calendar.getCreatedBy() != user) {
+			User personToShare = userService.findByEmail(email);
+			if (personToShare != null && calendar.getCreatedBy() != personToShare) {
+				if (!calendar.getShareduser().contains(personToShare)) {
 					sharedWithList.add(email);
-					calendar.getShareduser().add(user);
+					calendar.getShareduser().add(personToShare);
 					calendarService.save(calendar);
 				}
 
 			}
 
-			response = new CalendarResponse(calendar.getId(), calendar.getName(), calendar.getEvents(),
-					calendar.getCreatedBy().getEmail(), calendar.isShown(), calendar.isDefaultCalendar());
 		}
+
+		CalendarResponse response = new CalendarResponse(calendar.getId(), calendar.getName(), calendar.getEvents(),
+				calendar.getCreatedBy().getEmail(), calendar.isShown(), calendar.isDefaultCalendar());
+
 		return new APIresponse(HttpStatus.OK.value(),
 				"Calendar " + calendar.getName() + " has been shared to users: " + sharedWithList, response);
 	}

@@ -16,4 +16,6 @@ public class EventDummy {
 	String start;
 	String end;
 	Boolean allDay;
+	String borderColor;
+	String backgroundColor;
 }

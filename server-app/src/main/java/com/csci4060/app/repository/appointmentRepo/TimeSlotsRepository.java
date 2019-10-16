@@ -11,6 +11,6 @@ import com.csci4060.app.model.appointment.TimeSlots;
 
 public interface TimeSlotsRepository extends JpaRepository<TimeSlots, Long>{
 
-	Optional<List<TimeSlots>> findByAppointment(Appointment appointment);
-	Optional<List<TimeSlots>> findBySelectedBy(User selectedBy);
+	Optional<List<TimeSlots>> findAllByAppointment(Appointment appointment);
+	Optional<List<TimeSlots>> findAllBySelectedBy(User selectedBy);
 }

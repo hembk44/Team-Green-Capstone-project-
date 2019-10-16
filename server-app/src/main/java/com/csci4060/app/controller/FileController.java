@@ -82,9 +82,9 @@ public class FileController {
 				if (!userService.existsByUsername(user.getUsername())) {
 					newUsersEmailList.add(user.getEmail());
 					userService.save(user);
-					calendarService.save(new Calendar("Main Calendar", null, null, user, true, true));
-					calendarService.save(new Calendar("Appointment Calendar", null, null, user, true, true));
-					calendarService.save(new Calendar("Special Event Calendar", null, null, user, true, true));
+					calendarService.save(new Calendar("Main", null, null, user, true, true));
+					calendarService.save(new Calendar("Appointment", null, null, user, true, true));
+					calendarService.save(new Calendar("Shared Event", null, null, user, true, true));
 
 				}
 			}

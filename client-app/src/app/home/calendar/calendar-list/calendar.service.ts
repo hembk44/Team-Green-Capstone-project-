@@ -123,4 +123,10 @@ export class CalendarService{
     addEvent(event: CalEvent){
         this.events.push(event);
     }
+
+    getEventCal(event: CalEvent){
+        const cal = this.calendars.find(calendar => calendar.events.includes(event));
+        return cal.id;
+    }
+
 }

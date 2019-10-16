@@ -1,7 +1,11 @@
 package com.csci4060.app.controller;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.security.sasl.AuthenticationException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.mail.SimpleMailMessage;
@@ -9,7 +13,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,7 +47,8 @@ public class EventController {
 
 	@PostMapping(path = "/set", consumes = "application/json")
 	@PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
-	public APIresponse setEvent(@RequestBody EventDummy eventDummy) {
+	public APIresponse setEvent(@RequestBody EventDummy eventDummy)
+			throws FileNotFoundException, AuthenticationException {
 
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -55,44 +59,55 @@ public class EventController {
 		}
 
 		User createdBy = userService.findByUsername(creatorUsername);
-		
+
 		List<User> recipientList = new ArrayList<User>();
 
 		List<String> recepientsEmailList = eventDummy.getRecipients();
-		
+
 		for (String each : recepientsEmailList) {
-			
+
 			User recipient = userService.findByEmail(each);
-			
-			if(recipient != null) {
+
+			if (recipient != null) {
 				recipientList.add(recipient);
 			}
 		}
-		
-		Event event = new Event(eventDummy.getTitle(), eventDummy.getDescription(), eventDummy.getLocation(),
-				recipientList, eventDummy.getStart(), eventDummy.getEnd(), createdBy, eventDummy.getAllDay());
 
-		//eventService.save(event);
-		
+		Event event = new Event(eventDummy.getTitle(), eventDummy.getDescription(), eventDummy.getLocation(),
+				recipientList, eventDummy.getStart(), eventDummy.getEnd(), createdBy, eventDummy.getAllDay(),
+				eventDummy.getBorderColor(), eventDummy.getBackgroundColor());
+
+		eventService.save(event);
+
+		Long newEventId = event.getId();
+		System.out.println(newEventId);
+
 		Calendar calendar = calendarService.findById(eventDummy.getCalendarId());
-		
-		if(calendar.getCreatedBy() == createdBy) {
+
+		if (calendar == null) {
+			throw new FileNotFoundException("Calendar with given id is not present in the database");
+		}
+
+		if (calendar.getCreatedBy() == createdBy) {
 			calendar.getEvents().add(event);
 			calendarService.save(calendar);
+		} else {
+			throw new AuthenticationException("You are not allowed to create an event for this calendar");
 		}
-		
 
 		if (!recipientList.isEmpty()) {
-			
-			for (User person: recipientList) {
-				Calendar mainCalendar = calendarService.findByNameAndCreatedBy("Main Calendar", person);
-				mainCalendar.getEvents().add(event);
-				
-				System.out.println(mainCalendar.getEvents());
-				
-				calendarService.save(mainCalendar);
+
+			for (User sharedToPerson : recipientList) {
+
+				Calendar recipientCalendar = null;
+
+				if (!calendar.getShareduser().contains(sharedToPerson)) {
+					recipientCalendar = calendarService.findByNameAndCreatedBy("Shared Event", sharedToPerson);
+					recipientCalendar.addEvent(event);
+					calendarService.save(recipientCalendar);
+				}
 			}
-			
+
 			SimpleMailMessage mailMessage = new SimpleMailMessage();
 
 			String[] emails = recepientsEmailList.toArray(new String[recepientsEmailList.size()]);
@@ -108,46 +123,6 @@ public class EventController {
 		}
 
 		return new APIresponse(HttpStatus.CREATED.value(), "event created successfully", event);
-	}
-
-	@GetMapping(path = "faculty/allEvents")
-	@PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
-	public APIresponse getFacultyEvents() {
-
-		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-		String username = "";
-
-		if (principal instanceof UserDetails) {
-			username = ((UserDetails) principal).getUsername();
-		}
-
-		User user = userService.findByUsername(username);
-
-		List<Event> events = eventService.findAllByCreatedBy(user);
-
-		return new APIresponse(HttpStatus.OK.value(), "All events successfully sent.", events);
-
-	}
-
-	@GetMapping(path = "user/allEvents")
-	@PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
-	public APIresponse getStudentEvents() {
-
-		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-		String username = "";
-
-		if (principal instanceof UserDetails) {
-			username = ((UserDetails) principal).getUsername();
-		}
-
-		User user = userService.findByUsername(username);
-
-		List<Event> events = eventService.findAllByRecepients(user);
-
-		return new APIresponse(HttpStatus.OK.value(), "All events successfully sent.", events);
-
 	}
 
 }

@@ -111,8 +111,8 @@ export class CreateEventComponent implements OnInit {
         end: endDate,
         recipients: [eventFormValues.email],
         location: eventFormValues.location,
-        // backgroundColor: this.primaryColor,
-        // borderColor: this.primaryColor,
+        backgroundColor: this.primaryColor,
+        borderColor: this.primaryColor,
         allDay: this.allDay
       };
     }else{
@@ -124,8 +124,8 @@ export class CreateEventComponent implements OnInit {
         end: eventFormValues.endDate.setHours(eventFormValues.endDate.getHours()+1),
         recipients: [eventFormValues.email],
         location: eventFormValues.location,
-        // backgroundColor: this.primaryColor,
-        // borderColor: this.primaryColor,
+        backgroundColor: this.primaryColor,
+        borderColor: this.primaryColor,
         allDay: this.allDay
       };
     }

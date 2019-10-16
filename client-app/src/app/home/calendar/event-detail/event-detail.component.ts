@@ -1,8 +1,8 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { CalendarService } from '../calendar-list/calendar.service';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { CalEvent } from '../events.model';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material';
 
 @Component({
   selector: 'app-event-detail',
@@ -14,8 +14,9 @@ export class EventDetailComponent implements OnInit {
   event: CalEvent;
 
   constructor(private calService: CalendarService,
-    private route: ActivatedRoute,
+    private router: Router,
     private ref: MatDialogRef<EventDetailComponent>,
+    private dialog: MatDialog,
     @Inject(MAT_DIALOG_DATA)public data: CalEvent) { 
     }
 
@@ -32,4 +33,31 @@ export class EventDetailComponent implements OnInit {
     this.ref.close();
   }
 
+  editEvent(){
+    this.ref.close();
+    this.router.navigate(["home/edit-event", this.event.id])
+  }
+
+  deleteEvent(){
+    this.dialog.open(EventDeleteConfirm, {
+      width: "300px"
+    });
+  }
+
+}
+
+@Component({
+  selector: 'confirm-event-delete',
+  templateUrl: 'event-delete-confirm.html',
+  styleUrls: ['./event-detail.component.css']
+})
+
+export class EventDeleteConfirm{
+  constructor(
+    private ref: MatDialogRef<EventDeleteConfirm>
+  ){}
+
+  close(){
+    this.ref.close();
+  }
 }

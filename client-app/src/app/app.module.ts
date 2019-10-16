@@ -79,10 +79,12 @@ import { LoginComponent } from "./login/login.component";
 import { RegisterComponent } from "./register/register.component";
 import { LoadingSpinnerComponent } from "./loading-spinner/loading-spinner.component";
 import { AuthInterceptor } from "./auth/auth-interceptor";
-import { EventDetailComponent } from "./home/calendar/event-detail/event-detail.component";
+import { EventDetailComponent, EventDeleteConfirm } from "./home/calendar/event-detail/event-detail.component";
 import { CalendarCreateComponent } from "./home/calendar/calendar-create/calendar-create.component";
 import { GroupComponent } from "./home/group/group.component";
 import { ShareCalendarComponent } from "./home/calendar/share-calendar/share-calendar.component";
+import { EditEventComponent } from './home/calendar/create-event/edit-event/edit-event.component';
+
 import { RegisterUsersComponent } from "./home/register-users/register-users.component";
 
 @NgModule({
@@ -119,6 +121,8 @@ import { RegisterUsersComponent } from "./home/register-users/register-users.com
     AppointmentReceivedComponent,
     GroupComponent,
     ShareCalendarComponent,
+    EditEventComponent,
+    EventDeleteConfirm
     RegisterUsersComponent
   ],
   imports: [
@@ -168,7 +172,8 @@ import { RegisterUsersComponent } from "./home/register-users/register-users.com
     CalendarCreateComponent,
     CalRename,
     DeleteConfirm,
-    ShareCalendarComponent
+    ShareCalendarComponent,
+    EventDeleteConfirm
   ],
   providers: [
     MatDatepickerModule,
