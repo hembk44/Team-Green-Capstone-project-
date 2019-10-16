@@ -77,7 +77,7 @@ import { LoginComponent } from "./login/login.component";
 import { RegisterComponent } from "./register/register.component";
 import { LoadingSpinnerComponent } from "./loading-spinner/loading-spinner.component";
 import { AuthInterceptor } from "./auth/auth-interceptor";
-import { EventDetailComponent } from "./home/calendar/event-detail/event-detail.component";
+import { EventDetailComponent, EventDeleteConfirm } from "./home/calendar/event-detail/event-detail.component";
 import { CalendarCreateComponent } from "./home/calendar/calendar-create/calendar-create.component";
 import { GroupComponent } from "./home/group/group.component";
 import { ShareCalendarComponent } from "./home/calendar/share-calendar/share-calendar.component";
@@ -117,7 +117,8 @@ import { EditEventComponent } from './home/calendar/create-event/edit-event/edit
     AppointmentReceivedComponent,
     GroupComponent,
     ShareCalendarComponent,
-    EditEventComponent
+    EditEventComponent,
+    EventDeleteConfirm
   ],
   imports: [
     BrowserModule,
@@ -165,7 +166,8 @@ import { EditEventComponent } from './home/calendar/create-event/edit-event/edit
     CalendarCreateComponent,
     CalRename,
     DeleteConfirm,
-    ShareCalendarComponent
+    ShareCalendarComponent,
+    EventDeleteConfirm
   ],
   providers: [
     MatDatepickerModule,

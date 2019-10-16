@@ -41,7 +41,7 @@ export class EditEventComponent implements OnInit {
     this.event = this.calService.getEvent(this.id);
     this.primaryColor = this.event.backgroundColor;
     this.username = this.authService.username;
-    this.calendars = this.calService.getCalendars().filter(cal => cal.createdBy === this.username);
+    this.calendars=this.calService.getCalendars().filter(cal => cal.createdBy === this.username);
     this.selectedCal = this.calService.getEventCal(this.event);
     console.log(this.selectedCal);
     this.eventForm = new FormGroup({
