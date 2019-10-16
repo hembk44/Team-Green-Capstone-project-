@@ -1,5 +1,6 @@
 package com.csci4060.app.model.event;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -36,6 +37,9 @@ public class Event {
 	@JsonIgnore
 	@ManyToMany(targetEntity = User.class, fetch = FetchType.LAZY)
 	List<User> recipients;
+//	
+//	@ManyToMany(mappedBy = "events")
+//	List<Calendar> calendars =new ArrayList<>();
 	
 	@NotNull
 	String start;
@@ -48,9 +52,12 @@ public class Event {
 	User createdBy;
 	
 	Boolean allDay;
-
 	
-	public Event(String title, String description, String location, List<User> recipients, String start, String end, User createdBy, Boolean allDay) {
+	String borderColor;
+	
+	String backgroundColor;
+	
+	public Event(String title, String description, String location, List<User> recipients, String start, String end, User createdBy, Boolean allDay, String borderColor, String backgroundColor) {
 		this.title = title;
 		this.description = description;
 		this.location = location;
@@ -59,6 +66,8 @@ public class Event {
 		this.end = end;
 		this.createdBy = createdBy;
 		this.allDay = allDay;
+		this.borderColor = borderColor;
+		this.backgroundColor = backgroundColor;
 	}
 
 	public Event() {

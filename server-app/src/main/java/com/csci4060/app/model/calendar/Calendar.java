@@ -3,12 +3,9 @@ package com.csci4060.app.model.calendar;
 import java.util.List;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
@@ -30,10 +27,7 @@ public class Calendar {
 	@NotNull
 	String name;
 	
-	@ManyToMany(targetEntity = Event.class, fetch = FetchType.LAZY)
-	@JoinTable(name = "calendar_events",
-				joinColumns = {@JoinColumn(name = "calendar_id")},
-				inverseJoinColumns = {@JoinColumn(name = "events_id")})
+	@ManyToMany(targetEntity = Event.class)
 	List<Event> events;
 	
 	@JsonIgnore
@@ -47,6 +41,16 @@ public class Calendar {
 	boolean shown;
 	
 	boolean isDefaultCalendar;
+	
+	public void addEvent(Event event) {
+		events.add(event);
+		//event.getCalendars().add(this);
+	}
+	
+	public void removeEvent(Event event) {
+        events.remove(event);
+        //event.getCalendars().remove(this);
+    }
 	
 	public Calendar(String name, List<Event> events, List<User> shareduser, User createdBy, boolean shown, boolean isDefaultCalendar) {
 		this.name = name;

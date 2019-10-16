@@ -4,6 +4,8 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.security.sasl.AuthenticationException;
+
 import org.apache.commons.collections4.ListUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -118,24 +120,41 @@ public class CalendarController {
 
 	@PostMapping(path = "/share", produces = "application/json")
 	@PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
-	public APIresponse shareCalendar(@RequestBody CalendarShare calendarShare) throws FileNotFoundException {
+	public APIresponse shareCalendar(@RequestBody CalendarShare calendarShare) throws FileNotFoundException, AuthenticationException {
 
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		String username = "";
+
+		if (principal instanceof UserDetails) {
+			username = ((UserDetails) principal).getUsername();
+		}
+
+		User user = userService.findByUsername(username);
+		
 		Calendar calendar = calendarService.findById(calendarShare.getCalendarId());
-
-		List<String> emailsFromJson = calendarShare.getRecipients();
-		List<String> sharedWithList = new ArrayList<String>();
-
+		
 		if (calendar == null) {
 			throw new FileNotFoundException("Calendar with the given id is not present in the database");
 		}
+		
+		if(calendar.getCreatedBy() != user) {
+			throw new AuthenticationException("You are not allowed to share this calendar.");
+		}
+		
+		List<String> emailsFromJson = calendarShare.getRecipients();
+		List<String> sharedWithList = new ArrayList<String>();
 
 		for (String email : emailsFromJson) {
 
 			User personToShare = userService.findByEmail(email);
 			if (personToShare != null && calendar.getCreatedBy() != personToShare) {
-				sharedWithList.add(email);
-				calendar.getShareduser().add(personToShare);
-				calendarService.save(calendar);
+				if(!calendar.getShareduser().contains(personToShare)) {
+					sharedWithList.add(email);
+					calendar.getShareduser().add(personToShare);
+					calendarService.save(calendar);
+				}
+				
 			}
 
 		}
