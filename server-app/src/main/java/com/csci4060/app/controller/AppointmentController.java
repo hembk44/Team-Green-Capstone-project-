@@ -4,10 +4,7 @@ import java.time.Duration;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.ResourceAccessException;
 
 import com.csci4060.app.model.APIresponse;
-import com.csci4060.app.model.Role;
 import com.csci4060.app.model.User;
 import com.csci4060.app.model.appointment.Appointment;
 import com.csci4060.app.model.appointment.AppointmentDate;
@@ -150,7 +146,8 @@ public class AppointmentController {
 			}
 		}
 
-		if (!recepientsEmailList.isEmpty()) {
+
+		if (!recepientsEmailList.isEmpty(){
 			SimpleMailMessage mailMessage = new SimpleMailMessage();
 
 			String[] emails = recepientsEmailList.toArray(new String[recepientsEmailList.size()]);
@@ -163,7 +160,7 @@ public class AppointmentController {
 							+ "Thank you!");
 
 			emailSenderService.sendEmail(mailMessage);
-		}
+    }
 
 		return new APIresponse(HttpStatus.CREATED.value(), "Appointment created successfully", appointment);
 	}
@@ -273,9 +270,11 @@ public class AppointmentController {
 		return new APIresponse(HttpStatus.OK.value(), "Time slots successfully sent.", slotsFromAppointment);
 	}
 
+
 	@PostMapping(path = "timeslots/postSlot/{timeSlotId}", produces = "application/json")
 	@PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
 	public APIresponse postSlots(@PathVariable("timeSlotId") long id) {
+
 
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -292,21 +291,15 @@ public class AppointmentController {
 		if(slotToRemove == null) {
 			throw new ResourceAccessException("There is no timeslot with given id "+ id+ " in the database");
 		}
-		
+	
 		slotToRemove.setSelectedBy(selectedBy);
 		timeSlotsService.save(slotToRemove);
 		
 		Event creatorsEvent = eventService.findByTimeSlotId(id);
 		
-		System.out.println("Event from timeslot: "+creatorsEvent);
-		
 		Calendar calendar = calendarService.findByNameAndCreatedBy("Appointment", selectedBy);
 		
-		System.out.println("calendar before adding event"+calendar);
-		
 		calendar.addEvent(creatorsEvent);
-		
-		System.out.println("calendar after adding event"+calendar);
 		
 		calendarService.save(calendar);
 
