@@ -25,6 +25,7 @@ export class EditEventComponent implements OnInit {
   defaultTime: Date = new Date();
   defaultTime2: Date = new Date();
   email = new FormControl("",[Validators.email]);
+  newEnd: Date;
 
   constructor(
     private route: ActivatedRoute,
@@ -39,18 +40,22 @@ export class EditEventComponent implements OnInit {
       this.id = +params["id"];
     });
     this.event = this.calService.getEvent(this.id);
+    this.newEnd = this.event.end;
+    this.newEnd.setDate(this.newEnd.getDate()-1);
     this.primaryColor = this.event.backgroundColor;
     this.username = this.authService.username;
     this.calendars=this.calService.getCalendars().filter(cal => cal.createdBy === this.username);
     this.selectedCal = this.calService.getEventCal(this.event);
     console.log(this.selectedCal);
+    this.allDay=(this.event.allDay);
+    console.log(this.allDay);
     this.eventForm = new FormGroup({
       title: new FormControl(this.event.title),
       location: new FormControl(this.event.location),
       description: new FormControl(this.event.description),
       email: this.email,
       startDate: new FormControl(this.event.start),
-      endDate: new FormControl(this.event.end),
+      endDate: new FormControl(this.newEnd),
       startTime: new FormControl(this.event.start.toLocaleTimeString()),
       endTime: new FormControl(this.event.end.toLocaleTimeString()),
       primary: new FormControl(this.event.backgroundColor),
@@ -67,6 +72,7 @@ export class EditEventComponent implements OnInit {
 
   allday(){
     this.allDay = !this.allDay;
+    console.log(this.allDay)
   }
 
   onSubmit(){
@@ -87,12 +93,14 @@ export class EditEventComponent implements OnInit {
         allDay: this.allDay
       }
     }else{
+      this.newEnd = eventFormValues.endDate;
+      this.newEnd.setDate(this.newEnd.getDate()+1);
       this.obj = {
         calendarId: this.selectedCal,
         title: eventFormValues.title,
         description: eventFormValues.description,
         start: eventFormValues.startDate,
-        end: eventFormValues.endDate.setHours(eventFormValues.endDate.getHours()+1),
+        end: this.newEnd,
         recipients: [eventFormValues.email],
         location: eventFormValues.location,
         backgroundColor: this.primaryColor,
