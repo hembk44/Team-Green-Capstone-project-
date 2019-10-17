@@ -1,19 +1,26 @@
 <div class="example-container">
-  <form
-  [formGroup]="eventForm"
-  (ngSubmit)="onSubmit()"
-  >
+  <form [formGroup]="eventForm" (ngSubmit)="onSubmit()">
     <mat-form-field class="cal-select" required>
       <mat-label>Select Calendar</mat-label>
       <mat-select formControlName="calendar" [disableOptionCentering]="true">
-        <mat-option *ngFor="let cal of calendars" [value]="cal.name" (click)="selectCalendar(cal.id)">{{ cal.name }}</mat-option>
+        <mat-option
+          *ngFor="let cal of calendars"
+          [value]="cal.name"
+          (click)="selectCalendar(cal.id)"
+          >{{ cal.name }}</mat-option
+        >
       </mat-select>
     </mat-form-field>
     <mat-form-field>
-      <input matInput placeholder="Event Title" formControlName="title" />
-    </mat-form-field><br>
+      <input
+        matInput
+        placeholder="Event Title"
+        formControlName="title"
+      /> </mat-form-field
+    ><br />
 
-    <mat-form-field style="width:60%;">
+    <mat-form-field style="width:60%;"
+      >ng
       <textarea
         matInput
         cdkTextareaAutosize
@@ -22,16 +29,16 @@
         placeholder="Event Description"
         cols="50"
         formControlName="description"
-      ></textarea>
-    </mat-form-field><br>
+      ></textarea> </mat-form-field
+    ><br />
 
     <mat-form-field>
       <input
         matInput
         placeholder="Event Location"
         formControlName="location"
-      />
-    </mat-form-field><br>
+      /> </mat-form-field
+    ><br />
 
     <!-- <mat-form-field>
       <input
@@ -43,70 +50,111 @@
     </mat-form-field><br> -->
     <mat-form-field id="end-date">
       <input
-      matInput
-      placeholder="Start Date"
-      formControlName="startDate"
-      [matDatepicker]="startpicker">
-      <mat-datepicker-toggle matSuffix [for]="startpicker"></mat-datepicker-toggle>
+        matInput
+        placeholder="Start Date"
+        formControlName="startDate"
+        [matDatepicker]="startpicker"
+      />
+      <mat-datepicker-toggle
+        matSuffix
+        [for]="startpicker"
+      ></mat-datepicker-toggle>
       <mat-datepicker touchUi #startpicker></mat-datepicker>
     </mat-form-field>
     <mat-form-field *ngIf="!allDay">
       <mat-label>Start Time</mat-label>
       <input
-      matInput
-      formControlName="startTime"
-      aria-label="default time"
-      [value]="defaultTime.toLocaleTimeString([], {hour: '2-digit',  minute:'2-digit'})"
-      [ngxTimepicker]="starttime"
-      readonly>
-      <ngx-material-timepicker #starttime [minutesGap]="5" [appendToInput]="true"></ngx-material-timepicker>
-    </mat-form-field><br>
+        matInput
+        formControlName="startTime"
+        aria-label="default time"
+        [value]="
+          defaultTime.toLocaleTimeString([], {
+            hour: '2-digit',
+            minute: '2-digit'
+          })
+        "
+        [ngxTimepicker]="starttime"
+        readonly
+      />
+      <ngx-material-timepicker
+        #starttime
+        [minutesGap]="5"
+        [appendToInput]="true"
+      ></ngx-material-timepicker> </mat-form-field
+    ><br />
     <mat-form-field id="end-date">
       <input
-      matInput
-      placeholder="End Date"
-      formControlName="endDate"
-      [matDatepicker]="endpicker">
-      <mat-datepicker-toggle matSuffix [for]="endpicker"></mat-datepicker-toggle>
+        matInput
+        placeholder="End Date"
+        formControlName="endDate"
+        [matDatepicker]="endpicker"
+      />
+      <mat-datepicker-toggle
+        matSuffix
+        [for]="endpicker"
+      ></mat-datepicker-toggle>
       <mat-datepicker touchUi #endpicker></mat-datepicker>
     </mat-form-field>
     <mat-form-field *ngIf="!allDay">
       <mat-label>End Time</mat-label>
       <input
-      matInput
-      formControlName="endTime"
-      aria-label="default time"
-      [value]="defaultTime2.toLocaleTimeString([], {hour: '2-digit',  minute:'2-digit'})"
-      [ngxTimepicker]="endtime"
-      readonly>
-      <ngx-material-timepicker #endtime [minutesGap]="5" [appendToInput]="true"></ngx-material-timepicker>
-    </mat-form-field><br>
+        matInput
+        formControlName="endTime"
+        aria-label="default time"
+        [value]="
+          defaultTime2.toLocaleTimeString([], {
+            hour: '2-digit',
+            minute: '2-digit'
+          })
+        "
+        [ngxTimepicker]="endtime"
+        readonly
+      />
+      <ngx-material-timepicker
+        #endtime
+        [minutesGap]="5"
+        [appendToInput]="true"
+      ></ngx-material-timepicker> </mat-form-field
+    ><br />
     <mat-form-field id="primary-color">
       <input
-      matInput
-      formControlName="primary"
-      [style.background]="color"
-      [style.color]="'white'"
-      placeholder="Event Color"
-      [cpOutputFormat]="'hex'"
-      (colorPickerClose)="setPrimary(color)"
-      [cpPosition]="'top-right'"
-      [cpPresetColors]="['#5484ed','#a4bdfc','#46d6db','#7ae7bf','#51b749','#fbd75b','#ffb878','#ff887c','#dc2127','#dbadff','#585858']"
-      [cpOKButton]="true"
-      [cpColorMode] = "'presets'"
-      [cpPresetLabel]="'Event Color'"
-      [value]="color"
-      [cpFallbackColor]="'#5484ed'"
-      [(colorPicker)]="color"
-      readonly>
+        matInput
+        formControlName="primary"
+        [style.background]="color"
+        [style.color]="'white'"
+        placeholder="Event Color"
+        [cpOutputFormat]="'hex'"
+        (colorPickerClose)="setPrimary(color)"
+        [cpPosition]="'top-right'"
+        [cpPresetColors]="[
+          '#5484ed',
+          '#a4bdfc',
+          '#46d6db',
+          '#7ae7bf',
+          '#51b749',
+          '#fbd75b',
+          '#ffb878',
+          '#ff887c',
+          '#dc2127',
+          '#dbadff',
+          '#585858'
+        ]"
+        [cpOKButton]="true"
+        [cpColorMode]="'presets'"
+        [cpPresetLabel]="'Event Color'"
+        [value]="color"
+        [cpFallbackColor]="'#5484ed'"
+        [(colorPicker)]="color"
+        readonly
+      />
     </mat-form-field>
     <mat-form-field>
-      <input matInput
-      formControlName="email"
-      placeholder="Recipient Email">
+      <input matInput formControlName="email" placeholder="Recipient Email" />
       <mat-error *ngIf="email.invalid">{{ getErrorMessage() }}</mat-error>
     </mat-form-field>
-    <mat-checkbox formControlName="allDay" (click)="allday()" color="primary">All Day</mat-checkbox>
+    <mat-checkbox formControlName="allDay" (click)="allday()" color="primary"
+      >All Day</mat-checkbox
+    >
 
     <!-- <mat-toolbar>
       <mat-toolbar-row>
@@ -132,9 +180,15 @@
         <button type="submit" mat-raised-button class="primary">
           Confirm
         </button>
-        <button mat-raised-button color="warn" (click)="onNoClick()" class="cancel-button">Cancel</button>
+        <button
+          mat-raised-button
+          color="warn"
+          (click)="onNoClick()"
+          class="cancel-button"
+        >
+          Cancel
+        </button>
       </mat-toolbar-row>
     </mat-toolbar>
   </form>
-
 </div>
