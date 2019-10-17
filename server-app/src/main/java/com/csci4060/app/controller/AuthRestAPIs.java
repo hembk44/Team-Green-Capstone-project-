@@ -1,13 +1,18 @@
 package com.csci4060.app.controller;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -20,7 +25,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import com.csci4060.app.configuration.jwt.JwtProvider;
 import com.csci4060.app.model.APIresponse;
 import com.csci4060.app.model.Role;
@@ -93,6 +102,8 @@ public class AuthRestAPIs {
 
 			String role = "";
 
+			String name = user.getName();
+			
 			@SuppressWarnings("unchecked")
 			List<GrantedAuthority> authorities = (List<GrantedAuthority>) authentication.getAuthorities();
 
@@ -101,7 +112,7 @@ public class AuthRestAPIs {
 			}
 
 			
-			return new APIresponse(HttpStatus.OK.value(), "Successful", new JwtResponse(jwt, loginRequest.getUsername(),role));
+			return new APIresponse(HttpStatus.OK.value(), "Successful", new JwtResponse(jwt, name, loginRequest.getUsername(),role));
 		    }
 		
 

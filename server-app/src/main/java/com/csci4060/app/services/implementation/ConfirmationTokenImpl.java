@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.csci4060.app.model.User;
 import com.csci4060.app.model.authentication.ConfirmationToken;
 import com.csci4060.app.repository.authenticationRepo.ConfirmationTokenRepository;
 import com.csci4060.app.services.ConfirmationTokenService;
