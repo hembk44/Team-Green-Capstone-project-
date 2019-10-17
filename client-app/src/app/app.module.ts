@@ -57,15 +57,15 @@ import {
   DialogTimeIntervalDialog
 } from "./home/appointment/appointment-create/appointment-create.component";
 
+import { AppointmentStartComponent } from "./home/appointment/appointment-types/appointment-start/appointment-start.component";
+import { AppointmentSentComponent } from "./home/appointment/appointment-types/appointment-sent/appointment-sent.component";
+import { AppointmentReceivedComponent } from "./home/appointment/appointment-types/appointment-received/appointment-received.component";
+
 import {
   CreateEventComponent,
   EventTimeDialog,
   EventTimeIntervalDialog
 } from "./home/calendar/create-event/create-event.component";
-
-import { AppointmentStartComponent } from "./home/appointment/appointment-types/appointment-start/appointment-start.component";
-import { AppointmentSentComponent } from "./home/appointment/appointment-types/appointment-sent/appointment-sent.component";
-import { AppointmentReceivedComponent } from "./home/appointment/appointment-types/appointment-received/appointment-received.component";
 
 import { CalendarListComponent } from "./home/calendar/calendar-list/calendar-list.component";
 import { FullCalendarModule } from "@fullcalendar/angular";

@@ -1,32 +1,17 @@
 package com.csci4060.app.controller;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashSet;
-
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
-
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.security.access.method.P;
-
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -35,14 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
-
 import com.csci4060.app.configuration.jwt.JwtProvider;
 import com.csci4060.app.model.APIresponse;
 import com.csci4060.app.model.Role;
@@ -107,9 +85,7 @@ public class AuthRestAPIs {
 
 		User user = userService.findByUsername(loginRequest.getUsername());
 
-
 		if (user.isVerified()) {
-
 			Authentication authentication = authenticationManager.authenticate(
 					new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 			SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -129,7 +105,6 @@ public class AuthRestAPIs {
 		}
 
 		return new APIresponse(HttpStatus.FORBIDDEN.value(), "Please click on the verification link to login", null);
-
 	}
 
 	@PostMapping("/signup")
@@ -238,87 +213,5 @@ public class AuthRestAPIs {
 //		}
 //		return new APIresponse(HttpStatus.UNAUTHORIZED.value(), "User email is not in the database", null);
 //	}
-	
-	
-	@PostMapping(value = "/forgot")
-	public APIresponse processForgotPasswordForm( @RequestParam("email") String userEmail, HttpServletRequest request) {
-
-		// Lookup user in database by e-mail
-		User user = userService.findByEmail(userEmail);
-
-		if (user == null) {
-			return new APIresponse(HttpStatus.NOT_FOUND.value(),"Requested user for given email is not found. Please sign up!", null);
-		} else {
-			
-			ConfirmationToken token = new ConfirmationToken(user);
-     		confirmationTokenService.save(token);
-
-			String appUrl = request.getScheme() + "://" + request.getServerName();
-			
-			SimpleMailMessage mailMessage = new SimpleMailMessage();
-			mailMessage.setTo(user.getEmail());
-			mailMessage.setSubject("Verify Email");
-			mailMessage.setFrom("ulmautoemail@gmail.com");
-			mailMessage.setText("Here is the link to reset your password:\n"
-					+ appUrl + ":8181/api/auth/"+ confirmationTokenService.findByUser(user).getConfirmationToken());
-
-			emailSenderService.sendEmail(mailMessage);
-
-			// Add success message to view
-			return new APIresponse(HttpStatus.OK.value(),"A link has been sent to your email, please follow the link to reset your password!", null);		
-		}
-
-
-	}
-	
-	
-	@GetMapping(value = "/{resetToken}")
-    public ModelAndView displayResetPasswordPage(@PathVariable("resetToken") String token)  {
-        
-        ConfirmationToken resettoken = confirmationTokenService.findByConfirmationToken(token);
-        ModelAndView modelAndView = new ModelAndView();
-       try {
-            if (!(resettoken.getCreatedDate()).after(new Date())) {
-            	System.out.println("True");
-               modelAndView.addObject("resetToken", token);
-               modelAndView.setViewName("redirect:http://localhost:4200/reset-password");
-            } else {
-            	System.out.println("false");
-                modelAndView.addObject("errorMessage", "Oops!  Your password reset link has expired.");
-               modelAndView.setViewName("redirect:http://localhost:4200/forgot-password");
-            }
-        } catch(RuntimeException e) {
-           modelAndView.addObject("errorMessage", "Oops!  This is an invalid password reset link.");
-           modelAndView.setViewName("redirect:http://localhost:4200/forgot-password");
-        }
-        return modelAndView;
-    }
-	
-	
-	@PostMapping(value = "/processResetPassword")
-    public ModelAndView setNewPassword(@RequestBody Map<String, String> requestParams, RedirectAttributes redir, HttpServletResponse response) {
-        
-        ConfirmationToken resetToken = confirmationTokenService.findByConfirmationToken(requestParams.get("resetToken"));
-        User resetUser = resetToken.getUser();
-        ModelAndView modelAndView = new ModelAndView();
-      try {
-           System.out.println("true");
-           System.out.println(resetToken.getConfirmationToken());
-            resetUser.setPassword(encoder.encode(requestParams.get("password")));
-            userService.save(resetUser);
-            
-            confirmationTokenService.deleteByConfirmationToken(resetToken.getConfirmationToken());
-          
-            //redir.addFlashAttribute("successMessage", "You have successfully reset your password. You may now login.");
-            //modelAndView.addObject("successMessage", "You have successfully reset your password. You may now login.");
-           modelAndView.setViewName("redirect:http://localhost:4200");
-            return modelAndView;
-        } catch (RuntimeException e){
-            modelAndView.addObject("errorMessage", "Oops!  This is an invalid password reset link.");
-            modelAndView.setViewName("redirect:http://localhost:4200/forgot-password");
-        }
-        return modelAndView;
-    }
-
 
 }
