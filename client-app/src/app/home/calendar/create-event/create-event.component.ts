@@ -28,7 +28,7 @@ import { AuthService } from 'src/app/auth/auth.service';
 export class CreateEventComponent implements OnInit {
   eventForm: FormGroup;
   eventData: CalEvent;
-  email = new FormControl("",[Validators.email]);
+  email = new FormControl();
   dateRangeArray: EventDate[] = [];
   primaryColor: string='';
   secondaryColor: string='';
@@ -50,7 +50,8 @@ export class CreateEventComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.calendars=this.calService.getCalendars().filter(cal => cal.createdBy.username === this.username);
+    this.username=this.authService.username;
+    this.calendars=this.calService.getCalendars().filter(cal => cal.createdBy === this.username);
     console.log(this.calendars);
     this.eventForm = new FormGroup({
       title: new FormControl(),
@@ -69,7 +70,6 @@ export class CreateEventComponent implements OnInit {
     this.defaultTime.setMinutes(0);
     this.defaultTime2.setHours(this.defaultTime2.getHours()+2);
     this.defaultTime2.setMinutes(0);
-    this.username=this.authService.username;
   }
 
   getErrorMessage() {
@@ -109,19 +109,20 @@ export class CreateEventComponent implements OnInit {
         description: eventFormValues.description,
         start: startDate,
         end: endDate,
-        recipients: [eventFormValues.email],
+        recipients: eventFormValues.email.split(','),
         location: eventFormValues.location,
         backgroundColor: this.primaryColor,
         borderColor: this.primaryColor,
         allDay: this.allDay
       };
     }else{
+      eventFormValues.endDate.setDate(eventFormValues.endDate.getDate()+1)
       this.obj = {
         calendarId: this.selectedCal,
         title: eventFormValues.title,
         description: eventFormValues.description,
         start: eventFormValues.startDate,
-        end: eventFormValues.endDate.setHours(eventFormValues.endDate.getHours()+1),
+        end: eventFormValues.endDate.toISOString(),
         recipients: [eventFormValues.email],
         location: eventFormValues.location,
         backgroundColor: this.primaryColor,

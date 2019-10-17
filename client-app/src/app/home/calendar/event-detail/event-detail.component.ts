@@ -12,6 +12,7 @@ import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material';
 export class EventDetailComponent implements OnInit {
   id:number;
   event: CalEvent;
+  newEnd: Date;
 
   constructor(private calService: CalendarService,
     private router: Router,
@@ -22,7 +23,11 @@ export class EventDetailComponent implements OnInit {
 
   ngOnInit() {
     this.event = this.data;
-    console.log(this.event);
+    if(this.event.allDay && this.event.end){
+      this.newEnd = this.event.end;
+      this.newEnd.setDate(this.event.end.getDate()-1);
+      console.log(this.newEnd);
+    }
   }
 
   close(){
