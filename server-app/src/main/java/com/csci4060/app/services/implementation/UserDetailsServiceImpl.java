@@ -102,7 +102,7 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
 
 	@Override
 	public Boolean existsByEmail(String email) {
-		return userRepo.existsByEmail(email);
+		return userRepo.existsByEmailIgnoreCase(email);
 	}
 
 }

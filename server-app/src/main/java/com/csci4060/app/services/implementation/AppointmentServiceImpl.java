@@ -1,6 +1,8 @@
 package com.csci4060.app.services.implementation;
 
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,20 +24,35 @@ public class AppointmentServiceImpl implements AppointmentService {
 
 	@Override
 	public List<Appointment> findAllByRecepients(User user) {
-		return appointmentRepo.findAllByRecepients(user)
-				.orElseThrow(() -> new RuntimeException("Fail! -> This user does not have any appointments."));
+
+		Optional<List<Appointment>> optAppointments = appointmentRepo.findAllByRecepients(user);
+
+		if (optAppointments.isPresent()) {
+			return optAppointments.get();
+		}
+		return null;
 	}
 
 	@Override
 	public Appointment findById(Long id) {
-		return appointmentRepo.findById(id)
-				.orElseThrow(() -> new RuntimeException("Fail! -> Appointment with the given ID not find."));
+
+		Optional<Appointment> optAppointment = appointmentRepo.findById(id);
+
+		if (optAppointment.isPresent()) {
+			return optAppointment.get();
+		}
+		return null;
 	}
 
 	@Override
 	public List<Appointment> findAllByCreatedBy(User user) {
-		return appointmentRepo.findAllByCreatedBy(user)
-				.orElseThrow(() -> new RuntimeException("Fail! -> This user has not created any appointments."));
+
+		Optional<List<Appointment>> optAppointments = appointmentRepo.findAllByCreatedBy(user);
+
+		if (optAppointments.isPresent()) {
+			return optAppointments.get();
+		}
+		return null;
 	}
 
 }

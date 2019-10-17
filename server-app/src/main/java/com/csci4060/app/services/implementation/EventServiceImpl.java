@@ -1,13 +1,14 @@
 package com.csci4060.app.services.implementation;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.csci4060.app.model.User;
 import com.csci4060.app.model.event.Event;
-import com.csci4060.app.repository.event.EventRepository;
+import com.csci4060.app.repository.eventRepo.EventRepository;
 import com.csci4060.app.services.EventService;
 
 @Service(value = "EventService")
@@ -23,20 +24,42 @@ public class EventServiceImpl implements EventService {
 
 	@Override
 	public List<Event> findAllByRecepients(User user) {
-		return eventRepo.findAllByRecepients(user)
-				.orElseThrow(() -> new RuntimeException("Fail! -> This user does not have any Events."));
+
+		Optional<List<Event>> optEvents = eventRepo.findAllByRecipients(user);
+		if (optEvents.isPresent()) {
+			return optEvents.get();
+		}
+		return null;
 	}
 
 	@Override
 	public Event findById(Long id) {
-		return eventRepo.findById(id)
-				.orElseThrow(() -> new RuntimeException("Fail! -> Event with the given ID not find."));
+
+		Optional<Event> optEvent = eventRepo.findById(id);
+		if (optEvent.isPresent()) {
+			return optEvent.get();
+		}
+		return null;
+
 	}
 
 	@Override
 	public List<Event> findAllByCreatedBy(User user) {
-		return eventRepo.findAllByCreatedBy(user)
-				.orElseThrow(() -> new RuntimeException("Fail! -> This user has not created any Events."));
+
+		Optional<List<Event>> optEvents = eventRepo.findAllByCreatedBy(user);
+		if (optEvents.isPresent()) {
+			return optEvents.get();
+		}
+		return null;
+	}
+
+	@Override
+	public Event findByTimeSlotId(Long timeSlotId) {
+		Optional<Event> optEvent = eventRepo.findByTimeSlotId(timeSlotId);
+		if (optEvent.isPresent()) {
+			return optEvent.get();
+		}
+		return null;
 	}
 
 }

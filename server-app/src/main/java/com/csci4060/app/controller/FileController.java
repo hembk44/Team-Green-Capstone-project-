@@ -31,8 +31,13 @@ import com.csci4060.app.configuration.fileStorage.FileReadException;
 import com.csci4060.app.model.APIresponse;
 import com.csci4060.app.model.UploadFileResponse;
 import com.csci4060.app.model.User;
+
 import com.csci4060.app.model.authentication.ConfirmationToken;
 import com.csci4060.app.services.ConfirmationTokenService;
+
+import com.csci4060.app.model.calendar.Calendar;
+import com.csci4060.app.services.CalendarService;
+
 import com.csci4060.app.services.EmailSenderService;
 import com.csci4060.app.services.FileReadService;
 import com.csci4060.app.services.FileStorageService;
@@ -62,6 +67,9 @@ public class FileController {
 	@Autowired
 	PasswordEncoder encoder;
 
+	@Autowired
+	CalendarService calendarService;
+
 	@PostMapping("/uploadStudents")
 	@PreAuthorize("hasRole('ADMIN')")
 	public APIresponse uploadFile(@RequestParam("file") MultipartFile file) throws IOException {
@@ -82,7 +90,11 @@ public class FileController {
 				if (!userService.existsByUsername(user.getUsername())) {
 					newUsersEmailList.add(user.getEmail());
 					userService.save(user);
-					
+          
+					calendarService.save(new Calendar("Main", null, null, user, true, true));
+					calendarService.save(new Calendar("Appointment", null, null, user, true, true));
+					calendarService.save(new Calendar("Shared Event", null, null, user, true, true));
+
 				}
 			}
 
@@ -96,9 +108,9 @@ public class FileController {
 				mailMessage.setFrom("ulmautoemail@gmail.com");
 				mailMessage.setText(
 						"Congratulations! You have been successfully registered to ULM Communication App. Your "
-						+ "username is your warhawks email address and your password is your cwid. Please change your "
-						+ "password as soon as possible to secure your account. Click on the following link to login "
-						+ "to your account.");
+								+ "username is your warhawks email address and your password is your cwid. Please change your "
+								+ "password as soon as possible to secure your account. Click on the following link to login "
+								+ "to your account.");
 
 				emailSenderService.sendEmail(mailMessage);
 			}
@@ -106,7 +118,7 @@ public class FileController {
 			UploadFileResponse response = new UploadFileResponse(fileName, fileDownloadUri, file.getContentType(),
 					file.getSize());
 
-			return new APIresponse(HttpStatus.OK.value(), "File was succesfully uploaded", response);
+			return new APIresponse(HttpStatus.CREATED.value(), "File was succesfully uploaded", response);
 		}
 
 		throw new FileReadException("The file is empty. Please upload a new file.");
