@@ -4,10 +4,7 @@ import java.time.Duration;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +20,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.ResourceAccessException;
 
 import com.csci4060.app.model.APIresponse;
-import com.csci4060.app.model.Role;
 import com.csci4060.app.model.User;
 import com.csci4060.app.model.appointment.Appointment;
 import com.csci4060.app.model.appointment.AppointmentDate;
@@ -33,10 +30,14 @@ import com.csci4060.app.model.appointment.AppointmentDummy;
 import com.csci4060.app.model.appointment.AppointmentTime;
 import com.csci4060.app.model.appointment.TimeSlotResponse;
 import com.csci4060.app.model.appointment.TimeSlots;
+import com.csci4060.app.model.calendar.Calendar;
+import com.csci4060.app.model.event.Event;
 import com.csci4060.app.services.AppointmentDateService;
 import com.csci4060.app.services.AppointmentService;
 import com.csci4060.app.services.AppointmentTimeService;
+import com.csci4060.app.services.CalendarService;
 import com.csci4060.app.services.EmailSenderService;
+import com.csci4060.app.services.EventService;
 import com.csci4060.app.services.TimeSlotsService;
 import com.csci4060.app.services.UserService;
 
@@ -62,6 +63,12 @@ public class AppointmentController {
 
 	@Autowired
 	private EmailSenderService emailSenderService;
+	
+	@Autowired
+	CalendarService calendarService;
+	
+	@Autowired
+	EventService eventService;
 
 	@PostMapping(path = "/set", consumes = "application/json")
 	@PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
@@ -70,17 +77,17 @@ public class AppointmentController {
 		List<User> recepientList = new ArrayList<User>();
 
 		List<String> emailFromDummy = appointmentDummy.getRecepients();
-		
+
 		List<String> recepientsEmailList = new ArrayList<String>();
-		
+
 		for (String each : emailFromDummy) {
 			User recepient = userService.findByEmail(each);
-			if(recepient != null) {
+			if (recepient != null) {
 				recepientList.add(recepient);
 				recepientsEmailList.add(each);
 			}
 		}
-		
+
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
 		String creatorUsername = "";
@@ -108,8 +115,17 @@ public class AppointmentController {
 
 				appointmentTimeService.save(time);
 
-				LocalTime sTime = LocalTime.parse(time.getStartTime(), DateTimeFormatter.ofPattern("hh:mma"));
-				LocalTime eTime = LocalTime.parse(time.getEndTime(), DateTimeFormatter.ofPattern("hh:mma"));
+				LocalTime sTime = LocalTime.parse(time.getStartTime(), DateTimeFormatter.ofPattern("hh:mm a"));
+				LocalTime eTime = LocalTime.parse(time.getEndTime(), DateTimeFormatter.ofPattern("hh:mm a"));
+
+				String result1 = LocalTime.parse(sTime.toString(), DateTimeFormatter.ofPattern("HH:mm"))
+						.format(DateTimeFormatter.ofPattern("hh:mm a"));
+				System.out.println("sTime is: " + result1);
+
+				String result2 = LocalTime.parse(eTime.toString(), DateTimeFormatter.ofPattern("HH:mm"))
+						.format(DateTimeFormatter.ofPattern("hh:mm a"));
+				System.out.println("sTime is: " + result2);
+
 				long elapsedMinutes = Math.abs(Duration.between(sTime, eTime).toMinutes());
 
 				long maxAppointment = elapsedMinutes / time.getInterv();
@@ -118,14 +134,20 @@ public class AppointmentController {
 
 				for (int i = 0; i < maxAppointment; i++) {
 					LocalTime slotEndTime = slotStartTime.plusMinutes(time.getInterv());
-					timeSlotsService.save(new TimeSlots(slotStartTime, slotEndTime, date, appointment, null));
+					String timeSlotStart = LocalTime
+							.parse(slotStartTime.toString(), DateTimeFormatter.ofPattern("HH:mm"))
+							.format(DateTimeFormatter.ofPattern("hh:mm a"));
+					String timeSlotEnd = LocalTime.parse(slotEndTime.toString(), DateTimeFormatter.ofPattern("HH:mm"))
+							.format(DateTimeFormatter.ofPattern("hh:mm a"));
+					timeSlotsService.save(new TimeSlots(timeSlotStart, timeSlotEnd, date, appointment, null));
 					slotStartTime = slotEndTime;
 				}
 
 			}
 		}
 
-		if(!recepientsEmailList.isEmpty()) {
+
+		if (!recepientsEmailList.isEmpty(){
 			SimpleMailMessage mailMessage = new SimpleMailMessage();
 
 			String[] emails = recepientsEmailList.toArray(new String[recepientsEmailList.size()]);
@@ -138,8 +160,8 @@ public class AppointmentController {
 							+ "Thank you!");
 
 			emailSenderService.sendEmail(mailMessage);
-		}
-		
+    }
+
 		return new APIresponse(HttpStatus.CREATED.value(), "Appointment created successfully", appointment);
 	}
 
@@ -199,7 +221,7 @@ public class AppointmentController {
 
 		Appointment appointment = appointmentService.findById(appointmentId);
 
-		List<TimeSlots> slotsFromAppointment = timeSlotsService.findByAppointment(appointment);
+		List<TimeSlots> slotsFromAppointment = timeSlotsService.findAllByAppointment(appointment);
 
 		List<TimeSlotResponse> timeSlotResponses = new ArrayList<TimeSlotResponse>();
 
@@ -222,7 +244,7 @@ public class AppointmentController {
 
 		Appointment appointment = appointmentService.findById(appointmentId);
 
-		List<TimeSlots> slotsFromAppointment = timeSlotsService.findByAppointment(appointment);
+		List<TimeSlots> slotsFromAppointment = timeSlotsService.findAllByAppointment(appointment);
 
 		List<TimeSlotResponse> timeSlotResponses = new ArrayList<TimeSlotResponse>();
 
@@ -248,9 +270,11 @@ public class AppointmentController {
 		return new APIresponse(HttpStatus.OK.value(), "Time slots successfully sent.", slotsFromAppointment);
 	}
 
-	@PostMapping(path = "timeslots/postSlot", produces = "application/json")
+
+	@PostMapping(path = "timeslots/postSlot/{timeSlotId}", produces = "application/json")
 	@PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
-	public APIresponse postSlots(@RequestBody TimeSlotResponse timeSlotResponse) {
+	public APIresponse postSlots(@PathVariable("timeSlotId") long id) {
+
 
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -262,9 +286,22 @@ public class AppointmentController {
 
 		User selectedBy = userService.findByUsername(username);
 
-		TimeSlots slotToRemove = timeSlotsService.findById(timeSlotResponse.getId());
+		TimeSlots slotToRemove = timeSlotsService.findById(id);
+		
+		if(slotToRemove == null) {
+			throw new ResourceAccessException("There is no timeslot with given id "+ id+ " in the database");
+		}
+	
 		slotToRemove.setSelectedBy(selectedBy);
 		timeSlotsService.save(slotToRemove);
+		
+		Event creatorsEvent = eventService.findByTimeSlotId(id);
+		
+		Calendar calendar = calendarService.findByNameAndCreatedBy("Appointment", selectedBy);
+		
+		calendar.addEvent(creatorsEvent);
+		
+		calendarService.save(calendar);
 
 		TimeSlotResponse response = new TimeSlotResponse(slotToRemove.getId(), slotToRemove.getStartTime(),
 				slotToRemove.getEndTime(), slotToRemove.getAppdates().getDate(), selectedBy.getName(),
@@ -272,11 +309,89 @@ public class AppointmentController {
 
 		return new APIresponse(HttpStatus.GONE.value(), "User has selected the timeslot.", response);
 	}
-	
-	@GetMapping(path = "calendar/user", produces = "application/json")
-	@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-	public APIresponse getCalendarAppointments()
-	{
+
+//	@GetMapping(path = "/sendToCalendar", produces = "application/json")
+//	@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+//	public APIresponse getCalendarAppointments() {
+//		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//
+//		String username = "";
+//
+//		if (principal instanceof UserDetails) {
+//			username = ((UserDetails) principal).getUsername();
+//		}
+//
+//		User currentUser = userService.findByUsername(username);
+//		Set<Role> role = currentUser.getRoles();
+//
+//		Boolean contains = false;
+//		Iterator<Role> value = role.iterator();
+//
+//		while (value.hasNext()) {
+//			Role role2 = (Role) value.next();
+//
+//			if (role2.getName().toString().equals("ROLE_USER")) {
+//				contains = true;
+//			}
+//
+//		}
+//
+//		if (contains) {
+//			List<TimeSlots> slotsToCalendar = timeSlotsService.findAllBySelectedBy(currentUser);
+//			List<TimeSlotResponse> slotResponses = new ArrayList<TimeSlotResponse>();
+//
+//			if (slotsToCalendar.size() == 0) {
+//				return new APIresponse(HttpStatus.OK.value(), "User doesnt have any appointments right now!", null);
+//			}
+//
+//			else {
+//				for (TimeSlots timeSlots : slotsToCalendar) {
+//					slotResponses.add(new TimeSlotResponse(timeSlots.getStartTime(), timeSlots.getEndTime(),
+//							timeSlots.getAppdates().getDate(), timeSlots.getAppointment().getName(),
+//							timeSlots.getAppointment().getDescription(),
+//							timeSlots.getAppointment().getCreatedBy().getName()));
+//
+//				}
+//				return new APIresponse(HttpStatus.OK.value(),
+//						"All  selected time slots from appointments successfully sent.", slotResponses);
+//			}
+//
+//		}
+//
+//		else {
+//			List<TimeSlots> slotsToCalendar = new ArrayList<TimeSlots>();
+//			List<TimeSlotResponse> slotResponses = new ArrayList<TimeSlotResponse>();
+//
+//			List<Appointment> appoi = appointmentService.findAllByCreatedBy(currentUser);
+//			for (Appointment appo : appoi) {
+//				List<TimeSlots> slots = timeSlotsService.findAllByAppointment(appo);
+//				slotsToCalendar.addAll(slots);
+//			}
+//
+//			if (slotsToCalendar.size() == 0) {
+//				return new APIresponse(HttpStatus.OK.value(), "User doesnt have any appointments right now!", null);
+//			}
+//
+//			else {
+//
+//				for (TimeSlots timeSlots : slotsToCalendar) {
+//					slotResponses.add(new TimeSlotResponse(timeSlots.getStartTime(), timeSlots.getEndTime(),
+//							timeSlots.getAppdates().getDate(), timeSlots.getAppointment().getName(),
+//							timeSlots.getAppointment().getDescription(),
+//							timeSlots.getAppointment().getCreatedBy().getName()));
+//
+//				}
+//				return new APIresponse(HttpStatus.OK.value(),
+//						"All  selected time slots from appointments successfully sent.", slotResponses);
+//			}
+//
+//		}
+//
+//	}
+
+	@PostMapping(path = "/sendToCalendar/{appointmentId}", produces = "application/json")
+	@PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
+	public APIresponse sendToCalendar(@PathVariable("appointmentId") long id) {
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
 		String username = "";
@@ -284,88 +399,44 @@ public class AppointmentController {
 		if (principal instanceof UserDetails) {
 			username = ((UserDetails) principal).getUsername();
 		}
-		
+
 		User currentUser = userService.findByUsername(username);
-		Set<Role> role = currentUser.getRoles();
+
+		Appointment appointment = appointmentService.findById(id);
 		
-		
-		
-		
-		Boolean contains = false;
-		Iterator<Role> value = role.iterator(); 
-		  
-        while (value.hasNext()) 
-        { 
-            Role role2 = (Role) value.next();
-           
-            if (role2.getName().toString().equals("ROLE_USER"))
-            {
-            	
-            	contains = true;
-            }
-            
-        } 
-		
-		
-		
-		if (contains)
-		{
-			List<TimeSlots> slotsToCalendar = timeSlotsService.findBySelectedBy(currentUser);
-			List<TimeSlotResponse> slotResponses =  new ArrayList<TimeSlotResponse>();
-			
-			if ( slotsToCalendar.size() == 0)
-			{
-				return new APIresponse(HttpStatus.OK.value(), "User doesnt have any appointments right now!", null);
-			}
-			
-			else
-			{
-				
-				for (TimeSlots timeSlots: slotsToCalendar)
-				{
-					slotResponses.add(new TimeSlotResponse(timeSlots.getStartTime(), timeSlots.getEndTime(), timeSlots.getAppdates().getDate(), timeSlots.getAppointment().getName(),timeSlots.getAppointment().getDescription(), timeSlots.getAppointment().getCreatedBy().getName()));
-					
-				}
-				return new APIresponse(HttpStatus.OK.value(), "All  selected time slots from appointments successfully sent.", slotResponses);
-			}
-			
+		if(appointment == null) {
+			throw new ResourceAccessException("There is no appointment with id "+id+" in the database");
 		}
 		
-		else {
-			List<TimeSlots> slotsToCalendar = new ArrayList<TimeSlots>();
-			List<TimeSlotResponse> slotResponses =  new ArrayList<TimeSlotResponse>();
-			
-			List<Appointment> appoi = appointmentService.findAllByCreatedBy(currentUser);
-			for( Appointment appo : appoi)
-			{
-				List<TimeSlots> slots = timeSlotsService.findByAppointment(appo);
-				slotsToCalendar.addAll(slots);
-			}
-			
-			if ( slotsToCalendar.size() == 0)
-			{
-				return new APIresponse(HttpStatus.OK.value(), "User doesnt have any appointments right now!", null);
-			}
-			
-			else
-			{
-				
-				for (TimeSlots timeSlots: slotsToCalendar)
-				{
-					slotResponses.add(new TimeSlotResponse(timeSlots.getStartTime(), timeSlots.getEndTime(), timeSlots.getAppdates().getDate(), timeSlots.getAppointment().getName(),timeSlots.getAppointment().getDescription(), timeSlots.getAppointment().getCreatedBy().getName()));
-					
-				}
-				return new APIresponse(HttpStatus.OK.value(), "All  selected time slots from appointments successfully sent.", slotResponses);
-			}
-			
-			
-			
+		List<TimeSlots> timeSlots = timeSlotsService.findAllByAppointment(appointment);
+
+		List<Event> eventList = new ArrayList<Event>();
+
+		Calendar calendar = calendarService.findByNameAndCreatedBy("Appointment", currentUser);
 		
+		System.out.println(appointment);
+		
+		for (TimeSlots slot : timeSlots) {
+
+			AppointmentDate appointmentDate = slot.getAppdates();
+
+			String startTime = appointmentDate.getDate() + " " + slot.getStartTime();
+			System.out.println(startTime);
+			
+			String endTime = appointmentDate.getDate() + " " + slot.getEndTime();
+			System.out.println(endTime);
+			
+			Event event = new Event(appointment.getName(), appointment.getDescription(), appointment.getLocation(),
+					null, startTime, endTime, currentUser, false, "", "",slot.getId());
+			
+			eventList.add(event);
+			System.out.println(event);
+			eventService.save(event);
+			calendar.addEvent(event);
+			calendarService.save(calendar);
 		}
-		
-		
-		
-		
-		
+
+		return new APIresponse(HttpStatus.CREATED.value(), "Appointment has been successfully saved to calendar", eventList);
+
 	}
 }

@@ -56,15 +56,14 @@ import {
   DialogDateTimeIntervalDialog,
   DialogTimeIntervalDialog
 } from "./home/appointment/appointment-create/appointment-create.component";
+
+import { CreateEventComponent, EventTimeDialog, EventTimeIntervalDialog } from "./home/calendar/create-event/create-event.component";
+
 import { AppointmentStartComponent } from "./home/appointment/appointment-types/appointment-start/appointment-start.component";
 import { AppointmentSentComponent } from "./home/appointment/appointment-types/appointment-sent/appointment-sent.component";
 import { AppointmentReceivedComponent } from "./home/appointment/appointment-types/appointment-received/appointment-received.component";
 
-import {
-  CreateEventComponent,
-  EventTimeDialog,
-  EventTimeIntervalDialog
-} from "./home/calendar/create-event/create-event.component";
+
 import { CalendarListComponent } from "./home/calendar/calendar-list/calendar-list.component";
 import { FullCalendarModule } from "@fullcalendar/angular";
 import {
@@ -79,10 +78,12 @@ import { LoginComponent } from "./login/login.component";
 import { RegisterComponent } from "./register/register.component";
 import { LoadingSpinnerComponent } from "./loading-spinner/loading-spinner.component";
 import { AuthInterceptor } from "./auth/auth-interceptor";
-import { EventDetailComponent } from "./home/calendar/event-detail/event-detail.component";
+import { EventDetailComponent, EventDeleteConfirm } from "./home/calendar/event-detail/event-detail.component";
 import { CalendarCreateComponent } from "./home/calendar/calendar-create/calendar-create.component";
 import { GroupComponent } from "./home/group/group.component";
 import { ShareCalendarComponent } from "./home/calendar/share-calendar/share-calendar.component";
+import { EditEventComponent } from './home/calendar/create-event/edit-event/edit-event.component';
+
 import { RegisterUsersComponent } from "./home/register-users/register-users.component";
 
 @NgModule({
@@ -119,6 +120,8 @@ import { RegisterUsersComponent } from "./home/register-users/register-users.com
     AppointmentReceivedComponent,
     GroupComponent,
     ShareCalendarComponent,
+    EditEventComponent,
+    EventDeleteConfirm
     RegisterUsersComponent
   ],
   imports: [
@@ -168,7 +171,8 @@ import { RegisterUsersComponent } from "./home/register-users/register-users.com
     CalendarCreateComponent,
     CalRename,
     DeleteConfirm,
-    ShareCalendarComponent
+    ShareCalendarComponent,
+    EventDeleteConfirm
   ],
   providers: [
     MatDatepickerModule,

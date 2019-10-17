@@ -30,11 +30,13 @@ export class CreateEventComponent implements OnInit {
   eventData: CalEvent;
   email = new FormControl("",[Validators.email]);
   dateRangeArray: EventDate[] = [];
+
   primaryColor: string='';
   secondaryColor: string='';
   allDay=false;
   calendars: Calendar[];
   obj: Object;
+
   username: string;
   selectedCal: number;
   defaultTime: Date = new Date();
@@ -46,6 +48,9 @@ export class CreateEventComponent implements OnInit {
     private authService: AuthService,
     public dialog: MatDialog,
     private dataStorage: DataStorageService,
+    private eventService: EventService,
+    private ref: MatDialogRef<CreateEventComponent>
+
     private calService: CalendarService,
   ) {}
 
@@ -96,6 +101,31 @@ export class CreateEventComponent implements OnInit {
 
   onSubmit() {
     const eventFormValues = this.eventForm.value;
+    const eventDate = this.dateRangeArray[0].date;
+    const eventstart = this.dateRangeArray[0].eventtimes[0].startTime;
+    const eventEnd = this.dateRangeArray[0].eventtimes[0].endTime;
+    const eventtimes = new EventTime(eventstart, eventEnd);
+    const eventdaterange = new EventDate(eventDate, [eventtimes]);
+    const tempid = 8;
+
+    console.log(eventdaterange);
+
+    const obj = {
+      name: eventFormValues.title,
+      description: eventFormValues.description,
+      eventdates: [eventdaterange],
+      recepients: [eventFormValues.email],
+      location: eventFormValues.location
+    };
+
+    this.dataStorage.storeEvent(obj).subscribe(result => {
+      if (result) {
+        this.dataStorage.fetchEvents();
+      }
+    });
+
+    this.router.navigate(["home/calendar"]);
+  }
     console.log(eventFormValues.startDate.toLocaleDateString());
     console.log(this.primaryColor);
     console.log(this.secondaryColor);
@@ -111,8 +141,8 @@ export class CreateEventComponent implements OnInit {
         end: endDate,
         recipients: [eventFormValues.email],
         location: eventFormValues.location,
-        // backgroundColor: this.primaryColor,
-        // borderColor: this.primaryColor,
+        backgroundColor: this.primaryColor,
+        borderColor: this.primaryColor,
         allDay: this.allDay
       };
     }else{
@@ -124,8 +154,8 @@ export class CreateEventComponent implements OnInit {
         end: eventFormValues.endDate.setHours(eventFormValues.endDate.getHours()+1),
         recipients: [eventFormValues.email],
         location: eventFormValues.location,
-        // backgroundColor: this.primaryColor,
-        // borderColor: this.primaryColor,
+        backgroundColor: this.primaryColor,
+        borderColor: this.primaryColor,
         allDay: this.allDay
       };
     }

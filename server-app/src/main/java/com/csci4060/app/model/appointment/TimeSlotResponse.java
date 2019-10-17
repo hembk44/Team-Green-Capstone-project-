@@ -1,14 +1,13 @@
 package com.csci4060.app.model.appointment;
 
-import java.time.LocalTime;
 import lombok.Data;
 
 @Data
 public class TimeSlotResponse {
 
 	private Long id;
-	private LocalTime startTime;
-	private LocalTime endTime;
+	private String startTime;
+	private String endTime;
 	private String date;
 	
 	private String selectorName;
@@ -17,7 +16,7 @@ public class TimeSlotResponse {
 	private String appointmentDescription;
 	private String appointmentCreatorName;
 	
-	public TimeSlotResponse(Long id, LocalTime startTime, LocalTime endTime, String date, String selectorName, String selectorEmail) {
+	public TimeSlotResponse(Long id, String startTime, String endTime, String date, String selectorName, String selectorEmail) {
 		super();
 		this.id = id;
 		this.startTime = startTime;
@@ -31,7 +30,7 @@ public class TimeSlotResponse {
 		super();
 	}
 
-	public TimeSlotResponse(Long id, LocalTime startTime, LocalTime endTime, String date) {
+	public TimeSlotResponse(Long id, String startTime, String endTime, String date) {
 		super();
 		this.id = id;
 		this.startTime = startTime;
@@ -39,7 +38,7 @@ public class TimeSlotResponse {
 		this.date = date;
 	}
 
-	public TimeSlotResponse(LocalTime startTime, LocalTime endTime, String date, String appointmentName,
+	public TimeSlotResponse(String startTime, String endTime, String date, String appointmentName,
 			String appointmentDescription, String appointmentCreator) {
 		super();
 		this.startTime = startTime;

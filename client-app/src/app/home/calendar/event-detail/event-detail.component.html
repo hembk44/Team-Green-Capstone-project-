@@ -16,9 +16,9 @@
     </div>
     <p><b>Location:</b> {{ event.extendedProps.location }}</p>
     <p><b>Description:</b> {{ event.extendedProps.description }}</p>
-    <!-- <button mat-raised-button [matMenuTriggerFor]="menu" class="options-button">Options</button> 
+    <button mat-raised-button [matMenuTriggerFor]="menu" class="options-button">Options</button> 
     <mat-menu #menu>
-        <button mat-menu-item>Edit Event</button>
-        <button mat-menu-item>Delete</button>
-    </mat-menu> -->
+        <button mat-menu-item (click)="editEvent()">Edit Event</button>
+        <button mat-menu-item (click)="deleteEvent()">Delete</button>
+    </mat-menu>
 </div>

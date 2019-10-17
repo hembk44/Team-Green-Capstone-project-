@@ -23,7 +23,7 @@ public class Event {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-
+	
 	@NotNull
 	String title;
 	
@@ -35,6 +35,9 @@ public class Event {
 	@JsonIgnore
 	@ManyToMany(targetEntity = User.class, fetch = FetchType.LAZY)
 	List<User> recipients;
+//	
+//	@ManyToMany(mappedBy = "events")
+//	List<Calendar> calendars =new ArrayList<>();
 	
 	@NotNull
 	String start;
@@ -47,9 +50,14 @@ public class Event {
 	User createdBy;
 	
 	Boolean allDay;
-
 	
-	public Event(String title, String description, String location, List<User> recipients, String start, String end, User createdBy, Boolean allDay) {
+	String borderColor;
+	
+	String backgroundColor;
+	
+	Long timeSlotId;
+	
+	public Event(String title, String description, String location, List<User> recipients, String start, String end, User createdBy, Boolean allDay, String borderColor, String backgroundColor) {
 		this.title = title;
 		this.description = description;
 		this.location = location;
@@ -58,10 +66,28 @@ public class Event {
 		this.end = end;
 		this.createdBy = createdBy;
 		this.allDay = allDay;
+		this.borderColor = borderColor;
+		this.backgroundColor = backgroundColor;
 	}
 
 	public Event() {
 		super();
+	}
+
+	public Event(String title, String description, String location, List<User> recipients,String start, String end, User createdBy, Boolean allDay, String borderColor,
+			String backgroundColor, Long timeSlotId) {
+		super();
+		this.title = title;
+		this.description = description;
+		this.location = location;
+		this.recipients = recipients;
+		this.start = start;
+		this.end = end;
+		this.createdBy = createdBy;
+		this.allDay = allDay;
+		this.borderColor = borderColor;
+		this.backgroundColor = backgroundColor;
+		this.timeSlotId = timeSlotId;
 	}
 	
 	

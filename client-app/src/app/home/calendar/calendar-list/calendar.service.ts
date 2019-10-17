@@ -5,6 +5,31 @@ import { Subject } from 'rxjs/internal/Subject';
 
 @Injectable()
 export class CalendarService{
+
+    calendars: Calendar[]=[];
+    //list of calendars for testing
+    // calendars: Calendar[] = [
+    //     {
+    //         users: ['moorea1'],
+    //         name: 'main',
+    //         createdBy: 'moorea1',
+    //         shown:true
+    //     },
+    //     {
+    //         users: ['moorea1'],
+    //         name: 'appointments',
+    //         createdBy: 'moorea1',
+    //         shown:true
+    //     },
+    //     {
+    //         users: ['moorea1'],
+    //         name: 'CSCI4060',
+    //         createdBy: 'moorea1',
+    //         shown:false
+    //     }
+    // ];
+
+  
     eventsChanged = new Subject<CalEvent[]>();
     newCals: Calendar[] = [];
     calendars: Calendar[]=[];
@@ -123,4 +148,10 @@ export class CalendarService{
     addEvent(event: CalEvent){
         this.events.push(event);
     }
+
+    getEventCal(event: CalEvent){
+        const cal = this.calendars.find(calendar => calendar.events.includes(event));
+        return cal.id;
+    }
+
 }
