@@ -31,6 +31,7 @@ import com.csci4060.app.model.User;
 import com.csci4060.app.model.appointment.Appointment;
 import com.csci4060.app.model.appointment.AppointmentDate;
 import com.csci4060.app.model.appointment.AppointmentDummy;
+import com.csci4060.app.model.appointment.AppointmentResponse;
 import com.csci4060.app.model.appointment.AppointmentTime;
 import com.csci4060.app.model.appointment.TimeSlotResponse;
 import com.csci4060.app.model.appointment.TimeSlots;
@@ -150,7 +151,10 @@ public class AppointmentController {
 			}
 		}
 
-		if (!recepientsEmailList.isEmpty()) {
+
+
+		if (!recepientsEmailList.isEmpty()){
+
 			SimpleMailMessage mailMessage = new SimpleMailMessage();
 
 			String[] emails = recepientsEmailList.toArray(new String[recepientsEmailList.size()]);
@@ -183,8 +187,29 @@ public class AppointmentController {
 		User user = userService.findByUsername(username);
 
 		List<Appointment> appointments = appointmentService.findAllByCreatedBy(user);
+		
+		List<AppointmentResponse> allAppointments = new ArrayList<AppointmentResponse>();
+		
+		for (Appointment app: appointments)
+		{
+			
+			
+			List<String> responseDate = new ArrayList<String>();
+			for(AppointmentDate date: app.getAppdates())
+			{
+				responseDate.add(date.getDate());
+				
+			}
+			
+			allAppointments.add(new AppointmentResponse(app.getId(), app.getName(), app.getDescription(), responseDate));
+			
+			
+		}
+		
+		
+		
 
-		return new APIresponse(HttpStatus.OK.value(), "All appointments successfully sent.", appointments);
+		return new APIresponse(HttpStatus.OK.value(), "All appointments successfully sent.", allAppointments);
 
 	}
 
@@ -203,8 +228,26 @@ public class AppointmentController {
 		User user = userService.findByUsername(username);
 
 		List<Appointment> appointments = appointmentService.findAllByRecepients(user);
+		
+		List<AppointmentResponse> allAppointments = new ArrayList<AppointmentResponse>();
+		
+		for (Appointment app: appointments)
+		{
+			
+			
+			List<String> responseDate = new ArrayList<String>();
+			for(AppointmentDate date: app.getAppdates())
+			{
+				responseDate.add(date.getDate());
+				
+			}
+			
+			allAppointments.add(new AppointmentResponse(app.getId(), app.getName(), app.getDescription(), responseDate));
+			
+			
+		}
 
-		return new APIresponse(HttpStatus.OK.value(), "All appointments successfully sent.", appointments);
+		return new APIresponse(HttpStatus.OK.value(), "All appointments successfully sent.", allAppointments);
 
 	}
 
@@ -232,7 +275,7 @@ public class AppointmentController {
 
 			if (slots.getSelectedBy() == null) {
 				timeSlotResponses.add(new TimeSlotResponse(slots.getId(), slots.getStartTime(), slots.getEndTime(),
-						slots.getAppdates().getDate()));
+						slots.getAppdates().getDate(), appointment.getName(), appointment.getDescription(), appointment.getCreatedBy().getName()));
 			} else if (slots.getSelectedBy() == user) {
 				return new APIresponse(HttpStatus.OK.value(), "User has already selected a slot.", null);
 			}
@@ -266,11 +309,11 @@ public class AppointmentController {
 			}
 
 			timeSlotResponses.add(new TimeSlotResponse(slots.getId(), slots.getStartTime(), slots.getEndTime(),
-					slots.getAppdates().getDate(), selectorName, selectorEmail));
+					slots.getAppdates().getDate(), selectorName, selectorEmail, appointment.getName(), appointment.getDescription(), appointment.getCreatedBy().getName()));
 
 		}
 
-		return new APIresponse(HttpStatus.OK.value(), "Time slots successfully sent.", slotsFromAppointment);
+		return new APIresponse(HttpStatus.OK.value(), "Time slots successfully sent.", timeSlotResponses);
 	}
 
 	@PostMapping(path = "timeslots/postSlot/{timeSlotId}", produces = "application/json")
@@ -446,4 +489,74 @@ public class AppointmentController {
 		return new APIresponse(HttpStatus.CREATED.value(), "Appointment has been successfully saved to calendar", eventList);
 
 	}
+	
+	@GetMapping(path = "/getScheduledAppointments", produces = "application/json")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('PM')")
+	public APIresponse scheduledAppointmentsByUser()
+	{
+		
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = "";
+        if (principal instanceof UserDetails) {
+			username = ((UserDetails) principal).getUsername();
+		}
+		User currentUser = userService.findByUsername(username);
+		
+		
+		
+		List<TimeSlots> allSlotsFromAppointment = new ArrayList<TimeSlots>();
+		for(Appointment app: appointmentService.findAllByCreatedBy(currentUser))
+		{
+			 allSlotsFromAppointment.addAll(timeSlotsService.findAllByAppointment(app));
+		}
+		
+		
+		List<TimeSlotResponse> slotResponses =  new ArrayList<TimeSlotResponse>();
+		for (TimeSlots slots: allSlotsFromAppointment)
+		{
+			if (slots.getSelectedBy() != null)
+			{
+				slotResponses.add(new TimeSlotResponse(slots.getId(), slots.getStartTime(), slots.getEndTime(),
+						slots.getAppdates().getDate(), slots.getSelectedBy().getName(),slots.getSelectedBy().getEmail(), slots.getAppointment().getName(), slots.getAppointment().getDescription(), slots.getAppointment().getCreatedBy().getName()));
+			}
+		}
+		return new APIresponse(HttpStatus.OK.value(), "All  selected time slots from appointments successfully sent.", slotResponses);
+
+	}
+	
+	
+	@GetMapping(path = "/getScheduledAppointmentsUser", produces = "application/json")
+	@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+	public APIresponse scheduledAppointmentsForUser()
+	{
+		
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = "";
+        if (principal instanceof UserDetails) {
+			username = ((UserDetails) principal).getUsername();
+		}
+		User currentUser = userService.findByUsername(username);
+		
+		
+		
+		List<TimeSlots> allSlotsFromAppointment = new ArrayList<TimeSlots>();
+		for(Appointment app: appointmentService.findAllByRecepients(currentUser))
+		{
+			 allSlotsFromAppointment.addAll(timeSlotsService.findAllByAppointment(app));
+		}
+		
+		
+		List<TimeSlotResponse> slotResponses =  new ArrayList<TimeSlotResponse>();
+		for (TimeSlots slots: allSlotsFromAppointment)
+		{
+			if (slots.getSelectedBy() == currentUser)
+			{
+				slotResponses.add(new TimeSlotResponse(slots.getId(), slots.getStartTime(), slots.getEndTime(),
+						slots.getAppdates().getDate(), slots.getSelectedBy().getName(),slots.getSelectedBy().getEmail(), slots.getAppointment().getName(), slots.getAppointment().getDescription(), slots.getAppointment().getCreatedBy().getName()));
+			}
+		}
+		return new APIresponse(HttpStatus.OK.value(), "All  selected time slots from appointments successfully sent.", slotResponses);
+
+	}
+	
 }

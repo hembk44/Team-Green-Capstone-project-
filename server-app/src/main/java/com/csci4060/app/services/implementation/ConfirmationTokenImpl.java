@@ -27,5 +27,20 @@ public class ConfirmationTokenImpl implements ConfirmationTokenService{
 	public ConfirmationToken save(ConfirmationToken token) {
 		return confirmationTokenRepo.save(token);
 	}
+	
+	@Override
+	public ConfirmationToken findByUser(User user)
+	{
+		return confirmationTokenRepo.findByUser(user)
+		.orElseThrow(() -> new RuntimeException("Fail! -> The confirmation token doesn not exists. Please try again."));
+	}
+	
+	@Override
+	public void delete(ConfirmationToken token) {
+		confirmationTokenRepo.delete(token);
+	}
+	
+
+	
 
 }

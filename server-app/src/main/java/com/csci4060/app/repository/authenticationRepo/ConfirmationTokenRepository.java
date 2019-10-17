@@ -9,4 +9,7 @@ import com.csci4060.app.model.authentication.ConfirmationToken;
 public interface ConfirmationTokenRepository extends JpaRepository<ConfirmationToken, String>{
 	Optional<ConfirmationToken> findByConfirmationToken(String confirmationToken);
 
+	Optional<ConfirmationToken> findByUser(User user);
+	void delete(ConfirmationToken token); 
+
 }
