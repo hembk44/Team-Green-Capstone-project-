@@ -18,6 +18,7 @@ import { DialogDateTimeIntervalDialog } from "../../appointment/appointment-crea
 import { EventDate } from "../event-date.model";
 import { TimeInterval } from "../../appointment/appointment-model/time-interval.model";
 import { EventTime } from "../event-times.model";
+import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
   selector: "app-create-event",
@@ -26,44 +27,54 @@ import { EventTime } from "../event-times.model";
 })
 export class CreateEventComponent implements OnInit {
   eventForm: FormGroup;
-  //calendars: Calendar[];
   eventData: CalEvent;
-  email = new FormControl("", [Validators.email]);
+  email = new FormControl("",[Validators.email]);
   dateRangeArray: EventDate[] = [];
-<<<<<<< HEAD
-=======
+
   primaryColor: string='';
   secondaryColor: string='';
   allDay=false;
+  calendars: Calendar[];
   obj: Object;
->>>>>>> rohan/beta-demo
+
+  username: string;
+  selectedCal: number;
+  defaultTime: Date = new Date();
+  defaultTime2: Date = new Date;
 
   constructor(
     private router: Router,
     private formBuilder: FormBuilder,
+    private authService: AuthService,
     public dialog: MatDialog,
     private dataStorage: DataStorageService,
     private eventService: EventService,
-<<<<<<< HEAD
     private ref: MatDialogRef<CreateEventComponent>
-=======
->>>>>>> rohan/beta-demo
+
+    private calService: CalendarService,
   ) {}
 
   ngOnInit() {
+    this.calendars=this.calService.getCalendars().filter(cal => cal.createdBy.username === this.username);
+    console.log(this.calendars);
     this.eventForm = new FormGroup({
       title: new FormControl(),
-      description: new FormControl(),
+      description: new FormControl(""),
       location: new FormControl(),
       email: this.email,
-      startDate: new FormControl(),
+      startDate: new FormControl(new Date()),
       startTime: new FormControl(),
-      endDate: new FormControl(),
+      endDate: new FormControl(new Date()),
       endTime: new FormControl(),
       primary: new FormControl(),
-      secondary: new FormControl(),
-      allDay: new FormControl()
+      allDay: new FormControl(),
+      calendar: new FormControl()
     });
+    this.defaultTime.setHours(this.defaultTime.getHours()+1);
+    this.defaultTime.setMinutes(0);
+    this.defaultTime2.setHours(this.defaultTime2.getHours()+2);
+    this.defaultTime2.setMinutes(0);
+    this.username=this.authService.username;
   }
 
   getErrorMessage() {
@@ -90,7 +101,6 @@ export class CreateEventComponent implements OnInit {
 
   onSubmit() {
     const eventFormValues = this.eventForm.value;
-<<<<<<< HEAD
     const eventDate = this.dateRangeArray[0].date;
     const eventstart = this.dateRangeArray[0].eventtimes[0].startTime;
     const eventEnd = this.dateRangeArray[0].eventtimes[0].endTime;
@@ -116,7 +126,6 @@ export class CreateEventComponent implements OnInit {
 
     this.router.navigate(["home/calendar"]);
   }
-=======
     console.log(eventFormValues.startDate.toLocaleDateString());
     console.log(this.primaryColor);
     console.log(this.secondaryColor);
@@ -125,41 +134,39 @@ export class CreateEventComponent implements OnInit {
 
     if(!this.allDay){
       this.obj = {
-        name: eventFormValues.title,
+        calendarId: this.selectedCal,
+        title: eventFormValues.title,
         description: eventFormValues.description,
         start: startDate,
         end: endDate,
-        email: [eventFormValues.email],
+        recipients: [eventFormValues.email],
         location: eventFormValues.location,
-        colors: {
-          primary: this.primaryColor,
-          secondary: this.secondaryColor
-        },
+        backgroundColor: this.primaryColor,
+        borderColor: this.primaryColor,
         allDay: this.allDay
       };
     }else{
       this.obj = {
-        name: eventFormValues.title,
+        calendarId: this.selectedCal,
+        title: eventFormValues.title,
         description: eventFormValues.description,
-        start: eventFormValues.startDate.toString(),
-        end: eventFormValues.endDate.toString(),
-        email: [eventFormValues.email],
+        start: eventFormValues.startDate,
+        end: eventFormValues.endDate.setHours(eventFormValues.endDate.getHours()+1),
+        recipients: [eventFormValues.email],
         location: eventFormValues.location,
-        colors: {
-          primary: this.primaryColor,
-          secondary: this.secondaryColor
-        },
+        backgroundColor: this.primaryColor,
+        borderColor: this.primaryColor,
         allDay: this.allDay
       };
     }
 
     console.log(this.obj);
 
-    // this.dataStorage.storeEvent(obj).subscribe(result => {
-    //   if (result) {
-    //     this.dataStorage.fetchEvents();
-    //   }
-    // });
+    this.dataStorage.storeEvent(this.obj).subscribe(result => {
+      if (result) {
+        this.dataStorage.fetchCalendars();
+      }
+    });
 
     this.router.navigate(["home/calendar"]);
   }
@@ -169,9 +176,12 @@ export class CreateEventComponent implements OnInit {
   setSecondary(color:string){
     this.secondaryColor=color;
   }
->>>>>>> rohan/beta-demo
   onNoClick(){
     this.router.navigate(["home/calendar"]);
+  }
+  selectCalendar(id: number){
+    this.selectedCal = id;
+    console.log(this.selectedCal);
   }
 }
 

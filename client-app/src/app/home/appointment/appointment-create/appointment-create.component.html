@@ -15,15 +15,29 @@
     ></textarea>
   </mat-form-field>
 
-  <mat-form-field>
-    <input
-      matInput
-      placeholder="Enter your email"
-      formControlName="email"
-      required
-    />
-    <mat-error *ngIf="email.invalid">{{ getErrorMessage() }}</mat-error>
-  </mat-form-field>
+  <mat-toolbar color="primary">
+    <mat-toolbar-row>
+      <mat-form-field>
+        <input
+          matInput
+          placeholder="Enter Recepient's email"
+          formControlName="email"
+          required
+        />
+        <mat-error *ngIf="email.invalid">{{ getErrorMessage() }}</mat-error>
+      </mat-form-field>
+      <span class="example-spacer"></span>
+      <button
+        mat-button
+        type="button"
+        class="primary"
+        matTooltip="click to add emails"
+        (click)="addEmails()"
+      >
+        Add emails
+      </button>
+    </mat-toolbar-row>
+  </mat-toolbar>
 
   <mat-toolbar>
     <mat-toolbar-row>
@@ -54,7 +68,9 @@
   <mat-toolbar>
     <mat-toolbar-row>
       <span class="example-spacer"></span>
-      <button type="button" mat-raised-button color="warn">Cancel</button>
+      <button mat-raised-button color="warn" (click)="cancel()">
+        Cancel
+      </button>
       &nbsp; &nbsp;
       <button type="submit" mat-raised-button class="primary">
         Create Appointment

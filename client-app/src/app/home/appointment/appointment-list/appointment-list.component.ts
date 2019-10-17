@@ -42,6 +42,6 @@ export class AppointmentListComponent implements OnInit {
     }
   }
   create() {
-    this.router.navigate(["home/appointment/type/create"]);
+    this.router.navigate(["home/appointment/sent/create"]);
   }
 }

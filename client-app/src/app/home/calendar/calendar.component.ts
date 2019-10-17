@@ -11,13 +11,19 @@ import { EventService } from "./events.service";
 import { Router } from "@angular/router";
 import { CompatibleEvent } from './compatible-events.model';
 import { DataStorageService } from '../shared/data-storage.service';
+import { EventInput } from '@fullcalendar/core';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import timeGridPlugin from '@fullcalendar/timegrid';
+import listPlugin from '@fullcalendar/list';
 import { AuthService } from 'src/app/auth/auth.service';
 import { MatDialog } from '@angular/material/dialog';
 import { CreateEventComponent } from './create-event/create-event.component';
-<<<<<<< HEAD
-=======
+
 import { CalendarService } from './calendar-list/calendar.service';
->>>>>>> rohan/beta-demo
+
+import { Subscription } from 'rxjs/internal/Subscription';
+import { EventDetailComponent } from './event-detail/event-detail.component';
+import { CalendarCreateComponent } from './calendar-create/calendar-create.component';
 
 @Component({
   selector: "app-calendar",
@@ -30,12 +36,8 @@ export class CalendarComponent implements OnInit {
     private dataStorage: DataStorageService, 
     private eventService: EventService,
     private authService: AuthService,
-<<<<<<< HEAD
-    private dialog: MatDialog) {}
-=======
     private dialog: MatDialog,
     private calService: CalendarService) {}
->>>>>>> rohan/beta-demo
 
   viewDate: Date;
   view: CalendarView = CalendarView.Month;
@@ -43,12 +45,24 @@ export class CalendarComponent implements OnInit {
   activeDayIsOpen: boolean = false;
   role = this.authService.user;
   panelOpen=false;
-
-  calEvents: CalEvent[]=[];//list of events
-  compatEvents: CalEvent[]=[];
+  subscription: Subscription;
+  calendarPlugins = [dayGridPlugin,timeGridPlugin,listPlugin];
+  weekends: boolean;
+  compatEvents=[];
   //apptEvents: any[] = [];
 
   ngOnInit() {
+    this.dataStorage.fetchCalendars();
+    this.dataStorage.isLoading.subscribe(loading => {
+      if(!loading){
+        this.compatEvents=this.calService.getEvents();
+        console.log(this.compatEvents);
+        for(let event of this.compatEvents){
+          event.start = new Date(event.start);
+          event.end = new Date(event.end);
+        }
+      }
+    })
     this.viewDate = new Date();
     this.compatEvents = this.calService.getEvents();
     // this.dataStorage.fetchEvents();
@@ -73,7 +87,6 @@ export class CalendarComponent implements OnInit {
     // });
     //console.log(this.compatEvents);
     //this.dataStorage.fetchUserAppointmentForCal();
-<<<<<<< HEAD
     this.dataStorage.isLoading.subscribe(loading=>{
       if(!loading){
         console.log('getting shit from db');
@@ -99,7 +112,6 @@ export class CalendarComponent implements OnInit {
     })
     
     console.log(this.compatEvents);
-=======
     // this.dataStorage.isLoading.subscribe(loading=>{
     //   if(!loading){
     //     this.apptEvents = this.dataStorage.appointmentLists;
@@ -120,8 +132,15 @@ export class CalendarComponent implements OnInit {
     //     this.compatEvents.push(ev);
     //   }
     // })
->>>>>>> rohan/beta-demo
+
+    this.subscription = this.calService.eventsChanged.subscribe(
+      (events: CalEvent[]) => {
+        this.compatEvents = events;
+        console.log(this.compatEvents);
+      }
+    );
   }
+
 
   //changes view of calendar to day, week, month
   setView(view: CalendarView) {
@@ -135,21 +154,33 @@ export class CalendarComponent implements OnInit {
     }
   }
 
-  eventClicked(event: CompatibleEvent) {
+  eventClicked(event: CalEvent) {
+    this.dialog.open(EventDetailComponent, {
+      width: "400px",
+      data: event
+    })
     console.log(event);
+    // this.router.navigate(["home/event", event.id]);
   }
 
   // navigates to event creation form
   createEvent() {
-<<<<<<< HEAD
     const dialogRef = this.dialog.open(CreateEventComponent, {
       width:"600px"
     })
-=======
     // const dialogRef = this.dialog.open(CreateEventComponent, {
     //   width:"600px"
     // })
     this.router.navigate(["home/create-event"]);
->>>>>>> rohan/beta-demo
+  }
+
+  toggleWeekends(){
+    this.weekends =! this.weekends;
+  }
+
+  newCal(){
+    this.dialog.open(CalendarCreateComponent, {
+      width:"400px"
+    });
   }
 }

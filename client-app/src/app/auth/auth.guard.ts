@@ -8,6 +8,7 @@ import {
 } from "@angular/router";
 import { TokenStorageService } from "./token-storage.service";
 import { Observable } from "rxjs";
+import { AuthService } from "./auth.service";
 
 @Injectable({
   providedIn: "root"
@@ -15,7 +16,8 @@ import { Observable } from "rxjs";
 export class AuthGuard implements CanActivate {
   constructor(
     private router: Router,
-    private tokenStorageService: TokenStorageService
+    private tokenStorageService: TokenStorageService,
+    private authServices: AuthService
   ) {}
   canActivate(
     route: ActivatedRouteSnapshot,
@@ -25,10 +27,11 @@ export class AuthGuard implements CanActivate {
     | UrlTree
     | Promise<boolean | UrlTree>
     | Observable<boolean | UrlTree> {
-    if (this.tokenStorageService.tokenExists) {
+    if (this.authServices.isUserLoggedIn()) {
       return true;
     } else {
-      return this.router.createUrlTree(["/login"]);
+      this.router.createUrlTree(["/login"]);
+      return false;
     }
   }
 }

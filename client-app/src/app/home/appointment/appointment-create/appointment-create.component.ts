@@ -29,6 +29,7 @@ export class AppointmentCreateComponent implements OnInit {
   email = new FormControl("", [Validators.required, Validators.email]);
   appointmentData: Appointment;
   dateRangeArray: DateRange[] = [];
+  emails: string[] = [];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -44,7 +45,15 @@ export class AppointmentCreateComponent implements OnInit {
       email: this.email
     });
   }
+  cancel() {
+    this.router.navigate(["/home/appointment/sent"]);
+  }
 
+  addEmails() {
+    this.emails.push(this.appointmentForm.value.email);
+    console.log(this.emails);
+    this.email.reset();
+  }
   getErrorMessage() {
     return this.email.hasError("required")
       ? "You must enter a valid email address"
@@ -67,16 +76,19 @@ export class AppointmentCreateComponent implements OnInit {
 
   onSubmit() {
     const appointmentFormValues = this.appointmentForm.value;
+    this.emails.push(this.appointmentForm.value.email);
     const obj = {
       name: appointmentFormValues.title,
       description: appointmentFormValues.description,
-      recepients: [appointmentFormValues.email],
+      recepients: this.emails,
       location: "Hem",
       appdates: this.dateRangeArray
     };
     console.log(obj);
     this.dataStorage.storeAppointment(obj).subscribe(result => {
       if (result) {
+        console.log(result);
+
         this.dataStorage.fetchAppointment();
       }
     });
@@ -114,7 +126,8 @@ export class AppointmentCreateComponent implements OnInit {
 
 @Component({
   selector: "dialog-date-timeInterval-dialog",
-  templateUrl: "date-timeInterval-dialog.html"
+  templateUrl: "date-timeInterval-dialog.html",
+  styleUrls: ["./appointment-create.component.css"]
 })
 export class DialogDateTimeIntervalDialog implements OnInit {
   date = new FormControl("");
@@ -167,7 +180,9 @@ export class DialogDateTimeIntervalDialog implements OnInit {
 
 @Component({
   selector: "dialog-time-interval-dialog",
-  templateUrl: "time-interval-dialog.html"
+  templateUrl: "time-interval-dialog.html",
+
+  styleUrls: ["./appointment-create.component.css"]
 })
 export class DialogTimeIntervalDialog implements OnInit {
   TimeIntervalFormData: FormGroup;

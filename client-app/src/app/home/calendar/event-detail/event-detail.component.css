@@ -1,0 +1,18 @@
+.close-button{
+    color: darkgrey;
+    cursor:pointer;
+}
+.options-button{
+    margin-bottom: 10px;
+}
+.spacer{
+    flex: 1 1 auto;
+}
+.top-detail-row{
+    background-color: white;
+    height: 50px;
+}
+
+mat-toolbar{
+    background-color: white;
+}

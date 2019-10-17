@@ -7,11 +7,17 @@
   [formGroup]="eventForm"
   (ngSubmit)="onSubmit()"
   >
+    <mat-form-field class="cal-select" required>
+      <mat-label>Select Calendar</mat-label>
+      <mat-select formControlName="calendar" [disableOptionCentering]="true">
+        <mat-option *ngFor="let cal of calendars" [value]="cal.name" (click)="selectCalendar(cal.id)">{{ cal.name }}</mat-option>
+      </mat-select>
+    </mat-form-field>
     <mat-form-field>
       <input matInput placeholder="Event Title" formControlName="title" />
     </mat-form-field><br>
 
-    <mat-form-field style="width:100%;">
+    <mat-form-field style="width:60%;">
       <textarea
         matInput
         cdkTextareaAutosize
@@ -31,14 +37,14 @@
       />
     </mat-form-field><br>
 
-    <mat-form-field>
+    <!-- <mat-form-field>
       <input
         matInput
         placeholder="Recipient Email"
         formControlName="email"
       />
       <mat-error *ngIf="email.invalid">{{ getErrorMessage() }}</mat-error>
-    </mat-form-field><br>
+    </mat-form-field><br> -->
     <mat-form-field id="end-date">
       <input
       matInput
@@ -49,12 +55,15 @@
       <mat-datepicker touchUi #startpicker></mat-datepicker>
     </mat-form-field>
     <mat-form-field *ngIf="!allDay">
+      <mat-label>Start Time</mat-label>
       <input
       matInput
       formControlName="startTime"
-      placeholder="Start Time"
-      [ngxTimepicker]="starttime">
-      <ngx-material-timepicker #starttime [minutesGap]="5"></ngx-material-timepicker>
+      aria-label="default time"
+      [value]="defaultTime.toLocaleTimeString([], {hour: '2-digit',  minute:'2-digit'})"
+      [ngxTimepicker]="starttime"
+      readonly>
+      <ngx-material-timepicker #starttime [minutesGap]="5" [appendToInput]="true"></ngx-material-timepicker>
     </mat-form-field><br>
     <mat-form-field id="end-date">
       <input
@@ -66,36 +75,42 @@
       <mat-datepicker touchUi #endpicker></mat-datepicker>
     </mat-form-field>
     <mat-form-field *ngIf="!allDay">
+      <mat-label>End Time</mat-label>
       <input
       matInput
       formControlName="endTime"
-      placeholder="End Time"
-      [ngxTimepicker]="endtime">
-      <ngx-material-timepicker #endtime [minutesGap]="5"></ngx-material-timepicker>
+      aria-label="default time"
+      [value]="defaultTime2.toLocaleTimeString([], {hour: '2-digit',  minute:'2-digit'})"
+      [ngxTimepicker]="endtime"
+      readonly>
+      <ngx-material-timepicker #endtime [minutesGap]="5" [appendToInput]="true"></ngx-material-timepicker>
     </mat-form-field><br>
     <mat-form-field id="primary-color">
       <input
       matInput
       formControlName="primary"
       [style.background]="color"
-      placeholder="Primary Color"
+      [style.color]="'white'"
+      placeholder="Event Color"
       [cpOutputFormat]="'hex'"
       (colorPickerClose)="setPrimary(color)"
+      [cpPosition]="'top-right'"
+      [cpPresetColors]="['#5484ed','#a4bdfc','#46d6db','#7ae7bf','#51b749','#fbd75b','#ffb878','#ff887c','#dc2127','#dbadff','#585858']"
       [cpOKButton]="true"
-      [(colorPicker)]="color">
+      [cpColorMode] = "'presets'"
+      [cpPresetLabel]="'Event Color'"
+      [value]="color"
+      [cpFallbackColor]="'#5484ed'"
+      [(colorPicker)]="color"
+      readonly>
     </mat-form-field>
     <mat-form-field>
-      <input
-      matInput
-      formControlName="secondary"
-      [style.background]="color2"
-      placeholder="Secondary Color"
-      [cpOutputFormat]="'hex'"
-      (colorPickerClose)="setSecondary(color2)"
-      [cpOKButton]="true"
-      [(colorPicker)]="color2">
-    </mat-form-field><br>
-    <mat-checkbox formControlName="allDay" (click)="allday()">All Day</mat-checkbox>
+      <input matInput
+      formControlName="email"
+      placeholder="Recipient Email">
+      <mat-error *ngIf="email.invalid">{{ getErrorMessage() }}</mat-error>
+    </mat-form-field>
+    <mat-checkbox formControlName="allDay" (click)="allday()" color="primary">All Day</mat-checkbox>
 
     <!-- <mat-toolbar>
       <mat-toolbar-row>
@@ -114,6 +129,9 @@
 
     <mat-toolbar>
       <mat-toolbar-row>
+        <!-- <button type="button" mat-raised-button color="primary">
+          Add Recipients
+        </button> -->
         <span class="example-spacer"></span>
         <button type="submit" mat-raised-button class="primary">
           Confirm

@@ -15,6 +15,10 @@
 <<<<<<< HEAD
 =======
 
+  .cal-select{
+    margin-right: 2em;
+  }
+
   #start-date,#end-date,#primary-color{
     margin-right:2em;
   }

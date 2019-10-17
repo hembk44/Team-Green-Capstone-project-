@@ -3,10 +3,10 @@
     #drawer
     class="sidenav"
     attr.role="navigation"
-    mode="side"
+    mode="over"
     opened="false"
   >
-    <mat-toolbar>
+    <mat-toolbar class="maroon">
       <mat-icon aria-hidden="false" aria-label="Example home icon"
         >home</mat-icon
       >Menu</mat-toolbar
@@ -30,12 +30,23 @@
         >
         Appointment</a
       >
-      <a mat-list-item routerLink="/home/dashboard" (click)="drawer.close()">
-        <mat-icon aria-hidden="false" aria-label="Example event icon"
-          >event</mat-icon
+      <a mat-list-item routerLink="/home/group" (click)="drawer.close()">
+        <mat-icon aria-hidden="false" aria-label="Example group icon"
+          >group</mat-icon
         >
 
-        Event</a
+        Group</a
+      >
+      <a
+        mat-list-item
+        routerLink="/home/register-users"
+        (click)="drawer.close()"
+      >
+        <mat-icon aria-hidden="false" aria-label="Example person add icon"
+          >person_add
+        </mat-icon>
+
+        Register Users</a
       >
     </mat-nav-list>
   </mat-sidenav>
