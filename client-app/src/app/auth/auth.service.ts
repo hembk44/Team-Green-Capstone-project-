@@ -33,7 +33,7 @@ export class AuthService {
     return this.userRoleSubject.value;
   }
 
-  get username(): string{
+  get username(): string {
     this.usernameSubject.next(this.tokenStorage.getUsername());
     return this.usernameSubject.value;
   }
@@ -52,9 +52,10 @@ export class AuthService {
           console.log(data);
           console.log(data.result);
           this.tokenStorage.saveToken(data.result.accessToken);
-          this.tokenStorage.saveUsername(data.result.username);
+          this.tokenStorage.saveUsername(data.result.name);
           this.tokenStorage.saveAuthority(data.result.role);
           this.userRoleSubject.next(this.tokenStorage.getAuthority());
+          this.usernameSubject.next(this.tokenStorage.getUsername());
           console.log(data.result.role);
           this.router.navigate(["home"]);
         }

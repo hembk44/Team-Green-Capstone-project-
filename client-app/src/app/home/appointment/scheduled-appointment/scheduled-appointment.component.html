@@ -9,13 +9,15 @@
     <div *ngIf="currentRole == 'ROLE_USER'">
       <h4>{{ time.appointmentName }}</h4>
       <p>{{ time.appointmentDescription }}</p>
-      <p>For: &nbsp;{{ time.appointmentCreatorName }}</p>
+      <p><strong>For: </strong> &nbsp;{{ time.appointmentCreatorName }}</p>
 
-      <p>{{ time.date | date }}</p>
+      <p>
+        <strong>Date & Time: </strong> &nbsp;{{ time.date | date }} &nbsp;
+        <button mat-raised-button class="primary">
+          {{ time.startTime }} - {{ time.endTime }}
+        </button>
+      </p>
 
-      <button mat-raised-button class="primary">
-        {{ time.startTime }} - {{ time.endTime }}
-      </button>
       <!-- <p>
         Selected by: &nbsp;{{ time.selectorName }}({{ time.selectorEmail }})
       </p> -->
