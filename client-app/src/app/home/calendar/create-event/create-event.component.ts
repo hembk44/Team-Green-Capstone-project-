@@ -39,6 +39,7 @@ export class CreateEventComponent implements OnInit {
   selectedCal: number;
   defaultTime: Date = new Date();
   defaultTime2: Date = new Date;
+  emails: string[];
 
   constructor(
     private router: Router,
@@ -50,6 +51,7 @@ export class CreateEventComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.emails = [];
     this.username=this.authService.username;
     this.calendars=this.calService.getCalendars().filter(cal => cal.createdBy === this.username);
     console.log(this.calendars);
@@ -96,6 +98,9 @@ export class CreateEventComponent implements OnInit {
 
   onSubmit() {
     const eventFormValues = this.eventForm.value;
+    if(eventFormValues.email){
+      this.emails = eventFormValues.email.split(',');
+    }
     console.log(eventFormValues.startDate.toLocaleDateString());
     console.log(this.primaryColor);
     console.log(this.secondaryColor);
@@ -109,7 +114,7 @@ export class CreateEventComponent implements OnInit {
         description: eventFormValues.description,
         start: startDate,
         end: endDate,
-        recipients: eventFormValues.email.split(','),
+        recipients: this.emails,
         location: eventFormValues.location,
         backgroundColor: this.primaryColor,
         borderColor: this.primaryColor,
@@ -123,7 +128,7 @@ export class CreateEventComponent implements OnInit {
         description: eventFormValues.description,
         start: eventFormValues.startDate,
         end: eventFormValues.endDate.toISOString(),
-        recipients: [eventFormValues.email],
+        recipients: this.emails,
         location: eventFormValues.location,
         backgroundColor: this.primaryColor,
         borderColor: this.primaryColor,

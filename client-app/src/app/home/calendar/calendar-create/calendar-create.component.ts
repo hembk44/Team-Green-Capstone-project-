@@ -10,6 +10,7 @@ import { DataStorageService } from '../../shared/data-storage.service';
 })
 export class CalendarCreateComponent implements OnInit {
   calForm: FormGroup;
+  emails: string[];
 
   constructor(
     private ref: MatDialogRef<CalendarCreateComponent>,
@@ -17,6 +18,7 @@ export class CalendarCreateComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.emails=[];
     this.calForm = new FormGroup({
       name: new FormControl(),
       recipients: new FormControl()
@@ -28,9 +30,12 @@ export class CalendarCreateComponent implements OnInit {
   }
 
   onSubmit(){
+    if(this.calForm.value['recipients']){
+      this.emails=this.calForm.value['recipients'].split(',');
+    }
     const obj = {
       name: this.calForm.value['name'],
-      recipients: this.calForm.value['recipients'].split(',')
+      recipients: this.emails
     }
     this.dataStorage.newCalendar(obj).subscribe(result => {
       console.log(obj);
