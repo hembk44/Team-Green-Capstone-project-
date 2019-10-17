@@ -8,10 +8,10 @@
         <p>{{ event.start.toLocaleString([], {month:'2-digit', day:'2-digit', year:'2-digit', hour: '2-digit',  minute:'2-digit'}) }} - 
         {{event.end.toLocaleString([], {month:'2-digit', day:'2-digit', year:'2-digit', hour: '2-digit',  minute:'2-digit'}) }}</p>
     </div>
-    <div *ngIf="event.allDay && event.end">
-        <p>{{event.start.toLocaleDateString()}} - {{event.end.toLocaleDateString()}}</p>
+    <div *ngIf="event.allDay && event.start !== newEnd">
+        <p>{{event.start.toLocaleDateString()}} - {{newEnd.toLocaleDateString()}}</p>
     </div>
-    <div *ngIf="event.allDay && !event.end">
+    <div *ngIf="event.allDay && event.start===newEnd">
         <p>{{event.start.toLocaleDateString()}}</p>
     </div>
     <p><b>Location:</b> {{ event.extendedProps.location }}</p>
