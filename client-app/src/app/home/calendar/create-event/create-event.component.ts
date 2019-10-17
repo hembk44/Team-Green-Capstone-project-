@@ -28,7 +28,7 @@ import { AuthService } from 'src/app/auth/auth.service';
 export class CreateEventComponent implements OnInit {
   eventForm: FormGroup;
   eventData: CalEvent;
-  email = new FormControl("",[Validators.email]);
+  email = new FormControl();
   dateRangeArray: EventDate[] = [];
   primaryColor: string='';
   secondaryColor: string='';
@@ -109,7 +109,7 @@ export class CreateEventComponent implements OnInit {
         description: eventFormValues.description,
         start: startDate,
         end: endDate,
-        recipients: [eventFormValues.email],
+        recipients: eventFormValues.email.split(','),
         location: eventFormValues.location,
         backgroundColor: this.primaryColor,
         borderColor: this.primaryColor,

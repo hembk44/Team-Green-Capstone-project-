@@ -27,7 +27,7 @@ export class ShareCalendarComponent implements OnInit {
   onSubmit(){
     const obj = {
       calendarId: this.data.id,
-      recipients: [this.shareForm.value['recipients']]
+      recipients: this.shareForm.value['recipients'].split(',')
     }
     this.dataStorage.shareCalenar(obj).subscribe(result=>{
       console.log(result);

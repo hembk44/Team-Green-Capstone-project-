@@ -86,7 +86,7 @@ export class EditEventComponent implements OnInit {
         description: eventFormValues.description,
         start: startDate,
         end: endDate,
-        recipients: [eventFormValues.email],
+        recipients: eventFormValues.email.split(','),
         location: eventFormValues.location,
         backgroundColor: this.primaryColor,
         borderColor: this.primaryColor,
