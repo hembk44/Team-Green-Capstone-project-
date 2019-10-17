@@ -26,6 +26,7 @@ export class EditEventComponent implements OnInit {
   defaultTime2: Date = new Date();
   email = new FormControl("",[Validators.email]);
   newEnd: Date;
+  emails: string[];
 
   constructor(
     private route: ActivatedRoute,
@@ -36,6 +37,7 @@ export class EditEventComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.emails=[];
     this.route.params.subscribe((params: Params) => {
       this.id = +params["id"];
     });
@@ -79,6 +81,9 @@ export class EditEventComponent implements OnInit {
     const eventFormValues = this.eventForm.value;
     const startDate = eventFormValues.startDate.toDateString().concat(' ').concat(eventFormValues.startTime);
     const endDate = eventFormValues.endDate.toDateString().concat(' ').concat(eventFormValues.endTime);
+    if(eventFormValues.email){
+      this.emails=eventFormValues.email.split(',');
+    }
     if(!this.allDay){
       this.obj = {
         calendarId: this.selectedCal,
@@ -86,7 +91,7 @@ export class EditEventComponent implements OnInit {
         description: eventFormValues.description,
         start: startDate,
         end: endDate,
-        recipients: eventFormValues.email.split(','),
+        recipients: this.emails,
         location: eventFormValues.location,
         backgroundColor: this.primaryColor,
         borderColor: this.primaryColor,
