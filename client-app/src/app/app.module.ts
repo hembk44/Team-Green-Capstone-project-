@@ -51,7 +51,6 @@ import {
   DialogDateTimeIntervalDialog,
   DialogTimeIntervalDialog
 } from "./home/appointment/appointment-create/appointment-create.component";
-import { CreateEventComponent, EventTimeDialog, EventTimeIntervalDialog } from "./home/calendar/create-event/create-event.component";
 import {
   CreateEventComponent,
   EventTimeDialog,
@@ -67,8 +66,8 @@ import { LoginComponent } from "./login/login.component";
 import { RegisterComponent } from "./register/register.component";
 import { LoadingSpinnerComponent } from "./loading-spinner/loading-spinner.component";
 import { AuthInterceptor } from "./auth/auth-interceptor";
-import { EventDetailComponent } from './home/calendar/event-detail/event-detail.component';
-import { CalendarCreateComponent } from './home/calendar/calendar-create/calendar-create.component';
+import { EventDetailComponent } from "./home/calendar/event-detail/event-detail.component";
+import { CalendarCreateComponent } from "./home/calendar/calendar-create/calendar-create.component";
 
 @NgModule({
   declarations: [
@@ -95,7 +94,6 @@ import { CalendarCreateComponent } from './home/calendar/calendar-create/calenda
     CreateEventComponent,
     CalendarListComponent,
     CalendarItemComponent,
-    TimeSlotSnackComponent
     TimeSlotSnackComponent,
     EventDetailComponent,
     CalendarCreateComponent
