@@ -6,6 +6,8 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 // import { CovalentLayoutModule } from "@covalent/core/layout";
 // import { CovalentStepsModule } from "@covalent/core/steps";
 
+import { MaterialFileInputModule } from "ngx-material-file-input";
+
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
@@ -54,6 +56,7 @@ import {
   DialogDateTimeIntervalDialog,
   DialogTimeIntervalDialog
 } from "./home/appointment/appointment-create/appointment-create.component";
+
 import { AppointmentStartComponent } from "./home/appointment/appointment-types/appointment-start/appointment-start.component";
 import { AppointmentSentComponent } from "./home/appointment/appointment-types/appointment-sent/appointment-sent.component";
 import { AppointmentReceivedComponent } from "./home/appointment/appointment-types/appointment-received/appointment-received.component";
@@ -63,6 +66,7 @@ import {
   EventTimeDialog,
   EventTimeIntervalDialog
 } from "./home/calendar/create-event/create-event.component";
+
 import { CalendarListComponent } from "./home/calendar/calendar-list/calendar-list.component";
 import { FullCalendarModule } from "@fullcalendar/angular";
 import {
@@ -77,11 +81,16 @@ import { LoginComponent } from "./login/login.component";
 import { RegisterComponent } from "./register/register.component";
 import { LoadingSpinnerComponent } from "./loading-spinner/loading-spinner.component";
 import { AuthInterceptor } from "./auth/auth-interceptor";
-import { EventDetailComponent, EventDeleteConfirm } from "./home/calendar/event-detail/event-detail.component";
+import {
+  EventDetailComponent,
+  EventDeleteConfirm
+} from "./home/calendar/event-detail/event-detail.component";
 import { CalendarCreateComponent } from "./home/calendar/calendar-create/calendar-create.component";
 import { GroupComponent } from "./home/group/group.component";
 import { ShareCalendarComponent } from "./home/calendar/share-calendar/share-calendar.component";
-import { EditEventComponent } from './home/calendar/create-event/edit-event/edit-event.component';
+import { EditEventComponent } from "./home/calendar/create-event/edit-event/edit-event.component";
+
+import { RegisterUsersComponent } from "./home/register-users/register-users.component";
 
 @NgModule({
   declarations: [
@@ -118,7 +127,8 @@ import { EditEventComponent } from './home/calendar/create-event/edit-event/edit
     GroupComponent,
     ShareCalendarComponent,
     EditEventComponent,
-    EventDeleteConfirm
+    EventDeleteConfirm,
+    RegisterUsersComponent
   ],
   imports: [
     BrowserModule,
@@ -150,6 +160,7 @@ import { EditEventComponent } from './home/calendar/create-event/edit-event/edit
     MatSelectModule,
     MatTooltipModule,
     MatSnackBarModule,
+    MaterialFileInputModule,
     CalendarModule.forRoot({
       provide: DateAdapter,
       useFactory: adapterFactory
