@@ -1,60 +1,99 @@
-<mat-toolbar>
-  <mat-toolbar-row>
-    <div
-      class="container"
-      fxLayout
-      fxLayout.xs="column"
-      fxLayoutAlign="flex-start"
-      fxLayoutGap="10px"
-      fxLayoutGap.xs="10px"
-    >
-      <div fxFlex="50%">
-        <button
-          mat-stroked-button
-          class="primary"
-          [matMenuTriggerFor]="type"
-          aria-label="Example icon-button with a menu"
-          matTooltip="Click to check sent and received appointments"
-        >
-          Appointment Types <mat-icon>expand_more </mat-icon>
-        </button>
-        <mat-menu #type="matMenu">
-          <button mat-menu-item (click)="navigateToReceive()">
-            <span
-              ><mat-icon>assignment_returned</mat-icon> Appointments
-              received</span
-            >
+<div *ngIf="currentRole == 'ROLE_ADMIN'">
+  <mat-toolbar>
+    <mat-toolbar-row>
+      <div
+        class="container"
+        fxLayout
+        fxLayout.xs="column"
+        fxLayoutAlign="flex-start"
+        fxLayoutGap="10px"
+        fxLayoutGap.xs="10px"
+      >
+        <div fxFlex="50%">
+          <button
+            mat-stroked-button
+            class="primary"
+            [matMenuTriggerFor]="type"
+            aria-label="Example icon-button with a menu"
+            matTooltip="Click to check sent and received appointments"
+          >
+            Appointment Types <mat-icon>expand_more </mat-icon>
           </button>
-          <button mat-menu-item (click)="navigateToSent()">
-            <mat-icon>assignment_turned_in</mat-icon>
-            <span>Appointments sent</span>
+          <mat-menu #type="matMenu">
+            <button mat-menu-item (click)="navigateToReceive()">
+              <span
+                ><mat-icon>assignment_returned</mat-icon> Appointments
+                received</span
+              >
+            </button>
+            <button mat-menu-item (click)="navigateToSent()">
+              <mat-icon>assignment_turned_in</mat-icon>
+              <span>Appointments sent</span>
+            </button>
+          </mat-menu>
+        </div>
+        <div fxFlex="50%">
+          <button
+            mat-stroked-button
+            class="primary"
+            [matMenuTriggerFor]="schedule"
+            aria-label="Example icon-button with a menu"
+            matTooltip="Click to see your all scheduled appointments"
+          >
+            Scheduled Appointment <mat-icon>expand_more </mat-icon>
           </button>
-        </mat-menu>
-      </div>
-      <div fxFlex="50%">
-        <button
-          mat-stroked-button
-          class="primary"
-          [matMenuTriggerFor]="schedule"
-          aria-label="Example icon-button with a menu"
-          matTooltip="Click to see your all scheduled appointments"
-          (click)="navigateToScheduled()"
-        >
-          Scheduled Appointment <mat-icon>expand_more </mat-icon>
-        </button>
 
-        <mat-menu #schedule="matMenu">
-          <button mat-menu-item>
-            <mat-icon>schedule</mat-icon>
+          <mat-menu #schedule="matMenu">
+            <button mat-menu-item (click)="navigateToScheduled()">
+              <mat-icon>schedule</mat-icon>
 
-            <span>For you</span>
-          </button>
-          <button mat-menu-item>
-            <mat-icon>schedule</mat-icon>
-            <span>For recipients</span>
-          </button>
-        </mat-menu>
+              <span>For you</span>
+            </button>
+            <button mat-menu-item (click)="navigateToScheduledRecipients()">
+              <mat-icon>schedule</mat-icon>
+              <span>For recipients</span>
+            </button>
+          </mat-menu>
+        </div>
       </div>
-    </div>
-  </mat-toolbar-row>
-</mat-toolbar>
+    </mat-toolbar-row>
+  </mat-toolbar>
+</div>
+
+<div *ngIf="currentRole == 'ROLE_USER'">
+  <mat-toolbar>
+    <mat-toolbar-row>
+      <div
+        class="container"
+        fxLayout
+        fxLayout.xs="column"
+        fxLayoutAlign="flex-start"
+        fxLayoutGap="10px"
+        fxLayoutGap.xs="10px"
+      >
+        <div fxFlex="50%">
+          <button
+            mat-stroked-button
+            class="primary"
+            aria-label="Example icon-button with a menu"
+            matTooltip="Click to check sent and received appointments"
+            (click)="userAppointments()"
+          >
+            Your Appointments
+          </button>
+        </div>
+        <div fxFlex="50%">
+          <button
+            mat-stroked-button
+            class="primary"
+            aria-label="Example icon-button with a menu"
+            matTooltip="Click to see your all scheduled appointments"
+            (click)="userScheduledAppointments()"
+          >
+            your Scheduled Appointments
+          </button>
+        </div>
+      </div>
+    </mat-toolbar-row>
+  </mat-toolbar>
+</div>
