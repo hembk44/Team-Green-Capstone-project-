@@ -30,7 +30,7 @@ export class CalendarCreateComponent implements OnInit {
   onSubmit(){
     const obj = {
       name: this.calForm.value['name'],
-      recipients: [this.calForm.value['recipients']]
+      recipients: this.calForm.value['recipients'].split(',')
     }
     this.dataStorage.newCalendar(obj).subscribe(result => {
       console.log(obj);
