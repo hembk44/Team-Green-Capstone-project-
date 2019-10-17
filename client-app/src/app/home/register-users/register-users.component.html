@@ -1,12 +1,10 @@
-{{ isInvalid }}
-<hr />
 <div style="margin: 20px; color: maroon;">
   <form
     class="example-container"
     [formGroup]="uploadForm"
     (ngSubmit)="onSubmit()"
   >
-    <mat-form-field>
+    <mat-form-field style="cursor: pointer;">
       <ngx-mat-file-input
         #removableInput
         formControlName="uploadFile"
