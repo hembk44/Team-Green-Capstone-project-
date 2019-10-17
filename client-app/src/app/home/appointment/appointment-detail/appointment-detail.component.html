@@ -1,6 +1,7 @@
 <mat-card>
   <h5>{{ appointmentName }}</h5>
   <p>{{ appointmentDesc }}</p>
+  <p>{{ appointmentDate | date }}</p>
   <p *ngIf="currentRole == 'ROLE_USER'">
     Please select any one of the time slots below:
   </p>

@@ -27,8 +27,9 @@ import { AppointmentStartComponent } from "./home/appointment/appointment-types/
 import { AppointmentSentComponent } from "./home/appointment/appointment-types/appointment-sent/appointment-sent.component";
 import { AppointmentReceivedComponent } from "./home/appointment/appointment-types/appointment-received/appointment-received.component";
 import { GroupComponent } from "./home/group/group.component";
-import { EditEventComponent } from './home/calendar/create-event/edit-event/edit-event.component';
+import { EditEventComponent } from "./home/calendar/create-event/edit-event/edit-event.component";
 import { RegisterUsersComponent } from "./home/register-users/register-users.component";
+import { ScheduledAppointmentsRecipientsComponent } from "./home/appointment/scheduled-appointments/scheduled-appointments-recipients/scheduled-appointments-recipients.component";
 
 const routes: Routes = [
   {
@@ -76,10 +77,11 @@ const routes: Routes = [
             ]
           },
           { path: "received", component: AppointmentReceivedComponent },
-
           { path: "scheduled", component: ScheduledAppointmentComponent },
-          { path: "scheduled", component: ScheduledAppointmentComponent },
-          { path: "scheduled", component: ScheduledAppointmentComponent }
+          {
+            path: "scheduled-recipients",
+            component: ScheduledAppointmentsRecipientsComponent
+          }
         ]
       },
       { path: "group", component: GroupComponent },

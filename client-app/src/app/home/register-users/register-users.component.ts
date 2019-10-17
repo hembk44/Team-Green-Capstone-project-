@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
+import { DataStorageService } from "../shared/data-storage.service";
 // import { FileValidator } from "ngx-material-file-input";
 
 @Component({
@@ -12,7 +13,10 @@ export class RegisterUsersComponent implements OnInit {
   validFileExtensions: string[] = ["xlsx", "csv"];
   invalidExtension: string;
   isInvalid: boolean = false;
-  constructor(private formBuilder: FormBuilder) {}
+  constructor(
+    private formBuilder: FormBuilder,
+    private dataStorage: DataStorageService
+  ) {}
 
   ngOnInit() {
     this.uploadForm = this.formBuilder.group({
@@ -24,6 +28,9 @@ export class RegisterUsersComponent implements OnInit {
       this.invalidExtension = "not supported file type!!!";
     } else {
       console.log(this.uploadForm.value.uploadFile);
+      this.dataStorage
+        .registerUsers(this.uploadForm.value.uploadFile)
+        .subscribe(result => console.log(result));
     }
   }
 
