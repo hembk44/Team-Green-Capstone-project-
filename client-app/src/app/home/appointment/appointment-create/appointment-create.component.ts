@@ -89,7 +89,7 @@ export class AppointmentCreateComponent implements OnInit {
       if (result) {
         console.log(result);
 
-        this.dataStorage.fetchAgit ppointment();
+        this.dataStorage.fetchAppointment();
       }
     });
 
