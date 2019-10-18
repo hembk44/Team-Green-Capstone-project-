@@ -12,3 +12,7 @@
     background-color: white;
     height: 50px;
 }
+
+mat-toolbar{
+    background-color: white;
+}

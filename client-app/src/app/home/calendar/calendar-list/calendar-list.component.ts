@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { CalendarService } from "./calendar.service";
 import { Calendar } from "./calendar.model";
 import { EventService } from "../events.service";
+import { DataStorageService } from "../../shared/data-storage.service";
 
 @Component({
   selector: "app-calendar-list",
@@ -11,17 +12,26 @@ import { EventService } from "../events.service";
 export class CalendarListComponent implements OnInit {
   private calendars: Calendar[]; //list of calendars
 
+  calendars: any[]; //list of calendars
+
   constructor(
     private calendarService: CalendarService,
-    private eventService: EventService
+    private eventService: EventService,
+    private dataStorage: DataStorageService
   ) {}
 
   ngOnInit() {
-    this.calendars = this.calendarService.getCalendars(); //gets calendars from service
+    this.dataStorage.fetchCalendars();
+    this.dataStorage.isLoading.subscribe(loading => {
+      if (!loading) {
+        this.calendars = this.calendarService.getCalendars();
+      }
+    }); //gets calendars from service
+    console.log(this.calendars);
   }
 
   //toggle view of calendars
-  toggleCalendar(cal: Calendar) {
-    this.calendarService.toggleCalendar(cal);
-  }
+  // toggleCalendar(cal: Calendar){
+  //   this.calendarService.toggleCalendar(cal);
+  // }
 }

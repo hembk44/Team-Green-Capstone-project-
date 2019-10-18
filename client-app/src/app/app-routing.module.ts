@@ -18,11 +18,18 @@ import { DashboardComponent } from "./home/dashboard/dashboard.component";
 import { CalendarComponent } from "./home/calendar/calendar.component";
 import { CreateEventComponent } from "./home/calendar/create-event/create-event.component";
 import { AppointmentComponent } from "./home/appointment/appointment/appointment.component";
-import { AppointmentTypeComponent } from "./home/appointment/appointment-type/appointment-type.component";
 import { AppointmentCreateComponent } from "./home/appointment/appointment-create/appointment-create.component";
 import { AppointmentDetailComponent } from "./home/appointment/appointment-detail/appointment-detail.component";
 import { ScheduledAppointmentComponent } from "./home/appointment/scheduled-appointment/scheduled-appointment.component";
-import { EventDetailComponent } from './home/calendar/event-detail/event-detail.component';
+import { EventDetailComponent } from "./home/calendar/event-detail/event-detail.component";
+import { AppointmentNavigationComponent } from "./home/appointment/appointment-navigation/appointment-navigation.component";
+import { AppointmentStartComponent } from "./home/appointment/appointment-types/appointment-start/appointment-start.component";
+import { AppointmentSentComponent } from "./home/appointment/appointment-types/appointment-sent/appointment-sent.component";
+import { AppointmentReceivedComponent } from "./home/appointment/appointment-types/appointment-received/appointment-received.component";
+import { GroupComponent } from "./home/group/group.component";
+import { EditEventComponent } from "./home/calendar/create-event/edit-event/edit-event.component";
+import { RegisterUsersComponent } from "./home/register-users/register-users.component";
+import { ScheduledAppointmentsRecipientsComponent } from "./home/appointment/scheduled-appointments/scheduled-appointments-recipients/scheduled-appointments-recipients.component";
 
 const routes: Routes = [
   {
@@ -49,14 +56,15 @@ const routes: Routes = [
       { path: "calendar", component: CalendarComponent },
       { path: "event/:id", component: EventDetailComponent },
       { path: "create-event", component: CreateEventComponent },
+      { path: "edit-event/:id", component: EditEventComponent },
       {
         path: "appointment",
         component: AppointmentComponent,
         children: [
-          { path: "", component: AppointmentTypeComponent },
+          { path: "", component: AppointmentStartComponent },
           {
-            path: "type",
-            component: AppointmentTypeComponent,
+            path: "sent",
+            component: AppointmentSentComponent,
             children: [
               {
                 path: "create",
@@ -68,10 +76,16 @@ const routes: Routes = [
               }
             ]
           },
-
-          { path: "scheduled", component: ScheduledAppointmentComponent }
+          { path: "received", component: AppointmentReceivedComponent },
+          { path: "scheduled", component: ScheduledAppointmentComponent },
+          {
+            path: "scheduled-recipients",
+            component: ScheduledAppointmentsRecipientsComponent
+          }
         ]
-      }
+      },
+      { path: "group", component: GroupComponent },
+      { path: "register-users", component: RegisterUsersComponent }
     ]
   }
   // { path: "dashboard", component: DashboardComponent },

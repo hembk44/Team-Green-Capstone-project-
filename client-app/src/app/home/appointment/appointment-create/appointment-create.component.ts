@@ -16,13 +16,8 @@ import { DateRange } from "../appointment-model/date-range.model";
 import { TimeInterval } from "../appointment-model/time-interval.model";
 import { DataStorageService } from "../../shared/data-storage.service";
 import { ApiResponse } from "src/app/auth/api.response";
-<<<<<<< HEAD
-import { EventTime } from '../../calendar/event-times.model';
-import { EventDate } from '../../calendar/event-date.model';
-=======
 import { EventTime } from "../../calendar/event-times.model";
 import { EventDate } from "../../calendar/event-date.model";
->>>>>>> beta-demo
 
 @Component({
   selector: "app-appointment-create",
@@ -34,6 +29,7 @@ export class AppointmentCreateComponent implements OnInit {
   email = new FormControl("", [Validators.required, Validators.email]);
   appointmentData: Appointment;
   dateRangeArray: DateRange[] = [];
+  emails: string[] = [];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -49,7 +45,15 @@ export class AppointmentCreateComponent implements OnInit {
       email: this.email
     });
   }
+  cancel() {
+    this.router.navigate(["/home/appointment/sent"]);
+  }
 
+  addEmails() {
+    this.emails.push(this.appointmentForm.value.email);
+    console.log(this.emails);
+    this.email.reset();
+  }
   getErrorMessage() {
     return this.email.hasError("required")
       ? "You must enter a valid email address"
@@ -72,17 +76,20 @@ export class AppointmentCreateComponent implements OnInit {
 
   onSubmit() {
     const appointmentFormValues = this.appointmentForm.value;
+    this.emails.push(this.appointmentForm.value.email);
     const obj = {
       name: appointmentFormValues.title,
       description: appointmentFormValues.description,
-      recepients: [appointmentFormValues.email],
+      recepients: this.emails,
       location: "Hem",
       appdates: this.dateRangeArray
     };
     console.log(obj);
     this.dataStorage.storeAppointment(obj).subscribe(result => {
       if (result) {
-        this.dataStorage.fetchAppointment();
+        console.log(result);
+
+        this.dataStorage.fetchAgit ppointment();
       }
     });
 

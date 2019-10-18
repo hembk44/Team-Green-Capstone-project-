@@ -32,7 +32,7 @@ export class AppointmentListComponent implements OnInit {
       });
     } else {
       console.log("admin data here!!!");
-
+      // console.log(this.dataStorage.fetchAppointment());
       this.dataStorage.fetchAppointment();
       this.dataStorage.isLoading.subscribe(loading => {
         if (!loading) {
@@ -42,6 +42,6 @@ export class AppointmentListComponent implements OnInit {
     }
   }
   create() {
-    this.router.navigate(["home/appointment/type/create"]);
+    this.router.navigate(["home/appointment/sent/create"]);
   }
 }

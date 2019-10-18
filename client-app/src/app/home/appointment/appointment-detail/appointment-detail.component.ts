@@ -6,8 +6,8 @@ import { Appointment } from "../appointment-model/appointment.model";
 import { TimeInterval } from "../appointment-model/time-interval.model";
 import { DataStorageService } from "../../shared/data-storage.service";
 import { AuthService } from "src/app/auth/auth.service";
-import { EventTime } from '../../calendar/event-times.model';
-import { EventDate } from '../../calendar/event-date.model';
+import { EventTime } from "../../calendar/event-times.model";
+import { EventDate } from "../../calendar/event-date.model";
 
 @Component({
   selector: "app-appointment-detail",
@@ -19,6 +19,7 @@ export class AppointmentDetailComponent implements OnInit {
   id: number;
   appointmentName: string;
   appointmentDesc: string;
+  appointmentDate: string;
   currentRole: string;
   // timeSlots: TimeInterval[]; // = this.dataService.fetchTimeSlots(id);
   constructor(
@@ -41,9 +42,10 @@ export class AppointmentDetailComponent implements OnInit {
           .displayAppointmentDetails(this.id)
           .subscribe(result => {
             this.appointment = result.result;
-            this.appointmentName = this.appointment[0].appointment.name;
-            this.appointmentDesc = this.appointment[0].appointment.description;
-            console.log(this.appointment);
+            console.log(result);
+            this.appointmentName = this.appointment[0].appointmentName;
+            this.appointmentDesc = this.appointment[0].appointmentDescription;
+            this.appointmentDate = this.appointment[0].date;
           });
       } else {
         console.log("user data here!!!");
@@ -70,38 +72,38 @@ export class AppointmentDetailComponent implements OnInit {
     this._snackBar.openFromComponent(TimeSlotSnackComponent, {
       duration: 5000
     });
-    this.router.navigate(["./home/appointment/type"]);
+    this.router.navigate(["./home/appointment/sent"]);
   }
   onDeleteAppointment() {
     // this.appointmentService.deleteAppointment(this.id);
-    this.router.navigate(["./appointment/type"]);
+    // this.router.navigate(["./appointment/type"]);
   }
   onUpdateAppointment() {
     console.log("updated");
   }
 
-//   confirmAppointment(start: string, end: string){
-//     const name = this.appointmentName;
-//     const date = this.appointment[0].appointment.date;
-//     const eventTimes = new EventTime(start,end);
-//     const evDR = new EventDate(date, [eventTimes]);
-//     const desc = this.appointmentDesc;
-//     const loc = 'unspecified location';
+  //   confirmAppointment(start: string, end: string){
+  //     const name = this.appointmentName;
+  //     const date = this.appointment[0].appointment.date;
+  //     const eventTimes = new EventTime(start,end);
+  //     const evDR = new EventDate(date, [eventTimes]);
+  //     const desc = this.appointmentDesc;
+  //     const loc = 'unspecified location';
 
-//     const obj = {
-//       name: name,
-//       description: desc,
-//       eventdates: [evDR],
-//       recepients: [''],
-//       location: loc
-//     }
+  //     const obj = {
+  //       name: name,
+  //       description: desc,
+  //       eventdates: [evDR],
+  //       recepients: [''],
+  //       location: loc
+  //     }
 
-//     this.dataService.storeEvent(obj).subscribe(result =>{ 
-//       if(result) {
-//         this.dataService.fetchEvents();
-//       }
-//     });
-//   }
+  //     this.dataService.storeEvent(obj).subscribe(result =>{
+  //       if(result) {
+  //         this.dataService.fetchEvents();
+  //       }
+  //     });
+  //   }
 }
 
 @Component({

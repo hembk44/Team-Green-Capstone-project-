@@ -1,17 +1,11 @@
 <mat-card>
-  <!-- <mat-card-header *ngFor="let time of appointment">
-    <mat-card-title>{{ time[0].appointment.name }}</mat-card-title>
-    <mat-card-subtitle>{{ time[0].appointment.description }}</mat-card-subtitle>
-  </mat-card-header> -->
   <h5>{{ appointmentName }}</h5>
   <p>{{ appointmentDesc }}</p>
-  <!-- <h4>time slots:</h4> -->
+  <p>{{ appointmentDate | date }}</p>
   <p *ngIf="currentRole == 'ROLE_USER'">
     Please select any one of the time slots below:
   </p>
   <mat-card-content *ngFor="let time of appointment">
-    <!-- <p>{{ time[0].appointment}}</p> -->
-    
     <div *ngIf="currentRole == 'ROLE_ADMIN'">
       <button mat-raised-button class="primary">
         {{ time.startTime }} - {{ time.endTime }}
@@ -23,8 +17,6 @@
         class="primary"
         [matMenuTriggerFor]="menu"
         matTooltip="Please click to confirm"
-        matTooltipClass="example-tooltip-red"
-        aria-label="Button that shows a red tooltip"
       >
         {{ time.startTime }} - {{ time.endTime }}
       </button>
@@ -33,21 +25,6 @@
         <button mat-menu-item>cancel</button>
       </mat-menu>
     </div>
-
-    <!-- <p>End time: {{ time.endTime }}</p> -->
-    <!-- <hr /> -->
-    <!-- <p>
-      Appointment date: {{ appointment.dateRange[0].appointmentDate | date }}
-    </p>
-    <p>
-      Appointment Time:
-      {{ appointment.dateRange[0].timeInterval[0].startTime }} -
-      {{ appointment.dateRange[0].timeInterval[0].endTime }}
-    </p>
-    <p>
-      Appointment Time Interval Duration:
-      {{ appointment.dateRange[0].timeInterval[0].timeIntervalDuration }}
-    </p> -->
   </mat-card-content>
 
   <button
@@ -56,8 +33,6 @@
     [matMenuTriggerFor]="manage"
     *ngIf="currentRole == 'ROLE_ADMIN'"
     matTooltip="Please click to delete or update"
-    matTooltipClass="example-tooltip-red"
-    aria-label="Button that shows a red tooltip"
   >
     Manage
   </button>

@@ -27,6 +27,10 @@
   background-color: white;
 }
 
+.top-row-wrap {
+  background-color: white;
+}
+
 .spacer {
   flex: 1 1 auto;
 }
@@ -48,10 +52,10 @@
   background-color: darkgrey
 }
 
-.calendar {
-  width: 70%;
-  margin: 0;
-  align-items: center;
+#calendar {
+  margin-top: 5px;
+  margin-left: 5px;
+  margin-right: 5px;
 }
 
 .top-row {
@@ -72,6 +76,7 @@
   margin-left: 6px;
   margin-right: 6px;
   margin-top: 15px;
+  text-align: center;
 }
 
 .menutoggle {
