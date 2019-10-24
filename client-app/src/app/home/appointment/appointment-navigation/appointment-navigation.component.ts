@@ -28,7 +28,7 @@ export class AppointmentNavigationComponent implements OnInit {
     this.router.navigate(["home/appointment/scheduled"]);
   }
   navigateToScheduledRecipients() {
-    this.router.navigate(["home/appointment/scheduled-recipients"]);
+    this.router.navigate(["home/appointment/scheduled-appointments-sent"]);
   }
 
   userAppointments() {

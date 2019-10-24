@@ -14,6 +14,10 @@ import { CalendarService } from "../calendar/calendar-list/calendar.service";
   providedIn: "root"
 })
 export class DataStorageService {
+  private baseUrlAppointment = "http://localhost:8181/api/appointment/";
+  private baseUrlEvent = "http://localhost:8181/api/event/";
+  private baseUrlCalendar = "http://localhost:8181/api/calendar/";
+
   private isLoadingSubject: BehaviorSubject<boolean> = new BehaviorSubject<
     boolean
   >(false);
@@ -50,35 +54,31 @@ export class DataStorageService {
   get calendars(): Calendar[] {
     return this.calSubject.value;
   }
-  // baseUrl = "localhost:8181/api/appointment/";
 
-  storeAppointment(obj: Object) {
+  registerUsers(file: File) {
     this.isLoadingSubject.next(true);
+    const formdata: FormData = new FormData();
+    formdata.append("file", file);
     return this.http
-      .post<Object>("http://localhost:8181/api/appointment/set", obj)
+      .post<Object>("http://localhost:8181/api/file/uploadStudents", formdata)
       .pipe(
         (map(data => data), catchError(error => throwError(error))),
         finalize(() => this.isLoadingSubject.next(false))
       );
   }
 
-  registerUsers(file: File) {
+  storeAppointment(obj: Object) {
     this.isLoadingSubject.next(true);
-    return this.http
-      .post<Object>("http://localhost:8181/api/file/uploadStudents", file)
-      .pipe(
-        (map(data => data), catchError(error => throwError(error))),
-        finalize(() => this.isLoadingSubject.next(false))
-      );
+    return this.http.post<Object>(this.baseUrlAppointment + "set", obj).pipe(
+      (map(data => data), catchError(error => throwError(error))),
+      finalize(() => this.isLoadingSubject.next(false))
+    );
   }
 
   userSelectTimeSlot(id: number) {
     this.isLoadingSubject.next(true);
     return this.http
-      .post<Object>(
-        "http://localhost:8181/api/appointment/timeslots/postSlot/" + id,
-        id
-      )
+      .post<Object>(this.baseUrlAppointment + "timeslots/postSlot/" + id, id)
       .pipe(
         (map(data => data), catchError(error => throwError(error))),
         finalize(() => this.isLoadingSubject.next(false))
@@ -88,9 +88,7 @@ export class DataStorageService {
   fetchAppointment() {
     this.isLoadingSubject.next(true);
     this.http
-      .get<ApiResponse>(
-        "http://localhost:8181/api/appointment/faculty/allAppointments"
-      )
+      .get<ApiResponse>(this.baseUrlAppointment + "faculty/allAppointments")
       .pipe(
         (map(data => data),
         catchError(error => throwError(error)),
@@ -108,9 +106,7 @@ export class DataStorageService {
   fetchUserAppointment() {
     this.isLoadingSubject.next(true);
     this.http
-      .get<ApiResponse>(
-        "http://localhost:8181/api/appointment/user/allAppointments"
-      )
+      .get<ApiResponse>(this.baseUrlAppointment + "user/allAppointments")
       .pipe(
         (map(data => data),
         catchError(error => throwError("there was an error" + error)),
@@ -127,7 +123,7 @@ export class DataStorageService {
   fetchUserAppointmentForCal() {
     this.isLoadingSubject.next(true);
     this.http
-      .get<ApiResponse>("http://localhost:8181/api/appointment/calendar/user")
+      .get<ApiResponse>(this.baseUrlAppointment + "calendar/user")
       .pipe(
         (map(data => data),
         catchError(error => throwError("there was an error" + error)),
@@ -144,9 +140,7 @@ export class DataStorageService {
   displayAppointmentDetails(id: number) {
     this.isLoadingSubject.next(true);
     return this.http
-      .get<ApiResponse>(
-        "http://localhost:8181/api/appointment/timeslots/faculty/" + id
-      )
+      .get<ApiResponse>(this.baseUrlAppointment + "timeslots/faculty/" + id)
       .pipe(
         (map(data => data),
         catchError(error => throwError(error)),
@@ -157,9 +151,7 @@ export class DataStorageService {
   displayUserAppointmentDetails(id: number) {
     this.isLoadingSubject.next(true);
     return this.http
-      .get<ApiResponse>(
-        "http://localhost:8181/api/appointment/timeslots/user/" + id
-      )
+      .get<ApiResponse>(this.baseUrlAppointment + "timeslots/user/" + id)
       .pipe(
         (map(data => data),
         catchError(error => throwError(error)),
@@ -170,9 +162,7 @@ export class DataStorageService {
   adminScheduledAppointmentsRecipients() {
     this.isLoadingSubject.next(true);
     return this.http
-      .get<ApiResponse>(
-        "http://localhost:8181/api/appointment/getScheduledAppointments"
-      )
+      .get<ApiResponse>(this.baseUrlAppointment + "getScheduledAppointments")
       .pipe(
         (map(data => data),
         catchError(error => throwError(error)),
@@ -184,7 +174,7 @@ export class DataStorageService {
     this.isLoadingSubject.next(true);
     return this.http
       .get<ApiResponse>(
-        "http://localhost:8181/api/appointment/getScheduledAppointmentsUser"
+        this.baseUrlAppointment + "getScheduledAppointmentsUser"
       )
       .pipe(
         (map(data => data),
@@ -203,9 +193,9 @@ export class DataStorageService {
   fetchEvents() {
     this.isLoadingSubject.next(true);
     if (this.authService.user === "ROLE_USER") {
-      this.eventAPI = "http://localhost:8181/api/event/user/allEvents";
+      this.eventAPI = this.baseUrlEvent + "user/allEvents";
     } else {
-      this.eventAPI = "http://localhost:8181/api/event/faculty/allEvents";
+      this.eventAPI = this.baseUrlEvent + "faculty/allEvents";
     }
     this.http
       .get<ApiResponse>(this.eventAPI)
@@ -225,18 +215,16 @@ export class DataStorageService {
 
   storeEvent(obj: Object) {
     this.isLoadingSubject.next(true);
-    return this.http
-      .post<Object>("http://localhost:8181/api/event/set", obj)
-      .pipe(
-        (map(data => data), catchError(error => throwError(error))),
-        finalize(() => this.isLoadingSubject.next(false))
-      );
+    return this.http.post<Object>(this.baseUrlEvent + "set", obj).pipe(
+      (map(data => data), catchError(error => throwError(error))),
+      finalize(() => this.isLoadingSubject.next(false))
+    );
   }
 
   fetchCalendars() {
     this.isLoadingSubject.next(true);
     this.http
-      .get<ApiResponse>("http://localhost:8181/api/calendar/allCalendars")
+      .get<ApiResponse>(this.baseUrlCalendar + "allCalendars")
       .pipe(
         (map(data => data),
         catchError(error => throwError(error)),
@@ -252,7 +240,7 @@ export class DataStorageService {
   newCalendar(obj: Object) {
     this.isLoadingSubject.next(true);
     return this.http
-      .post<Object>("http://localhost:8181/api/calendar/create", obj)
+      .post<Object>(this.baseUrlCalendar + "create", obj)
       .pipe(
         (map(data => data),
         catchError(error => throwError(error)),
@@ -263,7 +251,7 @@ export class DataStorageService {
   shareCalenar(obj: Object) {
     this.isLoadingSubject.next(true);
     return this.http
-      .post<Object>("http://localhost:8181/api/calendar/share", obj)
+      .post<Object>(this.baseUrlCalendar + "share", obj)
       .pipe(
         (map(data => data),
         catchError(error => throwError(error)),

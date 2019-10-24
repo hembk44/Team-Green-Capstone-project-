@@ -1,13 +1,12 @@
 import { Component, OnInit } from "@angular/core";
 import { DataStorageService } from "src/app/home/shared/data-storage.service";
 import { AuthService } from "src/app/auth/auth.service";
-
 @Component({
-  selector: "app-scheduled-appointments-recipients",
-  templateUrl: "./scheduled-appointments-recipients.component.html",
-  styleUrls: ["./scheduled-appointments-recipients.component.css"]
+  selector: "app-scheduled-appointments-sent",
+  templateUrl: "./scheduled-appointments-sent.component.html",
+  styleUrls: ["./scheduled-appointments-sent.component.css"]
 })
-export class ScheduledAppointmentsRecipientsComponent implements OnInit {
+export class ScheduledAppointmentsSentComponent implements OnInit {
   currentRole: string;
   appointments: any;
 

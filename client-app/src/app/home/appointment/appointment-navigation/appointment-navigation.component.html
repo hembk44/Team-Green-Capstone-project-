@@ -40,18 +40,18 @@
             aria-label="Example icon-button with a menu"
             matTooltip="Click to see your all scheduled appointments"
           >
-            Scheduled Appointment <mat-icon>expand_more </mat-icon>
+            Scheduled Appointments <mat-icon>expand_more </mat-icon>
           </button>
 
           <mat-menu #schedule="matMenu">
             <button mat-menu-item (click)="navigateToScheduled()">
               <mat-icon>schedule</mat-icon>
 
-              <span>For you</span>
+              <span>For Appointments received</span>
             </button>
             <button mat-menu-item (click)="navigateToScheduledRecipients()">
               <mat-icon>schedule</mat-icon>
-              <span>For recipients</span>
+              <span>For Appointments sent</span>
             </button>
           </mat-menu>
         </div>

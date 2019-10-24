@@ -13,6 +13,9 @@ export class RegisterUsersComponent implements OnInit {
   validFileExtensions: string[] = ["xlsx", "csv"];
   invalidExtension: string;
   isInvalid: boolean = false;
+  selectedFiles: FileList;
+  currentFileUpload: File;
+
   constructor(
     private formBuilder: FormBuilder,
     private dataStorage: DataStorageService
@@ -28,17 +31,19 @@ export class RegisterUsersComponent implements OnInit {
       this.invalidExtension = "not supported file type!!!";
     } else {
       console.log(this.uploadForm.value.uploadFile);
+      this.currentFileUpload = this.selectedFiles.item(0);
+      console.log(this.currentFileUpload);
       this.dataStorage
-        .registerUsers(this.uploadForm.value.uploadFile)
+        .registerUsers(this.currentFileUpload)
         .subscribe(result => console.log(result));
     }
   }
 
   upload(event: any) {
-    let files = event.target.files;
+    this.selectedFiles = event.target.files;
     this.isInvalid = false;
     //check file is valid
-    if (!this.validateFile(files[0].name)) {
+    if (!this.validateFile(this.selectedFiles[0].name)) {
       this.isInvalid = true;
       // console.log('Selected file format is not supported');
       // this.invalidExtension = "not supported file type!!!";

@@ -91,7 +91,8 @@ import { ShareCalendarComponent } from "./home/calendar/share-calendar/share-cal
 import { EditEventComponent } from "./home/calendar/create-event/edit-event/edit-event.component";
 
 import { RegisterUsersComponent } from "./home/register-users/register-users.component";
-import { ScheduledAppointmentsRecipientsComponent } from './home/appointment/scheduled-appointments/scheduled-appointments-recipients/scheduled-appointments-recipients.component';
+import { ScheduledAppointmentsSentComponent } from "./home/appointment/scheduled-appointments/scheduled-appointments-sent/scheduled-appointments-sent.component";
+import { ScheduledAppointmentsReceivedComponent } from "./home/appointment/scheduled-appointments/scheduled-appointments-received/scheduled-appointments-received.component";
 
 @NgModule({
   declarations: [
@@ -130,7 +131,8 @@ import { ScheduledAppointmentsRecipientsComponent } from './home/appointment/sch
     EditEventComponent,
     EventDeleteConfirm,
     RegisterUsersComponent,
-    ScheduledAppointmentsRecipientsComponent
+    ScheduledAppointmentsSentComponent,
+    ScheduledAppointmentsReceivedComponent
   ],
   imports: [
     BrowserModule,

@@ -18,7 +18,7 @@ import { DialogDateTimeIntervalDialog } from "../../appointment/appointment-crea
 import { EventDate } from "../event-date.model";
 import { TimeInterval } from "../../appointment/appointment-model/time-interval.model";
 import { EventTime } from "../event-times.model";
-import { AuthService } from 'src/app/auth/auth.service';
+import { AuthService } from "src/app/auth/auth.service";
 
 @Component({
   selector: "app-create-event",
@@ -30,15 +30,15 @@ export class CreateEventComponent implements OnInit {
   eventData: CalEvent;
   email = new FormControl();
   dateRangeArray: EventDate[] = [];
-  primaryColor: string='';
-  secondaryColor: string='';
-  allDay=false;
+  primaryColor: string = "";
+  secondaryColor: string = "";
+  allDay = false;
   calendars: Calendar[];
   obj: Object;
   username: string;
   selectedCal: number;
   defaultTime: Date = new Date();
-  defaultTime2: Date = new Date;
+  defaultTime2: Date = new Date();
   emails: string[];
 
   constructor(
@@ -47,13 +47,16 @@ export class CreateEventComponent implements OnInit {
     private authService: AuthService,
     public dialog: MatDialog,
     private dataStorage: DataStorageService,
-    private calService: CalendarService,
+    private calService: CalendarService
   ) {}
 
   ngOnInit() {
     this.emails = [];
-    this.username=this.authService.username;
-    this.calendars=this.calService.getCalendars().filter(cal => cal.createdBy === this.username);
+    this.username = this.authService.username;
+    console.log(this.username);
+    this.calendars = this.calService
+      .getCalendars()
+      .filter(cal => cal.createdBy === this.username);
     console.log(this.calendars);
     this.eventForm = new FormGroup({
       title: new FormControl(),
@@ -68,16 +71,14 @@ export class CreateEventComponent implements OnInit {
       allDay: new FormControl(),
       calendar: new FormControl()
     });
-    this.defaultTime.setHours(this.defaultTime.getHours()+1);
+    this.defaultTime.setHours(this.defaultTime.getHours() + 1);
     this.defaultTime.setMinutes(0);
-    this.defaultTime2.setHours(this.defaultTime2.getHours()+2);
+    this.defaultTime2.setHours(this.defaultTime2.getHours() + 2);
     this.defaultTime2.setMinutes(0);
   }
 
   getErrorMessage() {
-    return this.email.hasError("email")
-      ? "Not a valid email"
-      : "";
+    return this.email.hasError("email") ? "Not a valid email" : "";
   }
 
   openDateRangeDialog(): void {
@@ -91,23 +92,29 @@ export class CreateEventComponent implements OnInit {
     });
   }
 
-  allday(){
-    this.allDay=!this.allDay;
+  allday() {
+    this.allDay = !this.allDay;
     console.log(this.allDay);
   }
 
   onSubmit() {
     const eventFormValues = this.eventForm.value;
-    if(eventFormValues.email){
-      this.emails = eventFormValues.email.split(',');
+    if (eventFormValues.email) {
+      this.emails = eventFormValues.email.split(",");
     }
     console.log(eventFormValues.startDate.toLocaleDateString());
     console.log(this.primaryColor);
     console.log(this.secondaryColor);
-    const startDate = eventFormValues.startDate.toDateString().concat(' ').concat(eventFormValues.startTime);
-    const endDate = eventFormValues.endDate.toDateString().concat(' ').concat(eventFormValues.endTime);
+    const startDate = eventFormValues.startDate
+      .toDateString()
+      .concat(" ")
+      .concat(eventFormValues.startTime);
+    const endDate = eventFormValues.endDate
+      .toDateString()
+      .concat(" ")
+      .concat(eventFormValues.endTime);
 
-    if(!this.allDay){
+    if (!this.allDay) {
       this.obj = {
         calendarId: this.selectedCal,
         title: eventFormValues.title,
@@ -120,8 +127,8 @@ export class CreateEventComponent implements OnInit {
         borderColor: this.primaryColor,
         allDay: this.allDay
       };
-    }else{
-      eventFormValues.endDate.setDate(eventFormValues.endDate.getDate()+1)
+    } else {
+      eventFormValues.endDate.setDate(eventFormValues.endDate.getDate() + 1);
       this.obj = {
         calendarId: this.selectedCal,
         title: eventFormValues.title,
@@ -146,92 +153,87 @@ export class CreateEventComponent implements OnInit {
 
     this.router.navigate(["home/calendar"]);
   }
-  setPrimary(color:string){
-    this.primaryColor=color;
+  setPrimary(color: string) {
+    this.primaryColor = color;
   }
-  setSecondary(color:string){
-    this.secondaryColor=color;
+  setSecondary(color: string) {
+    this.secondaryColor = color;
   }
-  onNoClick(){
+  onNoClick() {
     this.router.navigate(["home/calendar"]);
   }
-  selectCalendar(id: number){
+  selectCalendar(id: number) {
     this.selectedCal = id;
     console.log(this.selectedCal);
   }
 }
 
 @Component({
-  selector:"event-time-dialog",
+  selector: "event-time-dialog",
   templateUrl: "event-timeInterval-dialog.html"
 })
-export class EventTimeDialog{
+export class EventTimeDialog {
   startdate = new FormControl();
-  enddate = new FormControl
+  enddate = new FormControl();
   startDate = new Date().toLocaleDateString();
   endDate = new Date().toLocaleDateString();
   dateData: EventDate;
-  dateDataArray: EventDate[]=[];
-  eventTimeArray: EventTime[]=[];
+  dateDataArray: EventDate[] = [];
+  eventTimeArray: EventTime[] = [];
 
   constructor(
     private formBuilder: FormBuilder,
     public dialogRef: MatDialogRef<EventTimeDialog>,
     public dialog: MatDialog
-  ){}
+  ) {}
 
-  openTimeDialog():void{
+  openTimeDialog(): void {
     const dialogRef = this.dialog.open(EventTimeIntervalDialog, {
-      width:"300px"
-    })
+      width: "300px"
+    });
     dialogRef.afterClosed().subscribe(result => {
       this.eventTimeArray = result;
-    })
+    });
   }
 
-  addDate(){
-    this.dateData = new EventDate(
-      this.startdate.value,
-      this.eventTimeArray
-    )
+  addDate() {
+    this.dateData = new EventDate(this.startdate.value, this.eventTimeArray);
     this.dateDataArray.push(this.dateData);
     this.startdate.setValue(this.startDate);
     this.enddate.setValue(this.enddate);
   }
 
-  onNoClick():void{
+  onNoClick(): void {
     this.dialogRef.close();
   }
 
-  saveDialogData(){
+  saveDialogData() {
     this.addDate();
     this.dialogRef.close(this.dateDataArray);
   }
-
 }
 
 @Component({
-  selector:"event-time-dialog",
+  selector: "event-time-dialog",
   templateUrl: "event-time-dialog.html"
 })
-export class EventTimeIntervalDialog implements OnInit{
-
+export class EventTimeIntervalDialog implements OnInit {
   timeIntervalFormData: FormGroup;
   timeIntervalData: EventTime;
-  timeDataArray: EventTime[]=[];
+  timeDataArray: EventTime[] = [];
 
   constructor(
     private formBuilder: FormBuilder,
     public dialogRef: MatDialogRef<EventTimeIntervalDialog>
-  ){}
+  ) {}
 
-  ngOnInit(){
+  ngOnInit() {
     this.timeIntervalFormData = new FormGroup({
       startTime: new FormControl(),
       endTime: new FormControl()
-    })
+    });
   }
-  addTimeInterval(){
+  addTimeInterval() {
     const timeIntervalDataValues = this.timeIntervalFormData.value;
     this.timeIntervalData = new EventTime(
       timeIntervalDataValues.startTime,
@@ -240,14 +242,13 @@ export class EventTimeIntervalDialog implements OnInit{
     this.timeDataArray.push(this.timeIntervalData);
     this.timeIntervalFormData.reset();
   }
-  onNoClick():void{
+  onNoClick(): void {
     this.dialogRef.close();
   }
 
-  saveDialogData(){
+  saveDialogData() {
     this.addTimeInterval();
     this.dialogRef.close(this.timeDataArray);
-    this.timeDataArray =[];
+    this.timeDataArray = [];
   }
-
 }
