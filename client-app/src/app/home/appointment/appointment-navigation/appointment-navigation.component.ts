@@ -25,7 +25,7 @@ export class AppointmentNavigationComponent implements OnInit {
   }
 
   navigateToScheduled() {
-    this.router.navigate(["home/appointment/scheduled"]);
+    this.router.navigate(["home/appointment/scheduled-appointments-received"]);
   }
   navigateToScheduledRecipients() {
     this.router.navigate(["home/appointment/scheduled-appointments-sent"]);
@@ -37,7 +37,8 @@ export class AppointmentNavigationComponent implements OnInit {
   }
 
   userScheduledAppointments() {
-    this.router.navigate(["/home/appointment/scheduled"]);
+    // this.router.navigate(["/home/appointment/scheduled"]);
+    this.router.navigate(["home/appointment/scheduled-appointments-sent"]);
 
     console.log("scheduled appointments!");
   }

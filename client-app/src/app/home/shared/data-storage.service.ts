@@ -31,10 +31,6 @@ export class DataStorageService {
 
   private calSubject: BehaviorSubject<any> = new BehaviorSubject<any>({});
 
-  // public apointmentList: Observable<
-  //   Appointment[]
-  // > = this.appointmentSubject.asObservable();
-
   public eventList: Observable<CalEvent[]> = this.eventSubject.asObservable();
 
   constructor(

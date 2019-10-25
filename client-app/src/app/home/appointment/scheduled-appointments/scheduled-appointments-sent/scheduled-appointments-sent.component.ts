@@ -25,17 +25,12 @@ export class ScheduledAppointmentsSentComponent implements OnInit {
           console.log(result.result);
           this.appointments = result.result;
         });
+    } else {
+      console.log("user data here!!!");
+      this.dataStorage.userScheduledAppointments().subscribe(result => {
+        console.log(result.result);
+        this.appointments = result.result;
+      });
     }
-    // else {
-    //   console.log("user data here!!!");
-    //   this.dataService
-    //     .displayUserAppointmentDetails(this.id)
-    //     .subscribe(result => {
-    //       this.appointment = result.result;
-    // this.appointmentName = this.appointment[0].appointment.name;
-    // this.appointmentDesc = this.appointment[0].appointment.description;
-    //       console.log(this.appointment);
-    //     });
-    // }
   }
 }

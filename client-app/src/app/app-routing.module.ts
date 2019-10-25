@@ -20,7 +20,6 @@ import { CreateEventComponent } from "./home/calendar/create-event/create-event.
 import { AppointmentComponent } from "./home/appointment/appointment/appointment.component";
 import { AppointmentCreateComponent } from "./home/appointment/appointment-create/appointment-create.component";
 import { AppointmentDetailComponent } from "./home/appointment/appointment-detail/appointment-detail.component";
-import { ScheduledAppointmentComponent } from "./home/appointment/scheduled-appointment/scheduled-appointment.component";
 import { EventDetailComponent } from "./home/calendar/event-detail/event-detail.component";
 import { AppointmentNavigationComponent } from "./home/appointment/appointment-navigation/appointment-navigation.component";
 import { AppointmentStartComponent } from "./home/appointment/appointment-types/appointment-start/appointment-start.component";
@@ -30,6 +29,7 @@ import { GroupComponent } from "./home/group/group.component";
 import { EditEventComponent } from "./home/calendar/create-event/edit-event/edit-event.component";
 import { RegisterUsersComponent } from "./home/register-users/register-users.component";
 import { ScheduledAppointmentsSentComponent } from "./home/appointment/scheduled-appointments/scheduled-appointments-sent/scheduled-appointments-sent.component";
+import { ScheduledAppointmentsReceivedComponent } from "./home/appointment/scheduled-appointments/scheduled-appointments-received/scheduled-appointments-received.component";
 
 const routes: Routes = [
   {
@@ -77,7 +77,13 @@ const routes: Routes = [
             ]
           },
           { path: "received", component: AppointmentReceivedComponent },
-          { path: "scheduled", component: ScheduledAppointmentComponent },
+          // { path: "scheduled", component: ScheduledAppointmentComponent },
+          { path: "scheduled", component: ScheduledAppointmentsSentComponent },
+          {
+            path: "scheduled-appointments-received",
+            component: ScheduledAppointmentsReceivedComponent
+          },
+
           {
             path: "scheduled-appointments-sent",
             component: ScheduledAppointmentsSentComponent

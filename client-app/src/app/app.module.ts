@@ -3,14 +3,13 @@ import { NgModule } from "@angular/core";
 import { ReactiveFormsModule, FormsModule } from "@angular/forms";
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 
-// import { CovalentLayoutModule } from "@covalent/core/layout";
-// import { CovalentStepsModule } from "@covalent/core/steps";
-
 import { MaterialFileInputModule } from "ngx-material-file-input";
 
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+
+import { AppointmentModule } from "./home/appointment/appointment.module";
 
 import { LayoutModule } from "@angular/cdk/layout";
 import { FlexLayoutModule } from "@angular/flex-layout";
@@ -43,7 +42,7 @@ import { NgxMaterialTimepickerModule } from "ngx-material-timepicker";
 import { DashboardComponent } from "./home/dashboard/dashboard.component";
 import { CalendarComponent } from "./home/calendar/calendar.component";
 import { AppointmentComponent } from "./home/appointment/appointment/appointment.component";
-import { ScheduledAppointmentComponent } from "./home/appointment/scheduled-appointment/scheduled-appointment.component";
+// import { ScheduledAppointmentComponent } from "./home/appointment/scheduled-appointment/scheduled-appointment.component";
 import { AppointmentItemComponent } from "./home/appointment/appointment-item/appointment-item.component";
 import { AppointmentNavigationComponent } from "./home/appointment/appointment-navigation/appointment-navigation.component";
 import {
@@ -60,7 +59,8 @@ import {
 import { AppointmentStartComponent } from "./home/appointment/appointment-types/appointment-start/appointment-start.component";
 import { AppointmentSentComponent } from "./home/appointment/appointment-types/appointment-sent/appointment-sent.component";
 import { AppointmentReceivedComponent } from "./home/appointment/appointment-types/appointment-received/appointment-received.component";
-
+import { ScheduledAppointmentsSentComponent } from "./home/appointment/scheduled-appointments/scheduled-appointments-sent/scheduled-appointments-sent.component";
+import { ScheduledAppointmentsReceivedComponent } from "./home/appointment/scheduled-appointments/scheduled-appointments-received/scheduled-appointments-received.component";
 import {
   CreateEventComponent,
   EventTimeDialog,
@@ -91,12 +91,47 @@ import { ShareCalendarComponent } from "./home/calendar/share-calendar/share-cal
 import { EditEventComponent } from "./home/calendar/create-event/edit-event/edit-event.component";
 
 import { RegisterUsersComponent } from "./home/register-users/register-users.component";
-import { ScheduledAppointmentsSentComponent } from "./home/appointment/scheduled-appointments/scheduled-appointments-sent/scheduled-appointments-sent.component";
-import { ScheduledAppointmentsReceivedComponent } from "./home/appointment/scheduled-appointments/scheduled-appointments-received/scheduled-appointments-received.component";
 
 @NgModule({
+  // declarations: [
+  //   AppComponent,
+  //   AppComponent,
+  //   LoginComponent,
+  //   RegisterComponent,
+  //   LoadingSpinnerComponent,
+  //   VerticalNavigationComponent,
+  //   DashboardComponent,
+  //   CalendarComponent,
+  //   AppointmentComponent,
+  //   AppointmentItemComponent,
+  //   AppointmentNavigationComponent,
+  //   AppointmentDetailComponent,
+  //   AppointmentListComponent,
+  //   AppointmentCreateComponent,
+  //   DialogDateTimeIntervalDialog,
+  //   DialogTimeIntervalDialog,
+  //   EventTimeDialog,
+  //   EventTimeIntervalDialog,
+  //   CreateEventComponent,
+  //   CalendarListComponent,
+  //   CalendarItemComponent,
+  //   TimeSlotSnackComponent,
+  //   EventDetailComponent,
+  //   CalendarCreateComponent,
+  //   CalRename,
+  //   DeleteConfirm,
+  //   AppointmentStartComponent,
+  //   AppointmentSentComponent,
+  //   AppointmentReceivedComponent,
+  //   GroupComponent,
+  //   ShareCalendarComponent,
+  //   EditEventComponent,
+  //   EventDeleteConfirm,
+  //   RegisterUsersComponent,
+  //   ScheduledAppointmentsSentComponent,
+  //   ScheduledAppointmentsReceivedComponent
+  // ],
   declarations: [
-    AppComponent,
     AppComponent,
     LoginComponent,
     RegisterComponent,
@@ -104,15 +139,6 @@ import { ScheduledAppointmentsReceivedComponent } from "./home/appointment/sched
     VerticalNavigationComponent,
     DashboardComponent,
     CalendarComponent,
-    AppointmentComponent,
-    ScheduledAppointmentComponent,
-    AppointmentItemComponent,
-    AppointmentNavigationComponent,
-    AppointmentDetailComponent,
-    AppointmentListComponent,
-    AppointmentCreateComponent,
-    DialogDateTimeIntervalDialog,
-    DialogTimeIntervalDialog,
     EventTimeDialog,
     EventTimeIntervalDialog,
     CreateEventComponent,
@@ -123,16 +149,11 @@ import { ScheduledAppointmentsReceivedComponent } from "./home/appointment/sched
     CalendarCreateComponent,
     CalRename,
     DeleteConfirm,
-    AppointmentStartComponent,
-    AppointmentSentComponent,
-    AppointmentReceivedComponent,
     GroupComponent,
     ShareCalendarComponent,
     EditEventComponent,
     EventDeleteConfirm,
-    RegisterUsersComponent,
-    ScheduledAppointmentsSentComponent,
-    ScheduledAppointmentsReceivedComponent
+    RegisterUsersComponent
   ],
   imports: [
     BrowserModule,
@@ -169,11 +190,12 @@ import { ScheduledAppointmentsReceivedComponent } from "./home/appointment/sched
       provide: DateAdapter,
       useFactory: adapterFactory
     }),
-    FullCalendarModule
+    FullCalendarModule,
+    AppointmentModule
   ],
   entryComponents: [
-    DialogDateTimeIntervalDialog,
-    DialogTimeIntervalDialog,
+    // DialogDateTimeIntervalDialog,
+    // DialogTimeIntervalDialog,
     EventTimeDialog,
     EventDetailComponent,
     EventTimeIntervalDialog,
