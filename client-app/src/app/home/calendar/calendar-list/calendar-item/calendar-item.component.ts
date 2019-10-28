@@ -23,7 +23,7 @@ export class CalendarItemComponent implements OnInit {
 
   ngOnInit() {
     console.log(this.calendar);
-    this.username = this.authService.username;
+    this.username = this.authService.name;
   }
   
   toggleCal(){

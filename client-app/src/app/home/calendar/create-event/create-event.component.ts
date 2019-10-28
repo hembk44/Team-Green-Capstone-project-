@@ -59,9 +59,9 @@ export class CreateEventComponent implements OnInit {
       .filter(cal => cal.createdBy === this.username);
     console.log(this.calendars);
     this.eventForm = new FormGroup({
-      title: new FormControl(),
+      title: new FormControl("",[Validators.required]),
       description: new FormControl(""),
-      location: new FormControl(),
+      location: new FormControl(""),
       email: this.email,
       startDate: new FormControl(new Date()),
       startTime: new FormControl(),
@@ -69,7 +69,7 @@ export class CreateEventComponent implements OnInit {
       endTime: new FormControl(),
       primary: new FormControl(),
       allDay: new FormControl(),
-      calendar: new FormControl()
+      calendar: new FormControl([Validators.required])
     });
     this.defaultTime.setHours(this.defaultTime.getHours() + 1);
     this.defaultTime.setMinutes(0);

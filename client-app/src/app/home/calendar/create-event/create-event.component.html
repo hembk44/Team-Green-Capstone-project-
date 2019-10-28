@@ -177,7 +177,7 @@
           Add Recipients
         </button> -->
         <span class="example-spacer"></span>
-        <button type="submit" mat-raised-button class="primary">
+        <button type="submit" mat-raised-button class="primary" [disabled]="!eventForm.valid">
           Confirm
         </button>
         <button
