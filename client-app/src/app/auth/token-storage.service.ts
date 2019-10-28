@@ -7,6 +7,8 @@ const USERNAME_KEY = "AuthName";
 // const AUTHORITIES_KEY = "AuthAuthorities";
 const AUTHORITY_KEY = "AuthAuthorities";
 
+const NAME_KEY = "AuthUsername";
+
 @Injectable({
   providedIn: "root"
 })
@@ -37,6 +39,15 @@ export class TokenStorageService {
 
   public getUsername(): string {
     return localStorage.getItem(USERNAME_KEY);
+  }
+
+  public saveName(name:string){
+    window.localStorage.removeItem(NAME_KEY);
+    window.localStorage.setItem(NAME_KEY, name);
+  }
+
+  public getName(): string{
+    return localStorage.getItem(NAME_KEY);
   }
 
   public saveAuthority(authority: string) {

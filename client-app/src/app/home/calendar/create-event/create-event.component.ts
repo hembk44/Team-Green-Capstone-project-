@@ -52,7 +52,7 @@ export class CreateEventComponent implements OnInit {
 
   ngOnInit() {
     this.emails = [];
-    this.username = this.authService.username;
+    this.username = this.authService.name;
     console.log(this.username);
     this.calendars = this.calService
       .getCalendars()
