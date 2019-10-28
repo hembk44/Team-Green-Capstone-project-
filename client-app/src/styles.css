@@ -14,5 +14,11 @@
     color: white;
 }
 
+.fc-button{
+    background-color: #800029;
+    border: none;
+    background-image:none;
+}
+
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
