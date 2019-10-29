@@ -120,8 +120,11 @@
       <input
         matInput
         formControlName="primary"
-        [style.background]="color"
+        [(colorPicker)]="color"
+        [style.background]="primaryColor"
+        [cpFallbackColor]="'#5484ed'"
         [style.color]="'white'"
+        [value]="primaryColor"
         placeholder="Event Color"
         [cpOutputFormat]="'hex'"
         (colorPickerClose)="setPrimary(color)"
@@ -142,9 +145,6 @@
         [cpOKButton]="true"
         [cpColorMode]="'presets'"
         [cpPresetLabel]="'Event Color'"
-        [value]="color"
-        [cpFallbackColor]="'#5484ed'"
-        [(colorPicker)]="color"
         readonly
       />
     </mat-form-field>
