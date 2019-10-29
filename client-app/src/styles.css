@@ -14,10 +14,15 @@
     color: white;
 }
 
+#calendar{
+    height:auto;
+}
+
 .fc-button{
     background-color: #800029;
     border: none;
     background-image:none;
+    text-transform: capitalize;
 }
 
 html, body { height: 100%; }

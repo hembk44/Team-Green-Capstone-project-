@@ -50,12 +50,12 @@
     [nextDayThreshold]="'00:00:00'"
     [themeSystem]="'standard'"
     [eventLimit]="true"
+    [height]="'parent'"
     [header]="{
       left: 'prev,today,next',
       center: 'title',
       right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
     }"
-    [height]="650"
     [weekends]="weekends"
     (eventClick)="eventClicked($event.event)"></full-calendar>
   <!-- Calendar heading -->

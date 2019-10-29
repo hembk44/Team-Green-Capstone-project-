@@ -74,6 +74,7 @@
 .menutoggle{
     height:2em;
     background-color:white;
+    padding: 2px;
 }
 .create-button{
     background-color: rgb(25, 204, 25);
@@ -90,6 +91,7 @@
 }
 .close-button{
     color:darkgrey;
+    margin-top:10px;
 }
 .event-times{
     font-size:0.8em;

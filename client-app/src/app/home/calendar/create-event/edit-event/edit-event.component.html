@@ -1,4 +1,4 @@
-<div class="example-container">
+<div class="example-container" fxLayoutAlign="center">
     <form
     [formGroup]="eventForm"
     (ngSubmit)="onSubmit()"
@@ -128,11 +128,12 @@
           <!-- <button type="button" mat-raised-button color="primary">
             Add Recipients
           </button> -->
-          <span class="example-spacer"></span>
+          
           <button type="submit" mat-raised-button class="primary" [disabled]="!eventForm.valid">
             Confirm
           </button>
           <button mat-raised-button color="warn" (click)="onNoClick()" class="cancel-button">Cancel</button>
+          <span class="example-spacer"></span>
         </mat-toolbar-row>
       </mat-toolbar>
     </form>

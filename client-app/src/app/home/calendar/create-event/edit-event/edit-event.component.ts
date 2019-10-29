@@ -10,7 +10,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 @Component({
   selector: 'app-edit-event',
   templateUrl: './edit-event.component.html',
-  styleUrls: ['./edit-event.component.css','../create-event.component.css']
+  styleUrls: ['../create-event.component.css']
 })
 export class EditEventComponent implements OnInit {
   id:number;
