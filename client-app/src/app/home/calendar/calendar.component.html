@@ -16,15 +16,14 @@
         </button>
       </mat-toolbar>
       <!-- Left side of calendar view -->
-      <div class="left-view">
+      <div class="left-view"><br>
         <!-- Small Calendar -->
         <!-- <mat-calendar [(selected)]="viewDate"></mat-calendar> -->
-        <hr>
         <!-- List of user calendars -->
         <div class="cal-list">
-          <mat-toolbar id="cal-heading"><p>Your Calendars</p><span class="spacer"></span><mat-icon matTooltip="New Calendar" style="cursor:pointer" (click)="newCal()">add</mat-icon></mat-toolbar>
+          <!-- <mat-toolbar id="cal-heading"><p>Your Calendars</p><span class="spacer"></span><mat-icon matTooltip="New Calendar" style="cursor:pointer" (click)="newCal()">add</mat-icon></mat-toolbar> -->
           <app-calendar-list></app-calendar-list>
-        </div><hr>
+        </div>
         <!-- <mat-checkbox color="primary" (click)="toggleWeekends()" [checked]="!weekends" style="margin-left:5px">Show Weekends</mat-checkbox> -->
       </div>
     </mat-sidenav>
