@@ -25,6 +25,7 @@ export class AuthService {
   private signupUrl = "http://localhost:8181/api/auth/signup";
   private userRoleSubject: BehaviorSubject<any> = new BehaviorSubject<any>({});
   private usernameSubject: BehaviorSubject<any> = new BehaviorSubject<any>({});
+  private nameSubject: BehaviorSubject<any> = new BehaviorSubject<any>({});
   public userRole: Observable<string> = this.userRoleSubject.asObservable();
 
   get user(): string {
@@ -36,6 +37,11 @@ export class AuthService {
   get username(): string {
     this.usernameSubject.next(this.tokenStorage.getUsername());
     return this.usernameSubject.value;
+  }
+
+  get name(): string{
+    this.nameSubject.next(this.tokenStorage.getName());
+    return this.nameSubject.value;
   }
 
   constructor(
@@ -53,6 +59,7 @@ export class AuthService {
           console.log(data.result);
           this.tokenStorage.saveToken(data.result.accessToken);
           this.tokenStorage.saveUsername(data.result.name);
+          this.tokenStorage.saveName(data.result.username);
           this.tokenStorage.saveAuthority(data.result.role);
           this.userRoleSubject.next(this.tokenStorage.getAuthority());
           this.usernameSubject.next(this.tokenStorage.getUsername());

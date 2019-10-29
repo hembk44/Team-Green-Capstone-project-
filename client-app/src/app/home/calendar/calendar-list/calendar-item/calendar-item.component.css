@@ -2,6 +2,7 @@
     height: 2em;
     background-color: white;
     font-size: 0.8em;
+    padding: 0;
 }
 .cal-menu{
     opacity: 0;

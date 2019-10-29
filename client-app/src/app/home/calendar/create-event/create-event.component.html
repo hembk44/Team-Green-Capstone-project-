@@ -1,4 +1,4 @@
-<div class="example-container">
+<div class="example-container" fxLayoutAlign="center">
   <form [formGroup]="eventForm" (ngSubmit)="onSubmit()">
     <mat-form-field class="cal-select" required>
       <mat-label>Select Calendar</mat-label>
@@ -20,7 +20,7 @@
     ><br />
 
 
-    <mat-form-field style="width:60%;">
+    <mat-form-field style="width:60%">
       <textarea
         matInput
         cdkTextareaAutosize
@@ -120,8 +120,11 @@
       <input
         matInput
         formControlName="primary"
-        [style.background]="color"
+        [(colorPicker)]="color"
+        [style.background]="primaryColor"
+        [cpFallbackColor]="'#5484ed'"
         [style.color]="'white'"
+        [value]="primaryColor"
         placeholder="Event Color"
         [cpOutputFormat]="'hex'"
         (colorPickerClose)="setPrimary(color)"
@@ -142,9 +145,6 @@
         [cpOKButton]="true"
         [cpColorMode]="'presets'"
         [cpPresetLabel]="'Event Color'"
-        [value]="color"
-        [cpFallbackColor]="'#5484ed'"
-        [(colorPicker)]="color"
         readonly
       />
     </mat-form-field>
@@ -176,8 +176,7 @@
         <!-- <button type="button" mat-raised-button color="primary">
           Add Recipients
         </button> -->
-        <span class="example-spacer"></span>
-        <button type="submit" mat-raised-button class="primary">
+        <button type="submit" mat-raised-button class="primary" [disabled]="!eventForm.valid">
           Confirm
         </button>
         <button
@@ -188,6 +187,7 @@
         >
           Cancel
         </button>
+        <span class="example-spacer"></span>
       </mat-toolbar-row>
     </mat-toolbar>
   </form>

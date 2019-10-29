@@ -10,7 +10,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 @Component({
   selector: 'app-edit-event',
   templateUrl: './edit-event.component.html',
-  styleUrls: ['./edit-event.component.css']
+  styleUrls: ['../create-event.component.css']
 })
 export class EditEventComponent implements OnInit {
   id:number;
@@ -45,24 +45,24 @@ export class EditEventComponent implements OnInit {
     this.newEnd = this.event.end;
     this.newEnd.setDate(this.newEnd.getDate()-1);
     this.primaryColor = this.event.backgroundColor;
-    this.username = this.authService.username;
+    this.username = this.authService.name;
     this.calendars=this.calService.getCalendars().filter(cal => cal.createdBy === this.username);
     this.selectedCal = this.calService.getEventCal(this.event);
     console.log(this.selectedCal);
     this.allDay=(this.event.allDay);
     console.log(this.allDay);
     this.eventForm = new FormGroup({
-      title: new FormControl(this.event.title),
+      title: new FormControl(this.event.title,[Validators.required]),
       location: new FormControl(this.event.location),
       description: new FormControl(this.event.description),
       email: this.email,
-      startDate: new FormControl(this.event.start),
-      endDate: new FormControl(this.newEnd),
+      startDate: new FormControl(this.event.start,[Validators.required]),
+      endDate: new FormControl(this.newEnd,[Validators.required]),
       startTime: new FormControl(this.event.start.toLocaleTimeString()),
       endTime: new FormControl(this.event.end.toLocaleTimeString()),
       primary: new FormControl(this.event.backgroundColor),
       allDay: new FormControl(this.event.allDay),
-      calendar: new FormControl(),
+      calendar: new FormControl([Validators.required]),
     })
   }
 
