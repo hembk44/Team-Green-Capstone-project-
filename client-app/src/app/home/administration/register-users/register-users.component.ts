@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
-import { DataStorageService } from "../shared/data-storage.service";
+import { DataStorageService } from "../../shared/data-storage.service";
 // import { FileValidator } from "ngx-material-file-input";
 
 @Component({
