@@ -41,6 +41,7 @@
         mat-list-item
         routerLink="/home/admin"
         (click)="drawer.close()"
+        *ngIf="userRole === 'ROLE_ADMIN'"
       >
         <mat-icon aria-hidden="false" aria-label="Example person add icon"
           >usb

@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from 'src/app/auth/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-administration',
@@ -7,9 +9,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AdministrationComponent implements OnInit {
 
-  constructor() { }
+  role: string;
+
+  constructor(private authService: AuthService, private router: Router) { }
 
   ngOnInit() {
+    this.role = this.authService.user;
+    if(this.role !== 'ROLE_ADMIN'){
+      this.router.navigate(['home/dashboard']);
+    }
   }
 
 }

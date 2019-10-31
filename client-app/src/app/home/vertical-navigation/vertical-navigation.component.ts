@@ -13,6 +13,7 @@ import { AuthService } from "src/app/auth/auth.service";
 })
 export class VerticalNavigationComponent implements OnInit {
   nameOfUser: string;
+  userRole: string;
   // isHandset$: Observable<boolean> = this.breakpointObserver
   //   .observe(Breakpoints.Web)
   //   .pipe(
@@ -29,6 +30,7 @@ export class VerticalNavigationComponent implements OnInit {
 
   ngOnInit() {
     this.nameOfUser = this.authService.username;
+    this.userRole = this.authService.user;
     console.log(this.nameOfUser);
   }
   logout() {

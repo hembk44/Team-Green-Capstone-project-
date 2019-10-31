@@ -92,6 +92,8 @@ import { EditEventComponent } from "./home/calendar/create-event/edit-event/edit
 
 import { RegisterUsersComponent } from "./home/administration/register-users/register-users.component";
 import { AdministrationComponent } from './home/administration/administration.component';
+import { UpdateRolesComponent } from './home/administration/update-roles/update-roles.component';
+import { DeleteUsersComponent } from './home/administration/delete-users/delete-users.component';
 
 @NgModule({
   // declarations: [
@@ -155,7 +157,9 @@ import { AdministrationComponent } from './home/administration/administration.co
     EditEventComponent,
     EventDeleteConfirm,
     RegisterUsersComponent,
-    AdministrationComponent
+    AdministrationComponent,
+    UpdateRolesComponent,
+    DeleteUsersComponent
   ],
   imports: [
     BrowserModule,
