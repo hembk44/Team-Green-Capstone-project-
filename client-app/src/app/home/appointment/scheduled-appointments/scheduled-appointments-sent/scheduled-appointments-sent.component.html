@@ -1,31 +1,46 @@
-<mat-card>
-  <mat-card-content *ngFor="let time of appointments">
-    <div *ngIf="currentRole == 'ROLE_ADMIN'">
-      <h4>{{ time.appointmentName }}</h4>
-      <p>{{ time.appointmentDescription }}</p>
-      <p>
-        <strong>Date & Time: </strong> &nbsp; {{ time.date | date }} &nbsp;
-        &nbsp;<button mat-raised-button class="primary">
-          {{ time.startTime }} - {{ time.endTime }}
-        </button>
-      </p>
-      <p>
-        <strong>Selected by:</strong> &nbsp; {{ time.selectorName }}({{
-          time.selectorEmail
-        }})
-      </p>
+<div
+  class="container"
+  fxLayout
+  fxLayout.xs="column"
+  fxLayout.sm="column"
+  fxLayoutAlign="flex-start"
+  fxLayoutGap="10px"
+  fxLayoutGap.xs="0"
+>
+  <div fxFlex="100%">
+    <div *ngFor="let time of appointments">
+      <div *ngIf="currentRole == 'ROLE_ADMIN'">
+        <mat-card>
+          <mat-card-content>
+            <h4>{{ time.appointmentName }}</h4>
+            <p>{{ time.appointmentDescription }}</p>
+            <p>
+              <strong>Date & Time: </strong> &nbsp;
+              {{ time.date | date }} &nbsp; &nbsp;<button
+                mat-raised-button
+                class="primary"
+              >
+                {{ time.startTime }} - {{ time.endTime }}
+              </button>
+            </p>
+            <p>
+              <strong>Selected by:</strong> &nbsp;
+              {{ time.selectorName }} &nbsp;({{ time.selectorEmail }})
+            </p>
+          </mat-card-content>
+        </mat-card>
+      </div>
+      <div *ngIf="currentRole == 'ROLE_USER'">
+        <h4>{{ time.appointmentName }}</h4>
+        <p>{{ time.appointmentDescription }}</p>
+        <p><strong>For: </strong> &nbsp;{{ time.appointmentCreatorName }}</p>
+        <p>
+          <strong>Date & Time: </strong> &nbsp;{{ time.date | date }} &nbsp;
+          <button mat-raised-button class="primary">
+            {{ time.startTime }} - {{ time.endTime }}
+          </button>
+        </p>
+      </div>
     </div>
-    <div *ngIf="currentRole == 'ROLE_USER'">
-      <h4>{{ time.appointmentName }}</h4>
-      <p>{{ time.appointmentDescription }}</p>
-      <p><strong>For: </strong> &nbsp;{{ time.appointmentCreatorName }}</p>
-      <p>
-        <strong>Date & Time: </strong> &nbsp;{{ time.date | date }} &nbsp;
-        <button mat-raised-button class="primary">
-          {{ time.startTime }} - {{ time.endTime }}
-        </button>
-      </p>
-    </div>
-    <hr />
-  </mat-card-content>
-</mat-card>
+  </div>
+</div>
