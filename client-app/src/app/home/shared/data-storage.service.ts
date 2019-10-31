@@ -31,6 +31,10 @@ export class DataStorageService {
 
   private calSubject: BehaviorSubject<any> = new BehaviorSubject<any>({});
 
+  private adminAppointmentReceived: BehaviorSubject<any> = new BehaviorSubject<
+    any
+  >({});
+
   public eventList: Observable<CalEvent[]> = this.eventSubject.asObservable();
 
   constructor(
@@ -41,6 +45,10 @@ export class DataStorageService {
 
   get appointmentLists(): Appointment[] {
     return this.appointmentSubject.value;
+  }
+
+  get appointmentsReceived(): Appointment[] {
+    return this.adminAppointmentReceived.value;
   }
 
   get eventsList(): CalEvent[] {
@@ -92,7 +100,7 @@ export class DataStorageService {
       )
       .subscribe((result: ApiResponse) => {
         console.log("Faculty appointments!");
-        console.log(result.result);
+        console.log(result);
         if (result.status == 200 && result.result) {
           this.appointmentSubject.next(result.result);
         }
@@ -112,6 +120,7 @@ export class DataStorageService {
         if (result.status == 200 && result.result) {
           console.log(result.result);
           this.appointmentSubject.next(result.result);
+          this.adminAppointmentReceived.next(true);
         }
       });
   }

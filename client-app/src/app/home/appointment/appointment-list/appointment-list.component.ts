@@ -3,6 +3,7 @@ import { Router } from "@angular/router";
 import { DataStorageService } from "../../shared/data-storage.service";
 import { Appointment } from "../appointment-model/appointment.model";
 import { AuthService } from "src/app/auth/auth.service";
+import { AppointmentsNavigationAdminService } from "../appointments-navigation-admin.service";
 
 @Component({
   selector: "app-appointment-list",
@@ -16,7 +17,8 @@ export class AppointmentListComponent implements OnInit {
   constructor(
     private router: Router,
     private dataStorage: DataStorageService,
-    private role: AuthService
+    private role: AuthService,
+    private appointmentNavigationAdmin: AppointmentsNavigationAdminService
   ) {}
 
   ngOnInit() {
@@ -32,11 +34,23 @@ export class AppointmentListComponent implements OnInit {
       });
     } else {
       console.log("admin data here!!!");
-      // console.log(this.dataStorage.fetchAppointment());
-      this.dataStorage.fetchAppointment();
-      this.dataStorage.isLoading.subscribe(loading => {
-        if (!loading) {
-          this.appointments = this.dataStorage.appointmentLists;
+
+      this.appointmentNavigationAdmin.appointmentStatus.subscribe(status => {
+        console.log(status);
+        if (status === "sent") {
+          this.dataStorage.fetchAppointment();
+          this.dataStorage.isLoading.subscribe(loading => {
+            if (!loading) {
+              this.appointments = this.dataStorage.appointmentLists;
+            }
+          });
+        } else {
+          this.dataStorage.fetchUserAppointment();
+          this.dataStorage.isLoading.subscribe(loading => {
+            if (!loading) {
+              this.appointments = this.dataStorage.appointmentLists;
+            }
+          });
         }
       });
     }
