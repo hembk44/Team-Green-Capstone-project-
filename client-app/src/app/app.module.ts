@@ -86,11 +86,16 @@ import {
   EventDeleteConfirm
 } from "./home/calendar/event-detail/event-detail.component";
 import { CalendarCreateComponent } from "./home/calendar/calendar-create/calendar-create.component";
-import { GroupComponent } from "./home/group/group.component";
 import { ShareCalendarComponent } from "./home/calendar/share-calendar/share-calendar.component";
 import { EditEventComponent } from "./home/calendar/create-event/edit-event/edit-event.component";
 
 import { RegisterUsersComponent } from "./home/register-users/register-users.component";
+import { GroupListComponent } from "./home/group/group-list/group-list.component";
+import { CreateGroupComponent } from "./home/group/create-group/create-group.component";
+import { GroupItemComponent } from "./home/group/group-item/group-item.component";
+import { GroupStartComponent } from "./home/group/group-start/group-start.component";
+import { GroupDetailComponent } from "./home/group/group-detail/group-detail.component";
+import { GroupComponent } from './home/group/group/group.component';
 
 @NgModule({
   // declarations: [
@@ -149,11 +154,16 @@ import { RegisterUsersComponent } from "./home/register-users/register-users.com
     CalendarCreateComponent,
     CalRename,
     DeleteConfirm,
-    GroupComponent,
     ShareCalendarComponent,
     EditEventComponent,
     EventDeleteConfirm,
-    RegisterUsersComponent
+    RegisterUsersComponent,
+    GroupListComponent,
+    CreateGroupComponent,
+    GroupItemComponent,
+    GroupStartComponent,
+    GroupDetailComponent,
+    GroupComponent
   ],
   imports: [
     BrowserModule,
