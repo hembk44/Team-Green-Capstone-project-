@@ -33,6 +33,7 @@ import { GroupListComponent } from "./home/group/group-list/group-list.component
 import { GroupComponent } from "./home/group/group/group.component";
 import { GroupStartComponent } from "./home/group/group-start/group-start.component";
 import { CreateGroupComponent } from "./home/group/create-group/create-group.component";
+import { GroupDetailComponent } from "./home/group/group-detail/group-detail.component";
 
 const routes: Routes = [
   {
@@ -97,7 +98,8 @@ const routes: Routes = [
         component: GroupComponent,
         children: [
           { path: "", component: GroupStartComponent },
-          { path: "create-group", component: CreateGroupComponent }
+          { path: "create-group", component: CreateGroupComponent },
+          { path: ":id", component: GroupDetailComponent }
         ]
       },
       { path: "register-users", component: RegisterUsersComponent }

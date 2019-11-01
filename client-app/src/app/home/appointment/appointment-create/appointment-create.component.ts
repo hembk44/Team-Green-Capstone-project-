@@ -11,9 +11,9 @@ import {
   FormControl
 } from "@angular/forms";
 import { Router } from "@angular/router";
-import { Appointment } from "../appointment-model/appointment.model";
-import { DateRange } from "../appointment-model/date-range.model";
-import { TimeInterval } from "../appointment-model/time-interval.model";
+import { Appointment } from "../models-appointments/appointment.model";
+import { DateRange } from "../models-appointments/date-range.model";
+import { TimeInterval } from "../models-appointments/time-interval.model";
 import { DataStorageService } from "../../shared/data-storage.service";
 import { ApiResponse } from "src/app/auth/api.response";
 import { EventTime } from "../../calendar/event-times.model";

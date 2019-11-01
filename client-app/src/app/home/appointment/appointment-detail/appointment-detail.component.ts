@@ -2,8 +2,8 @@ import { Component, OnInit } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
 
 import { ActivatedRoute, Router, Params } from "@angular/router";
-import { Appointment } from "../appointment-model/appointment.model";
-import { TimeInterval } from "../appointment-model/time-interval.model";
+import { Appointment } from "../models-appointments/appointment.model";
+import { TimeInterval } from "../models-appointments/time-interval.model";
 import { DataStorageService } from "../../shared/data-storage.service";
 import { AuthService } from "src/app/auth/auth.service";
 import { EventTime } from "../../calendar/event-times.model";

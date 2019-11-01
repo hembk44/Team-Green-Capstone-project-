@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject } from "@angular/core";
 import { Router } from "@angular/router";
 import { DataStorageService } from "../../shared/data-storage.service";
-import { Appointment } from "../appointment-model/appointment.model";
+import { Appointment } from "../models-appointments/appointment.model";
 import { AuthService } from "src/app/auth/auth.service";
 import { AppointmentsNavigationAdminService } from "../appointments-navigation-admin.service";
 

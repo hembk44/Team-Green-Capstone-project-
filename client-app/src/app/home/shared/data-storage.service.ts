@@ -4,7 +4,7 @@ import { map, tap, catchError, finalize } from "rxjs/operators";
 
 import { throwError, Observable, BehaviorSubject } from "rxjs";
 import { ApiResponse } from "src/app/auth/api.response";
-import { Appointment } from "../appointment/appointment-model/appointment.model";
+import { Appointment } from "../appointment/models-appointments/appointment.model";
 import { CalEvent } from "../calendar/events.model";
 import { AuthService } from "src/app/auth/auth.service";
 import { Calendar } from "../calendar/calendar-list/calendar.model";
