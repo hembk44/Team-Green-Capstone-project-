@@ -14,11 +14,12 @@
     <div *ngIf="event.allDay && event.start===newEnd">
         <p>{{event.start.toLocaleDateString()}}</p>
     </div>
-    <p><b>Location:</b> {{ event.extendedProps.location }}</p>
-    <p><b>Description:</b> {{ event.extendedProps.description }}</p>
+    <p *ngIf="event.extendedProps.location != ''"><b>Location:</b> {{ event.extendedProps.location }}</p>
+    <p *ngIf="event.extendedProps.description != ''"><b>Description:</b> {{ event.extendedProps.description }}</p>
     <button mat-raised-button [matMenuTriggerFor]="menu" class="options-button">Options</button> 
     <mat-menu #menu>
         <button mat-menu-item (click)="editEvent()">Edit Event</button>
         <button mat-menu-item (click)="deleteEvent()">Delete</button>
+        <button mat-menu-item>Confirm Attendance</button>
     </mat-menu>
 </div>

@@ -26,7 +26,7 @@ import { AppointmentStartComponent } from "./home/appointment/appointment-types/
 import { AppointmentSentComponent } from "./home/appointment/appointment-types/appointment-sent/appointment-sent.component";
 import { AppointmentReceivedComponent } from "./home/appointment/appointment-types/appointment-received/appointment-received.component";
 import { EditEventComponent } from "./home/calendar/create-event/edit-event/edit-event.component";
-import { RegisterUsersComponent } from "./home/register-users/register-users.component";
+import { RegisterUsersComponent } from "./home/administration/register-users/register-users.component";
 import { ScheduledAppointmentsSentComponent } from "./home/appointment/scheduled-appointments/scheduled-appointments-sent/scheduled-appointments-sent.component";
 import { ScheduledAppointmentsReceivedComponent } from "./home/appointment/scheduled-appointments/scheduled-appointments-received/scheduled-appointments-received.component";
 import { GroupListComponent } from "./home/group/group-list/group-list.component";

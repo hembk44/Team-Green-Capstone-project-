@@ -95,7 +95,7 @@ import { CreateGroupComponent } from "./home/group/create-group/create-group.com
 import { GroupItemComponent } from "./home/group/group-item/group-item.component";
 import { GroupStartComponent } from "./home/group/group-start/group-start.component";
 import { GroupDetailComponent } from "./home/group/group-detail/group-detail.component";
-import { GroupComponent } from './home/group/group/group.component';
+import { GroupComponent } from "./home/group/group/group.component";
 
 @NgModule({
   // declarations: [
