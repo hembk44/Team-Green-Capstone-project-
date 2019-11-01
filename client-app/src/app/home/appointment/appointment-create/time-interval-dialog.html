@@ -100,7 +100,12 @@
     Cancel
   </button>
 
-  <button mat-button class="primary" (click)="addTimeInterval()">
+  <button
+    mat-button
+    matTooltip="click to add another start/end time and time interval"
+    class="primary"
+    (click)="addTimeInterval()"
+  >
     Add time
   </button>
   <button mat-button class="primary" (click)="saveDialogData()" cdkFocusInitial>

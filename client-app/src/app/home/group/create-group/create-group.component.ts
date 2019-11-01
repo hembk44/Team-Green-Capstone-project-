@@ -7,12 +7,21 @@ import {
 } from "@angular/forms";
 import { Router } from "@angular/router";
 
+import { COMMA, ENTER } from "@angular/cdk/keycodes";
+import { MatChipInputEvent } from "@angular/material/chips";
+
 @Component({
   selector: "app-create-group",
   templateUrl: "./create-group.component.html",
   styleUrls: ["./create-group.component.css"]
 })
 export class CreateGroupComponent implements OnInit {
+  visible = true;
+  selectable = true;
+  removable = true;
+  addOnBlur = true;
+  readonly separatorKeysCodes: number[] = [ENTER, COMMA];
+
   groupForm: FormGroup;
   email = new FormControl("", [Validators.required, Validators.email]);
   emails: string[] = [];
@@ -26,10 +35,27 @@ export class CreateGroupComponent implements OnInit {
     });
   }
 
-  addEmails() {
-    this.emails.push(this.groupForm.value.email);
-    console.log(this.emails);
-    this.email.reset();
+  add(event: MatChipInputEvent): void {
+    const input = event.input;
+    const value = event.value;
+
+    // Add emails
+    if (value.trim()) {
+      this.emails.push(value.trim());
+    }
+
+    // Reset the input value
+    if (input) {
+      input.value = "";
+    }
+  }
+
+  remove(email: string): void {
+    const index = this.emails.indexOf(email);
+
+    if (index >= 0) {
+      this.emails.splice(index, 1);
+    }
   }
 
   getErrorMessage() {
@@ -45,7 +71,6 @@ export class CreateGroupComponent implements OnInit {
 
   onSubmit() {
     const groupFormValues = this.groupForm.value;
-    this.emails.push(this.groupForm.value.email);
     const obj = {
       name: groupFormValues.title,
       description: groupFormValues.description,

@@ -36,6 +36,7 @@ import { MatMenuModule } from "@angular/material/menu";
 import { MatSelectModule } from "@angular/material/select";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
+import { MatChipsModule } from "@angular/material/chips";
 
 import { VerticalNavigationComponent } from "./home/vertical-navigation/vertical-navigation.component";
 import { NgxMaterialTimepickerModule } from "ngx-material-timepicker";
@@ -97,7 +98,7 @@ import { GroupStartComponent } from "./home/group/group-start/group-start.compon
 import { GroupDetailComponent } from "./home/group/group-detail/group-detail.component";
 import { GroupComponent } from "./home/group/group/group.component";
 import { RegisterUsersComponent } from "./home/administration/register-users/register-users.component";
-import { FilterMemberPipe } from './home/group/group-detail/filter-member.pipe';
+import { FilterMemberPipe } from "./home/group/group-detail/filter-member.pipe";
 
 @NgModule({
   // declarations: [
@@ -198,6 +199,7 @@ import { FilterMemberPipe } from './home/group/group-detail/filter-member.pipe';
     MatSelectModule,
     MatTooltipModule,
     MatSnackBarModule,
+    MatChipsModule,
     MaterialFileInputModule,
     CalendarModule.forRoot({
       provide: DateAdapter,

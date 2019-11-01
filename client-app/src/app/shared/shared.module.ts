@@ -19,7 +19,11 @@ import { MatTabsModule } from "@angular/material/tabs";
 import { MatGridListModule } from "@angular/material/grid-list";
 import { MatCardModule } from "@angular/material/card";
 import { MatFormFieldModule } from "@angular/material/form-field";
-import { MatInputModule, MatNativeDateModule } from "@angular/material";
+import {
+  MatInputModule,
+  MatNativeDateModule,
+  MatChipsModule
+} from "@angular/material";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatDialogModule } from "@angular/material/dialog";
 import { MatExpansionModule } from "@angular/material/expansion";
@@ -57,6 +61,7 @@ import { MatSnackBarModule } from "@angular/material/snack-bar";
     MatSelectModule,
     MatTooltipModule,
     MatSnackBarModule,
+    MatChipsModule,
     MaterialFileInputModule
   ]
 })

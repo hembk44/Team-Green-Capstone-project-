@@ -15,7 +15,29 @@
     ></textarea>
   </mat-form-field>
 
-  <mat-toolbar color="primary">
+  <mat-form-field class="example-chip-list">
+    <mat-chip-list #chipList aria-label="adding emails">
+      <mat-chip
+        *ngFor="let email of emails"
+        [selectable]="selectable"
+        [removable]="removable"
+        (removed)="remove(email)"
+      >
+        {{ email }}
+        <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+      </mat-chip>
+      <input
+        placeholder="Enter Emails"
+        [matChipInputFor]="chipList"
+        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+        [matChipInputAddOnBlur]="addOnBlur"
+        (matChipInputTokenEnd)="add($event)"
+      />
+    </mat-chip-list>
+    <mat-hint>Use comma or hit ENTER to enter multiple emails!</mat-hint>
+  </mat-form-field>
+
+  <!-- <mat-toolbar color="primary">
     <mat-toolbar-row>
       <mat-form-field>
         <input
@@ -37,7 +59,7 @@
         Add emails
       </button>
     </mat-toolbar-row>
-  </mat-toolbar>
+  </mat-toolbar> -->
 
   <mat-toolbar>
     <mat-toolbar-row>
@@ -47,9 +69,10 @@
         type="button"
         class="primary"
         mat-raised-button
+        matTooltip="click to select date and time intervals"
         (click)="openDateRangeDialog()"
       >
-        click to select date and time
+        select date and time
       </button>
     </mat-toolbar-row>
     <!-- <mat-toolbar-row>
