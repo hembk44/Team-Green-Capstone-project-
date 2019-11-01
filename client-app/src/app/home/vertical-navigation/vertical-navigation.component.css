@@ -18,7 +18,7 @@
 }
 
 .mat-toolbar.mat-primary {
-  background: blanchedalmond;
+  background: rgb(185, 163, 90);
   color: #800029;
   z-index: 999999;
 }
@@ -34,7 +34,7 @@
 }
 
 .mat-raised-button {
-  color: blanchedalmond;
+  color: rgb(243, 242, 241);
   background: #800029;
 }
 

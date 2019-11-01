@@ -27,9 +27,10 @@ import { AppointmentSentComponent } from "./home/appointment/appointment-types/a
 import { AppointmentReceivedComponent } from "./home/appointment/appointment-types/appointment-received/appointment-received.component";
 import { GroupComponent } from "./home/group/group.component";
 import { EditEventComponent } from "./home/calendar/create-event/edit-event/edit-event.component";
-import { RegisterUsersComponent } from "./home/register-users/register-users.component";
+import { RegisterUsersComponent } from "./home/administration/register-users/register-users.component";
 import { ScheduledAppointmentsSentComponent } from "./home/appointment/scheduled-appointments/scheduled-appointments-sent/scheduled-appointments-sent.component";
 import { ScheduledAppointmentsReceivedComponent } from "./home/appointment/scheduled-appointments/scheduled-appointments-received/scheduled-appointments-received.component";
+import { AdministrationComponent } from './home/administration/administration.component';
 
 const routes: Routes = [
   {
@@ -91,7 +92,7 @@ const routes: Routes = [
         ]
       },
       { path: "group", component: GroupComponent },
-      { path: "register-users", component: RegisterUsersComponent }
+      { path: "admin", component: AdministrationComponent }
     ]
   }
   // { path: "dashboard", component: DashboardComponent },

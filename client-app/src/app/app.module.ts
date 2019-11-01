@@ -90,7 +90,8 @@ import { GroupComponent } from "./home/group/group.component";
 import { ShareCalendarComponent } from "./home/calendar/share-calendar/share-calendar.component";
 import { EditEventComponent } from "./home/calendar/create-event/edit-event/edit-event.component";
 
-import { RegisterUsersComponent } from "./home/register-users/register-users.component";
+import { RegisterUsersComponent } from "./home/administration/register-users/register-users.component";
+import { AdministrationComponent } from './home/administration/administration.component';
 
 @NgModule({
   // declarations: [
@@ -153,7 +154,8 @@ import { RegisterUsersComponent } from "./home/register-users/register-users.com
     ShareCalendarComponent,
     EditEventComponent,
     EventDeleteConfirm,
-    RegisterUsersComponent
+    RegisterUsersComponent,
+    AdministrationComponent
   ],
   imports: [
     BrowserModule,

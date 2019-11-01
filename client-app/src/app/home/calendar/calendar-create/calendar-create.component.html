@@ -1,5 +1,5 @@
 <mat-toolbar class="top-detail-row">
-    <span class="spacer"></span><mat-icon (click)="close()" class="close-button" matTooltip="Close">clear</mat-icon>
+    <div>New Calendar</div><span class="spacer"></span><mat-icon (click)="close()" class="close-button" matTooltip="Close">clear</mat-icon>
 </mat-toolbar>
 <div mat-dialog-content>
     <form [formGroup]="calForm" (ngSubmit)="onSubmit()">

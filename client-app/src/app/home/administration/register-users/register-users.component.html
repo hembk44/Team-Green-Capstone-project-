@@ -1,5 +1,11 @@
-<div style="margin: 20px; color: maroon;">
-  <form
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>
+      User File Upload
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <form
     class="example-container"
     [formGroup]="uploadForm"
     (ngSubmit)="onSubmit()"
@@ -8,7 +14,7 @@
       <ngx-mat-file-input
         #removableInput
         formControlName="uploadFile"
-        placeholder="please upload file "
+        placeholder="Upload .csv file"
         accept=".xlsx,.csv"
         (change)="upload($event)"
       ></ngx-mat-file-input>
@@ -33,14 +39,16 @@
         <mat-icon>delete</mat-icon>
       </button>
     </mat-form-field>
-    <hr />
     <mat-error
       *ngIf="isInvalid && !uploadForm.get('uploadFile').hasError('required')"
     >
       {{ invalidExtension }}
     </mat-error>
-    <button type="submit" mat-raised-button class="primary">
+  </form>
+  </mat-card-content>
+  <mat-card-actions>
+    <button type="submit" mat-raised-button class="primary submit-button">
       Ok
     </button>
-  </form>
-</div>
+  </mat-card-actions>
+</mat-card>
