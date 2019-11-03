@@ -9,7 +9,7 @@ import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
-import { AppointmentModule } from "./home/appointment/appointment.module";
+// import { AppointmentModule } from "./home/appointment/appointment.module";
 
 import { LayoutModule } from "@angular/cdk/layout";
 import { FlexLayoutModule } from "@angular/flex-layout";
@@ -99,6 +99,8 @@ import { GroupDetailComponent } from "./home/group/group-detail/group-detail.com
 import { GroupComponent } from "./home/group/group/group.component";
 import { RegisterUsersComponent } from "./home/administration/register-users/register-users.component";
 import { FilterMemberPipe } from "./home/group/group-detail/filter-member.pipe";
+import { AppointmentFilterPipe } from "./home/appointment/appointment-list/appointment-filter.pipe";
+import { ScheduledAppointmentSentPipe } from "./home/appointment/scheduled-appointments/scheduled-appointments-sent/scheduled-appointment-sent.pipe";
 
 @NgModule({
   // declarations: [
@@ -141,6 +143,21 @@ import { FilterMemberPipe } from "./home/group/group-detail/filter-member.pipe";
   // ],
   declarations: [
     AppComponent,
+    AppointmentComponent,
+    AppointmentItemComponent,
+    AppointmentNavigationComponent,
+    AppointmentDetailComponent,
+    AppointmentListComponent,
+    AppointmentCreateComponent,
+    DialogDateTimeIntervalDialog,
+    DialogTimeIntervalDialog,
+    AppointmentStartComponent,
+    AppointmentSentComponent,
+    AppointmentReceivedComponent,
+    ScheduledAppointmentsSentComponent,
+    ScheduledAppointmentsReceivedComponent,
+    DialogDateTimeIntervalDialog,
+    DialogTimeIntervalDialog,
     LoginComponent,
     RegisterComponent,
     LoadingSpinnerComponent,
@@ -167,7 +184,9 @@ import { FilterMemberPipe } from "./home/group/group-detail/filter-member.pipe";
     GroupStartComponent,
     GroupDetailComponent,
     GroupComponent,
-    FilterMemberPipe
+    FilterMemberPipe,
+    AppointmentFilterPipe,
+    ScheduledAppointmentSentPipe
   ],
   imports: [
     BrowserModule,
@@ -205,12 +224,11 @@ import { FilterMemberPipe } from "./home/group/group-detail/filter-member.pipe";
       provide: DateAdapter,
       useFactory: adapterFactory
     }),
-    FullCalendarModule,
-    AppointmentModule
+    FullCalendarModule
   ],
   entryComponents: [
-    // DialogDateTimeIntervalDialog,
-    // DialogTimeIntervalDialog,
+    DialogDateTimeIntervalDialog,
+    DialogTimeIntervalDialog,
     EventTimeDialog,
     EventDetailComponent,
     EventTimeIntervalDialog,

@@ -6,3 +6,9 @@
   margin: 10px;
   /* width: 30%; */
 }
+
+.mat-form-field {
+  font-size: 13px;
+  font-weight: 400;
+  width: 52%;
+}

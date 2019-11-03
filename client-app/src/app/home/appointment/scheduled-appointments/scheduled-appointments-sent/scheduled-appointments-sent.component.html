@@ -8,7 +8,29 @@
   fxLayoutGap.xs="0"
 >
   <div fxFlex="40%">
-    <div *ngFor="let time of appointments">
+    <div style=" margin-left: 10px; padding: 10px;">
+      <!-- <button
+                  mat-stroked-button
+                  class="primary"
+                  (click)="create()"
+                  *ngIf="currentRole == 'ROLE_ADMIN' || currentRole == 'ROLE_PM'"
+                >
+                  Create Appointment
+                </button> -->
+      <mat-form-field class="example-full-width">
+        <input
+          type="text"
+          matInput
+          [(ngModel)]="searchText"
+          placeholder="Search Appointments"
+        />
+        <mat-icon matSuffix>search</mat-icon>
+        <mat-hint>Search by Appointment name or description</mat-hint>
+      </mat-form-field>
+    </div>
+    <div
+      *ngFor="let time of appointments | scheduledAppointmentSent: searchText"
+    >
       <div *ngIf="currentRole == 'ROLE_ADMIN'">
         <mat-card>
           <mat-card-content>

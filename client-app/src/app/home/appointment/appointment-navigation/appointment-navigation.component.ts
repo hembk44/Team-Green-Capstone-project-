@@ -43,4 +43,8 @@ export class AppointmentNavigationComponent implements OnInit {
 
     console.log("scheduled appointments!");
   }
+
+  create() {
+    this.router.navigate(["home/appointment/sent/create"]);
+  }
 }

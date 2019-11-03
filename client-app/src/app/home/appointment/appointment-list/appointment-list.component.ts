@@ -14,6 +14,7 @@ export class AppointmentListComponent implements OnInit {
   appointments: Appointment[] = [];
   appointment: Appointment;
   currentRole: string;
+  searchText = "";
   constructor(
     private router: Router,
     private dataStorage: DataStorageService,
@@ -55,7 +56,7 @@ export class AppointmentListComponent implements OnInit {
       });
     }
   }
-  create() {
-    this.router.navigate(["home/appointment/sent/create"]);
-  }
+  // create() {
+  //   this.router.navigate(["home/appointment/sent/create"]);
+  // }
 }
