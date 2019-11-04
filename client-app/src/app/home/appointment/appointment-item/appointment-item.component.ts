@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from "@angular/core";
-import { Appointment } from "../appointment-model/appointment.model";
-import { DateRange } from "../appointment-model/date-range.model";
+import { Appointment } from "../models-appointments/appointment.model";
+import { DateRange } from "../models-appointments/date-range.model";
 import { Router } from "@angular/router";
 
 @Component({

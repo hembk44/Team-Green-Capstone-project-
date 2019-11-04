@@ -9,6 +9,7 @@ import { AuthService } from "src/app/auth/auth.service";
 export class ScheduledAppointmentsSentComponent implements OnInit {
   currentRole: string;
   appointments: any;
+  searchText = "";
 
   constructor(
     private authService: AuthService,

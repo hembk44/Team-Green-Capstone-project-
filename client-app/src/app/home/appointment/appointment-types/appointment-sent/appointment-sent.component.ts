@@ -1,4 +1,5 @@
 import { Component, OnInit } from "@angular/core";
+import { AppointmentsNavigationAdminService } from "../../appointments-navigation-admin.service";
 
 @Component({
   selector: "app-appointment-sent",
@@ -6,7 +7,11 @@ import { Component, OnInit } from "@angular/core";
   styleUrls: ["./appointment-sent.component.css"]
 })
 export class AppointmentSentComponent implements OnInit {
-  constructor() {}
+  constructor(
+    private appointmentNavigationAdmin: AppointmentsNavigationAdminService
+  ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.appointmentNavigationAdmin.changeAppointmentStatus("sent");
+  }
 }

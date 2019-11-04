@@ -1,0 +1,8 @@
+<!-- <div style=" margin: 10px;">
+  <button mat-stroked-button class="primary" (click)="create()">
+    Create Group
+  </button>
+</div> -->
+
+<app-group-item *ngFor="let g of group; let i = index" [eachGroup]="g" [id]="i">
+</app-group-item>

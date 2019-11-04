@@ -25,12 +25,15 @@ import { AppointmentNavigationComponent } from "./home/appointment/appointment-n
 import { AppointmentStartComponent } from "./home/appointment/appointment-types/appointment-start/appointment-start.component";
 import { AppointmentSentComponent } from "./home/appointment/appointment-types/appointment-sent/appointment-sent.component";
 import { AppointmentReceivedComponent } from "./home/appointment/appointment-types/appointment-received/appointment-received.component";
-import { GroupComponent } from "./home/group/group.component";
 import { EditEventComponent } from "./home/calendar/create-event/edit-event/edit-event.component";
 import { RegisterUsersComponent } from "./home/administration/register-users/register-users.component";
 import { ScheduledAppointmentsSentComponent } from "./home/appointment/scheduled-appointments/scheduled-appointments-sent/scheduled-appointments-sent.component";
 import { ScheduledAppointmentsReceivedComponent } from "./home/appointment/scheduled-appointments/scheduled-appointments-received/scheduled-appointments-received.component";
-import { AdministrationComponent } from './home/administration/administration.component';
+import { GroupListComponent } from "./home/group/group-list/group-list.component";
+import { GroupComponent } from "./home/group/group/group.component";
+import { GroupStartComponent } from "./home/group/group-start/group-start.component";
+import { CreateGroupComponent } from "./home/group/create-group/create-group.component";
+import { GroupDetailComponent } from "./home/group/group-detail/group-detail.component";
 
 const routes: Routes = [
   {
@@ -78,7 +81,6 @@ const routes: Routes = [
             ]
           },
           { path: "received", component: AppointmentReceivedComponent },
-          // { path: "scheduled", component: ScheduledAppointmentComponent },
           { path: "scheduled", component: ScheduledAppointmentsSentComponent },
           {
             path: "scheduled-appointments-received",
@@ -91,36 +93,18 @@ const routes: Routes = [
           }
         ]
       },
-      { path: "group", component: GroupComponent },
-      { path: "admin", component: AdministrationComponent }
+      {
+        path: "group",
+        component: GroupComponent,
+        children: [
+          { path: "", component: GroupStartComponent },
+          { path: "create-group", component: CreateGroupComponent },
+          { path: ":id", component: GroupDetailComponent }
+        ]
+      },
+      { path: "register-users", component: RegisterUsersComponent }
     ]
   }
-  // { path: "dashboard", component: DashboardComponent },
-  // { path: "calendar", component: CalendarComponent },
-  // { path: "create-event", component: CreateEventComponent },
-  // {
-  //   path: "appointment",
-  //   component: AppointmentComponent,
-  //   children: [
-  //     { path: "", component: AppointmentStartComponent },
-  //     {
-  //       path: "type",
-  //       component: AppointmentTypeComponent,
-  //       children: [
-  //         {
-  //           path: "create",
-  //           component: AppointmentCreateComponent
-  //         },
-  //         {
-  //           path: ":id",
-  //           component: AppointmentDetailComponent
-  //         }
-  //       ]
-  //     },
-
-  //     { path: "scheduled", component: ScheduledAppointmentComponent }
-  //   ]
-  // }
 ];
 
 @NgModule({

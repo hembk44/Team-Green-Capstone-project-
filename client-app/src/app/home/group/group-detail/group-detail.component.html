@@ -1,0 +1,58 @@
+<mat-card>
+  <h5>{{ groupName }}</h5>
+  <p>{{ groupDesc }}</p>
+
+  <mat-list>
+    <mat-toolbar>
+      <mat-toolbar-row>
+        <span
+          ><h3 mat-subheader>{{ numOfmembers }} &nbsp; members</h3></span
+        >
+        <span class="example-spacer"></span>
+        <mat-form-field class="example-full-width">
+          <input
+            type="text"
+            matInput
+            [(ngModel)]="searchText"
+            placeholder="Search members"
+          />
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+      </mat-toolbar-row>
+    </mat-toolbar>
+    <!-- <h3 mat-subheader>{{ numOfmembers }} &nbsp; members</h3>
+    <span class="example-spacer"></span>
+    <mat-form-field class="example-full-width">
+      <input
+        type="text"
+        matInput
+        [(ngModel)]="searchText"
+        placeholder="Search members"
+      />
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field> -->
+    <mat-list-item *ngFor="let email of groupemails | filterMember: searchText">
+      <mat-icon mat-list-icon>person_outline</mat-icon>
+      <a style="cursor: pointer;"
+        ><p mat-line>{{ email }}</p>
+      </a>
+    </mat-list-item>
+  </mat-list>
+
+  <button
+    mat-raised-button
+    class="primary"
+    [matMenuTriggerFor]="manage"
+    matTooltip="click to edit or message group"
+  >
+    Manage
+  </button>
+  <mat-menu #manage="matMenu">
+    <button mat-menu-item>
+      <a style="cursor: pointer;">Edit</a>
+    </button>
+    <button mat-menu-item>
+      <a style="cursor: pointer;">Message</a>
+    </button>
+  </mat-menu>
+</mat-card>

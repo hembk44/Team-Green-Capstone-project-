@@ -11,12 +11,12 @@ import { EventService } from "../events.service";
 import { Router } from "@angular/router";
 import { CalendarService } from "../calendar-list/calendar.service";
 import { Calendar } from "../calendar-list/calendar.model";
-import { DateRange } from "../../appointment/appointment-model/date-range.model";
+import { DateRange } from "../../appointment/models-appointments/date-range.model";
 import { MatDialog, MatDialogRef, MatSnackBar } from "@angular/material";
 import { DataStorageService } from "../../shared/data-storage.service";
 import { DialogDateTimeIntervalDialog } from "../../appointment/appointment-create/appointment-create.component";
 import { EventDate } from "../event-date.model";
-import { TimeInterval } from "../../appointment/appointment-model/time-interval.model";
+import { TimeInterval } from "../../appointment/models-appointments/time-interval.model";
 import { EventTime } from "../event-times.model";
 import { AuthService } from "src/app/auth/auth.service";
 import { NgxMaterialTimepickerTheme } from 'ngx-material-timepicker';
@@ -75,7 +75,7 @@ export class CreateEventComponent implements OnInit {
       .filter(cal => cal.createdBy === this.username);
     console.log(this.calendars);
     this.eventForm = new FormGroup({
-      title: new FormControl("",[Validators.required]),
+      title: new FormControl("", [Validators.required]),
       description: new FormControl(""),
       location: new FormControl(""),
       email: this.email,
@@ -130,7 +130,7 @@ export class CreateEventComponent implements OnInit {
       .concat(" ")
       .concat(eventFormValues.endTime);
 
-    if(startDate < endDate){
+    if (startDate < endDate) {
       if (!this.allDay) {
         this.obj = {
           calendarId: this.selectedCal,
@@ -167,18 +167,15 @@ export class CreateEventComponent implements OnInit {
         }
       });
 
-      this.snackbar.open('Event created successfully', 'OK', {
+      this.snackbar.open("Event created successfully", "OK", {
         duration: 3000
       });
-      this.router.navigate(["home/calendar"]); 
-      
-    } else{
-      this.snackbar.open('Start must come before end.', 'OK', {
+      this.router.navigate(["home/calendar"]);
+    } else {
+      this.snackbar.open("Start must come before end.", "OK", {
         duration: 5000
       });
     }
-
-    
   }
   setPrimary(color: string) {
     this.primaryColor = color;

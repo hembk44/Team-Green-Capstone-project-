@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { AuthService } from "src/app/auth/auth.service";
+import { BehaviorSubject, Observable } from "rxjs";
 
 @Component({
   selector: "app-appointment-navigation",
@@ -41,5 +42,9 @@ export class AppointmentNavigationComponent implements OnInit {
     this.router.navigate(["home/appointment/scheduled-appointments-sent"]);
 
     console.log("scheduled appointments!");
+  }
+
+  create() {
+    this.router.navigate(["home/appointment/sent/create"]);
   }
 }

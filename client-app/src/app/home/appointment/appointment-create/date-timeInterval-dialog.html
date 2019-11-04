@@ -30,6 +30,7 @@
           type="button"
           class="primary"
           mat-raised-button
+          matTooltip="click to select start/end time and time interval"
           (click)="openTimeIntervalDialog()"
         >
           select time interval
@@ -55,7 +56,14 @@
     Cancel
   </button>
 
-  <button mat-button class="primary" (click)="addDate()">Add Date</button>
+  <button
+    mat-button
+    matTooltip="click to add another date and time interval"
+    class="primary"
+    (click)="addDate()"
+  >
+    Add Date
+  </button>
 
   <button mat-button class="primary" (click)="saveDialogData()" cdkFocusInitial>
     Ok

@@ -4,8 +4,8 @@ import { Calendar } from "./calendar-list/calendar.model";
 import { CalendarService } from "./calendar-list/calendar.service";
 import { Subject } from "rxjs";
 import { DataStorageService } from "../shared/data-storage.service";
-import { DateRange } from "../appointment/appointment-model/date-range.model";
-import { TimeInterval } from "../appointment/appointment-model/time-interval.model";
+import { DateRange } from "../appointment/models-appointments/date-range.model";
+import { TimeInterval } from "../appointment/models-appointments/time-interval.model";
 import { CompatibleEvent } from "./compatible-events.model";
 
 @Injectable()

@@ -1,0 +1,47 @@
+<form class="example-container" [formGroup]="groupForm" (ngSubmit)="onSubmit()">
+  <mat-form-field>
+    <input matInput placeholder="Group Title" formControlName="title" />
+  </mat-form-field>
+
+  <mat-form-field>
+    <textarea
+      matInput
+      placeholder="Group Description"
+      formControlName="description"
+    ></textarea>
+  </mat-form-field>
+
+  <mat-form-field class="example-chip-list">
+    <mat-chip-list #chipList aria-label="adding emails">
+      <mat-chip
+        *ngFor="let email of emails"
+        [selectable]="selectable"
+        [removable]="removable"
+        (removed)="remove(email)"
+      >
+        {{ email }}
+        <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+      </mat-chip>
+      <input
+        placeholder="Enter Emails"
+        [matChipInputFor]="chipList"
+        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+        [matChipInputAddOnBlur]="addOnBlur"
+        (matChipInputTokenEnd)="add($event)"
+      />
+    </mat-chip-list>
+    <mat-hint>Use comma or hit ENTER to enter multiple emails!</mat-hint>
+  </mat-form-field>
+  <mat-toolbar>
+    <mat-toolbar-row>
+      <span class="example-spacer"></span>
+      <button mat-raised-button color="warn" (click)="cancel()">
+        Cancel
+      </button>
+      &nbsp; &nbsp;
+      <button type="submit" mat-raised-button class="primary">
+        Create Group
+      </button>
+    </mat-toolbar-row>
+  </mat-toolbar>
+</form>

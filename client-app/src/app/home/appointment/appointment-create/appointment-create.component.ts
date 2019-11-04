@@ -11,13 +11,16 @@ import {
   FormControl
 } from "@angular/forms";
 import { Router } from "@angular/router";
-import { Appointment } from "../appointment-model/appointment.model";
-import { DateRange } from "../appointment-model/date-range.model";
-import { TimeInterval } from "../appointment-model/time-interval.model";
+import { Appointment } from "../models-appointments/appointment.model";
+import { DateRange } from "../models-appointments/date-range.model";
+import { TimeInterval } from "../models-appointments/time-interval.model";
 import { DataStorageService } from "../../shared/data-storage.service";
 import { ApiResponse } from "src/app/auth/api.response";
 import { EventTime } from "../../calendar/event-times.model";
 import { EventDate } from "../../calendar/event-date.model";
+
+import { COMMA, ENTER } from "@angular/cdk/keycodes";
+import { MatChipInputEvent } from "@angular/material/chips";
 
 @Component({
   selector: "app-appointment-create",
@@ -25,6 +28,11 @@ import { EventDate } from "../../calendar/event-date.model";
   styleUrls: ["./appointment-create.component.css"]
 })
 export class AppointmentCreateComponent implements OnInit {
+  visible = true;
+  selectable = true;
+  removable = true;
+  addOnBlur = true;
+  readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   appointmentForm: FormGroup;
   email = new FormControl("", [Validators.required, Validators.email]);
   appointmentData: Appointment;
@@ -49,11 +57,35 @@ export class AppointmentCreateComponent implements OnInit {
     this.router.navigate(["/home/appointment/sent"]);
   }
 
-  addEmails() {
-    this.emails.push(this.appointmentForm.value.email);
-    console.log(this.emails);
-    this.email.reset();
+  // addEmails() {
+  //   this.emails.push(this.appointmentForm.value.email);
+  //   console.log(this.emails);
+  //   this.email.reset();
+  // }
+
+  add(event: MatChipInputEvent): void {
+    const input = event.input;
+    const value = event.value;
+
+    // Add emails
+    if (value.trim()) {
+      this.emails.push(value.trim());
+    }
+
+    // Reset the input value
+    if (input) {
+      input.value = "";
+    }
   }
+
+  remove(email: string): void {
+    const index = this.emails.indexOf(email);
+
+    if (index >= 0) {
+      this.emails.splice(index, 1);
+    }
+  }
+
   getErrorMessage() {
     return this.email.hasError("required")
       ? "You must enter a valid email address"
@@ -76,7 +108,7 @@ export class AppointmentCreateComponent implements OnInit {
 
   onSubmit() {
     const appointmentFormValues = this.appointmentForm.value;
-    this.emails.push(this.appointmentForm.value.email);
+    // this.emails.push(this.appointmentForm.value.email);
     const obj = {
       name: appointmentFormValues.title,
       description: appointmentFormValues.description,

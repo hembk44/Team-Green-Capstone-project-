@@ -9,7 +9,7 @@ import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
-import { AppointmentModule } from "./home/appointment/appointment.module";
+// import { AppointmentModule } from "./home/appointment/appointment.module";
 
 import { LayoutModule } from "@angular/cdk/layout";
 import { FlexLayoutModule } from "@angular/flex-layout";
@@ -36,6 +36,7 @@ import { MatMenuModule } from "@angular/material/menu";
 import { MatSelectModule } from "@angular/material/select";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
+import { MatChipsModule } from "@angular/material/chips";
 
 import { VerticalNavigationComponent } from "./home/vertical-navigation/vertical-navigation.component";
 import { NgxMaterialTimepickerModule } from "ngx-material-timepicker";
@@ -86,14 +87,23 @@ import {
   EventDeleteConfirm
 } from "./home/calendar/event-detail/event-detail.component";
 import { CalendarCreateComponent } from "./home/calendar/calendar-create/calendar-create.component";
-import { GroupComponent } from "./home/group/group.component";
 import { ShareCalendarComponent } from "./home/calendar/share-calendar/share-calendar.component";
 import { EditEventComponent } from "./home/calendar/create-event/edit-event/edit-event.component";
 
+// import { RegisterUsersComponent } from "./home/register-users/register-users.component";
+import { GroupListComponent } from "./home/group/group-list/group-list.component";
+import { CreateGroupComponent } from "./home/group/create-group/create-group.component";
+import { GroupItemComponent } from "./home/group/group-item/group-item.component";
+import { GroupStartComponent } from "./home/group/group-start/group-start.component";
+import { GroupDetailComponent } from "./home/group/group-detail/group-detail.component";
+import { GroupComponent } from "./home/group/group/group.component";
 import { RegisterUsersComponent } from "./home/administration/register-users/register-users.component";
 import { AdministrationComponent } from './home/administration/administration.component';
 import { UpdateRolesComponent } from './home/administration/update-roles/update-roles.component';
 import { DeleteUsersComponent } from './home/administration/delete-users/delete-users.component';
+import { FilterMemberPipe } from "./home/group/group-detail/filter-member.pipe";
+import { AppointmentFilterPipe } from "./home/appointment/appointment-list/appointment-filter.pipe";
+import { ScheduledAppointmentSentPipe } from "./home/appointment/scheduled-appointments/scheduled-appointments-sent/scheduled-appointment-sent.pipe";
 
 @NgModule({
   // declarations: [
@@ -136,6 +146,21 @@ import { DeleteUsersComponent } from './home/administration/delete-users/delete-
   // ],
   declarations: [
     AppComponent,
+    AppointmentComponent,
+    AppointmentItemComponent,
+    AppointmentNavigationComponent,
+    AppointmentDetailComponent,
+    AppointmentListComponent,
+    AppointmentCreateComponent,
+    DialogDateTimeIntervalDialog,
+    DialogTimeIntervalDialog,
+    AppointmentStartComponent,
+    AppointmentSentComponent,
+    AppointmentReceivedComponent,
+    ScheduledAppointmentsSentComponent,
+    ScheduledAppointmentsReceivedComponent,
+    DialogDateTimeIntervalDialog,
+    DialogTimeIntervalDialog,
     LoginComponent,
     RegisterComponent,
     LoadingSpinnerComponent,
@@ -152,14 +177,22 @@ import { DeleteUsersComponent } from './home/administration/delete-users/delete-
     CalendarCreateComponent,
     CalRename,
     DeleteConfirm,
-    GroupComponent,
     ShareCalendarComponent,
     EditEventComponent,
     EventDeleteConfirm,
     RegisterUsersComponent,
     AdministrationComponent,
     UpdateRolesComponent,
-    DeleteUsersComponent
+    DeleteUsersComponent,
+    GroupListComponent,
+    CreateGroupComponent,
+    GroupItemComponent,
+    GroupStartComponent,
+    GroupDetailComponent,
+    GroupComponent,
+    FilterMemberPipe,
+    AppointmentFilterPipe,
+    ScheduledAppointmentSentPipe
   ],
   imports: [
     BrowserModule,
@@ -191,17 +224,17 @@ import { DeleteUsersComponent } from './home/administration/delete-users/delete-
     MatSelectModule,
     MatTooltipModule,
     MatSnackBarModule,
+    MatChipsModule,
     MaterialFileInputModule,
     CalendarModule.forRoot({
       provide: DateAdapter,
       useFactory: adapterFactory
     }),
-    FullCalendarModule,
-    AppointmentModule
+    FullCalendarModule
   ],
   entryComponents: [
-    // DialogDateTimeIntervalDialog,
-    // DialogTimeIntervalDialog,
+    DialogDateTimeIntervalDialog,
+    DialogTimeIntervalDialog,
     EventTimeDialog,
     EventDetailComponent,
     EventTimeIntervalDialog,

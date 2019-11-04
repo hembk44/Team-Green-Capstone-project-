@@ -4,3 +4,17 @@
   /* background-color: blanchedalmond; */
   /* width: 10%; */
 }
+
+.mat-toolbar {
+  background: white;
+}
+
+.mat-form-field {
+  font-size: 13px;
+  font-weight: 400;
+  width: 52%;
+}
+
+.example-spacer {
+  flex: 1 1 auto;
+}

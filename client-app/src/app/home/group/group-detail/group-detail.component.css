@@ -1,0 +1,30 @@
+.primary {
+  color: #800029;
+  border: #800029 solid 1px;
+}
+
+.mat-menu-item:hover:not([disabled]) {
+  color: white;
+  background: #800029;
+}
+
+.example-tooltip-red {
+  background: #800029;
+}
+
+example-icon {
+  padding: 0 14px;
+}
+
+.example-spacer {
+  flex: 1 1 auto;
+}
+
+.mat-toolbar {
+  background: white;
+}
+
+.mat-form-field {
+  font-size: 14px;
+  font-weight: 400;
+}

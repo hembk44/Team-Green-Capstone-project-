@@ -15,9 +15,9 @@
             class="primary"
             [matMenuTriggerFor]="type"
             aria-label="Example icon-button with a menu"
-            matTooltip="Click to check sent and received appointments"
+            matTooltip="check sent and received appointments or create appointments"
           >
-            Appointment Types <mat-icon>expand_more </mat-icon>
+            Appointments <mat-icon>expand_more </mat-icon>
           </button>
           <mat-menu #type="matMenu">
             <button mat-menu-item (click)="navigateToReceive()">
@@ -30,6 +30,15 @@
               <mat-icon>assignment_turned_in</mat-icon>
               <span>Appointments sent</span>
             </button>
+
+            <button
+              mat-menu-item
+              (click)="create()"
+              *ngIf="currentRole == 'ROLE_ADMIN' || currentRole == 'ROLE_PM'"
+            >
+              <mat-icon>add_box</mat-icon>
+              <span>Create</span>
+            </button>
           </mat-menu>
         </div>
         <div fxFlex="50%">
@@ -38,7 +47,7 @@
             class="primary"
             [matMenuTriggerFor]="schedule"
             aria-label="Example icon-button with a menu"
-            matTooltip="Click to see your all scheduled appointments"
+            matTooltip="check your all scheduled appointments"
           >
             Scheduled Appointments <mat-icon>expand_more </mat-icon>
           </button>

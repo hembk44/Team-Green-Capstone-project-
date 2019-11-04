@@ -1,0 +1,19 @@
+<div style=" margin: 10px;">
+  <button mat-stroked-button class="primary" (click)="create()">
+    Create Group
+  </button>
+</div>
+<div
+  class="container"
+  fxLayout
+  fxLayout.xs="column"
+  fxLayout.sm="column"
+  fxLayoutAlign="flex-start"
+  fxLayoutGap="10px"
+  fxLayoutGap.xs="0"
+>
+  <div fxFlex="20%">
+    <app-group-list></app-group-list>
+  </div>
+  <div fxFlex="50%"><router-outlet></router-outlet></div>
+</div>
