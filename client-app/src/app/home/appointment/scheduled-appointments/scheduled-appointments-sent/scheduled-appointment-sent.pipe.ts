@@ -8,31 +8,25 @@ export class ScheduledAppointmentSentPipe implements PipeTransform {
     if (!items) return [];
     if (!searchText) return items;
     searchText = searchText.toLowerCase();
-    // if (isNaN(Date.parse(searchText))) alert("This is not date");
-    // else alert("This is date object");
-    // function getMonthInWord(date: Date) {
-    //   const monthNames = [
-    //     "January",
-    //     "February",
-    //     "March",
-    //     "April",
-    //     "May",
-    //     "June",
-    //     "July",
-    //     "August",
-    //     "September",
-    //     "October",
-    //     "November",
-    //     "December"
-    //   ];
-    //   var m = date.getMonth();
-    //   return monthNames[m];
-    // }
+    function getMonthInWord(date: Date) {
+      const monthNames = [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December"
+      ];
+      var m = date.getMonth();
+      return monthNames[m];
+    }
     return items.filter(appointment => {
-      // if (!isNaN(Date.parse(appointment.date))) {
-      //   return appointment.appointmentName.toLowerCase().includes(searchText);
-      // }
-
       if (appointment.appointmentName.toLowerCase().includes(searchText)) {
         return appointment.appointmentName.toLowerCase().includes(searchText);
       } else if (
@@ -43,12 +37,14 @@ export class ScheduledAppointmentSentPipe implements PipeTransform {
           .includes(searchText);
       } else if (appointment.selectorName.toLowerCase().includes(searchText)) {
         return appointment.selectorName.toLowerCase().includes(searchText);
+      } else if (appointment.date.includes(searchText)) {
+        return appointment.date.includes(searchText);
+      } else if (!isNaN(Date.parse(appointment.date))) {
+        console.log(new Date(appointment.date).getMonth());
+        let mon = getMonthInWord(new Date(appointment.date));
+        console.log(mon);
+        return mon.toLowerCase().includes(searchText);
       }
-      // else if (!isNaN(Date.parse(appointment.date))) {
-      //   return getMonthInWord(appointment.date)
-      //     .toLowerCase()
-      //     .includes(searchText);
-      // }
     });
   }
 }
