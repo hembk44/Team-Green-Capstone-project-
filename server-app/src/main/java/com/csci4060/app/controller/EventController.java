@@ -64,12 +64,15 @@ public class EventController {
 
 		List<String> recepientsEmailList = eventDummy.getRecipients();
 
+		List<String> actualRecipients = new ArrayList<>();
+
 		for (String each : recepientsEmailList) {
 
 			User recipient = userService.findByEmail(each);
 
 			if (recipient != null) {
 				recipientList.add(recipient);
+				actualRecipients.add(each);
 			}
 		}
 
@@ -107,10 +110,13 @@ public class EventController {
 					calendarService.save(recipientCalendar);
 				}
 			}
+		}
 
+		if (!actualRecipients.isEmpty()) {
+			
 			SimpleMailMessage mailMessage = new SimpleMailMessage();
 
-			String[] emails = recepientsEmailList.toArray(new String[recepientsEmailList.size()]);
+			String[] emails = actualRecipients.toArray(new String[actualRecipients.size()]);
 
 			mailMessage.setTo(emails);
 			mailMessage.setSubject("Event Information");
