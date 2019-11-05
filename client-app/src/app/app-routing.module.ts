@@ -34,6 +34,7 @@ import { GroupComponent } from "./home/group/group/group.component";
 import { GroupStartComponent } from "./home/group/group-start/group-start.component";
 import { CreateGroupComponent } from "./home/group/create-group/create-group.component";
 import { GroupDetailComponent } from "./home/group/group-detail/group-detail.component";
+import { AdministrationComponent } from './home/administration/administration.component';
 
 const routes: Routes = [
   {
@@ -102,7 +103,7 @@ const routes: Routes = [
           { path: ":id", component: GroupDetailComponent }
         ]
       },
-      { path: "register-users", component: RegisterUsersComponent }
+      { path: "admin", component: AdministrationComponent }
     ]
   }
 ];
