@@ -175,7 +175,7 @@ public class AuthRestAPIs {
 //		emailSenderService.sendEmail(mailMessage);
 
 		return new APIresponse(HttpStatus.OK.value(),
-				"Verification code has been sent to you email address. Please click it to register successfully.",
+				"Verification code has been sent to your email address. Please click it to register successfully.",
 				null);
 	}
 
