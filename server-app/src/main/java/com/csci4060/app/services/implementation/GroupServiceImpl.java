@@ -23,8 +23,8 @@ public class GroupServiceImpl implements GroupService{
 	}
 
 	@Override
-	public Group findByNameAndCreatedBy(String name, User createdBy) {
-		Optional<Group> optGroup = groupRepo.findByNameAndCreatedBy(name, createdBy);
+	public Group findByNameAndSemesterAndTypeAndCreatedBy(String name, String semester, String type, User createdBy) {
+		Optional<Group> optGroup = groupRepo.findByNameAndSemesterAndTypeAndCreatedByAllIgnoreCase(name, semester, type, createdBy);
 
 		if (optGroup.isPresent()) {
 			return optGroup.get();
@@ -50,6 +50,34 @@ public class GroupServiceImpl implements GroupService{
 			return optGroup.get();
 		}
 		return null;
+	}
+
+	@Override
+	public Group findByNameAndSemesterAndType(String name, String semester, String type) {
+		Optional<Group> optGroup = groupRepo.findByNameAndSemesterAndTypeAllIgnoreCase(name, semester, type);
+
+		if (optGroup.isPresent()) {
+			return optGroup.get();
+		}
+		return null;
+	}
+
+	@Override
+	public List<Group> findAllByOtherOwners(User otherOwner) {
+		Optional<List<Group>> optGroup = groupRepo.findAllByOtherOwnersOrderByCreatedAtDesc(otherOwner);
+
+		if (optGroup.isPresent()) {
+			return optGroup.get();
+		}
+		return null;
+	}
+
+	@Override
+	public void delete(Group group) {
+		
+		group.getMembers().clear();
+		group.getOtherOwners().clear();
+		groupRepo.delete(group);
 	}
 
 }

@@ -1,16 +1,20 @@
 package com.csci4060.app.controller;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.validation.Valid;
 
+import org.apache.commons.collections4.ListUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,12 +23,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.csci4060.app.model.APIresponse;
+import com.csci4060.app.model.Role;
+import com.csci4060.app.model.RoleName;
 import com.csci4060.app.model.User;
 import com.csci4060.app.model.group.Group;
 import com.csci4060.app.model.group.GroupDummy;
 import com.csci4060.app.model.group.GroupResponse;
 import com.csci4060.app.model.group.MemberNameAndEmail;
 import com.csci4060.app.services.GroupService;
+import com.csci4060.app.services.RoleService;
 import com.csci4060.app.services.UserService;
 
 @RestController
@@ -37,6 +44,9 @@ public class GroupController {
 
 	@Autowired
 	GroupService groupService;
+
+	@Autowired
+	RoleService roleService;
 
 	@PostMapping(path = "/createFromList", consumes = "application/json")
 	@PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
@@ -52,15 +62,50 @@ public class GroupController {
 
 		User createdBy = userService.findByUsername(username);
 
+		String groupType = groupDummy.getType();
 		String groupName = groupDummy.getName();
+		String groupSemester = groupDummy.getSemester();
 
-		if (groupService.findByNameAndCreatedBy(groupName, createdBy) != null) {
-			return new APIresponse(HttpStatus.CONFLICT.value(),
-					"Group with name " + groupName + " has already been created. Please try a different name.", null);
+		List<User> otherOwnersList = new ArrayList<User>();
+
+		if (groupType.equals("Course")) {
+
+			if (groupService.findByNameAndSemesterAndType(groupName, groupSemester, groupType) != null) {
+				return new APIresponse(HttpStatus.CONFLICT.value(), "Course with name: " + groupName + " on semester: "
+						+ groupSemester + " is already in the database. Please try a different name or semester.",
+						null);
+			}
+
+			Set<Role> role = new HashSet<>();
+
+			Role adminRole = roleService.findByName(RoleName.ROLE_ADMIN);
+			Role facultyRole = roleService.findByName(RoleName.ROLE_PM);
+
+			role.add(adminRole);
+			otherOwnersList = userService.findAllByRoles(role);
+
+			role.clear();
+			role.add(facultyRole);
+			List<User> facultyList = userService.findAllByRoles(role);
+
+			if (facultyList != null) {
+				otherOwnersList = ListUtils.union(otherOwnersList, facultyList);
+			}
+
+			if (otherOwnersList.contains(createdBy)) {
+				otherOwnersList.remove(createdBy);
+			}
+
+		} else {
+			if (groupService.findByNameAndSemesterAndTypeAndCreatedBy(groupName, groupSemester, groupType,
+					createdBy) != null) {
+				return new APIresponse(HttpStatus.CONFLICT.value(), "Group with name: " + groupName + " on semester: "
+						+ groupSemester + " has already been created by you. Please try a different name.", null);
+			}
 		}
 
 		List<String> emailsFromDummy = groupDummy.getRecipients();
-		
+
 		List<User> recipients = new ArrayList<>();
 
 		for (String email : emailsFromDummy) {
@@ -69,7 +114,8 @@ public class GroupController {
 			}
 		}
 
-		Group group = new Group(groupName, groupDummy.getDescription(), recipients, createdBy);
+		Group group = new Group(groupName, groupDummy.getDescription(), groupType, groupDummy.getSemester(), recipients,
+				otherOwnersList, createdBy);
 
 		groupService.save(group);
 
@@ -90,12 +136,21 @@ public class GroupController {
 
 		User user = userService.findByUsername(username);
 
-		List<Group> groups = groupService.findAllByCreatedBy(user);
+		List<Group> groups = new ArrayList<Group>();
+		List<Group> createdGroups = groupService.findAllByCreatedBy(user);
+		List<Group> courseGroups = groupService.findAllByOtherOwners(user);
 
-		if (groups == null) {
-			return new APIresponse(HttpStatus.NOT_FOUND.value(), "No groups created yet", null);
+		if (createdGroups == null && courseGroups == null) {
+			return new APIresponse(HttpStatus.NOT_FOUND.value(), "You do not have any groups", null);
 		}
 
+		if (createdGroups != null && courseGroups == null) {
+			groups = createdGroups;
+		} else if (createdGroups == null && courseGroups != null) {
+			groups = courseGroups;
+		} else {
+			groups = ListUtils.union(createdGroups, courseGroups);
+		}
 		return new APIresponse(HttpStatus.OK.value(), "All groups successfully sent", groups);
 	}
 
@@ -125,7 +180,7 @@ public class GroupController {
 					null);
 		}
 
-		List<User> membersList = group.getRecipients();
+		List<User> membersList = group.getMembers();
 
 		List<MemberNameAndEmail> nameAndEmail = new ArrayList<MemberNameAndEmail>();
 
@@ -133,31 +188,48 @@ public class GroupController {
 			nameAndEmail.add(new MemberNameAndEmail(member.getName(), member.getEmail()));
 		}
 
-		if(nameAndEmail.isEmpty()) {
+		if (nameAndEmail.isEmpty()) {
 			nameAndEmail = null;
 		}
-		
-		GroupResponse response = new GroupResponse(group.getName(), group.getDescription(), nameAndEmail);
+
+		GroupResponse response = new GroupResponse(group.getName(), group.getDescription(), group.getType(),
+				group.getSemester(), nameAndEmail);
 
 		return new APIresponse(HttpStatus.OK.value(), "Group details successfully sent", response);
 	}
-	
-	@PutMapping(path = "/edit/{id}", consumes = "application/json")
+
+	@PutMapping(path = "/edit/{id}")
 	@PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
-	public APIresponse editGroup(@Valid @RequestBody GroupDummy groupDummy, @PathVariable("id") Long groupId) {	
+	public APIresponse editGroup(@Valid @RequestBody GroupDummy groupDummy, @PathVariable("id") Long groupId) {
+
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		String username = "";
+
+		if (principal instanceof UserDetails) {
+			username = ((UserDetails) principal).getUsername();
+		}
+
+		User user = userService.findByUsername(username);
 		
 		Group group = groupService.findById(groupId);
-		
+
 		if (group == null) {
 			return new APIresponse(HttpStatus.BAD_REQUEST.value(), "Group with id " + groupId + " does not exist",
 					null);
 		}
 		
+		if (group.getCreatedBy() != user) {
+			return new APIresponse(HttpStatus.FORBIDDEN.value(), "You did not create the group. Authorization denied!",
+					null);
+		}
+
 		group.setName(groupDummy.getName());
 		group.setDescription(groupDummy.getDescription());
-		
+		group.setSemester(groupDummy.getSemester());
+
 		List<String> emailsFromDummy = groupDummy.getRecipients();
-		
+
 		List<User> recipients = new ArrayList<>();
 
 		for (String email : emailsFromDummy) {
@@ -165,10 +237,40 @@ public class GroupController {
 				recipients.add(userService.findByEmail(email));
 			}
 		}
-		
-		group.setRecipients(recipients);
+
+		group.setMembers(recipients);
 		groupService.save(group);
-		
+
 		return new APIresponse(HttpStatus.OK.value(), "Group has been successfully edited", group);
+	}
+
+	@DeleteMapping(path = "/delete/{id}")
+	@PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
+	public APIresponse deleteGroup(@PathVariable("id") Long groupId){
+		
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		String username = "";
+
+		if (principal instanceof UserDetails) {
+			username = ((UserDetails) principal).getUsername();
+		}
+
+		User user = userService.findByUsername(username);
+		
+		Group group = groupService.findById(groupId);
+		
+		if(group == null) {
+			return new APIresponse(HttpStatus.OK.value(), "Group with id "+groupId+" does not exists.", null );
+		}
+		
+		if (group.getCreatedBy() != user) {
+			return new APIresponse(HttpStatus.FORBIDDEN.value(), "You did not create the group. Authorization denied!",
+					null);
+		}
+		
+		groupService.delete(group);
+		
+		return new APIresponse(HttpStatus.OK.value(), "Group with id "+groupId+" has been successfully deleted.", group);
 	}
 }
