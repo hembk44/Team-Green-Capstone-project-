@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { FormBuilder, FormGroup, Validators, FormControl } from "@angular/forms";
 import { Router } from "@angular/router";
 
 import { AuthService } from "../auth/auth.service";
@@ -8,7 +8,7 @@ import { SignUpInfo } from "../auth/signup-info";
 @Component({
   selector: "app-register",
   templateUrl: "./register.component.html",
-  styleUrls: ["./register.component.css"]
+  styleUrls: ["./register.component.css","../home/administration/register-users/register-users.component.css"]
 })
 export class RegisterComponent implements OnInit {
   // form: any = {};
@@ -28,12 +28,13 @@ export class RegisterComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.signupForm = this.formBuilder.group({
-      fname: ["", Validators.required],
-      lname: ["", Validators.required],
-      email: ["", [Validators.required, Validators.email]],
-      password: ["", Validators.required],
-      confirmPwd: [""]
+    this.signupForm = new FormGroup({
+      fname: new FormControl("",[Validators.required]),
+      lname: new FormControl("",[Validators.required]),
+      email: new FormControl("",[Validators.required, Validators.email]),
+      username: new FormControl("",[Validators.required]),
+      password: new FormControl("",[Validators.required]),
+      confirmPwd: new FormControl("",[Validators.required])
     });
   }
 
@@ -45,7 +46,7 @@ export class RegisterComponent implements OnInit {
     }
     this.signupPayload = new SignUpInfo(
       signupFormValues.fname + " " + signupFormValues.lname,
-      signupFormValues.email,
+      signupFormValues.username,
       signupFormValues.email,
       signupFormValues.password
     );
@@ -66,6 +67,13 @@ export class RegisterComponent implements OnInit {
         this.isSignUpFailed = true;
       }
     );
+    this.signupForm.reset();
+    this.signupForm.clearValidators();
     // this.router.navigate(["login"]);
+  }
+
+  clearForm(){
+    this.signupForm.reset();
+    this.signupForm.clearValidators();
   }
 }

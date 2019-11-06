@@ -19,6 +19,7 @@ import { EventDate } from "../event-date.model";
 import { TimeInterval } from "../../appointment/models-appointments/time-interval.model";
 import { EventTime } from "../event-times.model";
 import { AuthService } from "src/app/auth/auth.service";
+import { NgxMaterialTimepickerTheme } from 'ngx-material-timepicker';
 
 @Component({
   selector: "app-create-event",
@@ -50,6 +51,20 @@ export class CreateEventComponent implements OnInit {
     private calService: CalendarService,
     private snackbar: MatSnackBar
   ) {}
+
+  timeTheme: NgxMaterialTimepickerTheme={
+    container: {
+      bodyBackgroundColor: 'darkgrey',
+      buttonColor: 'white'
+    },
+    dial: {
+      dialBackgroundColor: 'rgb(185, 163, 90)'
+    },
+    clockFace: {
+      clockHandColor: '#800029',
+
+    }
+  }
 
   ngOnInit() {
     this.emails = [];

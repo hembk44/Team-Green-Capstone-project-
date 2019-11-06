@@ -98,6 +98,9 @@ import { GroupStartComponent } from "./home/group/group-start/group-start.compon
 import { GroupDetailComponent } from "./home/group/group-detail/group-detail.component";
 import { GroupComponent } from "./home/group/group/group.component";
 import { RegisterUsersComponent } from "./home/administration/register-users/register-users.component";
+import { AdministrationComponent } from './home/administration/administration.component';
+import { UpdateRolesComponent } from './home/administration/update-roles/update-roles.component';
+import { DeleteUsersComponent } from './home/administration/delete-users/delete-users.component';
 import { FilterMemberPipe } from "./home/group/group-detail/filter-member.pipe";
 import { AppointmentFilterPipe } from "./home/appointment/appointment-list/appointment-filter.pipe";
 import { ScheduledAppointmentSentPipe } from "./home/appointment/scheduled-appointments/scheduled-appointments-sent/scheduled-appointment-sent.pipe";
@@ -178,6 +181,9 @@ import { ScheduledAppointmentSentPipe } from "./home/appointment/scheduled-appoi
     EditEventComponent,
     EventDeleteConfirm,
     RegisterUsersComponent,
+    AdministrationComponent,
+    UpdateRolesComponent,
+    DeleteUsersComponent,
     GroupListComponent,
     CreateGroupComponent,
     GroupItemComponent,
