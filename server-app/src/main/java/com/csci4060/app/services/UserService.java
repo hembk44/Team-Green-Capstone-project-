@@ -1,7 +1,9 @@
 package com.csci4060.app.services;
 
 import java.util.List;
+import java.util.Set;
 
+import com.csci4060.app.model.Role;
 import com.csci4060.app.model.User;
 
 public interface UserService {
@@ -23,4 +25,6 @@ public interface UserService {
 	Boolean existsByUsername(String username);
 	
 	Boolean existsByEmail(String email);
+	
+	List<User> findAllByRoles(Set<Role>roles ); 
 }

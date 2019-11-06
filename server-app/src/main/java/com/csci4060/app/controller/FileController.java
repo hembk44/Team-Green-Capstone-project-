@@ -3,7 +3,9 @@ package com.csci4060.app.controller;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -29,6 +31,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.csci4060.app.configuration.fileStorage.FileReadException;
 import com.csci4060.app.model.APIresponse;
+import com.csci4060.app.model.Role;
+import com.csci4060.app.model.RoleName;
 import com.csci4060.app.model.UploadFileResponse;
 import com.csci4060.app.model.User;
 import com.csci4060.app.model.calendar.Calendar;
@@ -36,6 +40,7 @@ import com.csci4060.app.services.CalendarService;
 import com.csci4060.app.services.EmailSenderService;
 import com.csci4060.app.services.FileReadService;
 import com.csci4060.app.services.FileStorageService;
+import com.csci4060.app.services.RoleService;
 import com.csci4060.app.services.UserService;
 
 @RestController
@@ -52,6 +57,9 @@ public class FileController {
 
 	@Autowired
 	UserService userService;
+	
+	@Autowired
+	RoleService roleService;
 
 	@Autowired
 	private EmailSenderService emailSenderService;
@@ -62,22 +70,36 @@ public class FileController {
 	@Autowired
 	CalendarService calendarService;
 
-	@PostMapping("/uploadStudents")
+	@PostMapping("/uploadUser/{roleParam}")
 	@PreAuthorize("hasRole('ADMIN')")
-	public APIresponse uploadFile(@RequestParam("file") MultipartFile file) throws IOException {
+	public APIresponse uploadFile(@RequestParam("file") MultipartFile file, @PathVariable("roleParam") String roleParam) throws IOException {
 
 		String fileName = fileStorageService.storeFile(file);
 
 		String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("api/file/downloadFile/")
 				.path(fileName).toUriString();
-
-		List<User> students = fileReadService.readFile(file);
+		
+		Set<Role> role = new HashSet<>();
+		
+		Role userRole = roleService.findByName(RoleName.ROLE_USER);
+		
+		if(roleParam.equalsIgnoreCase("faculty")) {
+			userRole = roleService.findByName(RoleName.ROLE_PM);
+		}
+		
+		else if(roleParam.equalsIgnoreCase("admin")) {
+			userRole = roleService.findByName(RoleName.ROLE_ADMIN);
+		}
+		
+		role.add(userRole);
+		
+		List<User> usersList = fileReadService.readFile(file, role);
 
 		List<String> newUsersEmailList = new ArrayList<>();
 
-		if (students != null) {
+		if (usersList != null) {
 
-			for (User user : students) {
+			for (User user : usersList) {
 
 				if (!userService.existsByUsername(user.getUsername())) {
 					newUsersEmailList.add(user.getEmail());

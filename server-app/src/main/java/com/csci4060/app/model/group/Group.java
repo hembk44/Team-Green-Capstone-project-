@@ -31,27 +31,40 @@ public class Group {
 	@NotBlank
 	private String name;
 	
+	@NotBlank
+	private String type;
+	
 	private String description;
+	
+	@NotBlank
+	private String semester;
+	
+	private Date createdAt;
 	
 	@JsonIgnore
 	@ManyToMany(fetch = FetchType.LAZY, targetEntity = User.class)
-	private List<User> recipients;
+	private List<User> members;
+	
+	@JsonIgnore
+	@ManyToMany(fetch = FetchType.LAZY, targetEntity = User.class)
+	private List<User> otherOwners;
 	
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY, targetEntity = User.class)
 	private User createdBy;
-	
-	private Date createdAt;
 	
 	@PrePersist
 	void createdAt() {
 		this.createdAt = new Date();
 	}
 	
-	public Group(String name, String description, List<User> recipients, User createdBy) {
+	public Group(String name, String description, String type, String semester, List<User> members, List<User> otherOwners, User createdBy) {
 		this.name = name;
 		this.description = description;
-		this.recipients = recipients;
+		this.type = type;
+		this.semester = semester;
+		this.members = members;
+		this.otherOwners = otherOwners;
 		this.createdBy = createdBy;
 	}
 

@@ -2,19 +2,21 @@ package com.csci4060.app.services.implementation;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.csci4060.app.model.Role;
 import com.csci4060.app.model.User;
 import com.csci4060.app.model.authentication.UserPrinciple;
 import com.csci4060.app.repository.UserRepository;
 import com.csci4060.app.services.UserService;
+
 
 /*
  *  UserDetailsServiceImpl implements UserDetailsService and overrides loadUserByUsername() method.
@@ -34,11 +36,14 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
 	@Transactional
 	// UserPrinciple implements UserDetails so returning UserPrinciple doesn't cause
 	// any problems
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		User user = userRepo.findByUsername(username).orElseThrow(
-				() -> new UsernameNotFoundException("User not found with -> username or email: " + username));
+	public UserDetails loadUserByUsername(String username){
+		
+		Optional<User> optUser = userRepo.findByUsername(username);
 
-		return UserPrinciple.build(user);
+		if (optUser.isPresent()) {
+			return UserPrinciple.build(optUser.get());
+		}
+		return null;
 	}
 
 	@Override
@@ -48,8 +53,13 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
 	
 	@Override
 	public User findByUsername(String username) {
-		return userRepo.findByUsername(username)
-				.orElseThrow(()->new UsernameNotFoundException("User not found with -> username: "+username));
+		
+		Optional<User> optUser = userRepo.findByUsername(username);
+
+		if (optUser.isPresent()) {
+			return optUser.get();
+		}
+		return null;
 	}
 
 	@Override
@@ -63,19 +73,29 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
 
 	@Override
 	public User findById(Long id) {
-		return userRepo.findById(id)
-				.orElseThrow(()->new UsernameNotFoundException("User not found"));
+		
+		Optional<User> optUser = userRepo.findById(id);
+
+		if (optUser.isPresent()) {
+			return optUser.get();
+		}
+		return null;
 	}
 
 	@Override
 	public User update(User user) {
-		User userFromDB = userRepo.findById(user.getId())
-				.orElseThrow(()-> new UsernameNotFoundException("User not found"));
-		userFromDB.setName(user.getName());
-		userFromDB.setEmail(user.getEmail());
-		userFromDB.setUsername(user.getUsername());
-		userFromDB.setPassword(encoder.encode(user.getPassword()));
-		return userFromDB;
+		
+		Optional<User> optUser = userRepo.findById(user.getId());
+
+		if (optUser.isPresent()) {
+			User userFromDB = optUser.get();
+			userFromDB.setName(user.getName());
+			userFromDB.setEmail(user.getEmail());
+			userFromDB.setUsername(user.getUsername());
+			userFromDB.setPassword(encoder.encode(user.getPassword()));
+			return userFromDB;
+		}
+		return null;
 	}
 
 	@Override
@@ -86,9 +106,11 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
 	@Override
 	public void delete(String email) {
 		
-		User user = userRepo.findByEmailIgnoreCase(email)
-				.orElseThrow(()->new UsernameNotFoundException("User not found with -> email:"+email));
-		userRepo.delete(user);
+		Optional<User> optUser = userRepo.findByEmailIgnoreCase(email);
+
+		if (optUser.isPresent()) {
+			userRepo.delete(optUser.get());
+		}
 	}
 
 	@Override
@@ -99,6 +121,17 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
 	@Override
 	public Boolean existsByEmail(String email) {
 		return userRepo.existsByEmailIgnoreCase(email);
+	}
+
+	@Override
+	public List<User> findAllByRoles(Set<Role> roles) {
+		Optional<List<User>> optUser = userRepo.findAllByRoles(roles);
+
+		if (optUser.isPresent()) {
+			return optUser.get();
+		}
+		
+		return null;
 	}
 
 }

@@ -2,7 +2,6 @@ package com.csci4060.app.services.implementation;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -21,7 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.csci4060.app.configuration.fileStorage.FileReadException;
 import com.csci4060.app.model.Role;
-import com.csci4060.app.model.RoleName;
 import com.csci4060.app.model.User;
 import com.csci4060.app.services.FileReadService;
 import com.csci4060.app.services.RoleService;
@@ -36,7 +34,7 @@ public class FileReadServiceImpl implements FileReadService {
 	RoleService roleService;
 
 	@Override
-	public List<User> readFile(MultipartFile file) throws IOException {
+	public List<User> readFile(MultipartFile file, Set<Role> userRole) throws IOException {
 
 		@SuppressWarnings("resource")
 		Workbook workbook = new XSSFWorkbook(file.getInputStream());
@@ -46,13 +44,7 @@ public class FileReadServiceImpl implements FileReadService {
 
 		if (isSheetFull(worksheet) == true) {
 			// check cell name before writing the following code
-			List<User> students = new ArrayList<User>();
-
-			Set<Role> role = new HashSet<>();
-
-			Role userRole = roleService.findByName(RoleName.ROLE_USER);
-
-			role.add(userRole);
+			List<User> users = new ArrayList<User>();
 
 			for (int i = 1; i <= worksheet.getLastRowNum(); i++) {
 
@@ -81,17 +73,17 @@ public class FileReadServiceImpl implements FileReadService {
 						String password = formatter.formatCellValue(row.getCell(2));
 						String email = formatter.formatCellValue(row.getCell(5));
 
-						User student = new User(name, username, email, encoder.encode(password), true);
+						User user = new User(name, username, email, encoder.encode(password), true);
 
-						student.setRoles(role);
+						user.setRoles(userRole);
 
-						students.add(student);
+						users.add(user);
 					} else {
 						throw new FileReadException("First name, last name, cwid and email must not be empty.");
 					}
 				}
 			}
-			return students;
+			return users;
 		}
 
 		return null;
