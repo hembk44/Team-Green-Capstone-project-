@@ -28,6 +28,8 @@ public class Calendar {
 	@NotNull
 	String name;
 	
+	String color;
+	
 	@ManyToMany(targetEntity = Event.class, fetch = FetchType.LAZY)
 	List<Event> events;
 	
@@ -53,8 +55,9 @@ public class Calendar {
         //event.getCalendars().remove(this);
     }
 	
-	public Calendar(String name, List<Event> events, List<User> shareduser, User createdBy, boolean shown, boolean isDefaultCalendar) {
+	public Calendar(String name, String color, List<Event> events, List<User> shareduser, User createdBy, boolean shown, boolean isDefaultCalendar) {
 		this.name = name;
+		this.color = color;
 		this.events = events;
 		this.shareduser = shareduser;
 		this.createdBy = createdBy;

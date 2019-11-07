@@ -75,11 +75,11 @@ public class CalendarController {
 			}
 		}
 
-		Calendar calendar = new Calendar(calendarName, null, recipients, createdBy, true, false);
+		Calendar calendar = new Calendar(calendarName, calendarCreate.getColor(),null, recipients, createdBy, true, false);
 
 		calendarService.save(calendar);
 
-		CalendarResponse response = new CalendarResponse(calendar.getId(), calendar.getName(), calendar.getEvents(),
+		CalendarResponse response = new CalendarResponse(calendar.getId(), calendar.getName(), calendar.getColor(),calendar.getEvents(),
 				createdBy.getUsername(), calendar.isShown(), calendar.isDefaultCalendar());
 
 		return new APIresponse(HttpStatus.CREATED.value(),
@@ -117,7 +117,7 @@ public class CalendarController {
 
 		for (Calendar calendar : allCalendars) {
 
-			responses.add(new CalendarResponse(calendar.getId(), calendar.getName(), calendar.getEvents(),
+			responses.add(new CalendarResponse(calendar.getId(), calendar.getName(), calendar.getColor(),calendar.getEvents(),
 					calendar.getCreatedBy().getUsername(), calendar.isShown(), calendar.isDefaultCalendar()));
 		}
 
@@ -167,7 +167,7 @@ public class CalendarController {
 
 		}
 
-		CalendarResponse response = new CalendarResponse(calendar.getId(), calendar.getName(), calendar.getEvents(),
+		CalendarResponse response = new CalendarResponse(calendar.getId(), calendar.getName(), calendar.getColor(),calendar.getEvents(),
 				calendar.getCreatedBy().getEmail(), calendar.isShown(), calendar.isDefaultCalendar());
 
 		return new APIresponse(HttpStatus.OK.value(),

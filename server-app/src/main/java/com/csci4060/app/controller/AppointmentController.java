@@ -184,6 +184,10 @@ public class AppointmentController {
 
 		List<Appointment> appointments = appointmentService.findAllByCreatedBy(user);
 		
+		if(appointments == null) {
+			return new APIresponse(HttpStatus.BAD_REQUEST.value(), "You have not created any appointments yet.", null);
+		}
+		
 		List<AppointmentResponse> allAppointments = new ArrayList<AppointmentResponse>();
 		
 		for (Appointment app: appointments)
@@ -224,6 +228,10 @@ public class AppointmentController {
 		User user = userService.findByUsername(username);
 
 		List<Appointment> appointments = appointmentService.findAllByRecepients(user);
+		
+		if(appointments == null) {
+			return new APIresponse(HttpStatus.BAD_REQUEST.value(), "You have not created any appointments yet.", null);
+		}
 		
 		List<AppointmentResponse> allAppointments = new ArrayList<AppointmentResponse>();
 		
