@@ -8,5 +8,6 @@ import lombok.Data;
 public class CalendarCreate {
 
 	String name;
+	String color;
 	List<String> recipients;
 }

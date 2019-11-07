@@ -11,16 +11,18 @@ public class CalendarResponse {
 
 	private long id;
 	private String name;
+	private String color;
 	private List<Event> events;
 	private String createdBy;
 	private boolean shown;
 	private boolean isDefaultCalendar;
 
-	public CalendarResponse(long id, String name, List<Event> events, String createdBy,
+	public CalendarResponse(long id, String name, String color, List<Event> events, String createdBy,
 			boolean shown, boolean isDefaultCalendar) {
 		super();
 		this.id = id;
 		this.name = name;
+		this.color = color;
 		this.events = events;
 		this.createdBy = createdBy;
 		this.shown = shown;
