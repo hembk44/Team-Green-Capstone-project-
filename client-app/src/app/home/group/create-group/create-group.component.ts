@@ -9,6 +9,7 @@ import { Router } from "@angular/router";
 
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
 import { MatChipInputEvent } from "@angular/material/chips";
+import { GroupDataStorageService } from "../group-data-storage.service";
 
 @Component({
   selector: "app-create-group",
@@ -25,13 +26,26 @@ export class CreateGroupComponent implements OnInit {
   groupForm: FormGroup;
   email = new FormControl("", [Validators.required, Validators.email]);
   emails: string[] = [];
-  constructor(private formBuilder: FormBuilder, private router: Router) {}
+  groupTypes: string[] = ["Course", "Custom"];
+  semesterTerm: string[] = ["Fall", "Spring"];
+  semesterYear: number[] = [2019, 2020, 2021];
+
+  // use dynamic method to add values in date
+
+  constructor(
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private groupDataStorageService: GroupDataStorageService
+  ) {}
 
   ngOnInit() {
     this.groupForm = this.formBuilder.group({
       title: ["", Validators.required],
       description: ["", Validators.required],
-      email: this.email
+      email: this.email,
+      groupType: ["", Validators.required],
+      semesterTerm: ["", Validators.required],
+      semesterYear: ["", Validators.required]
     });
   }
 
@@ -74,8 +88,18 @@ export class CreateGroupComponent implements OnInit {
     const obj = {
       name: groupFormValues.title,
       description: groupFormValues.description,
-      recepients: this.emails
+      recipients: this.emails,
+      type: groupFormValues.groupType,
+      semesterTerm: groupFormValues.semesterTerm,
+      semesterYear: groupFormValues.semesterYear
     };
     console.log(obj);
+    this.groupDataStorageService.createGroup(obj).subscribe(result => {
+      if (result) {
+        console.log(result);
+
+        this.groupDataStorageService.fetchGroup();
+      }
+    });
   }
 }

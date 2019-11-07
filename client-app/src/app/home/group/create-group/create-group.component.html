@@ -1,6 +1,9 @@
 <form class="example-container" [formGroup]="groupForm" (ngSubmit)="onSubmit()">
   <mat-form-field>
     <input matInput placeholder="Group Title" formControlName="title" />
+    <mat-error *ngIf="groupForm.controls['title'].hasError('required')"
+      >Please enter group title</mat-error
+    >
   </mat-form-field>
 
   <mat-form-field>
@@ -9,6 +12,9 @@
       placeholder="Group Description"
       formControlName="description"
     ></textarea>
+    <mat-error *ngIf="groupForm.controls['description'].hasError('required')"
+      >Please enter group description</mat-error
+    >
   </mat-form-field>
 
   <mat-form-field class="example-chip-list">
@@ -31,6 +37,45 @@
       />
     </mat-chip-list>
     <mat-hint>Use comma or hit ENTER to enter multiple emails!</mat-hint>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Group Type</mat-label>
+    <mat-select formControlName="groupType">
+      <mat-option>--</mat-option>
+      <mat-option *ngFor="let type of groupTypes" [value]="type">
+        {{ type }}
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="groupForm.controls['groupType'].hasError('required')"
+      >Please choose a group type</mat-error
+    >
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Semester Term</mat-label>
+    <mat-select formControlName="semesterTerm">
+      <mat-option>--</mat-option>
+      <mat-option *ngFor="let term of semesterTerm" [value]="term">
+        {{ term }}
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="groupForm.controls['semesterTerm'].hasError('required')"
+      >Please choose a Semester Term</mat-error
+    >
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Semester Year</mat-label>
+    <mat-select formControlName="semesterYear">
+      <mat-option>--</mat-option>
+      <mat-option *ngFor="let year of semesterYear" [value]="year">
+        {{ year }}
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="groupForm.controls['semesterYear'].hasError('required')"
+      >Please choose a Semester Year</mat-error
+    >
   </mat-form-field>
   <mat-toolbar>
     <mat-toolbar-row>

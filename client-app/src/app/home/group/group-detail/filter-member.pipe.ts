@@ -8,8 +8,12 @@ export class FilterMemberPipe implements PipeTransform {
     if (!items) return [];
     if (!searchText) return items;
     searchText = searchText.toLowerCase();
-    return items.filter(it => {
-      return it.toLowerCase().includes(searchText);
+    return items.filter(group => {
+      if (group.name.toLowerCase().includes(searchText)) {
+        return group.name.toLowerCase().includes(searchText);
+      } else if (group.email.toLowerCase().includes(searchText)) {
+        return group.email.toLowerCase().includes(searchText);
+      }
     });
   }
 }

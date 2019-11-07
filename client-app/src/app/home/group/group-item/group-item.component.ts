@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from "@angular/core";
-import { GroupModel } from "../models-group/group-model";
+import { Group } from "../models-group/group";
 import { Router } from "@angular/router";
 import { GroupDataStorageService } from "../group-data-storage.service";
 
@@ -9,7 +9,7 @@ import { GroupDataStorageService } from "../group-data-storage.service";
   styleUrls: ["./group-item.component.css"]
 })
 export class GroupItemComponent implements OnInit {
-  @Input() eachGroup: GroupModel;
+  @Input() eachGroup: Group;
   @Input() id: number;
   constructor(
     private router: Router,

@@ -64,7 +64,10 @@ export class DataStorageService {
     const formdata: FormData = new FormData();
     formdata.append("file", file);
     return this.http
-      .post<Object>("http://localhost:8181/api/file/uploadStudents", formdata)
+      .post<Object>(
+        "http://localhost:8181/api/file/uploadUser/faculty",
+        formdata
+      )
       .pipe(
         (map(data => data), catchError(error => throwError(error))),
         finalize(() => this.isLoadingSubject.next(false))
@@ -92,7 +95,7 @@ export class DataStorageService {
   fetchAppointment() {
     this.isLoadingSubject.next(true);
     this.http
-      .get<ApiResponse>(this.baseUrlAppointment + "faculty/allAppointments")
+      .get<ApiResponse>(this.baseUrlAppointment + "created/allAppointments")
       .pipe(
         (map(data => data),
         catchError(error => throwError(error)),
@@ -110,7 +113,7 @@ export class DataStorageService {
   fetchUserAppointment() {
     this.isLoadingSubject.next(true);
     this.http
-      .get<ApiResponse>(this.baseUrlAppointment + "user/allAppointments")
+      .get<ApiResponse>(this.baseUrlAppointment + "received/allAppointments")
       .pipe(
         (map(data => data),
         catchError(error => throwError("there was an error" + error)),

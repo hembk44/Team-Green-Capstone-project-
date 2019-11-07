@@ -4,5 +4,9 @@
   </button>
 </div> -->
 
-<app-group-item *ngFor="let g of group; let i = index" [eachGroup]="g" [id]="i">
+<app-group-item
+  *ngFor="let g of group; let i = index"
+  [eachGroup]="g"
+  [id]="g.id"
+>
 </app-group-item>

@@ -40,9 +40,7 @@ export class ScheduledAppointmentSentPipe implements PipeTransform {
       } else if (appointment.date.includes(searchText)) {
         return appointment.date.includes(searchText);
       } else if (!isNaN(Date.parse(appointment.date))) {
-        console.log(new Date(appointment.date).getMonth());
         let mon = getMonthInWord(new Date(appointment.date));
-        console.log(mon);
         return mon.toLowerCase().includes(searchText);
       }
     });
