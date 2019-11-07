@@ -168,7 +168,7 @@ public class AppointmentController {
 		return new APIresponse(HttpStatus.CREATED.value(), "Appointment created successfully", appointment);
 	}
 
-	@GetMapping(path = "faculty/allAppointments")
+	@GetMapping(path = "created/allAppointments")
 	@PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
 	public APIresponse getFacultyAppointments() {
 
@@ -209,8 +209,8 @@ public class AppointmentController {
 
 	}
 
-	@GetMapping(path = "user/allAppointments")
-	@PreAuthorize("hasRole('USER')")
+	@GetMapping(path = "received/allAppointments")
+	@PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
 	public APIresponse getAppointments() {
 
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -248,7 +248,7 @@ public class AppointmentController {
 	}
 
 	@GetMapping(path = "/timeslots/user/{id}")
-	@PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('USER') or hasRole('PM')")
 	public APIresponse getSlots(@PathVariable("id") Long appointmentId) {
 
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
