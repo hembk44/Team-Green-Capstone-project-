@@ -10,15 +10,17 @@ public class GroupResponse {
 	private String name;
 	private String description;
 	private String type;
-	private String semester;
+	private String semesterTerm;
+	private int semesterYear;
 	private List<MemberNameAndEmail> members;
 	
-	public GroupResponse(String name, String description, String type, String semester, List<MemberNameAndEmail> members) {
+	public GroupResponse(String name, String description, String type, String semesterTerm, int semesterYear, List<MemberNameAndEmail> members) {
 		super();
 		this.name = name;
 		this.description = description;
 		this.type = type;
-		this.semester = semester;
+		this.semesterTerm = semesterTerm;
+		this.semesterYear = semesterYear;
 		this.members = members;
 	}
 	

@@ -23,8 +23,8 @@ public class GroupServiceImpl implements GroupService{
 	}
 
 	@Override
-	public Group findByNameAndSemesterAndTypeAndCreatedBy(String name, String semester, String type, User createdBy) {
-		Optional<Group> optGroup = groupRepo.findByNameAndSemesterAndTypeAndCreatedByAllIgnoreCase(name, semester, type, createdBy);
+	public Group findByNameAndSemesterTermAndSemesterYearAndTypeAndCreatedBy(String name, String semesterTerm, int semesterYear, String type, User createdBy) {
+		Optional<Group> optGroup = groupRepo.findByNameAndSemesterTermAndSemesterYearAndTypeAndCreatedByAllIgnoreCase(name, semesterTerm, semesterYear, type, createdBy);
 
 		if (optGroup.isPresent()) {
 			return optGroup.get();
@@ -53,8 +53,8 @@ public class GroupServiceImpl implements GroupService{
 	}
 
 	@Override
-	public Group findByNameAndSemesterAndType(String name, String semester, String type) {
-		Optional<Group> optGroup = groupRepo.findByNameAndSemesterAndTypeAllIgnoreCase(name, semester, type);
+	public Group findByNameAndSemesterTermAndSemesterYearAndType(String name, String semesterTerm, int semesterYear, String type) {
+		Optional<Group> optGroup = groupRepo.findByNameAndSemesterTermAndSemesterYearAndTypeAllIgnoreCase(name, semesterTerm, semesterYear, type);
 
 		if (optGroup.isPresent()) {
 			return optGroup.get();

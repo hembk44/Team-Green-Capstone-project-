@@ -29,6 +29,7 @@ import com.csci4060.app.model.User;
 import com.csci4060.app.model.group.Group;
 import com.csci4060.app.model.group.GroupDummy;
 import com.csci4060.app.model.group.GroupResponse;
+import com.csci4060.app.model.group.GroupShare;
 import com.csci4060.app.model.group.MemberNameAndEmail;
 import com.csci4060.app.services.GroupService;
 import com.csci4060.app.services.RoleService;
@@ -64,15 +65,16 @@ public class GroupController {
 
 		String groupType = groupDummy.getType();
 		String groupName = groupDummy.getName();
-		String groupSemester = groupDummy.getSemester();
+		String groupSemesterTerm = groupDummy.getSemesterTerm();
+		int groupSemesterYear = groupDummy.getSemesterYear();
 
 		List<User> otherOwnersList = new ArrayList<User>();
 
 		if (groupType.equals("Course")) {
 
-			if (groupService.findByNameAndSemesterAndType(groupName, groupSemester, groupType) != null) {
+			if (groupService.findByNameAndSemesterTermAndSemesterYearAndType(groupName, groupSemesterTerm, groupSemesterYear, groupType) != null) {
 				return new APIresponse(HttpStatus.CONFLICT.value(), "Course with name: " + groupName + " on semester: "
-						+ groupSemester + " is already in the database. Please try a different name or semester.",
+						+ groupSemesterTerm+ " "+groupSemesterYear + " is already in the database. Please try a different name or semester.",
 						null);
 			}
 
@@ -97,10 +99,10 @@ public class GroupController {
 			}
 
 		} else {
-			if (groupService.findByNameAndSemesterAndTypeAndCreatedBy(groupName, groupSemester, groupType,
+			if (groupService.findByNameAndSemesterTermAndSemesterYearAndTypeAndCreatedBy(groupName, groupSemesterTerm, groupSemesterYear,groupType,
 					createdBy) != null) {
 				return new APIresponse(HttpStatus.CONFLICT.value(), "Group with name: " + groupName + " on semester: "
-						+ groupSemester + " has already been created by you. Please try a different name.", null);
+						+ groupSemesterTerm +" " +groupSemesterYear+" has already been created by you. Please try a different name.", null);
 			}
 		}
 
@@ -114,12 +116,12 @@ public class GroupController {
 			}
 		}
 
-		Group group = new Group(groupName, groupDummy.getDescription(), groupType, groupDummy.getSemester(), recipients,
+		Group group = new Group(groupName, groupDummy.getDescription(), groupType, groupSemesterTerm, groupSemesterYear, recipients,
 				otherOwnersList, createdBy);
 
 		groupService.save(group);
 
-		return new APIresponse(HttpStatus.CREATED.value(), "Group with name has been succesfully created", group);
+		return new APIresponse(HttpStatus.CREATED.value(), "Group with name "+groupName+ " has been succesfully created", group);
 	}
 
 	@GetMapping(path = "/fetch")
@@ -193,7 +195,7 @@ public class GroupController {
 		}
 
 		GroupResponse response = new GroupResponse(group.getName(), group.getDescription(), group.getType(),
-				group.getSemester(), nameAndEmail);
+				group.getSemesterTerm(), group.getSemesterYear(), nameAndEmail);
 
 		return new APIresponse(HttpStatus.OK.value(), "Group details successfully sent", response);
 	}
@@ -211,14 +213,14 @@ public class GroupController {
 		}
 
 		User user = userService.findByUsername(username);
-		
+
 		Group group = groupService.findById(groupId);
 
 		if (group == null) {
 			return new APIresponse(HttpStatus.BAD_REQUEST.value(), "Group with id " + groupId + " does not exist",
 					null);
 		}
-		
+
 		if (group.getCreatedBy() != user) {
 			return new APIresponse(HttpStatus.FORBIDDEN.value(), "You did not create the group. Authorization denied!",
 					null);
@@ -226,7 +228,8 @@ public class GroupController {
 
 		group.setName(groupDummy.getName());
 		group.setDescription(groupDummy.getDescription());
-		group.setSemester(groupDummy.getSemester());
+		group.setSemesterTerm(groupDummy.getSemesterTerm());
+		group.setSemesterYear(groupDummy.getSemesterYear());
 
 		List<String> emailsFromDummy = groupDummy.getRecipients();
 
@@ -244,10 +247,10 @@ public class GroupController {
 		return new APIresponse(HttpStatus.OK.value(), "Group has been successfully edited", group);
 	}
 
-	@DeleteMapping(path = "/delete/{id}")
+	@PostMapping(path = "/share")
 	@PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
-	public APIresponse deleteGroup(@PathVariable("id") Long groupId){
-		
+	public APIresponse shareGroup(@Valid @RequestBody GroupShare groupShare) {
+
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
 		String username = "";
@@ -257,20 +260,79 @@ public class GroupController {
 		}
 
 		User user = userService.findByUsername(username);
-		
+
+		Long groupId = groupShare.getId();
+
 		Group group = groupService.findById(groupId);
-		
-		if(group == null) {
-			return new APIresponse(HttpStatus.OK.value(), "Group with id "+groupId+" does not exists.", null );
+
+		if (group == null) {
+			return new APIresponse(HttpStatus.BAD_REQUEST.value(), "Group with id " + groupId + " does not exist",
+					null);
 		}
-		
+
 		if (group.getCreatedBy() != user) {
 			return new APIresponse(HttpStatus.FORBIDDEN.value(), "You did not create the group. Authorization denied!",
 					null);
 		}
-		
+
+		if (group.getType().equals("Course")) {
+			return new APIresponse(HttpStatus.CONFLICT.value(),
+					"Group with id " + groupId
+							+ " is a Course group. This group is already shared to other faculties during its creation",
+					null);
+		}
+
+		List<String> emailsFromGroupShare = groupShare.getEmails();
+		List<String> validEmails = new ArrayList<String>();
+
+		List<User> otherOwners = group.getOtherOwners();
+		User createdBy = group.getCreatedBy();
+
+		for (String email : emailsFromGroupShare) {
+			User userToAdd = userService.findByEmail(email);
+			if (userToAdd != null) {
+				if (!otherOwners.contains(userToAdd) && userToAdd != createdBy) {
+					validEmails.add(email);
+					otherOwners.add(userToAdd);
+				}
+
+			}
+		}
+
+		group.setOtherOwners(otherOwners);
+		groupService.save(group);
+
+		return new APIresponse(HttpStatus.OK.value(), "Group has been successfully shared to " + validEmails, group);
+	}
+
+	@DeleteMapping(path = "/delete/{id}")
+	@PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
+	public APIresponse deleteGroup(@PathVariable("id") Long groupId) {
+
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		String username = "";
+
+		if (principal instanceof UserDetails) {
+			username = ((UserDetails) principal).getUsername();
+		}
+
+		User user = userService.findByUsername(username);
+
+		Group group = groupService.findById(groupId);
+
+		if (group == null) {
+			return new APIresponse(HttpStatus.OK.value(), "Group with id " + groupId + " does not exists.", null);
+		}
+
+		if (group.getCreatedBy() != user) {
+			return new APIresponse(HttpStatus.FORBIDDEN.value(), "You did not create the group. Authorization denied!",
+					null);
+		}
+
 		groupService.delete(group);
-		
-		return new APIresponse(HttpStatus.OK.value(), "Group with id "+groupId+" has been successfully deleted.", group);
+
+		return new APIresponse(HttpStatus.OK.value(), "Group with id " + groupId + " has been successfully deleted.",
+				group);
 	}
 }

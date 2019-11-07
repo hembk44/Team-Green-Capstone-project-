@@ -17,7 +17,10 @@ public class GroupDummy {
 	@NotBlank
 	private String type;
 	
-	private String semester;
+	@NotBlank
+	private String semesterTerm;
+	
+	private int semesterYear;
 	
 	private List<String> recipients;
 	

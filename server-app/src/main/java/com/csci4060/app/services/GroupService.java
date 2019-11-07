@@ -7,8 +7,8 @@ import com.csci4060.app.model.group.Group;
 public interface GroupService {
 
 	Group save(Group group);
-	Group findByNameAndSemesterAndTypeAndCreatedBy(String name, String semester,String type, User createdBy);
-	Group findByNameAndSemesterAndType(String name, String semester,String type);
+	Group findByNameAndSemesterTermAndSemesterYearAndTypeAndCreatedBy(String name, String semesterTerm, int semesterYear, String type, User createdBy);
+	Group findByNameAndSemesterTermAndSemesterYearAndType(String name, String semesterTerm, int semesterYear, String type);
 	List<Group> findAllByCreatedBy(User user);
 	Group findById(Long id);
 	List<Group> findAllByOtherOwners(User otherOwner);
