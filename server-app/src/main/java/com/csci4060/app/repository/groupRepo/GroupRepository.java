@@ -10,8 +10,8 @@ import com.csci4060.app.model.group.Group;
 
 public interface GroupRepository extends JpaRepository<Group, Long>{
 	
-	Optional<Group> findByNameAndSemesterAndTypeAndCreatedByAllIgnoreCase(String name, String semester,String type, User createdBy);
-	Optional<Group> findByNameAndSemesterAndTypeAllIgnoreCase(String name, String semester, String type); 
+	Optional<Group> findByNameAndSemesterTermAndSemesterYearAndTypeAndCreatedByAllIgnoreCase(String name, String semesterTerm, int semesterYear, String type, User createdBy);
+	Optional<Group> findByNameAndSemesterTermAndSemesterYearAndTypeAllIgnoreCase(String name, String semesterTerm, int semesterYear, String type); 
 	Optional<List<Group>> findAllByCreatedByOrderByCreatedAtDesc(User user);
 	Optional<Group> findById(Long id);
 	Optional<List<Group>> findAllByOtherOwnersOrderByCreatedAtDesc(User otherOwner);

@@ -37,7 +37,9 @@ public class Group {
 	private String description;
 	
 	@NotBlank
-	private String semester;
+	private String semesterTerm;
+	
+	private int semesterYear;
 	
 	private Date createdAt;
 	
@@ -58,11 +60,12 @@ public class Group {
 		this.createdAt = new Date();
 	}
 	
-	public Group(String name, String description, String type, String semester, List<User> members, List<User> otherOwners, User createdBy) {
+	public Group(String name, String description, String type, String semesterTerm, int semesterYear, List<User> members, List<User> otherOwners, User createdBy) {
 		this.name = name;
 		this.description = description;
 		this.type = type;
-		this.semester = semester;
+		this.semesterTerm = semesterTerm;
+		this.semesterYear = semesterYear;
 		this.members = members;
 		this.otherOwners = otherOwners;
 		this.createdBy = createdBy;
