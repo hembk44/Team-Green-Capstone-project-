@@ -76,20 +76,20 @@ public class EventController {
 			}
 		}
 
-		Event event = new Event(eventDummy.getTitle(), eventDummy.getDescription(), eventDummy.getLocation(),
-				recipientList, eventDummy.getStart(), eventDummy.getEnd(), createdBy, eventDummy.getAllDay(),
-				eventDummy.getBorderColor(), eventDummy.getBackgroundColor());
-
-		eventService.save(event);
-
-		Long newEventId = event.getId();
-		System.out.println(newEventId);
-
 		Calendar calendar = calendarService.findById(eventDummy.getCalendarId());
 
 		if (calendar == null) {
 			throw new FileNotFoundException("Calendar with given id is not present in the database");
 		}
+		
+		Event event = new Event(eventDummy.getTitle(), eventDummy.getDescription(), eventDummy.getLocation(),
+				recipientList, eventDummy.getStart(), eventDummy.getEnd(), createdBy, eventDummy.getAllDay(),
+				calendar.getColor(), eventDummy.getBackgroundColor());
+
+		eventService.save(event);
+
+		Long newEventId = event.getId();
+		System.out.println(newEventId);
 
 		if (calendar.getCreatedBy() == createdBy) {
 			calendar.getEvents().add(event);
