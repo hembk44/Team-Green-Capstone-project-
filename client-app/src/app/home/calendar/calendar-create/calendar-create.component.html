@@ -9,6 +9,38 @@
         <mat-form-field>
             <input matInput formControlName="recipients" placeholder="Recipient Email">
         </mat-form-field>
+        <mat-form-field>
+            <input
+                matInput
+                formControlName="color"
+                [(colorPicker)]="color"
+                [style.background]="color"
+                [cpFallbackColor]="'#5484ed'"
+                [style.color]="'white'"
+                [value]="color"
+                placeholder="Calendar Color"
+                [cpOutputFormat]="'hex'"
+                (colorPickerClose)="setPrimary(color)"
+                [cpPosition]="'top-right'"
+                [cpPresetColors]="[
+                '#5484ed',
+                '#a4bdfc',
+                '#46d6db',
+                '#7ae7bf',
+                '#51b749',
+                '#fbd75b',
+                '#ffb878',
+                '#ff887c',
+                '#dc2127',
+                '#dbadff',
+                '#585858'
+                ]"
+                [cpOKButton]="true"
+                [cpColorMode]="'presets'"
+                [cpPresetLabel]="'Calendar Color'"
+                readonly
+            />
+        </mat-form-field>
         <mat-toolbar>
             <button mat-raised-button type="submit" class="submit">Save</button>    
         </mat-toolbar>  

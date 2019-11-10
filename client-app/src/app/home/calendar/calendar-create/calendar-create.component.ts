@@ -11,6 +11,7 @@ import { DataStorageService } from '../../shared/data-storage.service';
 export class CalendarCreateComponent implements OnInit {
   calForm: FormGroup;
   emails: string[];
+  color: string = '#5484ed';
 
   constructor(
     private ref: MatDialogRef<CalendarCreateComponent>,
@@ -21,12 +22,17 @@ export class CalendarCreateComponent implements OnInit {
     this.emails=[];
     this.calForm = new FormGroup({
       name: new FormControl(),
-      recipients: new FormControl()
+      recipients: new FormControl(),
+      color: new FormControl()
     })
   }
 
   close(){
     this.ref.close();
+  }
+
+  setPrimary(color: string){
+    this.color = color;
   }
 
   onSubmit(){
@@ -35,7 +41,8 @@ export class CalendarCreateComponent implements OnInit {
     }
     const obj = {
       name: this.calForm.value['name'],
-      recipients: this.emails
+      recipients: this.emails,
+      color: this.color
     }
     this.dataStorage.newCalendar(obj).subscribe(result => {
       console.log(obj);

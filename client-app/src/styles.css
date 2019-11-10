@@ -25,5 +25,12 @@
     text-transform: capitalize;
 }
 
+.fc-event{
+    border-width: 3px;
+    border-top: 0;
+    border-bottom: 0;
+    border-right: 0;
+}
+
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
