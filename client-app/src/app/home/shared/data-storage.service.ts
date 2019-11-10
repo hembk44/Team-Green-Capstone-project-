@@ -65,7 +65,7 @@ export class DataStorageService {
     formdata.append("file", file);
     return this.http
       .post<Object>(
-        "http://localhost:8181/api/file/uploadUser/faculty",
+        "http://localhost:8181/api/file/uploadUser/faculty/",
         formdata
       )
       .pipe(

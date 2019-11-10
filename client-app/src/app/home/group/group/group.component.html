@@ -1,7 +1,29 @@
 <div style=" margin: 10px;">
-  <button mat-stroked-button class="primary" (click)="create()">
+  <!-- <button mat-stroked-button class="primary" (click)="create()">
     Create Group
+  </button> -->
+
+  <button
+    mat-stroked-button
+    class="primary"
+    [matMenuTriggerFor]="createGroup"
+    aria-label="Example icon-button with a menu"
+    matTooltip="create course or custom group"
+  >
+    Create group<mat-icon>expand_more </mat-icon>
   </button>
+
+  <mat-menu #createGroup="matMenu">
+    <button mat-menu-item (click)="createCourseGroup()">
+      <mat-icon>school</mat-icon>
+
+      <span>Course Group</span>
+    </button>
+    <button mat-menu-item (click)="createCustomGroup()">
+      <mat-icon>build </mat-icon>
+      <span>Custom Group</span>
+    </button>
+  </mat-menu>
 </div>
 <div
   class="container"

@@ -14,8 +14,13 @@ export class RegisterUsersComponent implements OnInit {
   validFileExtensions: string[] = ["xlsx", "csv"];
   invalidExtension: string;
   isInvalid: boolean = false;
+
   selectedFiles: FileList;
   currentFileUpload: File;
+
+  // selectedFiles: FileList;
+  // currentFile: File;
+
   currentRole: string;
 
   constructor(
@@ -31,15 +36,25 @@ export class RegisterUsersComponent implements OnInit {
       uploadFile: [undefined, [Validators.required]]
     });
   }
+
+  // selectFile(event: any) {
+  //   this.selectedFiles = event.target.files;
+  // }
+
+  // upload() {
+  //   this.currentFile = this.selectedFiles.item(0);
+  //   this.dataStorage.registerUsers(this.currentFile).subscribe(response => {
+  //     console.log(response);
+  //   });
+  // }
+
   onSubmit() {
     if (this.isInvalid) {
       this.invalidExtension = "not supported file type!!!";
     } else {
       console.log("submitted");
-      // console.log(this.uploadForm);
       this.currentFileUpload = this.selectedFiles.item(0);
       console.log(this.currentFileUpload);
-
       this.dataStorage
         .registerUsers(this.currentFileUpload)
         .subscribe(result => console.log(result));
@@ -65,12 +80,9 @@ export class RegisterUsersComponent implements OnInit {
     console.log("Input files extension: " + fileExt);
     for (let ext of this.validFileExtensions) {
       if (fileExt.toLowerCase() == ext) {
-        // console.log("true");
-        // console.log(ext);
         return true;
       }
     }
-    // console.log("false");
     return false;
   }
 }
