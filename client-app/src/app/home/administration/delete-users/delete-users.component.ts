@@ -11,12 +11,12 @@ export class DeleteUsersComponent implements OnInit {
     {
       name: "Andrew Moore",
       email: "andrew.moore9497@gmail.com",
-      role: "admin"
+      role: "ROLE_ADMIN"
     },
     {
       name: "andrew",
       email: "ocsmoore@gmail.com",
-      role: "student"
+      role: "ROLE_USER"
     }
   ]
 

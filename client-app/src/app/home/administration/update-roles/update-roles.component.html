@@ -6,14 +6,14 @@
     </mat-card-header>
     <mat-card-content>
         <div *ngFor="let user of users">
-            <p>{{user.name}} <br> {{user.email}}
+            <p>{{user.name}}({{user.email}}) <br>
             <mat-form-field style="width:25%">
                 <mat-label>Role</mat-label>
                 <mat-select [(value)]="user.role">
-                    <mat-option value="admin">Admin</mat-option>
-                    <mat-option value="faculty">Faculty</mat-option>
-                    <mat-option value="moderator">Moderator</mat-option>
-                    <mat-option value="student">Student</mat-option>
+                    <mat-option value="ROLE_ADMIN">Admin</mat-option>
+                    <mat-option value="ROLE_PM">Faculty</mat-option>
+                    <mat-option value="ROLE_MO">Moderator</mat-option>
+                    <mat-option value="ROLE_USER">Student</mat-option>
                 </mat-select>   
             </mat-form-field>
             </p>
