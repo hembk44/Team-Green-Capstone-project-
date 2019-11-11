@@ -1,14 +1,28 @@
 <mat-toolbar class="top-detail-row">
-    <span class="spacer"></span><mat-icon (click)="close()" class="close-button" matTooltip="Close">clear</mat-icon>
+    <p>Share Calendar: {{data.name}}</p><span class="spacer"></span><mat-icon (click)="close()" class="close-button" matTooltip="Close">clear</mat-icon>
 </mat-toolbar>
 <div mat-dialog-content>
     <form [formGroup]="shareForm" (ngSubmit)="onSubmit()">
-        <mat-form-field>
-            <input
-            matInput
-            formControlName="recipients"
-            placeholder="Recipient Email">
-        </mat-form-field>
+            <mat-form-field class="example-chip-list">
+                <mat-chip-list #chipList aria-label="adding emails">
+                    <mat-chip
+                    *ngFor="let email of emails"
+                    [selectable]="selectable"
+                    [removable]="removable"
+                    (removed)="remove(email)"
+                    >
+                    {{ email }}
+                    <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                    </mat-chip>
+                    <input
+                    placeholder="Enter Emails"
+                    [matChipInputFor]="chipList"
+                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                    [matChipInputAddOnBlur]="addOnBlur"
+                    (matChipInputTokenEnd)="add($event)"
+                    />
+                </mat-chip-list>
+            </mat-form-field>
         <mat-toolbar>
             <button
             mat-raised-button

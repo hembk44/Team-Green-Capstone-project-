@@ -8,6 +8,7 @@ export class Calendar{
         public events: CalEvent[],
         public createdBy: any,
         public color: string,
-        public shown: boolean
+        public shown: boolean,
+        public recipients?: string[]
     ){}
 }
