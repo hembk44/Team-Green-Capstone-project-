@@ -74,6 +74,7 @@ export class CreateGroupComponent implements OnInit {
         this.isCourseGroup = true;
         this.groupForm.get("groupType").setValue("Course");
       } else {
+        this.isCourseGroup = false;
         this.groupForm.get("groupType").setValue("Custom");
       }
     });
