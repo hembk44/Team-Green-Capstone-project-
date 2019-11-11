@@ -95,12 +95,16 @@ import { GroupListComponent } from "./home/group/group-list/group-list.component
 import { CreateGroupComponent } from "./home/group/create-group/create-group.component";
 import { GroupItemComponent } from "./home/group/group-item/group-item.component";
 import { GroupStartComponent } from "./home/group/group-start/group-start.component";
-import { GroupDetailComponent } from "./home/group/group-detail/group-detail.component";
+import {
+  GroupDetailComponent,
+  DialogShareGroup,
+  SnackBarGroup
+} from "./home/group/group-detail/group-detail.component";
 import { GroupComponent } from "./home/group/group/group.component";
 import { RegisterUsersComponent } from "./home/administration/register-users/register-users.component";
-import { AdministrationComponent } from './home/administration/administration.component';
-import { UpdateRolesComponent } from './home/administration/update-roles/update-roles.component';
-import { DeleteUsersComponent } from './home/administration/delete-users/delete-users.component';
+import { AdministrationComponent } from "./home/administration/administration.component";
+import { UpdateRolesComponent } from "./home/administration/update-roles/update-roles.component";
+import { DeleteUsersComponent } from "./home/administration/delete-users/delete-users.component";
 import { FilterMemberPipe } from "./home/group/group-detail/filter-member.pipe";
 import { AppointmentFilterPipe } from "./home/appointment/appointment-list/appointment-filter.pipe";
 import { ScheduledAppointmentSentPipe } from "./home/appointment/scheduled-appointments/scheduled-appointments-sent/scheduled-appointment-sent.pipe";
@@ -192,7 +196,9 @@ import { ScheduledAppointmentSentPipe } from "./home/appointment/scheduled-appoi
     GroupComponent,
     FilterMemberPipe,
     AppointmentFilterPipe,
-    ScheduledAppointmentSentPipe
+    ScheduledAppointmentSentPipe,
+    DialogShareGroup,
+    SnackBarGroup
   ],
   imports: [
     BrowserModule,
@@ -243,7 +249,9 @@ import { ScheduledAppointmentSentPipe } from "./home/appointment/scheduled-appoi
     CalRename,
     DeleteConfirm,
     ShareCalendarComponent,
-    EventDeleteConfirm
+    EventDeleteConfirm,
+    DialogShareGroup,
+    SnackBarGroup
   ],
   providers: [
     MatDatepickerModule,
