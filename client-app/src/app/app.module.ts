@@ -246,12 +246,9 @@ import { ScheduledAppointmentSentPipe } from "./home/appointment/scheduled-appoi
     DeleteConfirm,
     ShareCalendarComponent,
     EventDeleteConfirm,
-<<<<<<< HEAD
-    GroupSelection
-=======
+    GroupSelection,
     DialogShareGroup,
     SnackBarGroup
->>>>>>> 31e8c407d98ac173e142ebf26cf94a678b328b8f
   ],
   providers: [
     MatDatepickerModule,
