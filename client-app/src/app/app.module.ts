@@ -73,6 +73,7 @@ import {
   CalRename,
   DeleteConfirm
 } from "./home/calendar/calendar-list/calendar-item/calendar-item.component";
+import { GroupSelection } from './home/shared/group-selection';
 import { ColorPickerModule } from "ngx-color-picker";
 import { EventService } from "./home/calendar/events.service";
 import { CalendarService } from "./home/calendar/calendar-list/calendar.service";
@@ -172,6 +173,7 @@ import { ScheduledAppointmentSentPipe } from "./home/appointment/scheduled-appoi
     EventDetailComponent,
     CalendarCreateComponent,
     CalRename,
+    GroupSelection,
     DeleteConfirm,
     ShareCalendarComponent,
     EditEventComponent,
@@ -237,7 +239,8 @@ import { ScheduledAppointmentSentPipe } from "./home/appointment/scheduled-appoi
     CalRename,
     DeleteConfirm,
     ShareCalendarComponent,
-    EventDeleteConfirm
+    EventDeleteConfirm,
+    GroupSelection
   ],
   providers: [
     MatDatepickerModule,
