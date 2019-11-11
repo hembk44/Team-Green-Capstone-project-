@@ -38,7 +38,50 @@ export class CreateGroupComponent implements OnInit {
   semesterYear: number[] = [2019, 2020, 2021];
   isCourseGroup: boolean = false;
   // majors = Majors.getMajors();
-  majors: string[] = ["Computer Science", "Computer Information System"];
+  majors: string[] = [
+    "Accounting",
+    "Agribusiness",
+    "Art",
+    "Atmospheric Science",
+    "Biology",
+    "Business",
+    "Communication",
+    "Computer Information Systems",
+    "Computer Science",
+    "Construction Management",
+    "Counseling",
+    "Criminal Justice",
+    "Dental Hygiene",
+    "Education: Curriculum and Instruction",
+    "Educational Leadership",
+    "English",
+    "Finance",
+    "General Studies",
+    "Gerontology",
+    "Health Studies",
+    "History",
+    "Kinesiology",
+    "Management",
+    "Marketing",
+    "Marriage & Family Therapy",
+    "Mathematics",
+    "Medical Laboratory Science",
+    "Music",
+    "Nursing",
+    "Occupational Therapy",
+    "Pharmacy",
+    "Political Science",
+    "Psychology",
+    "Radiologic Technology",
+    "Risk Management & Insurance",
+    "Social Work",
+    "Speech-Language Pathology",
+    "Toxicology",
+    "Unmanned Aircraft Systems Management",
+    "World Langauges: French",
+    "World Langauges: Spanish"
+  ];
+
   // majorType: MajorType;
   courseGroupInfo: courseGroup[] = [];
   selectedCourseGroupDetail: courseGroup;
