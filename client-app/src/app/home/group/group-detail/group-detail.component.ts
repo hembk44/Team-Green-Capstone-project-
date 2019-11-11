@@ -94,6 +94,10 @@ export class GroupDetailComponent implements OnInit {
       .subscribe(result => console.log(result));
     this.router.navigate(["/home/group"]);
   }
+
+  editGroup(){
+    this.router.navigate(["home/group/edit",this.id])
+  }
 }
 
 @Component({
