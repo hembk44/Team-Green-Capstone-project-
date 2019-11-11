@@ -62,8 +62,15 @@
     Manage
   </button>
   <mat-menu #manage="matMenu">
+    <button mat-menu-item *ngIf="groupType === 'custom'" (click)="shareGroup()">
+      <a style="cursor: pointer;">Share</a>
+    </button>
     <button mat-menu-item>
       <a style="cursor: pointer;">Edit</a>
+    </button>
+
+    <button mat-menu-item (click)="deleteGroup(id)">
+      <a style="cursor: pointer;">Delete</a>
     </button>
     <button mat-menu-item>
       <a style="cursor: pointer;">Message</a>

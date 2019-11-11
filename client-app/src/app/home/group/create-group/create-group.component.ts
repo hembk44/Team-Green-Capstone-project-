@@ -71,8 +71,10 @@ export class CreateGroupComponent implements OnInit {
     this.groupTypeNavigation.groupType.subscribe(type => {
       this.groupType = type;
       if (this.groupType === "course") {
+        this.isCourseGroup = true;
         this.groupForm.get("groupType").setValue("Course");
       } else {
+        this.isCourseGroup = false;
         this.groupForm.get("groupType").setValue("Custom");
       }
     });
