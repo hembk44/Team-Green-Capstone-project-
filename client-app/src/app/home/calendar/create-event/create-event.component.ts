@@ -12,7 +12,7 @@ import { Router } from "@angular/router";
 import { CalendarService } from "../calendar-list/calendar.service";
 import { Calendar } from "../calendar-list/calendar.model";
 import { DateRange } from "../../appointment/models-appointments/date-range.model";
-import { MatDialog, MatDialogRef, MatSnackBar } from "@angular/material";
+import { MatDialog, MatDialogRef, MatSnackBar, MatChipInputEvent } from "@angular/material";
 import { DataStorageService } from "../../shared/data-storage.service";
 import { DialogDateTimeIntervalDialog } from "../../appointment/appointment-create/appointment-create.component";
 import { EventDate } from "../event-date.model";
@@ -20,6 +20,7 @@ import { TimeInterval } from "../../appointment/models-appointments/time-interva
 import { EventTime } from "../event-times.model";
 import { AuthService } from "src/app/auth/auth.service";
 import { NgxMaterialTimepickerTheme } from 'ngx-material-timepicker';
+import { ENTER, COMMA } from '@angular/cdk/keycodes';
 
 @Component({
   selector: "app-create-event",
@@ -40,7 +41,14 @@ export class CreateEventComponent implements OnInit {
   selectedCal: number;
   defaultTime: Date = new Date();
   defaultTime2: Date = new Date();
-  emails: string[];
+  emails: string[] =[];
+  startDate;
+  endDate;
+  visible = true;
+  selectable = true;
+  removable = true;
+  addOnBlur = true;
+  readonly separatorKeysCodes: number[] = [ENTER, COMMA];
 
   constructor(
     private router: Router,
@@ -121,23 +129,30 @@ export class CreateEventComponent implements OnInit {
     console.log(eventFormValues.startDate.toLocaleDateString());
     console.log(this.primaryColor);
     console.log(this.secondaryColor);
-    const startDate = eventFormValues.startDate
-      .toDateString()
-      .concat(" ")
-      .concat(eventFormValues.startTime);
-    const endDate = eventFormValues.endDate
-      .toDateString()
-      .concat(" ")
-      .concat(eventFormValues.endTime);
+    if(!this.allDay){
+      this.startDate = new Date(eventFormValues.startDate
+        .toDateString()
+        .concat(" ")
+        .concat(eventFormValues.startTime));
+        console.log(this.startDate);
+      this.endDate = new Date(eventFormValues.endDate
+        .toDateString()
+        .concat(" ")
+        .concat(eventFormValues.endTime));
+    } else{
+      this.startDate = new Date(eventFormValues.startDate);
+      this.endDate = new Date(eventFormValues.endDate);
+    }
+    
 
-    if (startDate < endDate) {
+    if (this.startDate <= this.endDate) {
       if (!this.allDay) {
         this.obj = {
           calendarId: this.selectedCal,
           title: eventFormValues.title,
           description: eventFormValues.description,
-          start: startDate,
-          end: endDate,
+          start: this.startDate,
+          end: this.endDate,
           recipients: this.emails,
           location: eventFormValues.location,
           backgroundColor: this.primaryColor,
@@ -189,6 +204,29 @@ export class CreateEventComponent implements OnInit {
   selectCalendar(id: number) {
     this.selectedCal = id;
     console.log(this.selectedCal);
+  }
+  
+  add(event: MatChipInputEvent): void {
+    const input = event.input;
+    const value = event.value;
+
+    // Add emails
+    if (value.trim()) {
+      this.emails.push(value.trim());
+    }
+
+    // Reset the input value
+    if (input) {
+      input.value = "";
+    }
+  }
+
+  remove(email: string): void {
+    const index = this.emails.indexOf(email);
+
+    if (index >= 0) {
+      this.emails.splice(index, 1);
+    }
   }
 }
 
