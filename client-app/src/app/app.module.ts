@@ -63,9 +63,7 @@ import { AppointmentReceivedComponent } from "./home/appointment/appointment-typ
 import { ScheduledAppointmentsSentComponent } from "./home/appointment/scheduled-appointments/scheduled-appointments-sent/scheduled-appointments-sent.component";
 import { ScheduledAppointmentsReceivedComponent } from "./home/appointment/scheduled-appointments/scheduled-appointments-received/scheduled-appointments-received.component";
 import {
-  CreateEventComponent,
-  EventTimeDialog,
-  EventTimeIntervalDialog
+  CreateEventComponent
 } from "./home/calendar/create-event/create-event.component";
 
 import { CalendarListComponent } from "./home/calendar/calendar-list/calendar-list.component";
@@ -167,8 +165,6 @@ import { ScheduledAppointmentSentPipe } from "./home/appointment/scheduled-appoi
     VerticalNavigationComponent,
     DashboardComponent,
     CalendarComponent,
-    EventTimeDialog,
-    EventTimeIntervalDialog,
     CreateEventComponent,
     CalendarListComponent,
     CalendarItemComponent,
@@ -235,9 +231,7 @@ import { ScheduledAppointmentSentPipe } from "./home/appointment/scheduled-appoi
   entryComponents: [
     DialogDateTimeIntervalDialog,
     DialogTimeIntervalDialog,
-    EventTimeDialog,
     EventDetailComponent,
-    EventTimeIntervalDialog,
     TimeSlotSnackComponent,
     CalendarCreateComponent,
     CalRename,
