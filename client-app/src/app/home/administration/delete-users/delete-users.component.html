@@ -4,4 +4,8 @@
             Delete Users
         </mat-card-title>
     </mat-card-header>
+    <mat-card-content>
+            <mat-checkbox *ngFor="let user of users" color="warn">{{user.name}}({{user.email}})</mat-checkbox>
+    </mat-card-content>
+    <button mat-raised-button color="warn">Confirm</button>
 </mat-card>

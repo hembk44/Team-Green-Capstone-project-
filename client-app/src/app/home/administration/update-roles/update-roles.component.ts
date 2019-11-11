@@ -7,6 +7,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UpdateRolesComponent implements OnInit {
 
+  users = [
+    {
+      name: "Andrew Moore",
+      email: "andrew.moore9497@gmail.com",
+      role: "admin"
+    },
+    {
+      name: "andrew",
+      email: "ocsmoore@gmail.com",
+      role: "student"
+    }
+  ]
+
   constructor() { }
 
   ngOnInit() {
