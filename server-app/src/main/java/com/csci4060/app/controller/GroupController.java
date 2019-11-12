@@ -10,6 +10,7 @@ import javax.validation.Valid;
 import org.apache.commons.collections4.ListUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -28,9 +29,11 @@ import com.csci4060.app.model.RoleName;
 import com.csci4060.app.model.User;
 import com.csci4060.app.model.group.Group;
 import com.csci4060.app.model.group.GroupDummy;
+import com.csci4060.app.model.group.GroupEmail;
 import com.csci4060.app.model.group.GroupResponse;
 import com.csci4060.app.model.group.GroupShare;
 import com.csci4060.app.model.group.MemberNameAndEmail;
+import com.csci4060.app.services.EmailSenderService;
 import com.csci4060.app.services.GroupService;
 import com.csci4060.app.services.RoleService;
 import com.csci4060.app.services.UserService;
@@ -48,6 +51,9 @@ public class GroupController {
 
 	@Autowired
 	RoleService roleService;
+	
+	@Autowired
+	EmailSenderService emailSenderService;
 
 	@PostMapping(path = "/createFromList", consumes = "application/json")
 	@PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
@@ -177,7 +183,7 @@ public class GroupController {
 					null);
 		}
 
-		if (group.getCreatedBy() != user) {
+		if (group.getType().equals("Custom") && group.getCreatedBy() != user) {
 			return new APIresponse(HttpStatus.FORBIDDEN.value(), "You did not create the group. Authorization denied!",
 					null);
 		}
@@ -334,5 +340,55 @@ public class GroupController {
 
 		return new APIresponse(HttpStatus.OK.value(), "Group with id " + groupId + " has been successfully deleted.",
 				group);
+	}
+	
+	@PostMapping(path = "/sendEmail")
+	@PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
+	public APIresponse sendEmail(@Valid @RequestBody GroupEmail groupEmail) {
+		
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		String username = "";
+
+		if (principal instanceof UserDetails) {
+			username = ((UserDetails) principal).getUsername();
+		}
+
+		User user = userService.findByUsername(username);
+		
+		Long groupId = groupEmail.getId();
+		
+		Group group = groupService.findById(groupId);
+		
+		if (group == null) {
+			return new APIresponse(HttpStatus.OK.value(), "Group with id " + groupId + " does not exists.", null);
+		}
+		
+		if (group.getType().equals("Custom") && group.getCreatedBy() != user) {
+			return new APIresponse(HttpStatus.FORBIDDEN.value(), "You did not create the group. Authorization denied!",
+					null);
+		}
+		
+		List<User> memberList = group.getMembers();
+		
+		List<String> emailList = new ArrayList<String>();
+		
+		for (User member:memberList) {
+			emailList.add(member.getEmail());
+		}
+		
+		String[] emails = emailList.toArray(new String[emailList.size()]);
+		
+		SimpleMailMessage mailMessage = new SimpleMailMessage();
+		
+		mailMessage.setTo(emails);
+		mailMessage.setSubject(groupEmail.getTitle());
+		mailMessage.setFrom(user.getEmail());
+		mailMessage.setText(groupEmail.getMessage());
+
+		emailSenderService.sendEmail(mailMessage);
+		
+		return new APIresponse(HttpStatus.OK.value(), "Emails have been successfully sent",
+				emailList);
 	}
 }
