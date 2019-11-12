@@ -55,9 +55,11 @@ export class RegisterUsersComponent implements OnInit {
       console.log("submitted");
       this.currentFileUpload = this.selectedFiles.item(0);
       console.log(this.currentFileUpload);
-      this.dataStorage
-        .registerUsers(this.currentFileUpload)
-        .subscribe(result => console.log(result));
+      if (this.currentRole === "ROLE_ADMIN") {
+        this.dataStorage
+          .registerUsers(this.currentFileUpload)
+          .subscribe(result => console.log(result));
+      }
     }
   }
 

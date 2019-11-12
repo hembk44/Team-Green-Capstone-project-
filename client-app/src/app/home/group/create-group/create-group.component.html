@@ -116,8 +116,8 @@
 
     <mat-hint>Use comma or hit ENTER to enter multiple emails!</mat-hint>
   </mat-form-field>
-  <!-- <div *ngIf="editMode" formArrayName="editEmailsArray">
-    <mat-form-field
+  <div *ngIf="editMode">
+    <!-- <mat-form-field
       class="example-full-width"
       *ngFor="let g of groupForm.get('editEmailsArray').controls; let i = index"
     >
@@ -128,8 +128,17 @@
         formControlName="editEmail"
       />
       <mat-icon matSuffix>mode_edit</mat-icon>
-    </mat-form-field>
-  </div> -->
+    </mat-form-field> -->
+    <mat-toolbar>
+      <mat-toolbar-row *ngFor="let e of customGroupEmails; let i = index">
+        <span>{{ e }}</span> &nbsp; &nbsp;
+        <!-- <span class="example-spacer"></span> -->
+        <button mat-button (click)="deleteEmail(i)">
+          <a style="cursor: pointer;"><mat-icon matSuffix>delete</mat-icon></a>
+        </button>
+      </mat-toolbar-row>
+    </mat-toolbar>
+  </div>
 
   <mat-form-field>
     <mat-label>Semester Term</mat-label>

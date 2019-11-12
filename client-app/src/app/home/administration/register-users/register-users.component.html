@@ -9,6 +9,7 @@
       class="example-container"
       [formGroup]="uploadForm"
       (ngSubmit)="onSubmit()"
+      enctype="multipart/form-data"
     >
       <mat-form-field style="cursor: pointer;">
         <ngx-mat-file-input

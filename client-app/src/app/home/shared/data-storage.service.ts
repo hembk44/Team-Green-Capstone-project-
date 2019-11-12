@@ -63,6 +63,7 @@ export class DataStorageService {
     this.isLoadingSubject.next(true);
     const formdata: FormData = new FormData();
     formdata.append("file", file);
+    console.log(formdata);
     return this.http
       .post<ApiResponse>(
         "http://localhost:8181/api/file/uploadUser/faculty/",

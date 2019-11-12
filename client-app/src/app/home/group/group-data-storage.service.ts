@@ -94,4 +94,14 @@ export class GroupDataStorageService {
         console.log(result);
       });
   }
+
+  updateGroup(obj: Object, id: number) {
+    {
+      this.isLoadingSubject.next(true);
+      return this.http.put<Object>(this.baseUrlGroup + "edit/" + id, obj).pipe(
+        (map(data => data), catchError(error => throwError(error))),
+        finalize(() => this.isLoadingSubject.next(false))
+      );
+    }
+  }
 }

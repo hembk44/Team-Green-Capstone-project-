@@ -183,8 +183,7 @@ export class CreateGroupComponent implements OnInit {
               title: [this.groupToEdit.name],
               description: [this.groupToEdit.description],
               semesterTerm: [this.groupToEdit.semesterTerm],
-              semesterYear: [this.groupToEdit.semesterYear],
-              editEmailsArray: groupEmailsArray
+              semesterYear: [this.groupToEdit.semesterYear]
             });
           } else {
             this.isCourseGroup = true;
@@ -202,6 +201,9 @@ export class CreateGroupComponent implements OnInit {
   get major(): any {
     return this.groupForm.get("majorControl");
   }
+  deleteEmail(index: number) {
+    this.customGroupEmails.splice(index, 1);
+  }
 
   add(event: MatChipInputEvent): void {
     const input = event.input;
@@ -213,6 +215,7 @@ export class CreateGroupComponent implements OnInit {
       if (this.email.value.trim()) {
         this.isEmailValid = true;
         this.emails.push(this.email.value.trim());
+        this.customGroupEmails.push(this.email.value.trim());
         console.log(this.emails);
       } else if (this.email.value === "" && this.emails.length <= 0) {
         this.chipList.errorState = true;
@@ -284,22 +287,44 @@ export class CreateGroupComponent implements OnInit {
 
   onSubmit() {
     const groupFormValues = this.groupForm.value;
-    const obj = {
-      name: groupFormValues.title,
-      description: groupFormValues.description,
-      recipients: this.emails,
-      type: groupFormValues.groupType,
-      semesterTerm: groupFormValues.semesterTerm,
-      semesterYear: groupFormValues.semesterYear
-    };
-    console.log(obj);
-    this.groupDataStorageService.createGroup(obj).subscribe(result => {
-      if (result) {
-        console.log(result);
+    if (this.editMode) {
+      const obj = {
+        name: groupFormValues.title,
+        description: groupFormValues.description,
+        recipients: this.customGroupEmails,
+        type: groupFormValues.groupType,
+        semesterTerm: groupFormValues.semesterTerm,
+        semesterYear: groupFormValues.semesterYear
+      };
+      console.log(obj);
+      this.groupDataStorageService
+        .updateGroup(obj, this.id)
+        .subscribe(result => {
+          if (result) {
+            console.log(result);
 
-        this.groupDataStorageService.fetchGroup();
-        this.router.navigate(["/home/group"]);
-      }
-    });
+            this.groupDataStorageService.fetchGroup();
+            // this.router.navigate(["/home/group"]);
+          }
+        });
+    } else {
+      const obj = {
+        name: groupFormValues.title,
+        description: groupFormValues.description,
+        recipients: this.emails,
+        type: groupFormValues.groupType,
+        semesterTerm: groupFormValues.semesterTerm,
+        semesterYear: groupFormValues.semesterYear
+      };
+      console.log(obj);
+      this.groupDataStorageService.createGroup(obj).subscribe(result => {
+        if (result) {
+          console.log(result);
+
+          this.groupDataStorageService.fetchGroup();
+          this.router.navigate(["/home/group"]);
+        }
+      });
+    }
   }
 }
