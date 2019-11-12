@@ -1,16 +1,18 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import {
   FormGroup,
   Validators,
   FormControl,
-  FormBuilder
+  FormBuilder,
+  FormArray
 } from "@angular/forms";
-import { Router } from "@angular/router";
+import { Router, ActivatedRoute, Params } from "@angular/router";
 
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
 import { MatChipInputEvent } from "@angular/material/chips";
 import { GroupDataStorageService } from "../group-data-storage.service";
 import { GroupCreateNavigationService } from "../group/group-create-navigation.service";
+import { Group } from "../models-group/group";
 // import { Majors, MajorType } from "./majors";
 
 export interface courseGroup {
@@ -29,6 +31,7 @@ export class CreateGroupComponent implements OnInit {
   removable = true;
   addOnBlur = true;
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
+  @ViewChild("chipList", { static: false }) chipList;
 
   groupForm: FormGroup;
   email = new FormControl("", [Validators.required, Validators.email]);
@@ -89,6 +92,12 @@ export class CreateGroupComponent implements OnInit {
   selectedDesc: string;
   selected: string;
   groupType: string;
+  id: number;
+  editMode: boolean = false;
+  errorMessage: string;
+  isEmailValid: boolean = false;
+  groupToEdit: any;
+  customGroupEmails: string[] = [];
 
   // use dynamic method to add values in date
 
@@ -96,11 +105,11 @@ export class CreateGroupComponent implements OnInit {
     private formBuilder: FormBuilder,
     private router: Router,
     private groupDataStorageService: GroupDataStorageService,
-    private groupTypeNavigation: GroupCreateNavigationService
+    private groupTypeNavigation: GroupCreateNavigationService,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit() {
-    console.log(this.majors);
     this.groupForm = this.formBuilder.group({
       title: ["", Validators.required],
       description: ["", Validators.required],
@@ -108,7 +117,8 @@ export class CreateGroupComponent implements OnInit {
       email: this.email,
       semesterTerm: ["", Validators.required],
       semesterYear: ["", Validators.required],
-      majorControl: ["", Validators.required]
+      majorControl: ["", Validators.required],
+      editEmail: ["", Validators.required]
     });
 
     this.groupTypeNavigation.groupType.subscribe(type => {
@@ -122,35 +132,99 @@ export class CreateGroupComponent implements OnInit {
       }
     });
 
-    // const groupFormValues = this.groupForm.value;
-    // console.log(this.isCourseGroup);
-    // console.log(groupFormValues.majorControl);
-    // console.log(this.selected);
-    // console.log(this.major);
-    // if (this.selected === "Computer Science") {
-    //   this.isCourseGroup = true;
-    //   console.log(this.isCourseGroup);
-    //   this.courseGroupInfo = [
-    //     { title: "CSCI 1070", description: "Computer Literacy" },
-    //     {
-    //       title: "CSCI 4060",
-    //       description: "Principles of Software Engineering"
-    //     }
-    //   ];
-    // }
+    this.route.params.subscribe((params: Params) => {
+      this.id = +params["id"];
+      this.editMode = params["id"] != null;
+      console.log(this.editMode);
+      this.initForm();
+    });
   }
 
+  private initForm() {
+    let groupEmailsArray = new FormArray([]);
+    if (this.editMode) {
+      this.groupDataStorageService
+        .displayGroupDetails(this.id)
+        .subscribe(result => {
+          console.log(result);
+          this.groupToEdit = result.result;
+          console.log(this.groupToEdit);
+          if (this.groupToEdit.type === "Custom") {
+            this.isCourseGroup = false;
+            this.groupForm.get("groupType").setValue(this.groupToEdit.type);
+            // this.groupForm.get("title").setValue(this.groupToEdit.name);
+            // this.groupForm
+            //   .get("description")
+            //   .setValue(this.groupToEdit.description);
+            // this.groupForm
+            //   .get("semesterYear")
+            //   .setValue(this.groupToEdit.semesterYear);
+            // this.groupForm
+            //   .get("semesterTerm")
+            //   .setValue(this.groupToEdit.semesterTerm);
+            const customGroupMembers = this.groupToEdit.members;
+            console.log(customGroupMembers);
+
+            for (let member of customGroupMembers) {
+              this.customGroupEmails.push(member.email);
+              console.log(this.customGroupEmails);
+            }
+            // for (let email of this.customGroupEmails) {
+            //   this.groupForm.get("editEmail").setValue(email);
+            //   groupEmailsArray.push({
+            //     new FormGroup({
+            //       editEmail : new FormControl(email)
+            //     })
+            //   });
+            // }
+
+            this.groupForm = this.formBuilder.group({
+              groupType: [this.groupToEdit.type],
+              title: [this.groupToEdit.name],
+              description: [this.groupToEdit.description],
+              semesterTerm: [this.groupToEdit.semesterTerm],
+              semesterYear: [this.groupToEdit.semesterYear],
+              editEmailsArray: groupEmailsArray
+            });
+          } else {
+            this.isCourseGroup = true;
+            this.groupForm.get("groupType").setValue("Course");
+          }
+        });
+    }
+  }
+
+  // createEmail(){
+  //   return this.formBuilder.group{{
+  //     editEmail: ['', Validators.required]
+  //   }}
+  // }
   get major(): any {
     return this.groupForm.get("majorControl");
   }
 
   add(event: MatChipInputEvent): void {
     const input = event.input;
-    const value = event.value;
-
-    // Add emails
-    if (value.trim()) {
-      this.emails.push(value.trim());
+    // const value = event.value;
+    this.email.setValue(event.value);
+    console.log(this.email.hasError("email"));
+    if (!this.email.hasError("email")) {
+      // if (!this.email.hasError("email")) {
+      if (this.email.value.trim()) {
+        this.isEmailValid = true;
+        this.emails.push(this.email.value.trim());
+        console.log(this.emails);
+      } else if (this.email.value === "" && this.emails.length <= 0) {
+        this.chipList.errorState = true;
+        this.isEmailValid = false;
+        this.errorMessage = "please enter a valid email address";
+      } else {
+        this.chipList.errorState = false;
+      }
+    } else {
+      this.chipList.errorState = true;
+      this.isEmailValid = false;
+      this.errorMessage = "please enter a valid email address";
     }
 
     // Reset the input value
@@ -166,13 +240,13 @@ export class CreateGroupComponent implements OnInit {
     }
   }
 
-  getErrorMessage() {
-    return this.email.hasError("required")
-      ? "You must enter a valid email address"
-      : this.email.hasError("email")
-      ? "Not a valid email"
-      : "";
-  }
+  // getErrorMessage() {
+  //   return this.email.hasError("required")
+  //     ? "You must enter a valid email address"
+  //     : this.email.hasError("email")
+  //     ? "Not a valid email"
+  //     : "";
+  // }
   cancel() {
     this.router.navigate(["/home/group"]);
   }
@@ -224,6 +298,7 @@ export class CreateGroupComponent implements OnInit {
         console.log(result);
 
         this.groupDataStorageService.fetchGroup();
+        this.router.navigate(["/home/group"]);
       }
     });
   }

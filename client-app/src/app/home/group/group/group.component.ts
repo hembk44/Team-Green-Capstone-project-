@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { Router } from "@angular/router";
+import { Router, ActivatedRoute } from "@angular/router";
 import { GroupDataStorageService } from "../group-data-storage.service";
 import { GroupCreateNavigationService } from "./group-create-navigation.service";
 
@@ -12,12 +12,13 @@ export class GroupComponent implements OnInit {
   constructor(
     private router: Router,
     private groupDataStorage: GroupDataStorageService,
-    private groupTypeNavigation: GroupCreateNavigationService
+    private groupTypeNavigation: GroupCreateNavigationService,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit() {}
   createCourseGroup() {
-    this.router.navigate(["home/group/create-group"]);
+    this.router.navigate(["create-group"], { relativeTo: this.route });
     this.groupTypeNavigation.changeGroupType("course");
   }
 

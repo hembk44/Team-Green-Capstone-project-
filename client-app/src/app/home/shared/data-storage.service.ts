@@ -64,7 +64,7 @@ export class DataStorageService {
     const formdata: FormData = new FormData();
     formdata.append("file", file);
     return this.http
-      .post<Object>(
+      .post<ApiResponse>(
         "http://localhost:8181/api/file/uploadUser/faculty/",
         formdata
       )

@@ -66,7 +66,7 @@ export class GroupDataStorageService {
 
   shareGroup(obj: Object) {
     this.isLoadingSubject.next(true);
-    return this.http.post<Object>(this.baseUrlGroup + "share", obj).pipe(
+    return this.http.post<ApiResponse>(this.baseUrlGroup + "share", obj).pipe(
       (map(data => data), catchError(error => throwError(error))),
       finalize(() => this.isLoadingSubject.next(false))
     );
@@ -74,19 +74,24 @@ export class GroupDataStorageService {
 
   deleteGroup(id: number) {
     this.isLoadingSubject.next(true);
-    return this.http.delete<Object>(this.baseUrlGroup + "delete/" + id).pipe(
-      (map(data => data), catchError(error => throwError(error))),
-      finalize(() => this.isLoadingSubject.next(false))
-    );
+    return this.http
+      .delete<ApiResponse>(this.baseUrlGroup + "delete/" + id)
+      .pipe(
+        (map(data => data), catchError(error => throwError(error))),
+        finalize(() => this.isLoadingSubject.next(false))
+      );
   }
 
-  sendEmail(obj: Object){
+  sendEmail(obj: Object) {
     this.isLoadingSubject.next(true);
-    return this.http.post<Object>(this.baseUrlGroup + "sendEmail", obj).pipe(
-      (map(data => data), catchError(error => throwError(error))),
-      finalize(() => this.isLoadingSubject.next(false))
-    ).subscribe((result: ApiResponse) => {
-      console.log(result);
-    });
+    return this.http
+      .post<Object>(this.baseUrlGroup + "sendEmail", obj)
+      .pipe(
+        (map(data => data), catchError(error => throwError(error))),
+        finalize(() => this.isLoadingSubject.next(false))
+      )
+      .subscribe((result: ApiResponse) => {
+        console.log(result);
+      });
   }
 }
