@@ -21,8 +21,8 @@ const httpOptions = {
   providedIn: "root"
 })
 export class AuthService {
-  private loginUrl = "http://localhost:8181/api/auth/signin";
-  private signupUrl = "http://localhost:8181/api/auth/signup";
+  private loginUrl = "http://ec2-100-26-194-180.compute-1.amazonaws.com:8181/api/auth/signin";
+  private signupUrl = "http://ec2-100-26-194-180.compute-1.amazonaws.com:8181/api/auth/signup";
   private userRoleSubject: BehaviorSubject<any> = new BehaviorSubject<any>({});
   private usernameSubject: BehaviorSubject<any> = new BehaviorSubject<any>({});
   private nameSubject: BehaviorSubject<any> = new BehaviorSubject<any>({});

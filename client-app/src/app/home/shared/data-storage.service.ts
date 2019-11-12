@@ -14,9 +14,9 @@ import { CalendarService } from "../calendar/calendar-list/calendar.service";
   providedIn: "root"
 })
 export class DataStorageService {
-  private baseUrlAppointment = "http://localhost:8181/api/appointment/";
-  private baseUrlEvent = "http://localhost:8181/api/event/";
-  private baseUrlCalendar = "http://localhost:8181/api/calendar/";
+  private baseUrlAppointment = "http://ec2-100-26-194-180.compute-1.amazonaws.com:8181/api/appointment/";
+  private baseUrlEvent = "http://ec2-100-26-194-180.compute-1.amazonaws.com:8181/api/event/";
+  private baseUrlCalendar = "http://ec2-100-26-194-180.compute-1.amazonaws.com:8181/api/calendar/";
 
   private isLoadingSubject: BehaviorSubject<boolean> = new BehaviorSubject<
     boolean

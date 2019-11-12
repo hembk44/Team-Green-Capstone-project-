@@ -10,7 +10,7 @@ import { ApiResponse } from "src/app/auth/api.response";
   providedIn: "root"
 })
 export class GroupDataStorageService {
-  private baseUrlGroup = "http://localhost:8181/api/group/";
+  private baseUrlGroup = "http://ec2-100-26-194-180.compute-1.amazonaws.com:8181/api/group/";
 
   private isLoadingSubject: BehaviorSubject<boolean> = new BehaviorSubject<
     boolean
