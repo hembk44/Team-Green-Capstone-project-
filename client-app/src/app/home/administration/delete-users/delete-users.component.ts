@@ -7,6 +7,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DeleteUsersComponent implements OnInit {
 
+  users = [
+    {
+      name: "Andrew Moore",
+      email: "andrew.moore9497@gmail.com",
+      role: "ROLE_ADMIN"
+    },
+    {
+      name: "andrew",
+      email: "ocsmoore@gmail.com",
+      role: "ROLE_USER"
+    }
+  ]
+
   constructor() { }
 
   ngOnInit() {

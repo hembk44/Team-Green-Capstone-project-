@@ -6,11 +6,61 @@
         <mat-form-field>
             <input matInput formControlName="name" placeholder="Calendar Name">
         </mat-form-field><br>
+        <mat-form-field class="example-chip-list">
+            <mat-chip-list #chipList aria-label="adding emails">
+                <mat-chip
+                *ngFor="let email of emails"
+                [selectable]="selectable"
+                [removable]="removable"
+                (removed)="remove(email)"
+                >
+                {{ email }}
+                <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                </mat-chip>
+                <input
+                placeholder="Enter Emails"
+                [matChipInputFor]="chipList"
+                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                [matChipInputAddOnBlur]="addOnBlur"
+                (matChipInputTokenEnd)="add($event)"
+                />
+            </mat-chip-list>
+        </mat-form-field><br>
         <mat-form-field>
-            <input matInput formControlName="recipients" placeholder="Recipient Email">
+            <input
+                matInput
+                formControlName="color"
+                [(colorPicker)]="color"
+                [style.background]="color"
+                [cpFallbackColor]="'#5484ed'"
+                [style.color]="'white'"
+                [value]="color"
+                placeholder="Calendar Color"
+                [cpOutputFormat]="'hex'"
+                (colorPickerClose)="setPrimary(color)"
+                [cpPosition]="'top-right'"
+                [cpPresetColors]="[
+                '#5484ed',
+                '#a4bdfc',
+                '#46d6db',
+                '#7ae7bf',
+                '#51b749',
+                '#fbd75b',
+                '#ffb878',
+                '#ff887c',
+                '#dc2127',
+                '#dbadff',
+                '#585858'
+                ]"
+                [cpOKButton]="true"
+                [cpColorMode]="'presets'"
+                [cpPresetLabel]="'Calendar Color'"
+                readonly
+            />
         </mat-form-field>
         <mat-toolbar>
-            <button mat-raised-button type="submit" class="submit">Save</button>    
+            <button mat-raised-button type="submit" class="submit">Save</button>&nbsp;&nbsp;
+            <button mat-raised-button type="button" (click)="groupSelect()">Select Groups</button>
         </mat-toolbar>  
     </form>
 </div>

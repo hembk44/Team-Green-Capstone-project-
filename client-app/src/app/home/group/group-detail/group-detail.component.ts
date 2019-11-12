@@ -15,6 +15,7 @@ import {
 import { Validators, FormControl } from "@angular/forms";
 import { GroupCreateNavigationService } from "../group/group-create-navigation.service";
 import { share } from "rxjs/operators";
+import { MessageGroupComponent } from '../message-group/message-group.component';
 
 @Component({
   selector: "app-group-detail",
@@ -93,6 +94,20 @@ export class GroupDetailComponent implements OnInit {
       .deleteGroup(id)
       .subscribe(result => console.log(result));
     this.router.navigate(["/home/group"]);
+  }
+
+  editGroup(){
+    this.router.navigate(["home/group/edit",this.id])
+  }
+
+  messageGroup(){
+    const dialogRef = this.dialog.open(MessageGroupComponent, {
+      width: "400px",
+      data: {
+        id: this.id,
+        name: this.group.name
+      }
+    })
   }
 }
 

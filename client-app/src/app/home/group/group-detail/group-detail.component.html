@@ -65,7 +65,7 @@
     <button mat-menu-item *ngIf="groupType === 'custom'" (click)="shareGroup()">
       <a style="cursor: pointer;">Share</a>
     </button>
-    <button mat-menu-item>
+    <button mat-menu-item (click)="editGroup()">
       <a style="cursor: pointer;">Edit</a>
     </button>
 
@@ -73,7 +73,7 @@
       <a style="cursor: pointer;">Delete</a>
     </button>
     <button mat-menu-item>
-      <a style="cursor: pointer;">Message</a>
+      <a style="cursor: pointer;" (click)="messageGroup()">Message</a>
     </button>
   </mat-menu>
 </mat-card>

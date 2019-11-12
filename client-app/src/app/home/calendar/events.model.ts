@@ -1,5 +1,3 @@
-import { Color } from './colors.model';
-
 export class CalEvent{
 
     constructor(

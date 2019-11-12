@@ -63,9 +63,7 @@ import { AppointmentReceivedComponent } from "./home/appointment/appointment-typ
 import { ScheduledAppointmentsSentComponent } from "./home/appointment/scheduled-appointments/scheduled-appointments-sent/scheduled-appointments-sent.component";
 import { ScheduledAppointmentsReceivedComponent } from "./home/appointment/scheduled-appointments/scheduled-appointments-received/scheduled-appointments-received.component";
 import {
-  CreateEventComponent,
-  EventTimeDialog,
-  EventTimeIntervalDialog
+  CreateEventComponent
 } from "./home/calendar/create-event/create-event.component";
 
 import { CalendarListComponent } from "./home/calendar/calendar-list/calendar-list.component";
@@ -75,6 +73,7 @@ import {
   CalRename,
   DeleteConfirm
 } from "./home/calendar/calendar-list/calendar-item/calendar-item.component";
+import { GroupSelection } from './home/shared/group-selection';
 import { ColorPickerModule } from "ngx-color-picker";
 import { EventService } from "./home/calendar/events.service";
 import { CalendarService } from "./home/calendar/calendar-list/calendar.service";
@@ -108,6 +107,8 @@ import { DeleteUsersComponent } from "./home/administration/delete-users/delete-
 import { FilterMemberPipe } from "./home/group/group-detail/filter-member.pipe";
 import { AppointmentFilterPipe } from "./home/appointment/appointment-list/appointment-filter.pipe";
 import { ScheduledAppointmentSentPipe } from "./home/appointment/scheduled-appointments/scheduled-appointments-sent/scheduled-appointment-sent.pipe";
+import { GroupEditComponent } from './home/group/group-edit/group-edit.component';
+import { MessageGroupComponent } from './home/group/message-group/message-group.component';
 
 @NgModule({
   // declarations: [
@@ -171,8 +172,6 @@ import { ScheduledAppointmentSentPipe } from "./home/appointment/scheduled-appoi
     VerticalNavigationComponent,
     DashboardComponent,
     CalendarComponent,
-    EventTimeDialog,
-    EventTimeIntervalDialog,
     CreateEventComponent,
     CalendarListComponent,
     CalendarItemComponent,
@@ -180,6 +179,7 @@ import { ScheduledAppointmentSentPipe } from "./home/appointment/scheduled-appoi
     EventDetailComponent,
     CalendarCreateComponent,
     CalRename,
+    GroupSelection,
     DeleteConfirm,
     ShareCalendarComponent,
     EditEventComponent,
@@ -198,7 +198,9 @@ import { ScheduledAppointmentSentPipe } from "./home/appointment/scheduled-appoi
     AppointmentFilterPipe,
     ScheduledAppointmentSentPipe,
     DialogShareGroup,
-    SnackBarGroup
+    SnackBarGroup,
+    GroupEditComponent,
+    MessageGroupComponent
   ],
   imports: [
     BrowserModule,
@@ -241,16 +243,16 @@ import { ScheduledAppointmentSentPipe } from "./home/appointment/scheduled-appoi
   entryComponents: [
     DialogDateTimeIntervalDialog,
     DialogTimeIntervalDialog,
-    EventTimeDialog,
     EventDetailComponent,
-    EventTimeIntervalDialog,
     TimeSlotSnackComponent,
     CalendarCreateComponent,
     CalRename,
     DeleteConfirm,
     ShareCalendarComponent,
     EventDeleteConfirm,
+    GroupSelection,
     DialogShareGroup,
+    MessageGroupComponent,
     SnackBarGroup
   ],
   providers: [

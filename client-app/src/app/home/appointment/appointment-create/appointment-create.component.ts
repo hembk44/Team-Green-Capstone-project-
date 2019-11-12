@@ -21,6 +21,7 @@ import { EventDate } from "../../calendar/event-date.model";
 
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
 import { MatChipInputEvent } from "@angular/material/chips";
+import { GroupSelection } from '../../shared/group-selection';
 
 @Component({
   selector: "app-appointment-create",
@@ -154,6 +155,20 @@ export class AppointmentCreateComponent implements OnInit {
     //   })
     // }
   }
+
+  groupSelect(){
+    const dialogRef = this.dialog.open(GroupSelection, {
+      width: '600px'
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(result);
+      for(let email of result){
+        if(!this.emails.includes(email)){
+          this.emails.push(email);
+        }
+      }
+    })
+  }
 }
 
 @Component({
@@ -208,6 +223,7 @@ export class DialogDateTimeIntervalDialog implements OnInit {
     // Prevent Saturday and Sunday from being selected.
     return day !== 0 && day !== 6;
   };
+
 }
 
 @Component({

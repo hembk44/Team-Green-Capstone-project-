@@ -6,6 +6,8 @@ import { Calendar } from '../../calendar-list/calendar.model';
 import { DataStorageService } from 'src/app/home/shared/data-storage.service';
 import { AuthService } from 'src/app/auth/auth.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { ENTER, COMMA } from '@angular/cdk/keycodes';
+import { MatChipInputEvent } from '@angular/material';
 
 @Component({
   selector: 'app-edit-event',
@@ -26,7 +28,12 @@ export class EditEventComponent implements OnInit {
   defaultTime2: Date = new Date();
   email = new FormControl("",[Validators.email]);
   newEnd: Date;
-  emails: string[];
+  emails: string[] = [];
+  visible = true;
+  selectable = true;
+  removable = true;
+  addOnBlur = true;
+  readonly separatorKeysCodes: number[] = [ENTER, COMMA];
 
   constructor(
     private route: ActivatedRoute,
@@ -37,11 +44,12 @@ export class EditEventComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.emails=[];
     this.route.params.subscribe((params: Params) => {
       this.id = +params["id"];
     });
     this.event = this.calService.getEvent(this.id);
+    console.log(this.event);
+    this.emails=this.event.email;
     this.newEnd = this.event.end;
     this.newEnd.setDate(this.newEnd.getDate()-1);
     this.primaryColor = this.event.backgroundColor;
@@ -133,6 +141,29 @@ export class EditEventComponent implements OnInit {
 
   selectCalendar(id: number){
     this.selectedCal = id;
+  }
+
+  add(event: MatChipInputEvent): void {
+    const input = event.input;
+    const value = event.value;
+
+    // Add emails
+    if (value.trim()) {
+      this.emails.push(value.trim());
+    }
+
+    // Reset the input value
+    if (input) {
+      input.value = "";
+    }
+  }
+
+  remove(email: string): void {
+    const index = this.emails.indexOf(email);
+
+    if (index >= 0) {
+      this.emails.splice(index, 1);
+    }
   }
 
 }
