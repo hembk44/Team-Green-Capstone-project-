@@ -79,4 +79,12 @@ export class GroupDataStorageService {
       finalize(() => this.isLoadingSubject.next(false))
     );
   }
+
+  sendEmail(obj: Object){
+    this.isLoadingSubject.next(true);
+    return this.http.post<Object>(this.baseUrlGroup + "sendEmail", obj).pipe(
+      (map(data => data), catchError(error => throwError(error))),
+      finalize(() => this.isLoadingSubject.next(false))
+    );
+  }
 }

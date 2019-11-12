@@ -108,6 +108,7 @@ import { FilterMemberPipe } from "./home/group/group-detail/filter-member.pipe";
 import { AppointmentFilterPipe } from "./home/appointment/appointment-list/appointment-filter.pipe";
 import { ScheduledAppointmentSentPipe } from "./home/appointment/scheduled-appointments/scheduled-appointments-sent/scheduled-appointment-sent.pipe";
 import { GroupEditComponent } from './home/group/group-edit/group-edit.component';
+import { MessageGroupComponent } from './home/group/message-group/message-group.component';
 
 @NgModule({
   // declarations: [
@@ -198,7 +199,8 @@ import { GroupEditComponent } from './home/group/group-edit/group-edit.component
     ScheduledAppointmentSentPipe,
     DialogShareGroup,
     SnackBarGroup,
-    GroupEditComponent
+    GroupEditComponent,
+    MessageGroupComponent
   ],
   imports: [
     BrowserModule,
@@ -250,6 +252,7 @@ import { GroupEditComponent } from './home/group/group-edit/group-edit.component
     EventDeleteConfirm,
     GroupSelection,
     DialogShareGroup,
+    MessageGroupComponent,
     SnackBarGroup
   ],
   providers: [

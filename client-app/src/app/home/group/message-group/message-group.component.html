@@ -1,0 +1,22 @@
+<mat-toolbar>
+    <mat-toolbar-row>
+        <p>Message to {{data.name}}</p><span class="spacer"></span>
+        <mat-icon (click)="cancel()" style="cursor:pointer">clear</mat-icon>
+    </mat-toolbar-row>
+</mat-toolbar>
+<form [formGroup]="messageForm" (ngSubmit)="onSubmit()">
+    <mat-form-field>
+        <mat-label>Message Subject</mat-label>
+        <input matInput formControlName="title">
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Message Content</mat-label>
+        <textarea matInput formControlName="message"></textarea>
+    </mat-form-field>
+    <mat-toolbar>
+        <mat-toolbar-row>
+            <button mat-raised-button type="submit">Send</button>&nbsp;&nbsp;
+            <button mat-raised-button type="button" (click)="cancel()" color="warn">Cancel</button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+</form>
