@@ -1,8 +1,54 @@
-<form [formGroup]="groupForm">
+<form [formGroup]="groupForm" (ngSubmit)="onSubmit()" class="example-container">
     <mat-form-field>
-        <input matInput [value]="group.name">
-    </mat-form-field>
+        <mat-label>Group Name</mat-label>
+        <input matInput [value]="group.name" [readonly]="group.type==='Course'">
+    </mat-form-field><br>
     <mat-form-field>
-        <input matInput [value]="group.description">
+        <mat-label>Description</mat-label>
+        <textarea matInput [value]="group.description" [readonly]="group.type==='Course'"></textarea>
+    </mat-form-field><br>
+    <mat-form-field class="example-chip-list">
+        <mat-chip-list #chipList aria-label="adding emails">
+            <mat-chip
+            *ngFor="let email of emails"
+            [selectable]="selectable"
+            [removable]="removable"
+            (removed)="remove(email)"
+            >
+            {{ email }}
+            <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+            </mat-chip>
+            <input
+            placeholder="Enter Emails"
+            [matChipInputFor]="chipList"
+            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+            [matChipInputAddOnBlur]="addOnBlur"
+            (matChipInputTokenEnd)="add($event)"
+            />
+        </mat-chip-list>
+        <mat-hint>Use comma or hit ENTER to enter multiple emails!</mat-hint>
+    </mat-form-field> <br> 
+    <mat-form-field>
+        <mat-label>Semester Term</mat-label>
+        <mat-select formControlName="semesterTerm" [(value)]="group.semesterTerm">
+            <mat-option>--</mat-option>
+            <mat-option *ngFor="let term of semesterTerm" [value]="term">{{term}}</mat-option>
+        </mat-select>
+    </mat-form-field><br>
+    <mat-form-field>
+        <mat-label>Semester Year</mat-label>
+        <mat-select formControlName="semesterYear" [(value)]="group.semesterYear">
+            <mat-option>--</mat-option>
+            <mat-option
+            *ngFor="let year of semesterYear" [value]="year">{{year}}</mat-option>
+        </mat-select>
     </mat-form-field>
+    <mat-toolbar>
+        <mat-toolbar-row>
+            <span class="spacer"></span>
+            <button mat-raised-button color="warn" (click)="cancel()">Cancel</button>
+            &nbsp;&nbsp;
+            <button type="submit" mat-raised-button class="primary">Update</button>
+        </mat-toolbar-row>
+    </mat-toolbar>
 </form>
