@@ -481,7 +481,7 @@ public class AppointmentController {
 			System.out.println(endTime);
 			
 			Event event = new Event(appointment.getName(), appointment.getDescription(), appointment.getLocation(),
-					null, startTime, endTime, currentUser, false, "", "",slot.getId());
+					null, startTime, endTime, currentUser, false, calendar.getColor(), "",slot.getId());
 			
 			eventList.add(event);
 			System.out.println(event);
