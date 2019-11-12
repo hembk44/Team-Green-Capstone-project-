@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialogRef, MatChipInputEvent } from '@angular/material';
+import { MatDialogRef, MatChipInputEvent, MatDialog } from '@angular/material';
 import { FormGroup, FormControl } from '@angular/forms';
 import { DataStorageService } from '../../shared/data-storage.service';
 import { ENTER, COMMA } from '@angular/cdk/keycodes';
+import { GroupSelection } from '../../shared/group-selection';
 
 @Component({
   selector: 'app-calendar-create',
@@ -21,7 +22,8 @@ export class CalendarCreateComponent implements OnInit {
 
   constructor(
     private ref: MatDialogRef<CalendarCreateComponent>,
-    private dataStorage: DataStorageService
+    private dataStorage: DataStorageService,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit() {
@@ -76,6 +78,20 @@ export class CalendarCreateComponent implements OnInit {
     if (index >= 0) {
       this.emails.splice(index, 1);
     }
+  }
+
+  groupSelect(){
+    const dialogRef = this.dialog.open(GroupSelection, {
+      width: "500px"
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(result);
+      for(let email of result){
+        if(!this.emails.includes(email)){
+          this.emails.push(email);
+        }
+      }
+    })
   }
 
 }

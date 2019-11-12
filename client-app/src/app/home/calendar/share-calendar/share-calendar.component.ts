@@ -1,9 +1,10 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA, MatChipInputEvent } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA, MatChipInputEvent, MatDialog } from '@angular/material';
 import { Calendar } from '../calendar-list/calendar.model';
 import { FormGroup, FormControl } from '@angular/forms';
 import { DataStorageService } from '../../shared/data-storage.service';
 import { ENTER, COMMA } from '@angular/cdk/keycodes';
+import { GroupSelection } from '../../shared/group-selection';
 
 @Component({
   selector: 'app-share-calendar',
@@ -22,6 +23,7 @@ export class ShareCalendarComponent implements OnInit {
   constructor(
     private ref: MatDialogRef<ShareCalendarComponent>,
     private dataStorage: DataStorageService,
+    private dialog: MatDialog,
     @Inject(MAT_DIALOG_DATA)public data: Calendar
   ) { }
 
@@ -77,6 +79,20 @@ export class ShareCalendarComponent implements OnInit {
     if (index >= 0) {
       this.emails.splice(index, 1);
     }
+  }
+
+  groupSelect(){
+    const dialogRef = this.dialog.open(GroupSelection, {
+      width: "500px"
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(result);
+      for(let email of result){
+        if(!this.emails.includes(email)){
+          this.emails.push(email);
+        }
+      }
+    })
   }
 
 }
