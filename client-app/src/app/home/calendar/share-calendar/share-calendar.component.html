@@ -3,7 +3,7 @@
 </mat-toolbar>
 <div mat-dialog-content>
     <form [formGroup]="shareForm" (ngSubmit)="onSubmit()">
-            <mat-form-field class="example-chip-list">
+            <mat-form-field class="example-chip-list" style="width:100%">
                 <mat-chip-list #chipList aria-label="adding emails">
                     <mat-chip
                     *ngFor="let email of emails"
