@@ -1,5 +1,9 @@
 import { Injectable } from "@angular/core";
-import { HttpClient, HttpErrorResponse } from "@angular/common/http";
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpHeaders
+} from "@angular/common/http";
 import { map, tap, catchError, finalize } from "rxjs/operators";
 
 import { throwError, Observable, BehaviorSubject } from "rxjs";
@@ -9,6 +13,7 @@ import { CalEvent } from "../calendar/events.model";
 import { AuthService } from "src/app/auth/auth.service";
 import { Calendar } from "../calendar/calendar-list/calendar.model";
 import { CalendarService } from "../calendar/calendar-list/calendar.service";
+import { TokenStorageService } from "src/app/auth/token-storage.service";
 
 @Injectable({
   providedIn: "root"
@@ -17,6 +22,12 @@ export class DataStorageService {
   private baseUrlAppointment = "http://localhost:8181/api/appointment/";
   private baseUrlEvent = "http://localhost:8181/api/event/";
   private baseUrlCalendar = "http://localhost:8181/api/calendar/";
+  private httpOptions = {
+    headers: new HttpHeaders({
+      "Content-Type": "multipart/form-data",
+      Authorization: "my-auth-token"
+    })
+  };
 
   private isLoadingSubject: BehaviorSubject<boolean> = new BehaviorSubject<
     boolean
@@ -40,7 +51,8 @@ export class DataStorageService {
   constructor(
     private http: HttpClient,
     private authService: AuthService,
-    private calService: CalendarService
+    private calService: CalendarService,
+    private token: TokenStorageService
   ) {}
 
   get appointmentLists(): Appointment[] {
@@ -61,10 +73,18 @@ export class DataStorageService {
 
   registerUsers(file: File) {
     this.isLoadingSubject.next(true);
+    // this.httpOptions.headers = this.httpOptions.headers.set(
+    //   "Authorization",
+    //   "Bearer " + this.token.getToken()
+    // );
+    // console.log(this.httpOptions.headers);
+    // const token = this.token.getToken();
+    // console.log(token);
     const formdata: FormData = new FormData();
     formdata.append("file", file);
+    console.log(formdata);
     return this.http
-      .post<Object>(
+      .post<ApiResponse>(
         "http://localhost:8181/api/file/uploadUser/faculty/",
         formdata
       )

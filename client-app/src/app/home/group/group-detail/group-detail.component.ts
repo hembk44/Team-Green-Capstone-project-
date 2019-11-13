@@ -5,7 +5,9 @@ import { ActivatedRoute, Router, Params } from "@angular/router";
 import { AuthService } from "src/app/auth/auth.service";
 
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
+
 import { MatChipInputEvent } from "@angular/material/chips";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 import {
   MatDialog,
@@ -15,7 +17,8 @@ import {
 import { Validators, FormControl } from "@angular/forms";
 import { GroupCreateNavigationService } from "../group/group-create-navigation.service";
 import { share } from "rxjs/operators";
-import { MessageGroupComponent } from '../message-group/message-group.component';
+import { MessageGroupComponent } from "../message-group/message-group.component";
+import { GroupDetailDataShareService } from "./group-detail-data-share.service";
 
 @Component({
   selector: "app-group-detail",
@@ -25,6 +28,7 @@ import { MessageGroupComponent } from '../message-group/message-group.component'
 export class GroupDetailComponent implements OnInit {
   group: any;
   id: number;
+  editMode: boolean = false;
   groupName: string;
   groupDesc: string;
   groupemails: string[];
@@ -39,12 +43,15 @@ export class GroupDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private authService: AuthService,
     public dialog: MatDialog,
-    private router: Router
+    private router: Router,
+    private groupDetailDataShare: GroupDetailDataShareService,
+    private _snackBar: MatSnackBar
   ) {}
 
   ngOnInit() {
     this.route.params.subscribe((params: Params) => {
       this.id = +params["id"];
+
       this.currentRole = this.authService.user;
 
       if (this.currentRole === "ROLE_ADMIN") {
@@ -58,7 +65,6 @@ export class GroupDetailComponent implements OnInit {
           this.groupemails = this.group.members;
           this.groupType = this.group.type.toLowerCase();
           console.log(this.groupType);
-          // console.log(this.groupemails);
         });
       }
     });
@@ -81,8 +87,11 @@ export class GroupDetailComponent implements OnInit {
       this.groupDataStorage.shareGroup(shareObj).subscribe(result => {
         if (result) {
           console.log(result);
-
-          // this.groupDataStorageService.fetchGroup();
+          this.groupDetailDataShare.passSharedMessage(result.message);
+          this._snackBar.openFromComponent(SnackBarGroup, {
+            duration: 5000,
+            panelClass: ["standard"]
+          });
         }
       });
     });
@@ -90,24 +99,52 @@ export class GroupDetailComponent implements OnInit {
 
   deleteGroup(id: number) {
     console.log("deleted");
-    this.groupDataStorage
-      .deleteGroup(id)
-      .subscribe(result => console.log(result));
+    this.groupDataStorage.deleteGroup(id).subscribe(result => {
+      console.log(result.message);
+      this.groupDataStorage.fetchGroup();
+
+      this.groupDetailDataShare.passDeletedMessage(result.message);
+      // this._snackBar.open(result.message, "close", {
+      //   duration: 5000,
+      //   panelClass: ["delete"]
+      // });
+    });
+    this._snackBar.openFromComponent(SnackBarGroup, {
+      duration: 5000,
+      panelClass: ["delete"]
+    });
+
     this.router.navigate(["/home/group"]);
   }
 
-  editGroup(){
-    this.router.navigate(["home/group/edit",this.id])
+  editGroup() {
+    this.router.navigate(["edit"], { relativeTo: this.route });
   }
 
-  messageGroup(){
+  messageGroup() {
     const dialogRef = this.dialog.open(MessageGroupComponent, {
       width: "400px",
       data: {
         id: this.id,
         name: this.group.name
       }
-    })
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(result);
+      if (result) {
+        this.groupDataStorage.sendEmail(result).subscribe(result => {
+          if (result.status === 200) {
+            this.groupDetailDataShare.passMessageSentMessage(
+              "Message Successfully Sent to " + this.group.name
+            );
+            this._snackBar.openFromComponent(SnackBarGroup, {
+              duration: 5000,
+              panelClass: ["standard"]
+            });
+          }
+        });
+      }
+    });
   }
 }
 
@@ -176,13 +213,19 @@ export class DialogShareGroup implements OnInit {
   templateUrl: "group-snack-bar.html",
   styles: [
     `
-      .time-slot {
+      .group-detail-messages {
         color: #800029;
-        background-color: blanchedalmond;
+        background: white;
       }
     `
   ]
 })
 export class SnackBarGroup implements OnInit {
-  ngOnInit() {}
+  message: string;
+  constructor(private groupDetailDataShare: GroupDetailDataShareService) {}
+  ngOnInit() {
+    this.groupDetailDataShare.groupDetailData.subscribe(
+      data => (this.message = data)
+    );
+  }
 }

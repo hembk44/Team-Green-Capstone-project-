@@ -34,8 +34,8 @@ import { GroupComponent } from "./home/group/group/group.component";
 import { GroupStartComponent } from "./home/group/group-start/group-start.component";
 import { CreateGroupComponent } from "./home/group/create-group/create-group.component";
 import { GroupDetailComponent } from "./home/group/group-detail/group-detail.component";
-import { AdministrationComponent } from './home/administration/administration.component';
-import { GroupEditComponent } from './home/group/group-edit/group-edit.component';
+import { AdministrationComponent } from "./home/administration/administration.component";
+import { GroupEditComponent } from "./home/group/group-edit/group-edit.component";
 
 const routes: Routes = [
   {
@@ -59,6 +59,8 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     children: [
       { path: "dashboard", component: DashboardComponent },
+
+      { path: "admin", component: AdministrationComponent },
       { path: "calendar", component: CalendarComponent },
       { path: "event/:id", component: EventDetailComponent },
       { path: "create-event", component: CreateEventComponent },
@@ -102,10 +104,9 @@ const routes: Routes = [
           { path: "", component: GroupStartComponent },
           { path: "create-group", component: CreateGroupComponent },
           { path: ":id", component: GroupDetailComponent },
-          { path: "edit/:id", component: GroupEditComponent }
+          { path: ":id/edit", component: CreateGroupComponent }
         ]
-      },
-      { path: "admin", component: AdministrationComponent }
+      }
     ]
   }
 ];

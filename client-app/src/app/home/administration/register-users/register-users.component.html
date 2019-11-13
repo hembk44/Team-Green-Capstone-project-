@@ -1,4 +1,4 @@
-<mat-card style="height:20%">
+<mat-card style="height:31%">
   <mat-card-header>
     <mat-card-title>
       User File Upload
@@ -9,6 +9,7 @@
       class="example-container"
       [formGroup]="uploadForm"
       (ngSubmit)="onSubmit()"
+      enctype="multipart/form-data"
     >
       <mat-form-field style="cursor: pointer;">
         <ngx-mat-file-input
