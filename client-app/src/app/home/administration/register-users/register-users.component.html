@@ -1,4 +1,4 @@
-<mat-card style="height:31%">
+<mat-card style="height:25%">
   <mat-card-header>
     <mat-card-title>
       User File Upload
@@ -45,9 +45,13 @@
       >
         {{ invalidExtension }}
       </mat-error>
-      <button type="submit" mat-raised-button class="primary submit-button">
-        Ok
-      </button>
+      <mat-toolbar>
+        <mat-toolbar-row>
+          <button type="submit" mat-raised-button class="primary submit-button">
+            Ok
+          </button>
+        </mat-toolbar-row>
+      </mat-toolbar>
     </form>
   </mat-card-content>
 </mat-card>

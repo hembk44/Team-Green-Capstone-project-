@@ -17,6 +17,66 @@ export class DeleteUsersComponent implements OnInit {
       name: "andrew",
       email: "ocsmoore@gmail.com",
       role: "ROLE_USER"
+    },
+    {
+      name: "Andrew Moore",
+      email: "andrew.moore9497@gmail.com",
+      role: "ROLE_ADMIN"
+    },
+    {
+      name: "andrew",
+      email: "ocsmoore@gmail.com",
+      role: "ROLE_USER"
+    },
+    {
+      name: "Andrew Moore",
+      email: "andrew.moore9497@gmail.com",
+      role: "ROLE_ADMIN"
+    },
+    {
+      name: "andrew",
+      email: "ocsmoore@gmail.com",
+      role: "ROLE_USER"
+    },
+    {
+      name: "Andrew Moore",
+      email: "andrew.moore9497@gmail.com",
+      role: "ROLE_ADMIN"
+    },
+    {
+      name: "andrew",
+      email: "ocsmoore@gmail.com",
+      role: "ROLE_USER"
+    },
+    {
+      name: "Andrew Moore",
+      email: "andrew.moore9497@gmail.com",
+      role: "ROLE_ADMIN"
+    },
+    {
+      name: "andrew",
+      email: "ocsmoore@gmail.com",
+      role: "ROLE_USER"
+    },
+    {
+      name: "Andrew Moore",
+      email: "andrew.moore9497@gmail.com",
+      role: "ROLE_ADMIN"
+    },
+    {
+      name: "andrew",
+      email: "ocsmoore@gmail.com",
+      role: "ROLE_USER"
+    },
+    {
+      name: "Andrew Moore",
+      email: "andrew.moore9497@gmail.com",
+      role: "ROLE_ADMIN"
+    },
+    {
+      name: "andrew",
+      email: "ocsmoore@gmail.com",
+      role: "ROLE_USER"
     }
   ]
 

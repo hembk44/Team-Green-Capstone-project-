@@ -1,0 +1,18 @@
+.spacer{
+    flex: 1 1 auto;
+}
+mat-toolbar{
+    background-color: white;
+    font-size: 1em;
+    height:20%;
+}
+
+.user-wrap{
+    margin-left:15px;
+    overflow-y:auto;
+    height: 60%;
+}
+
+.user{
+    color: '#800029';
+}

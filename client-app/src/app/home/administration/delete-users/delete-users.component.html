@@ -1,11 +1,11 @@
-<mat-card style="margin-top:2%; height:73.5%">
+<mat-card style="margin-top:2%;height:60%">
     <mat-card-header>
         <mat-card-title>
             Delete Users
         </mat-card-title>
     </mat-card-header>
-    <mat-card-content>
-            <mat-checkbox *ngFor="let user of users" color="warn">{{user.name}}({{user.email}})</mat-checkbox>
+    <mat-card-content class="users-wrap">
+            <mat-checkbox *ngFor="let user of users" color="warn">{{user.name}} ({{user.email}})</mat-checkbox>
     </mat-card-content>
     <button mat-raised-button color="warn">Confirm</button>
 </mat-card>
