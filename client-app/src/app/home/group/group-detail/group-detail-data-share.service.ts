@@ -21,4 +21,8 @@ export class GroupDetailDataShareService {
   passSharedMessage(message: string) {
     this.groupDetailDataSubject.next(message);
   }
+
+  passMessageSentMessage(message: string) {
+    this.groupDetailDataSubject.next(message);
+  }
 }

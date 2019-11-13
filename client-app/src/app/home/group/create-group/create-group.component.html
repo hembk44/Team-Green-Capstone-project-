@@ -98,7 +98,7 @@
         [removable]="removable"
         (removed)="remove(email)"
       >
-        {{ email }}
+        <mat-icon mat-list-icon>person_outline</mat-icon> {{ email }}
         <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
       </mat-chip>
       <input
@@ -129,13 +129,15 @@
       />
       <mat-icon matSuffix>mode_edit</mat-icon>
     </mat-form-field> -->
-    <mat-toolbar>
+    <mat-toolbar class="primary" style="margin: 10px auto; padding-left: 10px;">
       <mat-toolbar-row *ngFor="let e of customGroupEmails; let i = index">
-        <span>{{ e }}</span> &nbsp; &nbsp;
+        <mat-icon mat-list-icon>person_outline</mat-icon>
+        <span>{{ e }}</span> &nbsp;
         <!-- <span class="example-spacer"></span> -->
-        <button mat-button (click)="deleteEmail(i)">
-          <a style="cursor: pointer;"><mat-icon matSuffix>delete</mat-icon></a>
-        </button>
+
+        <a style="cursor: pointer;" (click)="deleteEmail(i)"
+          ><mat-icon matSuffix>delete</mat-icon></a
+        >
       </mat-toolbar-row>
     </mat-toolbar>
   </div>
@@ -173,7 +175,7 @@
       </button>
       &nbsp; &nbsp;
       <button type="submit" mat-raised-button class="primary">
-        Create Group
+        {{ editMode ? "Update" : "Create Group" }}
       </button>
     </mat-toolbar-row>
   </mat-toolbar>

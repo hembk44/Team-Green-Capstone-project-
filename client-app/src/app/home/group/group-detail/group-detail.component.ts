@@ -65,7 +65,6 @@ export class GroupDetailComponent implements OnInit {
           this.groupemails = this.group.members;
           this.groupType = this.group.type.toLowerCase();
           console.log(this.groupType);
-          // console.log(this.groupemails);
         });
       }
     });
@@ -90,9 +89,9 @@ export class GroupDetailComponent implements OnInit {
           console.log(result);
           this.groupDetailDataShare.passSharedMessage(result.message);
           this._snackBar.openFromComponent(SnackBarGroup, {
-            duration: 5000
+            duration: 5000,
+            panelClass: ["standard"]
           });
-          // this.groupDataStorageService.fetchGroup();
         }
       });
     });
@@ -105,10 +104,16 @@ export class GroupDetailComponent implements OnInit {
       this.groupDataStorage.fetchGroup();
 
       this.groupDetailDataShare.passDeletedMessage(result.message);
+      // this._snackBar.open(result.message, "close", {
+      //   duration: 5000,
+      //   panelClass: ["delete"]
+      // });
     });
     this._snackBar.openFromComponent(SnackBarGroup, {
-      duration: 5000
+      duration: 5000,
+      panelClass: ["delete"]
     });
+
     this.router.navigate(["/home/group"]);
   }
 
@@ -122,6 +127,22 @@ export class GroupDetailComponent implements OnInit {
       data: {
         id: this.id,
         name: this.group.name
+      }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(result);
+      if (result) {
+        this.groupDataStorage.sendEmail(result).subscribe(result => {
+          if (result.status === 200) {
+            this.groupDetailDataShare.passMessageSentMessage(
+              "Message Successfully Sent to " + this.group.name
+            );
+            this._snackBar.openFromComponent(SnackBarGroup, {
+              duration: 5000,
+              panelClass: ["standard"]
+            });
+          }
+        });
       }
     });
   }
@@ -192,7 +213,7 @@ export class DialogShareGroup implements OnInit {
   templateUrl: "group-snack-bar.html",
   styles: [
     `
-      .group-detail-message {
+      .group-detail-messages {
         color: #800029;
         background: white;
       }

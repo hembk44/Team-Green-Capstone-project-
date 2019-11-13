@@ -59,6 +59,8 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     children: [
       { path: "dashboard", component: DashboardComponent },
+
+      { path: "admin", component: AdministrationComponent },
       { path: "calendar", component: CalendarComponent },
       { path: "event/:id", component: EventDetailComponent },
       { path: "create-event", component: CreateEventComponent },
@@ -104,8 +106,7 @@ const routes: Routes = [
           { path: ":id", component: GroupDetailComponent },
           { path: ":id/edit", component: CreateGroupComponent }
         ]
-      },
-      { path: "admin", component: AdministrationComponent }
+      }
     ]
   }
 ];

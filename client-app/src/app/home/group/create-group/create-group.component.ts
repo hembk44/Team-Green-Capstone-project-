@@ -304,7 +304,7 @@ export class CreateGroupComponent implements OnInit {
             console.log(result);
 
             this.groupDataStorageService.fetchGroup();
-            // this.router.navigate(["/home/group"]);
+            this.router.navigate(["/home/group"]);
           }
         });
     } else {

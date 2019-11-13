@@ -85,14 +85,11 @@ export class GroupDataStorageService {
   sendEmail(obj: Object) {
     this.isLoadingSubject.next(true);
     return this.http
-      .post<Object>(this.baseUrlGroup + "sendEmail", obj)
+      .post<ApiResponse>(this.baseUrlGroup + "sendEmail", obj)
       .pipe(
         (map(data => data), catchError(error => throwError(error))),
         finalize(() => this.isLoadingSubject.next(false))
-      )
-      .subscribe((result: ApiResponse) => {
-        console.log(result);
-      });
+      );
   }
 
   updateGroup(obj: Object, id: number) {
