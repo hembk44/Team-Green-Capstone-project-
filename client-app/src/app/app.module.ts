@@ -101,7 +101,7 @@ import { GroupComponent } from "./home/group/group/group.component";
 import { RegisterUsersComponent } from "./home/administration/register-users/register-users.component";
 import { AdministrationComponent } from "./home/administration/administration.component";
 import { UpdateRolesComponent, RoleConfirm } from "./home/administration/update-roles/update-roles.component";
-import { DeleteUsersComponent } from "./home/administration/delete-users/delete-users.component";
+import { DeleteUsersComponent, DeleteUsers } from "./home/administration/delete-users/delete-users.component";
 import { FilterMemberPipe } from "./home/group/group-detail/filter-member.pipe";
 import { AppointmentFilterPipe } from "./home/appointment/appointment-list/appointment-filter.pipe";
 import { ScheduledAppointmentSentPipe } from "./home/appointment/scheduled-appointments/scheduled-appointments-sent/scheduled-appointment-sent.pipe";
@@ -180,6 +180,7 @@ import { MessageGroupComponent } from "./home/group/message-group/message-group.
     GroupSelection,
     DeleteConfirm,
     ShareCalendarComponent,
+    DeleteUsers,
     EditEventComponent,
     EventDeleteConfirm,
     RegisterUsersComponent,
@@ -252,6 +253,7 @@ import { MessageGroupComponent } from "./home/group/message-group/message-group.
     GroupSelection,
     DialogShareGroup,
     MessageGroupComponent,
+    DeleteUsers,
     SnackBarGroup,
     RoleConfirm
   ],

@@ -1,0 +1,20 @@
+<mat-toolbar>
+    <mat-toolbar-row>
+        <p>Are you sure you want to delete these users?</p>
+        <span class="spacer"></span>
+        <mat-icon (click)="close()" matTooltip="close" style="cursor:pointer">clear</mat-icon>
+    </mat-toolbar-row>
+</mat-toolbar>
+<div class="user-wrap">
+    <p class="user" *ngFor="let user of data">
+        <mat-icon>person_outline</mat-icon>
+        {{ user.name }} - {{ user.email }}
+    </p>
+</div>
+<mat-toolbar>
+    <mat-toolbar-row>
+        <mat-hint>Close this dialog if you need to make any changes.</mat-hint>
+        <span class="spacer"></span>
+        <button mat-raised-button class="primary submit-button" (click)="confirm()">Confirm</button>
+    </mat-toolbar-row>
+</mat-toolbar>
