@@ -1,5 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material';
+import { DataStorageService } from '../../shared/data-storage.service';
 
 @Component({
   selector: 'app-update-roles',
@@ -59,12 +60,19 @@ export class UpdateRolesComponent implements OnInit {
   ]
 
   constructor(
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private dataStorage: DataStorageService
   ) { }
 
   ngOnInit() {
     this.updates = [];
     this.updateEmails = [];
+    // this.dataStorage.fetchUsers();
+    // this.dataStorage.isLoading.subscribe((loading => {
+    //   if(!loading){
+    //     this.users = this.dataStorage.users;
+    //   }
+    // }));
     this.users.sort((a, b) => a.name.toLowerCase() < b.name.toLowerCase() ? -1 : a.name.toLowerCase() > b.name.toLowerCase() ? 1 : 0);
   }
 
@@ -102,6 +110,7 @@ export class UpdateRolesComponent implements OnInit {
 
       dialogRef.afterClosed().subscribe(result => {
         if(result === 'confirmed'){
+          this.dataStorage.updateRoles(this.updates);
           this.updateEmails = [];
           this.updates = [];
           console.log(this.updates);

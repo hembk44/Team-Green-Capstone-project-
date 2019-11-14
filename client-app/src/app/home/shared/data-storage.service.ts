@@ -42,6 +42,8 @@ export class DataStorageService {
 
   private calSubject: BehaviorSubject<any> = new BehaviorSubject<any>({});
 
+  private userSubject: BehaviorSubject<any> = new BehaviorSubject<any>({});
+
   private adminAppointmentReceived: BehaviorSubject<any> = new BehaviorSubject<
     any
   >({});
@@ -69,6 +71,10 @@ export class DataStorageService {
 
   get calendars(): Calendar[] {
     return this.calSubject.value;
+  }
+
+  get users(): any[]{
+    return this.userSubject.value;
   }
 
   registerUsers(file: File) {
@@ -286,4 +292,39 @@ export class DataStorageService {
         finalize(() => this.isLoadingSubject.next(false)))
       );
   }
+
+  updateRoles(obj: Object){
+    console.log(obj);
+    // this.isLoadingSubject.next(true);
+    // return this.http.post<Object>('roles api', obj).pipe(
+    //   (map(data => data),
+    //   catchError(error => throwError(error)),
+    //   finalize(() => this.isLoadingSubject.next(false)))
+    // );
+  }
+
+  deleteUsers(obj: Object){
+    console.log(obj);
+    // this.isLoadingSubject.next(true);
+    // return this.http.post<Object>('delete api', obj).pipe(
+    //   (map(data => data),
+    //   catchError(error => throwError(error)),
+    //   finalize(() => this.isLoadingSubject.next(false)))
+    // );
+  }
+
+  fetchUsers(){
+    this.isLoadingSubject.next(true);
+    this.http.get<ApiResponse>('users api')
+    .pipe(
+      (map(data => data),
+      catchError(error => throwError(error)),
+      finalize(() => this.isLoadingSubject.next(false)))
+    )
+    .subscribe((result: ApiResponse) => {
+      console.log(result.result);
+      this.userSubject.next(result.result);
+    });
+  }
+
 }
