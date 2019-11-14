@@ -5,7 +5,7 @@
         </mat-card-title>
     </mat-card-header>
     <mat-card-content class="users-wrap">
-        <div *ngFor="let user of users">
+        <div *ngFor="let user of users | filterMember: searchText">
             <p>{{user.name}}({{user.email}}) &nbsp;&nbsp;
             <mat-form-field style="width:20%">
                 <mat-label>Role</mat-label>
@@ -19,5 +19,19 @@
             </p>
         </div>
     </mat-card-content>
-    <button mat-raised-button class="primary submit-button" (click)="onSubmit()">OK</button>
+    <mat-toolbar>
+        <mat-toolbar-row>
+           <button mat-raised-button class="primary submit-button" (click)="onSubmit()">OK</button><span class="spacer"></span>
+            <mat-form-field class="example-full-width">
+                <input
+                    type="text"
+                    matInput
+                    [(ngModel)]="searchText"
+                    placeholder="Search"
+                />
+                <mat-icon matSuffix>search</mat-icon>
+            </mat-form-field> 
+        </mat-toolbar-row>
+    </mat-toolbar>
+    
 </mat-card>

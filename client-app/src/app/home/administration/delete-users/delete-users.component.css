@@ -4,3 +4,17 @@
     padding:3px;
     padding-left:8px;
 }
+
+mat-toolbar{
+    font-size:1em;
+    color: #800029;
+    height:1em;
+}
+
+.spacer{
+    flex: 1 1 auto;
+}
+
+.submit-button{
+    height: 2.5em;
+}
