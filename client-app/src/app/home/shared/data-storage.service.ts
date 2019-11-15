@@ -313,6 +313,18 @@ export class DataStorageService {
       );
   }
 
+  updateCalendar(obj: Object){
+    // this.isLoadingSubject.next(true);
+    // return this.http
+    // .post<Object>(this.baseUrlCalendar+'edit or whatever', obj)
+    // .pipe(
+    //   (map(data => data),
+    //   catchError(error => throwError(error)),
+    //   finalize(()=>this.isLoadingSubject.next(false)))
+    // );
+    console.log(obj);
+  }
+
   updateRoles(obj: Object){
     console.log(obj);
     // this.isLoadingSubject.next(true);

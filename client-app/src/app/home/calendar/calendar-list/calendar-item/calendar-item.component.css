@@ -28,3 +28,8 @@ mat-toolbar{
 .spacer{
     flex: 1 1 auto;
 }
+
+.submit{
+    border-color: #800029;
+    color: #800029;
+}
