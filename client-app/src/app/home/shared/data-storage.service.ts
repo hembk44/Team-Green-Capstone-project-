@@ -19,9 +19,9 @@ import { TokenStorageService } from "src/app/auth/token-storage.service";
   providedIn: "root"
 })
 export class DataStorageService {
-  private baseUrlAppointment = "http://ec2-18-188-12-185.us-east-2.compute.amazonaws.com:8181/api/appointment/";
-  private baseUrlEvent = "http://ec2-18-188-12-185.us-east-2.compute.amazonaws.com:8181/api/event/";
-  private baseUrlCalendar = "http://ec2-18-188-12-185.us-east-2.compute.amazonaws.com:8181/api/calendar/";
+  private baseUrlAppointment = "http://localhost:8181/api/appointment/";
+  private baseUrlEvent = "http://localhost:8181/api/event/";
+  private baseUrlCalendar = "http://localhost:8181/api/calendar/";
   private httpOptions = {
     headers: new HttpHeaders({
       "Content-Type": "multipart/form-data",
