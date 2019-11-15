@@ -99,7 +99,7 @@ export class DataStorageService {
     console.log(formdata);
     return this.http
       .post<ApiResponse>(
-        "http://ec2-18-188-12-185.us-east-2.compute.amazonaws.com:8181/api/file/uploadUser/faculty/",
+        "http://localhost:8181/api/file/uploadUser/faculty/",
         formdata
       )
       .pipe(
@@ -148,6 +148,8 @@ export class DataStorageService {
         console.log(result);
         if (result.status == 200 && result.result) {
           this.appointmentSubject.next(result.result);
+        } else{
+          this.appointmentSubject.next([]);
         }
       });
   }
@@ -166,6 +168,8 @@ export class DataStorageService {
           console.log(result.result);
           this.appointmentSubject.next(result.result);
           this.adminAppointmentReceived.next(true);
+        } else{
+          this.appointmentSubject.next([]);
         }
       });
   }
