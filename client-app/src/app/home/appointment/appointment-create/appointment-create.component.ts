@@ -51,6 +51,7 @@ export class AppointmentCreateComponent implements OnInit {
     this.appointmentForm = this.formBuilder.group({
       title: ["", Validators.required],
       description: ["", Validators.required],
+      location: [""],
       email: this.email
     });
   }
@@ -114,15 +115,18 @@ export class AppointmentCreateComponent implements OnInit {
       name: appointmentFormValues.title,
       description: appointmentFormValues.description,
       recepients: this.emails,
-      location: "Hem",
+      location: appointmentFormValues.location,
       appdates: this.dateRangeArray
     };
     console.log(obj);
     this.dataStorage.storeAppointment(obj).subscribe(result => {
       if (result) {
         console.log(result);
-
         this.dataStorage.fetchAppointment();
+        // console.log(result.result.id);
+        // this.dataStorage.sendApptToCal(result.result.id).subscribe(result => {
+        //   console.log(result);
+        // });
       }
     });
 

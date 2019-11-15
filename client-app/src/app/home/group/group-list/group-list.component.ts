@@ -27,6 +27,7 @@ export class GroupListComponent implements OnInit {
       this.groupDataStorage.isLoading.subscribe(loading => {
         if (!loading) {
           this.group = this.groupDataStorage.groupLists;
+          console.log(this.group);
         }
       });
     }

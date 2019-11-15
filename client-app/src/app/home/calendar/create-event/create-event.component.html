@@ -39,15 +39,6 @@
         formControlName="location"
       /> </mat-form-field
     ><br />
-
-    <!-- <mat-form-field>
-      <input
-        matInput
-        placeholder="Recipient Email"
-        formControlName="email"
-      />
-      <mat-error *ngIf="email.invalid">{{ getErrorMessage() }}</mat-error>
-    </mat-form-field><br> -->
     <mat-form-field id="end-date">
       <input
         matInput
@@ -138,7 +129,7 @@
         readonly
       />
     </mat-form-field>
-    <mat-form-field class="example-chip-list">
+    <mat-form-field class="example-chip-list" style="width:30%">
       <mat-chip-list #chipList aria-label="adding emails">
         <mat-chip
           *ngFor="let email of emails"
@@ -164,26 +155,8 @@
     >&nbsp;&nbsp;
     <button mat-raised-button type="button" class="primary" (click)="groupSelect()">Select Groups</button>
 
-    <!-- <mat-toolbar>
-      <mat-toolbar-row>
-        <span class="example-spacer"></span>
-        <button
-          type="button"
-          class="primary"
-          mat-raised-button
-          (click)="openDateRangeDialog()"
-        >
-          Add date and time
-        </button>
-      </mat-toolbar-row>
-    </mat-toolbar>
-    <mat-divider></mat-divider> -->
-
     <mat-toolbar>
       <mat-toolbar-row>
-        <!-- <button type="button" mat-raised-button color="primary">
-          Add Recipients
-        </button> -->
         <button type="submit" mat-raised-button class="primary" [disabled]="!eventForm.valid">
           Confirm
         </button>

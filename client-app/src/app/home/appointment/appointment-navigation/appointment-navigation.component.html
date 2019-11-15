@@ -17,18 +17,17 @@
             aria-label="Example icon-button with a menu"
             matTooltip="check sent and received appointments or create appointments"
           >
-            Appointments <mat-icon>expand_more </mat-icon>
+            Not Scheduled <mat-icon>expand_more </mat-icon>
           </button>
           <mat-menu #type="matMenu">
             <button mat-menu-item (click)="navigateToReceive()">
               <span
-                ><mat-icon>assignment_returned</mat-icon> Appointments
-                received</span
+                ><mat-icon>assignment_returned</mat-icon> Created for you</span
               >
             </button>
             <button mat-menu-item (click)="navigateToSent()">
               <mat-icon>assignment_turned_in</mat-icon>
-              <span>Appointments sent</span>
+              <span>Created by you</span>
             </button>
 
             <button
@@ -49,18 +48,18 @@
             aria-label="Example icon-button with a menu"
             matTooltip="check your all scheduled appointments"
           >
-            Scheduled Appointments <mat-icon>expand_more </mat-icon>
+            Scheduled<mat-icon>expand_more </mat-icon>
           </button>
 
           <mat-menu #schedule="matMenu">
             <button mat-menu-item (click)="navigateToScheduled()">
               <mat-icon>schedule</mat-icon>
 
-              <span>For Appointments received</span>
+              <span>Created for you</span>
             </button>
             <button mat-menu-item (click)="navigateToScheduledRecipients()">
               <mat-icon>schedule</mat-icon>
-              <span>For Appointments sent</span>
+              <span>Created by you</span>
             </button>
           </mat-menu>
         </div>

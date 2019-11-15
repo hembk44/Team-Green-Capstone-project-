@@ -1,23 +1,37 @@
-<mat-card style="height:100%">
+<mat-card style="height:90%;">
     <mat-card-header>
         <mat-card-title>
             Change User Roles
         </mat-card-title>
     </mat-card-header>
-    <mat-card-content>
-        <div *ngFor="let user of users">
-            <p>{{user.name}}({{user.email}}) <br>
-            <mat-form-field style="width:25%">
+    <mat-card-content class="users-wrap">
+        <div *ngFor="let user of users | filterMember: searchText">
+            <p>{{user.name}}({{user.email}}) &nbsp;&nbsp;
+            <mat-form-field style="width:20%">
                 <mat-label>Role</mat-label>
                 <mat-select [(value)]="user.role">
-                    <mat-option value="ROLE_ADMIN">Admin</mat-option>
-                    <mat-option value="ROLE_PM">Faculty</mat-option>
-                    <mat-option value="ROLE_MO">Moderator</mat-option>
-                    <mat-option value="ROLE_USER">Student</mat-option>
+                    <mat-option value="ROLE_ADMIN" (click)="addUser(user.name,user.email,'ROLE_ADMIN')">Admin</mat-option>
+                    <mat-option value="ROLE_PM" (click)="addUser(user.name,user.email,'ROLE_PM')">Faculty</mat-option>
+                    <mat-option value="ROLE_MO" (click)="addUser(user.name,user.email,'ROLE_MO')">Moderator</mat-option>
+                    <mat-option value="ROLE_USER" (click)="addUser(user.name,user.email,'ROLE_USER')">Student</mat-option>
                 </mat-select>   
             </mat-form-field>
             </p>
         </div>
     </mat-card-content>
-    <button mat-raised-button class="primary submit-button">OK</button>
+    <mat-toolbar>
+        <mat-toolbar-row>
+           <button mat-raised-button class="primary submit-button" (click)="onSubmit()">OK</button><span class="spacer"></span>
+            <mat-form-field class="example-full-width">
+                <input
+                    type="text"
+                    matInput
+                    [(ngModel)]="searchText"
+                    placeholder="Search"
+                />
+                <mat-icon matSuffix>search</mat-icon>
+            </mat-form-field> 
+        </mat-toolbar-row>
+    </mat-toolbar>
+    
 </mat-card>

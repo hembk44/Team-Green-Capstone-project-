@@ -1,0 +1,13 @@
+.users-wrap{
+    overflow-y: auto;
+    height:75%;
+}
+
+mat-toolbar{
+    font-size:1em;
+    color: #800029;
+}
+
+.spacer{
+    flex: 1 1 auto;
+}

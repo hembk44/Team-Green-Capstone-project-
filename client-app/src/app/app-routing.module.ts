@@ -58,6 +58,7 @@ const routes: Routes = [
     component: VerticalNavigationComponent,
     canActivate: [AuthGuard],
     children: [
+      { path: "", redirectTo: "dashboard", pathMatch: "full" },
       { path: "dashboard", component: DashboardComponent },
 
       { path: "admin", component: AdministrationComponent },

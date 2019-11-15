@@ -30,7 +30,7 @@
         >
         Appointments</a
       >
-      <a mat-list-item routerLink="/home/group" (click)="drawer.close()">
+      <a mat-list-item routerLink="/home/group" (click)="drawer.close()" *ngIf="userRole !== 'ROLE_USER'">
         <mat-icon aria-hidden="false" aria-label="Example group icon"
           >group</mat-icon
         >

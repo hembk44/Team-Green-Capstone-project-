@@ -5,6 +5,8 @@ import { AuthService } from 'src/app/auth/auth.service';
 import { MatDialogRef, MatDialog, MAT_DIALOG_DATA } from '@angular/material';
 import { FormGroup, FormControl } from '@angular/forms';
 import { ShareCalendarComponent } from '../../share-calendar/share-calendar.component';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import { DataStorageService } from 'src/app/home/shared/data-storage.service';
 
 @Component({
   selector: 'app-calendar-item',
@@ -60,21 +62,32 @@ export class CalendarItemComponent implements OnInit {
 export class CalRename implements OnInit{
   nameForm: FormGroup;
   cal: Calendar;
+  primaryColor: string;
   constructor (
     private ref: MatDialogRef<CalRename>,
+    private dataStorage: DataStorageService,
     @Inject(MAT_DIALOG_DATA)public data: Calendar
   ){}
   ngOnInit(){
-    this.nameForm = new FormGroup({
-      name: new FormControl()
-    })
     this.cal = this.data;
+    console.log(this.cal);
+    this.primaryColor = this.cal.color;
+    this.nameForm = new FormGroup({
+      name: new FormControl(this.cal.name),
+      color: new FormControl()
+    })
   }
   onSubmit(){
+    const nameFormValues = this.nameForm.value;
     const obj = {
-      name: this.nameForm.value['name']
+      name: nameFormValues.name,
+      color: this.primaryColor
     }
-    console.log(obj);
+    this.dataStorage.updateCalendar(obj);
+  }
+
+  setPrimary(color: string){
+    this.primaryColor = color;
   }
 
   close(){

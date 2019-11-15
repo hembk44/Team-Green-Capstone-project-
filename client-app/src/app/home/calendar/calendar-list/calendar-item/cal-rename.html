@@ -1,12 +1,51 @@
 <mat-toolbar class="top-detail-row">
-    <p mat-dialog-content>Rename Calendar</p>
-    <span class="spacer"></span><mat-icon (click)="close()" class="close-button" matTooltip="Close">clear</mat-icon>
+    <mat-toolbar-row>
+        <p mat-dialog-content>Edit Calendar: {{cal.name}}</p>
+        <span class="spacer"></span><mat-icon (click)="close()" class="close-button" matTooltip="Close">clear</mat-icon>
+    </mat-toolbar-row>
 </mat-toolbar>
 <div mat-dialog-content>
-    <form [formGroup]="nameForm" ngSubmit="onSubmit()">
+    <form [formGroup]="nameForm" (ngSubmit)="onSubmit()">
         <mat-form-field>
-            <input matInput formControlName="name" [value]="cal.name">
+            <mat-label>Name</mat-label>
+            <input matInput formControlName="name">
         </mat-form-field><br><span class="spacer"></span>
-        <button mat-raised-button type="submit" class="submit">Save</button> 
+        <mat-form-field>
+            <input
+                matInput
+                formControlName="color"
+                [(colorPicker)]="color"
+                [style.background]="primaryColor"
+                [cpFallbackColor]="'#5484ed'"
+                [style.color]="'white'"
+                [value]="primaryColor"
+                placeholder="Calendar Color"
+                [cpOutputFormat]="'hex'"
+                (colorPickerClose)="setPrimary(color)"
+                [cpPosition]="'top-right'"
+                [cpPresetColors]="[
+                '#5484ed',
+                '#a4bdfc',
+                '#46d6db',
+                '#7ae7bf',
+                '#51b749',
+                '#fbd75b',
+                '#ffb878',
+                '#ff887c',
+                '#dc2127',
+                '#dbadff',
+                '#585858'
+                ]"
+                [cpOKButton]="true"
+                [cpColorMode]="'presets'"
+                [cpPresetLabel]="'Calendar Color'"
+                readonly
+            />
+        </mat-form-field>
+        <mat-toolbar>
+            <mat-toolbar-row>
+                <button mat-raised-button type="submit" class="submit">Save</button>
+            </mat-toolbar-row>
+        </mat-toolbar>
     </form>
 </div>

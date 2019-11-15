@@ -1,1 +1,17 @@
-<h3>Dashboard is under Construction!!!</h3>
+<div class="wrapper">
+    <full-calendar 
+    id="calendar"
+    defaultView="listWeek" 
+    [plugins]="calendarPlugins" 
+    [events]="events"
+    [nextDayThreshold]="'00:00:00'"
+    [themeSystem]="'standard'"
+    [eventLimit]="true"
+    [height]="'parent'"
+    [header]="{
+        left: none,
+        center: 'title',
+        right: none
+      }"
+    [weekends]="weekends"></full-calendar>
+</div>
