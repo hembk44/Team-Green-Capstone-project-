@@ -9,10 +9,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+<<<<<<< HEAD
 
 import javax.validation.constraints.NotEmpty;
 
 
+=======
+import javax.validation.constraints.NotEmpty;
+>>>>>>> fe9437d1d7ad3890fd7a6028eecafe8c96cc2c09
 import javax.validation.constraints.NotNull;
 
 import com.csci4060.app.model.User;
@@ -32,11 +36,14 @@ public class Calendar {
 	@NotEmpty(message= "Calendar name must not be empty!")
 	String name;
 	
+<<<<<<< HEAD
 
 	
 	String color;
 	
 
+=======
+>>>>>>> fe9437d1d7ad3890fd7a6028eecafe8c96cc2c09
 	@ManyToMany(targetEntity = Event.class, fetch = FetchType.LAZY)
 	List<Event> events;
 	
@@ -62,10 +69,15 @@ public class Calendar {
         //event.getCalendars().remove(this);
     }
 	
+<<<<<<< HEAD
 
 	public Calendar(String name, String color, List<Event> events, List<User> shareduser, User createdBy, boolean shown, boolean isDefaultCalendar) {
 		this.name = name;
 		this.color = color;
+=======
+	public Calendar(String name, List<Event> events, List<User> shareduser, User createdBy, boolean shown, boolean isDefaultCalendar) {
+		this.name = name;
+>>>>>>> fe9437d1d7ad3890fd7a6028eecafe8c96cc2c09
 		this.events = events;
 		this.shareduser = shareduser;
 		this.createdBy = createdBy;

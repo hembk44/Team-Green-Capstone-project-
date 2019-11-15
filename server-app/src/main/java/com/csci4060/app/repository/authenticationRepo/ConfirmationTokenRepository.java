@@ -13,6 +13,9 @@ public interface ConfirmationTokenRepository extends JpaRepository<ConfirmationT
 	void delete(ConfirmationToken token); 
 	 
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> fe9437d1d7ad3890fd7a6028eecafe8c96cc2c09
 }

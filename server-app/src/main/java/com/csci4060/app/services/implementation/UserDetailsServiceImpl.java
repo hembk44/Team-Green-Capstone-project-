@@ -1,8 +1,11 @@
 package com.csci4060.app.services.implementation;
 
 import java.util.List;
+<<<<<<< HEAD
 import java.util.Optional;
 import java.util.Set;
+=======
+>>>>>>> fe9437d1d7ad3890fd7a6028eecafe8c96cc2c09
 
 import java.util.Optional;
 
@@ -10,17 +13,27 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+<<<<<<< HEAD
+=======
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+>>>>>>> fe9437d1d7ad3890fd7a6028eecafe8c96cc2c09
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+<<<<<<< HEAD
 import com.csci4060.app.model.Role;
+=======
+>>>>>>> fe9437d1d7ad3890fd7a6028eecafe8c96cc2c09
 import com.csci4060.app.model.User;
 import com.csci4060.app.model.authentication.UserPrinciple;
 import com.csci4060.app.repository.UserRepository;
 import com.csci4060.app.services.UserService;
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> fe9437d1d7ad3890fd7a6028eecafe8c96cc2c09
 /*
  *  UserDetailsServiceImpl implements UserDetailsService and overrides loadUserByUsername() method.
  *  loadUserByUsername method finds a record from users database tables to build a UserDetails object
@@ -39,6 +52,7 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
 	@Transactional
 	// UserPrinciple implements UserDetails so returning UserPrinciple doesn't cause
 	// any problems
+<<<<<<< HEAD
 	public UserDetails loadUserByUsername(String username){
 		
 		Optional<User> optUser = userRepo.findByUsername(username);
@@ -47,6 +61,13 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
 			return UserPrinciple.build(optUser.get());
 		}
 		return null;
+=======
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		User user = userRepo.findByUsername(username).orElseThrow(
+				() -> new UsernameNotFoundException("User not found with -> username or email: " + username));
+
+		return UserPrinciple.build(user);
+>>>>>>> fe9437d1d7ad3890fd7a6028eecafe8c96cc2c09
 	}
 
 	@Override
@@ -56,6 +77,7 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
 	
 	@Override
 	public User findByUsername(String username) {
+<<<<<<< HEAD
 		
 		Optional<User> optUser = userRepo.findByUsername(username);
 
@@ -63,6 +85,10 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
 			return optUser.get();
 		}
 		return null;
+=======
+		return userRepo.findByUsername(username)
+				.orElseThrow(()->new UsernameNotFoundException("User not found with -> username: "+username));
+>>>>>>> fe9437d1d7ad3890fd7a6028eecafe8c96cc2c09
 	}
 
 	@Override
@@ -78,6 +104,7 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
 
 	@Override
 	public User findById(Long id) {
+<<<<<<< HEAD
 		
 		Optional<User> optUser = userRepo.findById(id);
 
@@ -85,10 +112,15 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
 			return optUser.get();
 		}
 		return null;
+=======
+		return userRepo.findById(id)
+				.orElseThrow(()->new UsernameNotFoundException("User not found"));
+>>>>>>> fe9437d1d7ad3890fd7a6028eecafe8c96cc2c09
 	}
 
 	@Override
 	public User update(User user) {
+<<<<<<< HEAD
 		
 		Optional<User> optUser = userRepo.findById(user.getId());
 
@@ -101,6 +133,15 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
 			return userFromDB;
 		}
 		return null;
+=======
+		User userFromDB = userRepo.findById(user.getId())
+				.orElseThrow(()-> new UsernameNotFoundException("User not found"));
+		userFromDB.setName(user.getName());
+		userFromDB.setEmail(user.getEmail());
+		userFromDB.setUsername(user.getUsername());
+		userFromDB.setPassword(encoder.encode(user.getPassword()));
+		return userFromDB;
+>>>>>>> fe9437d1d7ad3890fd7a6028eecafe8c96cc2c09
 	}
 
 	@Override
@@ -111,11 +152,17 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
 	@Override
 	public void delete(String email) {
 		
+<<<<<<< HEAD
 		Optional<User> optUser = userRepo.findByEmailIgnoreCase(email);
 
 		if (optUser.isPresent()) {
 			userRepo.delete(optUser.get());
 		}
+=======
+		User user = userRepo.findByEmailIgnoreCase(email)
+				.orElseThrow(()->new UsernameNotFoundException("User not found with -> email:"+email));
+		userRepo.delete(user);
+>>>>>>> fe9437d1d7ad3890fd7a6028eecafe8c96cc2c09
 	}
 
 	@Override
@@ -126,6 +173,7 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
 	@Override
 	public Boolean existsByEmail(String email) {
 		return userRepo.existsByEmailIgnoreCase(email);
+<<<<<<< HEAD
 
 	}
 
@@ -139,6 +187,8 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
 		
 		return null;
 
+=======
+>>>>>>> fe9437d1d7ad3890fd7a6028eecafe8c96cc2c09
 	}
 
 }

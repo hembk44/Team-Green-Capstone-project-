@@ -2,9 +2,13 @@ package com.csci4060.app.services.implementation;
 
 import java.io.IOException;
 import java.util.ArrayList;
+<<<<<<< HEAD
 
 import java.util.HashSet;
 
+=======
+import java.util.HashSet;
+>>>>>>> fe9437d1d7ad3890fd7a6028eecafe8c96cc2c09
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -23,14 +27,20 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.csci4060.app.configuration.fileStorage.FileReadException;
 import com.csci4060.app.model.Role;
+<<<<<<< HEAD
 
+=======
+>>>>>>> fe9437d1d7ad3890fd7a6028eecafe8c96cc2c09
 import com.csci4060.app.model.RoleName;
 import com.csci4060.app.model.User;
 import com.csci4060.app.model.authentication.ConfirmationToken;
 import com.csci4060.app.services.ConfirmationTokenService;
+<<<<<<< HEAD
 
 import com.csci4060.app.model.User;
 
+=======
+>>>>>>> fe9437d1d7ad3890fd7a6028eecafe8c96cc2c09
 import com.csci4060.app.services.FileReadService;
 import com.csci4060.app.services.RoleService;
 
@@ -43,10 +53,17 @@ public class FileReadServiceImpl implements FileReadService {
 	@Autowired
 	RoleService roleService;
 
+<<<<<<< HEAD
 
 	@Override
 	public List<User> readFile(MultipartFile file, Set<Role> userRole) throws IOException {
 
+=======
+	
+	
+	@Override
+	public List<User> readFile( MultipartFile file, RoleName role) throws IOException {
+>>>>>>> fe9437d1d7ad3890fd7a6028eecafe8c96cc2c09
 
 		@SuppressWarnings("resource")
 		Workbook workbook = new XSSFWorkbook(file.getInputStream());
@@ -58,6 +75,15 @@ public class FileReadServiceImpl implements FileReadService {
 			// check cell name before writing the following code
 			List<User> users = new ArrayList<User>();
 
+<<<<<<< HEAD
+=======
+			Set<Role> roles = new HashSet<>();
+
+			Role userRole = roleService.findByName(role);
+
+			roles.add(userRole);
+
+>>>>>>> fe9437d1d7ad3890fd7a6028eecafe8c96cc2c09
 			for (int i = 1; i <= worksheet.getLastRowNum(); i++) {
 
 				Row row = worksheet.getRow(i);
@@ -85,11 +111,21 @@ public class FileReadServiceImpl implements FileReadService {
 						String password = formatter.formatCellValue(row.getCell(2));
 						String email = formatter.formatCellValue(row.getCell(5));
 
+<<<<<<< HEAD
 						User user = new User(name, username, email, encoder.encode(password), true);
 
 						user.setRoles(userRole);
 
 						users.add(user);
+=======
+						User student = new User(name, username, email, encoder.encode(password), true);
+						
+						
+
+						student.setRoles(roles);
+
+						users.add(student);
+>>>>>>> fe9437d1d7ad3890fd7a6028eecafe8c96cc2c09
 					} else {
 						throw new FileReadException("First name, last name, cwid and email must not be empty.");
 					}

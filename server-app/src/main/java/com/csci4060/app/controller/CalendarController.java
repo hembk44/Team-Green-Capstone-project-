@@ -5,10 +5,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.security.sasl.AuthenticationException;
+<<<<<<< HEAD
 
 import javax.validation.Valid;
 
 
+=======
+import javax.validation.Valid;
+
+>>>>>>> fe9437d1d7ad3890fd7a6028eecafe8c96cc2c09
 import org.apache.commons.collections4.ListUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
@@ -23,9 +28,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+<<<<<<< HEAD
 
 import com.csci4060.app.ExceptionResolver;
 
+=======
+import com.csci4060.app.ExceptionResolver;
+>>>>>>> fe9437d1d7ad3890fd7a6028eecafe8c96cc2c09
 import com.csci4060.app.model.APIresponse;
 import com.csci4060.app.model.User;
 import com.csci4060.app.model.calendar.Calendar;
@@ -38,11 +47,16 @@ import com.csci4060.app.services.UserService;
 @RestController
 @CrossOrigin(origins = "*")
 @RequestMapping(path = "/api/calendar", produces = "application/json")
+<<<<<<< HEAD
 
 public class CalendarController extends ExceptionResolver {
 
 
 
+=======
+public class CalendarController extends ExceptionResolver {
+
+>>>>>>> fe9437d1d7ad3890fd7a6028eecafe8c96cc2c09
 	@Autowired
 	UserService userService;
 
@@ -51,10 +65,15 @@ public class CalendarController extends ExceptionResolver {
 
 	@PostMapping(path = "/create", produces = "application/json")
 	@PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
+<<<<<<< HEAD
 
 	public APIresponse createCalendar(@Valid @RequestBody CalendarCreate calendarCreate) {
 
 
+=======
+	public APIresponse createCalendar(@Valid @RequestBody CalendarCreate calendarCreate) {
+
+>>>>>>> fe9437d1d7ad3890fd7a6028eecafe8c96cc2c09
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
 		String username = "";
@@ -86,6 +105,7 @@ public class CalendarController extends ExceptionResolver {
 			}
 		}
 
+<<<<<<< HEAD
 
 		Calendar calendar = new Calendar(calendarName, calendarCreate.getColor(),null, recipients, createdBy, true, false);
 
@@ -93,6 +113,13 @@ public class CalendarController extends ExceptionResolver {
 
 		CalendarResponse response = new CalendarResponse(calendar.getId(), calendar.getName(), calendar.getColor(),calendar.getEvents(),
 
+=======
+		Calendar calendar = new Calendar(calendarName, null, recipients, createdBy, true, false);
+
+		calendarService.save(calendar);
+
+		CalendarResponse response = new CalendarResponse(calendar.getId(), calendar.getName(), calendar.getEvents(),
+>>>>>>> fe9437d1d7ad3890fd7a6028eecafe8c96cc2c09
 				createdBy.getUsername(), calendar.isShown(), calendar.isDefaultCalendar());
 
 		return new APIresponse(HttpStatus.CREATED.value(),
@@ -130,9 +157,13 @@ public class CalendarController extends ExceptionResolver {
 
 		for (Calendar calendar : allCalendars) {
 
+<<<<<<< HEAD
 
 			responses.add(new CalendarResponse(calendar.getId(), calendar.getName(), calendar.getColor(),calendar.getEvents(),
 
+=======
+			responses.add(new CalendarResponse(calendar.getId(), calendar.getName(), calendar.getEvents(),
+>>>>>>> fe9437d1d7ad3890fd7a6028eecafe8c96cc2c09
 					calendar.getCreatedBy().getUsername(), calendar.isShown(), calendar.isDefaultCalendar()));
 		}
 
@@ -142,9 +173,13 @@ public class CalendarController extends ExceptionResolver {
 
 	@PostMapping(path = "/share", produces = "application/json")
 	@PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
+<<<<<<< HEAD
 
 	public APIresponse shareCalendar(@Valid @RequestBody CalendarShare calendarShare)
 
+=======
+	public APIresponse shareCalendar(@Valid @RequestBody CalendarShare calendarShare)
+>>>>>>> fe9437d1d7ad3890fd7a6028eecafe8c96cc2c09
 			throws FileNotFoundException, AuthenticationException {
 
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -184,9 +219,13 @@ public class CalendarController extends ExceptionResolver {
 
 		}
 
+<<<<<<< HEAD
 
 		CalendarResponse response = new CalendarResponse(calendar.getId(), calendar.getName(), calendar.getColor(),calendar.getEvents(),
 
+=======
+		CalendarResponse response = new CalendarResponse(calendar.getId(), calendar.getName(), calendar.getEvents(),
+>>>>>>> fe9437d1d7ad3890fd7a6028eecafe8c96cc2c09
 				calendar.getCreatedBy().getEmail(), calendar.isShown(), calendar.isDefaultCalendar());
 
 		return new APIresponse(HttpStatus.OK.value(),

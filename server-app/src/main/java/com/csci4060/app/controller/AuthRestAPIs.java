@@ -1,6 +1,9 @@
 package com.csci4060.app.controller;
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> fe9437d1d7ad3890fd7a6028eecafe8c96cc2c09
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -15,13 +18,19 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> fe9437d1d7ad3890fd7a6028eecafe8c96cc2c09
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> fe9437d1d7ad3890fd7a6028eecafe8c96cc2c09
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.access.method.P;
 
@@ -46,7 +55,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.csci4060.app.ExceptionResolver;
+<<<<<<< HEAD
 
+=======
+>>>>>>> fe9437d1d7ad3890fd7a6028eecafe8c96cc2c09
 import com.csci4060.app.configuration.jwt.JwtProvider;
 import com.csci4060.app.model.APIresponse;
 import com.csci4060.app.model.Role;
@@ -80,11 +92,16 @@ import com.csci4060.app.services.UserService;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/auth")
+<<<<<<< HEAD
 
 public class AuthRestAPIs extends ExceptionResolver {
 
 
 
+=======
+public class AuthRestAPIs extends ExceptionResolver {
+
+>>>>>>> fe9437d1d7ad3890fd7a6028eecafe8c96cc2c09
 	@Autowired
 	AuthenticationManager authenticationManager;
 
@@ -124,21 +141,31 @@ public class AuthRestAPIs extends ExceptionResolver {
 
 			String role = "";
 
+<<<<<<< HEAD
 
 			String name = user.getName();
 			
 
+=======
+>>>>>>> fe9437d1d7ad3890fd7a6028eecafe8c96cc2c09
 			@SuppressWarnings("unchecked")
 			List<GrantedAuthority> authorities = (List<GrantedAuthority>) authentication.getAuthorities();
 
 			for (GrantedAuthority authority : authorities) {
 				role = authority.toString();
 			}
+<<<<<<< HEAD
 
 
 			
 			return new APIresponse(HttpStatus.OK.value(), "Successful", new JwtResponse(jwt, name, loginRequest.getUsername(),role));
 
+=======
+		
+
+			
+			return new APIresponse(HttpStatus.OK.value(), "Successful", new JwtResponse(jwt, loginRequest.getUsername(),role));
+>>>>>>> fe9437d1d7ad3890fd7a6028eecafe8c96cc2c09
 		    }
 		
 
@@ -182,6 +209,7 @@ public class AuthRestAPIs extends ExceptionResolver {
 		
 		userService.save(user);
 		
+<<<<<<< HEAD
 
 		calendarService.save(new Calendar("Main","#800029", null, null, user, true, true));
 		calendarService.save(new Calendar("Appointment","#800029", null, null, user, true, true));
@@ -205,6 +233,29 @@ public class AuthRestAPIs extends ExceptionResolver {
 		return new APIresponse(HttpStatus.OK.value(),
 				"Verification code has been sent to your email address. Please click it to register successfully.",
 
+=======
+		calendarService.save(new Calendar("Main", null, null, user, true, true));
+		calendarService.save(new Calendar("Appointment", null, null, user, true, true));
+		calendarService.save(new Calendar("Shared Event", null, null, user, true, true));
+		
+		
+
+		ConfirmationToken confirmationToken = new ConfirmationToken(user);
+
+		confirmationTokenService.save(confirmationToken);
+
+		SimpleMailMessage mailMessage = new SimpleMailMessage();
+		mailMessage.setTo(user.getEmail());
+		mailMessage.setSubject("Complete Registration!");
+		mailMessage.setFrom("ulmautoemail@gmail.com");
+		mailMessage.setText("To confirm your account, please click here : "
+				+ "http://localhost:8181/api/auth/confirm-account/" + confirmationToken.getConfirmationToken());
+
+		emailSenderService.sendEmail(mailMessage);
+
+		return new APIresponse(HttpStatus.OK.value(),
+				"Verification code has been sent to you email address. Please click it to register successfully.",
+>>>>>>> fe9437d1d7ad3890fd7a6028eecafe8c96cc2c09
 				null);
 	}
 
@@ -226,7 +277,11 @@ public class AuthRestAPIs extends ExceptionResolver {
 		
 		
 	}
+<<<<<<< HEAD
 
+=======
+	
+>>>>>>> fe9437d1d7ad3890fd7a6028eecafe8c96cc2c09
 //	@PostMapping(path = "verifyEmail", produces = "application/json")
 //	public APIresponse verifyEmail(@RequestBody Map<String,String> emailJson) {
 //		
@@ -255,12 +310,19 @@ public class AuthRestAPIs extends ExceptionResolver {
 //		}
 //		return new APIresponse(HttpStatus.UNAUTHORIZED.value(), "User email is not in the database", null);
 //	}
+<<<<<<< HEAD
 
 	
 	
 	@PostMapping(value = "/forgot")
 	public APIresponse processForgotPasswordForm( @RequestParam("email") String userEmail, HttpServletRequest request) {
 
+=======
+	
+	
+	@PostMapping(value = "/forgot")
+	public APIresponse processForgotPasswordForm(@Valid @RequestParam("email") String userEmail, HttpServletRequest request) {
+>>>>>>> fe9437d1d7ad3890fd7a6028eecafe8c96cc2c09
 
 		// Lookup user in database by e-mail
 		User user = userService.findByEmail(userEmail);
@@ -315,8 +377,12 @@ public class AuthRestAPIs extends ExceptionResolver {
 	
 	
 	@PostMapping(value = "/processResetPassword")
+<<<<<<< HEAD
 	public ModelAndView setNewPassword(@Valid @RequestBody Map<String, String> requestParams, RedirectAttributes redir, HttpServletResponse response) {
 
+=======
+    public ModelAndView setNewPassword(@Valid @RequestBody Map<String, String> requestParams, RedirectAttributes redir, HttpServletResponse response) {
+>>>>>>> fe9437d1d7ad3890fd7a6028eecafe8c96cc2c09
         
         ConfirmationToken resetToken = confirmationTokenService.findByConfirmationToken(requestParams.get("resetToken"));
         User resetUser = resetToken.getUser();

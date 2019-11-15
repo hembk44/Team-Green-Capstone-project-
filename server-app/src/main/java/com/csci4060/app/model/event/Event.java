@@ -9,10 +9,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
+<<<<<<< HEAD
 
 import javax.validation.constraints.NotEmpty;
 
 
+=======
+import javax.validation.constraints.NotEmpty;
+>>>>>>> fe9437d1d7ad3890fd7a6028eecafe8c96cc2c09
 import javax.validation.constraints.NotNull;
 
 import com.csci4060.app.model.User;
@@ -28,22 +32,33 @@ public class Event {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
+<<<<<<< HEAD
 
 	@NotEmpty(message= "Event name must not be empty")
 
+=======
+	@NotEmpty(message= "Event name must not be empty")
+>>>>>>> fe9437d1d7ad3890fd7a6028eecafe8c96cc2c09
 	String title;
 	
 	String description;
 
+<<<<<<< HEAD
 
 	@NotEmpty(message= "Location must be specified")
 
+=======
+	@NotEmpty(message= "Location must be specified")
+>>>>>>> fe9437d1d7ad3890fd7a6028eecafe8c96cc2c09
 	String location;
 
 	@JsonIgnore
 	@ManyToMany(targetEntity = User.class, fetch = FetchType.LAZY)
 	List<User> recipients;
+<<<<<<< HEAD
 
+=======
+>>>>>>> fe9437d1d7ad3890fd7a6028eecafe8c96cc2c09
 	
 	@NotEmpty(message= "Start time must be specified for the event!")
 	String start;
@@ -57,7 +72,11 @@ public class Event {
 	
 	Boolean allDay;
 	
+<<<<<<< HEAD
 
+=======
+	
+>>>>>>> fe9437d1d7ad3890fd7a6028eecafe8c96cc2c09
 	String borderColor;
 	
 	String backgroundColor;

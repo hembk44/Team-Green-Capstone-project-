@@ -6,10 +6,15 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
+<<<<<<< HEAD
 
 import javax.validation.Valid;
 
 
+=======
+import javax.validation.Valid;
+
+>>>>>>> fe9437d1d7ad3890fd7a6028eecafe8c96cc2c09
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.mail.SimpleMailMessage;
@@ -25,9 +30,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.ResourceAccessException;
 
+<<<<<<< HEAD
 
 import com.csci4060.app.ExceptionResolver;
 
+=======
+import com.csci4060.app.ExceptionResolver;
+>>>>>>> fe9437d1d7ad3890fd7a6028eecafe8c96cc2c09
 import com.csci4060.app.model.APIresponse;
 import com.csci4060.app.model.User;
 import com.csci4060.app.model.appointment.Appointment;
@@ -51,10 +60,15 @@ import com.csci4060.app.services.UserService;
 @RestController
 @CrossOrigin(origins = "*")
 @RequestMapping(path = "/api/appointment", produces = "application/json")
+<<<<<<< HEAD
 
 public class AppointmentController extends ExceptionResolver {
 
 
+=======
+public class AppointmentController extends ExceptionResolver {
+
+>>>>>>> fe9437d1d7ad3890fd7a6028eecafe8c96cc2c09
 	@Autowired
 	UserService userService;
 
@@ -81,10 +95,15 @@ public class AppointmentController extends ExceptionResolver {
 
 	@PostMapping(path = "/set", consumes = "application/json")
 	@PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
+<<<<<<< HEAD
 
 	public APIresponse setAppointment( @Valid @RequestBody AppointmentDummy appointmentDummy, HttpServletRequest request) {
 
 
+=======
+	public APIresponse setAppointment( @Valid @RequestBody AppointmentDummy appointmentDummy, HttpServletRequest request) {
+
+>>>>>>> fe9437d1d7ad3890fd7a6028eecafe8c96cc2c09
 		List<User> recepientList = new ArrayList<User>();
 
 		List<String> emailFromDummy = appointmentDummy.getRecepients();
@@ -158,10 +177,14 @@ public class AppointmentController extends ExceptionResolver {
 		}
 
 
+<<<<<<< HEAD
 
 
 		if (!recepientsEmailList.isEmpty()){
 
+=======
+		if (!recepientsEmailList.isEmpty()){
+>>>>>>> fe9437d1d7ad3890fd7a6028eecafe8c96cc2c09
 			SimpleMailMessage mailMessage = new SimpleMailMessage();
 
 			String[] emails = recepientsEmailList.toArray(new String[recepientsEmailList.size()]);
@@ -174,6 +197,7 @@ public class AppointmentController extends ExceptionResolver {
 							+ "Thank you!");
 
 			emailSenderService.sendEmail(mailMessage);
+<<<<<<< HEAD
 
     }
 
@@ -183,6 +207,14 @@ public class AppointmentController extends ExceptionResolver {
 
 	@GetMapping(path = "created/allAppointments")
 
+=======
+    }
+
+		return new APIresponse(HttpStatus.CREATED.value(), "Appointment created successfully", appointment);
+	}
+
+	@GetMapping(path = "faculty/allAppointments")
+>>>>>>> fe9437d1d7ad3890fd7a6028eecafe8c96cc2c09
 	@PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
 	public APIresponse getFacultyAppointments() {
 
@@ -195,6 +227,7 @@ public class AppointmentController extends ExceptionResolver {
 		}
 
 		User user = userService.findByUsername(username);
+<<<<<<< HEAD
 
 
 		List<Appointment> appointments = appointmentService.findAllByCreatedBy(user);
@@ -202,6 +235,15 @@ public class AppointmentController extends ExceptionResolver {
 		if(appointments == null) {
 			return new APIresponse(HttpStatus.BAD_REQUEST.value(), "You have not created any appointments yet.", null);
 
+=======
+		
+		
+		
+		List<Appointment> appointments = appointmentService.findAllByCreatedBy(user);
+		if ( appointments == null )
+		{
+			return new APIresponse(HttpStatus.OK.value(), "There are no appointments created by this user", null);
+>>>>>>> fe9437d1d7ad3890fd7a6028eecafe8c96cc2c09
 		}
 		
 		List<AppointmentResponse> allAppointments = new ArrayList<AppointmentResponse>();
@@ -229,10 +271,15 @@ public class AppointmentController extends ExceptionResolver {
 
 	}
 
+<<<<<<< HEAD
 
 	@GetMapping(path = "received/allAppointments")
 	@PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
 
+=======
+	@GetMapping(path = "user/allAppointments")
+	@PreAuthorize("hasRole('USER')")
+>>>>>>> fe9437d1d7ad3890fd7a6028eecafe8c96cc2c09
 	public APIresponse getAppointments() {
 
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -247,12 +294,15 @@ public class AppointmentController extends ExceptionResolver {
 
 		List<Appointment> appointments = appointmentService.findAllByRecepients(user);
 		
+<<<<<<< HEAD
 
 		if(appointments == null) {
 			return new APIresponse(HttpStatus.BAD_REQUEST.value(), "You have not created any appointments yet.", null);
 		}
 		
 
+=======
+>>>>>>> fe9437d1d7ad3890fd7a6028eecafe8c96cc2c09
 		List<AppointmentResponse> allAppointments = new ArrayList<AppointmentResponse>();
 		
 		for (Appointment app: appointments)
@@ -276,9 +326,13 @@ public class AppointmentController extends ExceptionResolver {
 	}
 
 	@GetMapping(path = "/timeslots/user/{id}")
+<<<<<<< HEAD
 
 	@PreAuthorize("hasRole('ADMIN') or hasRole('USER') or hasRole('PM')")
 
+=======
+	@PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
+>>>>>>> fe9437d1d7ad3890fd7a6028eecafe8c96cc2c09
 	public APIresponse getSlots(@PathVariable("id") Long appointmentId) {
 
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -345,7 +399,11 @@ public class AppointmentController extends ExceptionResolver {
 
 	@PostMapping(path = "timeslots/postSlot/{timeSlotId}", produces = "application/json")
 	@PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
+<<<<<<< HEAD
 	public APIresponse postSlots(@PathVariable("timeSlotId") long id) {
+=======
+	public APIresponse postSlots( @Valid @PathVariable("timeSlotId") long id) {
+>>>>>>> fe9437d1d7ad3890fd7a6028eecafe8c96cc2c09
 
 
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -363,12 +421,17 @@ public class AppointmentController extends ExceptionResolver {
 		if(slotToRemove == null) {
 			throw new ResourceAccessException("There is no timeslot with given id "+ id+ " in the database");
 		}
+<<<<<<< HEAD
 
+=======
+	
+>>>>>>> fe9437d1d7ad3890fd7a6028eecafe8c96cc2c09
 		slotToRemove.setSelectedBy(selectedBy);
 		timeSlotsService.save(slotToRemove);
 		
 		Event creatorsEvent = eventService.findByTimeSlotId(id);
 		
+<<<<<<< HEAD
 
 		System.out.println("Event from timeslot: "+creatorsEvent);
 		
@@ -381,6 +444,12 @@ public class AppointmentController extends ExceptionResolver {
 		System.out.println("calendar after adding event"+calendar);
 		
 
+=======
+		Calendar calendar = calendarService.findByNameAndCreatedBy("Appointment", selectedBy);
+		
+		calendar.addEvent(creatorsEvent);
+		
+>>>>>>> fe9437d1d7ad3890fd7a6028eecafe8c96cc2c09
 		calendarService.save(calendar);
 
 		TimeSlotResponse response = new TimeSlotResponse(slotToRemove.getId(), slotToRemove.getStartTime(),
@@ -471,9 +540,13 @@ public class AppointmentController extends ExceptionResolver {
 
 	@PostMapping(path = "/sendToCalendar/{appointmentId}", produces = "application/json")
 	@PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
+<<<<<<< HEAD
 
 	public APIresponse sendToCalendar(@Valid @PathVariable("appointmentId") long id) {
 
+=======
+	public APIresponse sendToCalendar(@Valid @PathVariable("appointmentId") long id) {
+>>>>>>> fe9437d1d7ad3890fd7a6028eecafe8c96cc2c09
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
 		String username = "";
@@ -509,9 +582,13 @@ public class AppointmentController extends ExceptionResolver {
 			System.out.println(endTime);
 			
 			Event event = new Event(appointment.getName(), appointment.getDescription(), appointment.getLocation(),
+<<<<<<< HEAD
 
 					null, startTime, endTime, currentUser, false, calendar.getColor(), "",slot.getId());
 
+=======
+					null, startTime, endTime, currentUser, false, "", "",slot.getId());
+>>>>>>> fe9437d1d7ad3890fd7a6028eecafe8c96cc2c09
 			
 			eventList.add(event);
 			System.out.println(event);
