@@ -58,11 +58,19 @@ export class DataStorageService {
   ) {}
 
   get appointmentLists(): Appointment[] {
-    return this.appointmentSubject.value;
+    if(!this.appointmentSubject.value){
+      return [];
+    }else{
+      return this.appointmentSubject.value;
+    }
   }
 
   get appointmentsReceived(): Appointment[] {
-    return this.adminAppointmentReceived.value;
+    if(!this.adminAppointmentReceived.value){
+      return [];
+    } else{
+      return this.adminAppointmentReceived.value;
+    }
   }
 
   get eventsList(): CalEvent[] {
@@ -104,6 +112,14 @@ export class DataStorageService {
     this.isLoadingSubject.next(true);
     return this.http.post<Object>(this.baseUrlAppointment + "set", obj).pipe(
       (map(data => data), catchError(error => throwError(error))),
+      finalize(() => this.isLoadingSubject.next(false))
+    );
+  }
+
+  sendApptToCal(id: number){
+    this.isLoadingSubject.next(true);
+    return this.http.post<Object>(this.baseUrlAppointment+"sendToCalendar/"+id,id).pipe(
+      (map(data =>data), catchError(error => throwError(error))),
       finalize(() => this.isLoadingSubject.next(false))
     );
   }

@@ -22,7 +22,12 @@ export class GroupDataStorageService {
   constructor(private http: HttpClient, private authService: AuthService) {}
 
   get groupLists(): Group[] {
-    return this.groupSubject.value;
+    if(!this.groupSubject.value){
+      console.log(this.groupSubject.value);
+      return [];
+    } else{
+      return this.groupSubject.value;
+    }
   }
 
   createGroup(obj: Object) {
