@@ -365,4 +365,17 @@ export class DataStorageService {
         this.userSubject.next(result.result);
       });
   }
+
+  editEvent(obj: Object){
+    console.log(obj);
+    // this.isLoadingSubject.next(true);
+    // return this.http
+    // .post<Object>('edit api', obj)
+    // .pipe(
+    //   (map(data=>data),
+    //   catchError(error => throwError(error)),
+    //   finalize(()=>this.isLoadingSubject.next(false)))
+    // );
+  }
+
 }
