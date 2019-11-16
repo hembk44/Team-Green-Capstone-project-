@@ -141,4 +141,26 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
 
 	}
 
+//	@Override
+//	public List<User> allUsers(String userEmail) {
+//		Optional<List<User>> allUsers = userRepo.findAllUser(userEmail);
+//
+//		if (allUsers.isPresent()) {
+//			return allUsers.get();
+//		}
+//		
+//		return null;
+//	}
+
+	@Override
+	public List<User> findAllUserExcept(String userEmail) {
+		Optional<List<User>> allUsers = userRepo.findAllByEmailNot(userEmail);
+
+		if (allUsers.isPresent()) {
+			return allUsers.get();
+		}
+		
+		return null;
+	}
+
 }

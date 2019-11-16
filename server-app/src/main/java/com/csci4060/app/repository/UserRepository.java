@@ -6,6 +6,7 @@ import java.util.Set;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
+
 import com.csci4060.app.model.Role;
 import com.csci4060.app.model.User;
 
@@ -20,5 +21,14 @@ public interface UserRepository extends JpaRepository<User, String>{
 
 
 	Optional<List<User>> findAllByRoles(Set<Role>roles);
+	
+
+
+	
+	Optional<List<User>> findAllByEmailNot(String useremail);
+	
+	
+	
+	
 }
 

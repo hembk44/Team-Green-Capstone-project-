@@ -20,6 +20,7 @@ import javax.validation.constraints.Size;
 import org.hibernate.annotations.NaturalId;
 
 import com.csci4060.app.model.calendar.Calendar;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 
@@ -47,6 +48,7 @@ public class User {
 	
 	@NotEmpty(message="Password must not be empty")
 	@Size(min=6, max=100 , message = "Password must be minimum of 6 characters")
+	@JsonIgnore
 	private String password;
 	
 	private boolean verified;
