@@ -22,12 +22,6 @@ export class DataStorageService {
   private baseUrlAppointment = "http://localhost:8181/api/appointment/";
   private baseUrlEvent = "http://localhost:8181/api/event/";
   private baseUrlCalendar = "http://localhost:8181/api/calendar/";
-  private httpOptions = {
-    headers: new HttpHeaders({
-      "Content-Type": "multipart/form-data",
-      Authorization: "my-auth-token"
-    })
-  };
 
   private isLoadingSubject: BehaviorSubject<boolean> = new BehaviorSubject<
     boolean
@@ -58,17 +52,17 @@ export class DataStorageService {
   ) {}
 
   get appointmentLists(): Appointment[] {
-    if(!this.appointmentSubject.value){
+    if (!this.appointmentSubject.value) {
       return [];
-    }else{
+    } else {
       return this.appointmentSubject.value;
     }
   }
 
   get appointmentsReceived(): Appointment[] {
-    if(!this.adminAppointmentReceived.value){
+    if (!this.adminAppointmentReceived.value) {
       return [];
-    } else{
+    } else {
       return this.adminAppointmentReceived.value;
     }
   }
@@ -81,25 +75,35 @@ export class DataStorageService {
     return this.calSubject.value;
   }
 
-  get users(): any[]{
+  get users(): any[] {
     return this.userSubject.value;
   }
 
   registerUsers(file: File) {
     this.isLoadingSubject.next(true);
-    // this.httpOptions.headers = this.httpOptions.headers.set(
+    const token = this.token.getToken();
+    console.log(token);
+    const headers_object = new HttpHeaders().set(
+      "Authorization",
+      "Bearer " + token
+    );
+    const httpOptions = {
+      headers: headers_object
+    };
+    console.log(headers_object);
+    // httpOptions.headers = httpOptions.headers.set(
     //   "Authorization",
     //   "Bearer " + this.token.getToken()
     // );
-    // console.log(this.httpOptions.headers);
-    // const token = this.token.getToken();
-    // console.log(token);
-    const formdata: FormData = new FormData();
+    // console.log(httpOptions.headers);
+
+    var formdata: FormData = new FormData();
     formdata.append("file", file);
     console.log(formdata);
+    console.log("file upload!");
     return this.http
       .post<ApiResponse>(
-        "http://localhost:8181/api/file/uploadUser/faculty/",
+        "http://localhost:8181/api/file/uploadUser/faculty",
         formdata
       )
       .pipe(
@@ -116,12 +120,14 @@ export class DataStorageService {
     );
   }
 
-  sendApptToCal(id: number){
+  sendApptToCal(id: number) {
     this.isLoadingSubject.next(true);
-    return this.http.post<Object>(this.baseUrlAppointment+"sendToCalendar/"+id,id).pipe(
-      (map(data =>data), catchError(error => throwError(error))),
-      finalize(() => this.isLoadingSubject.next(false))
-    );
+    return this.http
+      .post<Object>(this.baseUrlAppointment + "sendToCalendar/" + id, id)
+      .pipe(
+        (map(data => data), catchError(error => throwError(error))),
+        finalize(() => this.isLoadingSubject.next(false))
+      );
   }
 
   userSelectTimeSlot(id: number) {
@@ -148,7 +154,7 @@ export class DataStorageService {
         console.log(result);
         if (result.status == 200 && result.result) {
           this.appointmentSubject.next(result.result);
-        } else{
+        } else {
           this.appointmentSubject.next([]);
         }
       });
@@ -168,7 +174,7 @@ export class DataStorageService {
           console.log(result.result);
           this.appointmentSubject.next(result.result);
           this.adminAppointmentReceived.next(true);
-        } else{
+        } else {
           this.appointmentSubject.next([]);
         }
       });
@@ -313,7 +319,7 @@ export class DataStorageService {
       );
   }
 
-  updateCalendar(obj: Object){
+  updateCalendar(obj: Object) {
     // this.isLoadingSubject.next(true);
     // return this.http
     // .post<Object>(this.baseUrlCalendar+'edit or whatever', obj)
@@ -325,7 +331,7 @@ export class DataStorageService {
     console.log(obj);
   }
 
-  updateRoles(obj: Object){
+  updateRoles(obj: Object) {
     console.log(obj);
     // this.isLoadingSubject.next(true);
     // return this.http.post<Object>('roles api', obj).pipe(
@@ -335,7 +341,7 @@ export class DataStorageService {
     // );
   }
 
-  deleteUsers(obj: Object){
+  deleteUsers(obj: Object) {
     console.log(obj);
     // this.isLoadingSubject.next(true);
     // return this.http.post<Object>('delete api', obj).pipe(
@@ -345,18 +351,18 @@ export class DataStorageService {
     // );
   }
 
-  fetchUsers(){
+  fetchUsers() {
     this.isLoadingSubject.next(true);
-    this.http.get<ApiResponse>('users api')
-    .pipe(
-      (map(data => data),
-      catchError(error => throwError(error)),
-      finalize(() => this.isLoadingSubject.next(false)))
-    )
-    .subscribe((result: ApiResponse) => {
-      console.log(result.result);
-      this.userSubject.next(result.result);
-    });
+    this.http
+      .get<ApiResponse>("users api")
+      .pipe(
+        (map(data => data),
+        catchError(error => throwError(error)),
+        finalize(() => this.isLoadingSubject.next(false)))
+      )
+      .subscribe((result: ApiResponse) => {
+        console.log(result.result);
+        this.userSubject.next(result.result);
+      });
   }
-
 }
