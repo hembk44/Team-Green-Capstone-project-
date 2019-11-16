@@ -2,6 +2,8 @@ import { Component, OnInit } from "@angular/core";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { DataStorageService } from "../../shared/data-storage.service";
 import { AuthService } from "src/app/auth/auth.service";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { Router } from "@angular/router";
 // import { FileValidator } from "ngx-material-file-input";
 
 @Component({
@@ -26,7 +28,9 @@ export class RegisterUsersComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private dataStorage: DataStorageService,
-    private role: AuthService
+    private role: AuthService,
+    private _snackBar: MatSnackBar,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -58,7 +62,24 @@ export class RegisterUsersComponent implements OnInit {
 
       this.dataStorage
         .registerUsers(this.currentFileUpload)
-        .subscribe(result => console.log(result));
+        .subscribe(result => {
+          console.log(result);
+          if (result.status === 201) {
+            let snackBarRef = this._snackBar.open(
+              "All users are successfully registered!!!",
+              "close",
+              { duration: 10000, panelClass: ["standard"] }
+            );
+            snackBarRef
+              .onAction()
+              .subscribe(() => this.router.navigate(["/home/admin"]));
+            // this.groupDetailDataShare.passSharedMessage(result.message);
+            // this._snackBar.openFromComponent(SnackBarGroup, {
+            //   duration: 5000
+            // });
+          }
+        });
+      this.router.navigate(["/home/admin"]);
     }
   }
 
