@@ -20,6 +20,7 @@ export class CalendarItemComponent implements OnInit {
   username;
 
   constructor(private calService: CalendarService,
+    private dataStorage: DataStorageService,
     private authService: AuthService,
     private dialog: MatDialog) { }
 
@@ -33,8 +34,13 @@ export class CalendarItemComponent implements OnInit {
   }
 
   deleteCal(){
-    this.dialog.open(DeleteConfirm, {
+    const dialogRef = this.dialog.open(DeleteConfirm, {
       width: "250px"
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if(result === 'confirmed'){
+        this.dataStorage.deleteCalendar(this.calendar.id);
+      }
     })
   }
 
@@ -107,7 +113,11 @@ export class DeleteConfirm{
   ){}
 
   close(){
-    this.ref.close();
+    this.ref.close('cancel');
+  }
+
+  delete(){
+    this.ref.close('confirmed');
   }
 
 }

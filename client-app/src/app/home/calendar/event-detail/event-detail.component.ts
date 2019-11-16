@@ -3,6 +3,7 @@ import { CalendarService } from '../calendar-list/calendar.service';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { CalEvent } from '../events.model';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material';
+import { DataStorageService } from '../../shared/data-storage.service';
 
 @Component({
   selector: 'app-event-detail',
@@ -18,6 +19,7 @@ export class EventDetailComponent implements OnInit {
     private router: Router,
     private ref: MatDialogRef<EventDetailComponent>,
     private dialog: MatDialog,
+    private dataStorage: DataStorageService,
     @Inject(MAT_DIALOG_DATA)public data: CalEvent) { 
     }
 
@@ -27,6 +29,7 @@ export class EventDetailComponent implements OnInit {
       this.newEnd = this.event.end;
       this.newEnd.setDate(this.event.end.getDate()-1);
       console.log(this.newEnd);
+      console.log(this.event.id);
     }
   }
 
@@ -44,9 +47,15 @@ export class EventDetailComponent implements OnInit {
   }
 
   deleteEvent(){
-    this.dialog.open(EventDeleteConfirm, {
+    const dialogRef = this.dialog.open(EventDeleteConfirm, {
       width: "300px"
     });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result === 'confirmed'){
+        this.dataStorage.deleteEvent(this.event.id);
+      }
+    })
   }
 
 }
@@ -62,7 +71,11 @@ export class EventDeleteConfirm{
     private ref: MatDialogRef<EventDeleteConfirm>
   ){}
 
+  delete(){
+    this.ref.close('confirmed')
+  }
+
   close(){
-    this.ref.close();
+    this.ref.close('cancel');
   }
 }

@@ -333,12 +333,12 @@ export class DataStorageService {
 
   updateRoles(obj: Object) {
     console.log(obj);
-    // this.isLoadingSubject.next(true);
-    // return this.http.post<Object>('roles api', obj).pipe(
-    //   (map(data => data),
-    //   catchError(error => throwError(error)),
-    //   finalize(() => this.isLoadingSubject.next(false)))
-    // );
+    this.isLoadingSubject.next(true);
+    return this.http.put<Object>('http://localhost:8181/api/admin/changeRole', obj).pipe(
+      (map(data => data),
+      catchError(error => throwError(error)),
+      finalize(() => this.isLoadingSubject.next(false)))
+    );
   }
 
   deleteUsers(obj: Object) {
@@ -354,7 +354,7 @@ export class DataStorageService {
   fetchUsers() {
     this.isLoadingSubject.next(true);
     this.http
-      .get<ApiResponse>("users api")
+      .get<ApiResponse>("http://localhost:8181/api/admin/getAllUsers")
       .pipe(
         (map(data => data),
         catchError(error => throwError(error)),
@@ -376,6 +376,24 @@ export class DataStorageService {
     //   catchError(error => throwError(error)),
     //   finalize(()=>this.isLoadingSubject.next(false)))
     // );
+  }
+
+  deleteEvent(id: number){
+    console.log(id);
+    // this.isLoadingSubject.next(false);
+    // this.http.delete<ApiResponse>('delete url' + id)
+    // .pipe(map(data=>data), 
+    // catchError(error => throwError(error))),
+    // finalize(()=>this.isLoadingSubject.next(false));
+  }
+
+  deleteCalendar(id: number){
+    console.log(id);
+    // this.isLoadingSubject.next(false);
+    // this.http.delete<ApiResponse>('delete url' + id)
+    // .pipe(map(data=>data),
+    // catchError(error=>throwError(error))),
+    // finalize(()=>this.isLoadingSubject.next(false));
   }
 
 }

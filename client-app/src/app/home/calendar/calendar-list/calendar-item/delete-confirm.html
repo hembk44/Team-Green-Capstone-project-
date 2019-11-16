@@ -1,7 +1,7 @@
 <div>
     <h3 mat-dialog-content>Are you sure you want to delete this calendar?</h3>
     <mat-toolbar>
-        <button mat-raised-button color="warn">
+        <button mat-raised-button color="warn" (click)="delete()">
             Delete
         </button><span class="spacer"></span>
         <button mat-raised-button (click)="close()">

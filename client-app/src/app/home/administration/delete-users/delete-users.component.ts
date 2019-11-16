@@ -12,78 +12,7 @@ export class DeleteUsersComponent implements OnInit {
   private updates: any[];
   private updateEmails: string[];
 
-  users = [
-    {
-      name: "Andrew Moore",
-      email: "andrew.moore9497@gmail.com",
-      role: "ROLE_ADMIN"
-    },
-    {
-      name: "andrew",
-      email: "ocsmoore@gmail.com",
-      role: "ROLE_USER"
-    },
-    {
-      name: "Andrew Moore",
-      email: "andrew.moore9497@gmail.com",
-      role: "ROLE_ADMIN"
-    },
-    {
-      name: "andrew",
-      email: "ocsmoore@gmail.com",
-      role: "ROLE_USER"
-    },
-    {
-      name: "Andrew Moore",
-      email: "andrew.moore9497@gmail.com",
-      role: "ROLE_ADMIN"
-    },
-    {
-      name: "andrew",
-      email: "ocsmoore@gmail.com",
-      role: "ROLE_USER"
-    },
-    {
-      name: "Andrew Moore",
-      email: "andrew.moore9497@gmail.com",
-      role: "ROLE_ADMIN"
-    },
-    {
-      name: "andrew",
-      email: "ocsmoore@gmail.com",
-      role: "ROLE_USER"
-    },
-    {
-      name: "Andrew Moore",
-      email: "andrew.moore9497@gmail.com",
-      role: "ROLE_ADMIN"
-    },
-    {
-      name: "andrew",
-      email: "ocsmoore@gmail.com",
-      role: "ROLE_USER"
-    },
-    {
-      name: "Andrew Moore",
-      email: "andrew.moore9497@gmail.com",
-      role: "ROLE_ADMIN"
-    },
-    {
-      name: "andrew",
-      email: "ocsmoore@gmail.com",
-      role: "ROLE_USER"
-    },
-    {
-      name: "Andrew Moore",
-      email: "andrew.moore9497@gmail.com",
-      role: "ROLE_ADMIN"
-    },
-    {
-      name: "andrew",
-      email: "ocsmoore@gmail.com",
-      role: "ROLE_USER"
-    }
-  ]
+  users = [];
 
   constructor(
     private dialog: MatDialog,
@@ -93,12 +22,12 @@ export class DeleteUsersComponent implements OnInit {
   ngOnInit() {
     this.updates = [];
     this.updateEmails = [];
-    //this.dataStorage.fetchUsers();
-    // this.dataStorage.isLoading.subscribe((loading => {
-    //   if(!loading){
-    //     this.users = this.dataStorage.users;
-    //   }
-    // }));
+    this.dataStorage.fetchUsers();
+    this.dataStorage.isLoading.subscribe((loading => {
+      if(!loading){
+        this.users = this.dataStorage.users;
+      }
+    }));
     this.users.sort((a, b) => a.name.toLowerCase() < b.name.toLowerCase() ? -1 : a.name.toLowerCase() > b.name.toLowerCase() ? 1 : 0);
   }
 
