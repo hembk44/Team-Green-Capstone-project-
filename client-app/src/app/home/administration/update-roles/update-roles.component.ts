@@ -11,53 +11,7 @@ export class UpdateRolesComponent implements OnInit {
 
   updates: any[];
   updateEmails: string[];
-  users = [
-    {
-      name: "Andrew Moore",
-      email: "moorea1@warhawks.ulm.edu",
-      role: "ROLE_ADMIN"
-    },
-    {
-      name: "andrew",
-      email: "ocsmoore@gmail.com",
-      role: "ROLE_USER"
-    },
-    {
-      name: "Hem BK",
-      email: "baralhems12@gmail.com",
-      role: "ROLE_PM"
-    },
-    {
-      name: "Andrew Moore",
-      email: "andrew.moore9497@gmail.com",
-      role: "ROLE_ADMIN"
-    },
-    {
-      name: "andrew",
-      email: "ocsmoore@gmail.com",
-      role: "ROLE_USER"
-    },
-    {
-      name: "Hem BK",
-      email: "baralhems12@gmail.com",
-      role: "ROLE_PM"
-    },
-    {
-      name: "Andrew Moore",
-      email: "andrew.moore9497@gmail.com",
-      role: "ROLE_ADMIN"
-    },
-    {
-      name: "andrew",
-      email: "ocsmoore@gmail.com",
-      role: "ROLE_USER"
-    },
-    {
-      name: "Hem BK",
-      email: "baralhems12@gmail.com",
-      role: "ROLE_PM"
-    }
-  ]
+  users = []
 
   constructor(
     private dialog: MatDialog,
@@ -67,12 +21,14 @@ export class UpdateRolesComponent implements OnInit {
   ngOnInit() {
     this.updates = [];
     this.updateEmails = [];
-    // this.dataStorage.fetchUsers();
-    // this.dataStorage.isLoading.subscribe((loading => {
-    //   if(!loading){
-    //     this.users = this.dataStorage.users;
-    //   }
-    // }));
+    this.dataStorage.fetchUsers();
+    this.dataStorage.isLoading.subscribe((loading => {
+      if(!loading){
+        this.users = this.dataStorage.users;
+        console.log(this.users);
+      }
+    }));
+    
     this.users.sort((a, b) => a.name.toLowerCase() < b.name.toLowerCase() ? -1 : a.name.toLowerCase() > b.name.toLowerCase() ? 1 : 0);
   }
 
@@ -83,13 +39,13 @@ export class UpdateRolesComponent implements OnInit {
       this.updates.push({
         name: name,
         email: email,
-        role: role
+        roles: role
       });
     } else{
       this.updates.push({
         name: name,
         email: email,
-        role: role
+        roles: role
       });
       this.updateEmails.push(email);
     }
@@ -110,13 +66,16 @@ export class UpdateRolesComponent implements OnInit {
 
       dialogRef.afterClosed().subscribe(result => {
         if(result === 'confirmed'){
-          this.dataStorage.updateRoles(this.updates);
+          this.dataStorage.updateRoles(this.updates).subscribe(result => {
+            console.log(result);
+          });
           this.updateEmails = [];
           this.updates = [];
           console.log(this.updates);
           console.log(this.updateEmails);
         }
       })
+      this.dataStorage.fetchUsers();
     }else{
       alert('Please make some changes first');
     }

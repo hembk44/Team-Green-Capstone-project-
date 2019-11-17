@@ -8,7 +8,8 @@ import {
   FormBuilder,
   FormGroup,
   Validators,
-  FormControl
+  FormControl,
+  FormArray
 } from "@angular/forms";
 import { Router } from "@angular/router";
 import { Appointment } from "../models-appointments/appointment.model";
@@ -22,6 +23,7 @@ import { EventDate } from "../../calendar/event-date.model";
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
 import { MatChipInputEvent } from "@angular/material/chips";
 import { GroupSelection } from '../../shared/group-selection';
+import { NgxMaterialTimepickerTheme } from 'ngx-material-timepicker';
 
 @Component({
   selector: "app-appointment-create",
@@ -40,6 +42,21 @@ export class AppointmentCreateComponent implements OnInit {
   dateRangeArray: DateRange[] = [];
   emails: string[] = [];
 
+  //theme for time picker
+  timeTheme: NgxMaterialTimepickerTheme={
+    container: {
+      bodyBackgroundColor: 'darkgrey',
+      buttonColor: 'white'
+    },
+    dial: {
+      dialBackgroundColor: 'rgb(185, 163, 90)'
+    },
+    clockFace: {
+      clockHandColor: '#800029',
+
+    }
+  }
+
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
@@ -48,15 +65,48 @@ export class AppointmentCreateComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.appointmentForm = this.formBuilder.group({
-      title: ["", Validators.required],
-      description: ["", Validators.required],
-      location: [""],
-      email: this.email
-    });
+    // this.appointmentForm = this.formBuilder.group({
+    //   title: ["", Validators.required],
+    //   description: ["", Validators.required],
+    //   location: [""],
+    //   email: this.email
+    // });
+    this.initForm();
   }
+
+  private initForm(){
+    let title = '';
+    let description = '';
+    let location = '';
+    let email = this.email;
+    let dateRange = new FormArray([]);
+
+    this.appointmentForm = new FormGroup({
+      'title': new FormControl(title,[Validators.required]),
+      'description': new FormControl(description),
+      'location': new FormControl(location),
+      'email': email,
+      'dateRange': dateRange
+    })    
+  }
+
   cancel() {
     this.router.navigate(["/home/appointment/sent"]);
+  }
+
+  addDate(){
+    (<FormArray>this.appointmentForm.get('dateRange')).push(
+      this.formBuilder.group({
+        date:[''],
+        start:[''],
+        end: [''],
+        interval:['']
+      })
+    );
+  }
+
+  deleteDate(index:number){
+    (<FormArray>this.appointmentForm.get('dateRange')).removeAt(index);
   }
 
   // addEmails() {
@@ -111,6 +161,17 @@ export class AppointmentCreateComponent implements OnInit {
   onSubmit() {
     const appointmentFormValues = this.appointmentForm.value;
     // this.emails.push(this.appointmentForm.value.email);
+    console.log(appointmentFormValues.dateRange);
+    for(let date of appointmentFormValues.dateRange){
+      this.dateRangeArray.push({
+        date: date.date,
+        apptimes: [{
+          startTime: '0'.concat(date.start),
+          endTime: '0'.concat(date.end),
+          interv: date.interval
+        }]
+      })
+    }
     const obj = {
       name: appointmentFormValues.title,
       description: appointmentFormValues.description,
