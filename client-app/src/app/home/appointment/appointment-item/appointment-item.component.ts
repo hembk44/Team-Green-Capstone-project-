@@ -1,22 +1,43 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit, Input, OnDestroy } from "@angular/core";
 import { Appointment } from "../models-appointments/appointment.model";
 import { DateRange } from "../models-appointments/date-range.model";
 import { Router } from "@angular/router";
+import { AppointmentsNavigationAdminService } from "../appointments-navigation-admin.service";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: "app-appointment-item",
   templateUrl: "./appointment-item.component.html",
   styleUrls: ["./appointment-item.component.css"]
 })
-export class AppointmentItemComponent implements OnInit {
+export class AppointmentItemComponent implements OnInit, OnDestroy {
   @Input() appointment: Appointment;
   @Input() id: number;
   @Input() dates: DateRange[];
+  status: string;
+  private appointmentTypeSubscription: Subscription;
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private appointmentNavigationAdmin: AppointmentsNavigationAdminService
+  ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.appointmentTypeSubscription = this.appointmentNavigationAdmin.appointmentStatusItem.subscribe(
+      status => {
+        this.status = status;
+        console.log(this.status);
+      }
+    );
+  }
   showDetails(index: number) {
-    this.router.navigate(["home/appointment/sent", index]);
+    if (this.status === "sent") {
+      this.router.navigate(["home/appointment/sent", index]);
+    } else {
+      this.router.navigate(["home/appointment/received", index]);
+    }
+  }
+  ngOnDestroy() {
+    this.appointmentTypeSubscription.unsubscribe();
   }
 }

@@ -2,16 +2,26 @@
   <h5>{{ appointmentName }}</h5>
   <p>{{ appointmentDesc }}</p>
   <p>{{ appointmentDate | date }}</p>
-  <p *ngIf="currentRole == 'ROLE_USER'">
+  <p
+    *ngIf="
+      currentRole == 'ROLE_USER' ||
+      (currentRole === 'ROLE_ADMIN' && appointmentType === 'received')
+    "
+  >
     Please select any one of the time slots below:
   </p>
   <mat-card-content *ngFor="let time of appointment">
-    <div *ngIf="currentRole == 'ROLE_ADMIN'">
+    <div *ngIf="currentRole === 'ROLE_ADMIN' && appointmentType === 'sent'">
       <button mat-raised-button class="primary">
         {{ time.startTime }} - {{ time.endTime }}
       </button>
     </div>
-    <div *ngIf="currentRole == 'ROLE_USER'">
+    <div
+      *ngIf="
+        currentRole == 'ROLE_USER' ||
+        (currentRole === 'ROLE_ADMIN' && appointmentType === 'received')
+      "
+    >
       <button
         mat-raised-button
         class="primary"
@@ -31,7 +41,7 @@
     mat-raised-button
     class="primary"
     [matMenuTriggerFor]="manage"
-    *ngIf="currentRole == 'ROLE_ADMIN'"
+    *ngIf="currentRole === 'ROLE_ADMIN' && appointmentType === 'sent'"
     matTooltip="Please click to delete or update"
   >
     Manage

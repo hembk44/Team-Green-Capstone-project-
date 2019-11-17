@@ -9,14 +9,6 @@
 >
   <div fxFlex="40%">
     <div style=" margin-left: 10px; padding: 10px;">
-      <!-- <button
-                  mat-stroked-button
-                  class="primary"
-                  (click)="create()"
-                  *ngIf="currentRole == 'ROLE_ADMIN' || currentRole == 'ROLE_PM'"
-                >
-                  Create Appointment
-                </button> -->
       <mat-form-field class="example-full-width">
         <input
           type="text"
@@ -53,15 +45,21 @@
         </mat-card>
       </div>
       <div *ngIf="currentRole == 'ROLE_USER'">
-        <h4>{{ time.appointmentName }}</h4>
-        <p>{{ time.appointmentDescription }}</p>
-        <p><strong>For: </strong> &nbsp;{{ time.appointmentCreatorName }}</p>
-        <p>
-          <strong>Date & Time: </strong> &nbsp;{{ time.date | date }} &nbsp;
-          <button mat-raised-button class="primary">
-            {{ time.startTime }} - {{ time.endTime }}
-          </button>
-        </p>
+        <mat-card>
+          <mat-card-content>
+            <h4>{{ time.appointmentName }}</h4>
+            <p>{{ time.appointmentDescription }}</p>
+            <p>
+              <strong>For: </strong> &nbsp;{{ time.appointmentCreatorName }}
+            </p>
+            <p>
+              <strong>Date & Time: </strong> &nbsp;{{ time.date | date }} &nbsp;
+              <button mat-raised-button class="primary">
+                {{ time.startTime }} - {{ time.endTime }}
+              </button>
+            </p>
+          </mat-card-content>
+        </mat-card>
       </div>
     </div>
   </div>

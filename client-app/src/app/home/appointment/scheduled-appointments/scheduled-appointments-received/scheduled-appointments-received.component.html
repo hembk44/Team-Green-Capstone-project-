@@ -1,1 +1,41 @@
-<p>scheduled-appointments-received works!</p>
+<div
+  class="container"
+  fxLayout
+  fxLayout.xs="column"
+  fxLayout.sm="column"
+  fxLayoutAlign="flex-start"
+  fxLayoutGap="10px"
+  fxLayoutGap.xs="0"
+>
+  <div fxFlex="40%">
+    <div style=" margin-left: 10px; padding: 10px;">
+      <mat-form-field class="example-full-width">
+        <input
+          type="text"
+          matInput
+          [(ngModel)]="searchText"
+          placeholder="Search Appointments"
+        />
+        <mat-icon matSuffix>search</mat-icon>
+        <mat-hint>Search by Appointment name or description</mat-hint>
+      </mat-form-field>
+    </div>
+    <div
+      *ngFor="let time of appointments | scheduledAppointmentSent: searchText"
+    >
+      <mat-card>
+        <mat-card-content>
+          <h4>{{ time.appointmentName }}</h4>
+          <p>{{ time.appointmentDescription }}</p>
+          <p><strong>For: </strong> &nbsp;{{ time.appointmentCreatorName }}</p>
+          <p>
+            <strong>Date & Time: </strong> &nbsp;{{ time.date | date }} &nbsp;
+            <button mat-raised-button class="primary">
+              {{ time.startTime }} - {{ time.endTime }}
+            </button>
+          </p>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

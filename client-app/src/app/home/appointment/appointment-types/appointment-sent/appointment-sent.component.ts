@@ -13,5 +13,7 @@ export class AppointmentSentComponent implements OnInit {
 
   ngOnInit() {
     this.appointmentNavigationAdmin.changeAppointmentStatus("sent");
+    this.appointmentNavigationAdmin.changeAppointmentStatusForDetail("sent");
+    this.appointmentNavigationAdmin.changeAppointmentStatusForItem("sent");
   }
 }

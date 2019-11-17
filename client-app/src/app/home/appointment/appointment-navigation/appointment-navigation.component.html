@@ -9,7 +9,20 @@
         fxLayoutGap="10px"
         fxLayoutGap.xs="10px"
       >
-        <div fxFlex="50%">
+        <div fxFlex="30%">
+          <button
+            mat-stroked-button
+            class="primary"
+            (click)="create()"
+            *ngIf="currentRole == 'ROLE_ADMIN' || currentRole == 'ROLE_PM'"
+            matTooltip="create appointments"
+          >
+            <span> Create Appointment</span>
+          </button>
+        </div>
+        &nbsp;
+
+        <div fxFlex="35%">
           <button
             mat-stroked-button
             class="primary"
@@ -17,7 +30,7 @@
             aria-label="Example icon-button with a menu"
             matTooltip="check sent and received appointments or create appointments"
           >
-            Not Scheduled <mat-icon>expand_more </mat-icon>
+            Your Appointments <mat-icon>expand_more </mat-icon>
           </button>
           <mat-menu #type="matMenu">
             <button mat-menu-item (click)="navigateToReceive()">
@@ -29,18 +42,10 @@
               <mat-icon>assignment_turned_in</mat-icon>
               <span>Created by you</span>
             </button>
-
-            <button
-              mat-menu-item
-              (click)="create()"
-              *ngIf="currentRole == 'ROLE_ADMIN' || currentRole == 'ROLE_PM'"
-            >
-              <mat-icon>add_box</mat-icon>
-              <span>Create</span>
-            </button>
           </mat-menu>
         </div>
-        <div fxFlex="50%">
+        &nbsp;
+        <div fxFlex="35%">
           <button
             mat-stroked-button
             class="primary"
@@ -48,7 +53,7 @@
             aria-label="Example icon-button with a menu"
             matTooltip="check your all scheduled appointments"
           >
-            Scheduled<mat-icon>expand_more </mat-icon>
+            Scheduled Appointments<mat-icon>expand_more </mat-icon>
           </button>
 
           <mat-menu #schedule="matMenu">

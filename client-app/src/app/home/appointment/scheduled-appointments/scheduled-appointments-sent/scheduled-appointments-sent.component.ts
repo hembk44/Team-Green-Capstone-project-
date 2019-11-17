@@ -20,6 +20,7 @@ export class ScheduledAppointmentsSentComponent implements OnInit {
     this.currentRole = this.authService.user;
     if (this.currentRole === "ROLE_ADMIN") {
       console.log("admin data here!");
+
       this.dataStorage
         .adminScheduledAppointmentsRecipients()
         .subscribe(result => {

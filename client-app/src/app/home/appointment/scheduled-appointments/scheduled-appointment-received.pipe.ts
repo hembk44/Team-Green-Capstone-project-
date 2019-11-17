@@ -1,9 +1,9 @@
 import { Pipe, PipeTransform } from "@angular/core";
 
 @Pipe({
-  name: "scheduledAppointmentSent"
+  name: "scheduledAppointmentReceived"
 })
-export class ScheduledAppointmentSentPipe implements PipeTransform {
+export class ScheduledAppointmentReceivedPipe implements PipeTransform {
   transform(items: any[], searchText: string): any[] {
     if (!items) return [];
     if (!searchText) return items;
@@ -35,8 +35,6 @@ export class ScheduledAppointmentSentPipe implements PipeTransform {
         return appointment.appointmentDescription
           .toLowerCase()
           .includes(searchText);
-      } else if (appointment.selectorName.toLowerCase().includes(searchText)) {
-        return appointment.selectorName.toLowerCase().includes(searchText);
       } else if (
         appointment.appointmentCreatorName.toLowerCase().includes(searchText)
       ) {

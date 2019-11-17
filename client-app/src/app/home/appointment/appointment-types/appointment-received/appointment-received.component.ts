@@ -13,5 +13,9 @@ export class AppointmentReceivedComponent implements OnInit {
 
   ngOnInit() {
     this.appointmentNavigationAdmin.changeAppointmentStatus("received");
+    this.appointmentNavigationAdmin.changeAppointmentStatusForDetail(
+      "received"
+    );
+    this.appointmentNavigationAdmin.changeAppointmentStatusForItem("received");
   }
 }

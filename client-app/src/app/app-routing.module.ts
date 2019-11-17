@@ -70,22 +70,31 @@ const routes: Routes = [
         path: "appointment",
         component: AppointmentComponent,
         children: [
-          { path: "", component: AppointmentStartComponent },
+          { path: "", component: AppointmentCreateComponent },
+          {
+            path: "create",
+            component: AppointmentCreateComponent
+          },
           {
             path: "sent",
             component: AppointmentSentComponent,
             children: [
-              {
-                path: "create",
-                component: AppointmentCreateComponent
-              },
               {
                 path: ":id",
                 component: AppointmentDetailComponent
               }
             ]
           },
-          { path: "received", component: AppointmentReceivedComponent },
+          {
+            path: "received",
+            component: AppointmentReceivedComponent,
+            children: [
+              {
+                path: ":id",
+                component: AppointmentDetailComponent
+              }
+            ]
+          },
           { path: "scheduled", component: ScheduledAppointmentsSentComponent },
           {
             path: "scheduled-appointments-received",
