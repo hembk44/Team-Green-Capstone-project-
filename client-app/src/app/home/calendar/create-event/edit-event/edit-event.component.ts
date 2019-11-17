@@ -127,7 +127,7 @@ export class EditEventComponent implements OnInit {
     //     this.dataStorage.fetchCalendars();
     //   }
     // });
-    console.log(this.obj);
+    this.dataStorage.editEvent(this.obj);
     this.router.navigate(["home/calendar"]);
   }
 
