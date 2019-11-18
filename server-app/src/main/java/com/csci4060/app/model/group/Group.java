@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -41,13 +40,13 @@ public class Group {
 	
 	private Date createdAt;
 	
-	@ManyToMany(fetch = FetchType.LAZY, targetEntity = User.class)
+	@ManyToMany(targetEntity = User.class)
 	private List<User> members;
 	
-	@ManyToMany(fetch = FetchType.LAZY, targetEntity = User.class)
+	@ManyToMany(targetEntity = User.class)
 	private List<User> otherOwners;
 	
-	@ManyToOne(fetch = FetchType.LAZY, targetEntity = User.class)
+	@ManyToOne(targetEntity = User.class)
 	private User createdBy;
 	
 	@PrePersist
