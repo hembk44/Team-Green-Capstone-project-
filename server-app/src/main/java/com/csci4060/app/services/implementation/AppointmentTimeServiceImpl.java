@@ -20,5 +20,10 @@ public class AppointmentTimeServiceImpl implements AppointmentTimeService{
 		return appointmentTimeRepo.save(appointmentTime);
 	}
 
+	@Override
+	public void delete(AppointmentTime appointmentTime) {
+		appointmentTimeRepo.delete(appointmentTime);
+	}
+
 	
 }

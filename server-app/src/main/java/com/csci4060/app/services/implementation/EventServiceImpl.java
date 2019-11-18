@@ -7,8 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.csci4060.app.model.User;
+import com.csci4060.app.model.calendar.Calendar;
 import com.csci4060.app.model.event.Event;
 import com.csci4060.app.repository.eventRepo.EventRepository;
+import com.csci4060.app.services.CalendarService;
 import com.csci4060.app.services.EventService;
 
 @Service(value = "EventService")
@@ -16,6 +18,9 @@ public class EventServiceImpl implements EventService {
 
 	@Autowired
 	EventRepository eventRepo;
+	
+	@Autowired
+	CalendarService calendarService;
 
 	@Override
 	public Event save(Event Event) {
@@ -60,6 +65,21 @@ public class EventServiceImpl implements EventService {
 			return optEvent.get();
 		}
 		return null;
+	}
+
+	@Override
+	public void delete(Event event) {
+
+		event.getRecipients().clear();
+		event.getConfirmedBy().clear();
+		
+		List<Calendar> calendars = calendarService.findAllByEvents(event);
+		
+		for(Calendar calendar:calendars) {
+			calendar.getEvents().remove(event);
+		}
+				
+		eventRepo.delete(event);
 	}
 
 }

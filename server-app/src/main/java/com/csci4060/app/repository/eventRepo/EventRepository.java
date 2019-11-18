@@ -17,4 +17,6 @@ public interface EventRepository extends JpaRepository<Event,Long>{
 	Optional<Event> findById(Long id);
 	
 	Optional<Event> findByTimeSlotId(Long timeSlotId);
+	
+	void delete(Event event);
 }

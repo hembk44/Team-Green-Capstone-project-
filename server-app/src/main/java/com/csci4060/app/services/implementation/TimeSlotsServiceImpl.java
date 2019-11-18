@@ -9,7 +9,9 @@ import org.springframework.stereotype.Service;
 import com.csci4060.app.model.User;
 import com.csci4060.app.model.appointment.Appointment;
 import com.csci4060.app.model.appointment.TimeSlots;
+import com.csci4060.app.model.event.Event;
 import com.csci4060.app.repository.appointmentRepo.TimeSlotsRepository;
+import com.csci4060.app.services.EventService;
 import com.csci4060.app.services.TimeSlotsService;
 
 @Service(value = "timeSlotsService")
@@ -17,6 +19,9 @@ public class TimeSlotsServiceImpl implements TimeSlotsService {
 
 	@Autowired
 	TimeSlotsRepository timeSlotsRepo;
+	
+	@Autowired
+	EventService eventService;
 
 	@Override
 	public TimeSlots save(TimeSlots slots) {
@@ -53,6 +58,14 @@ public class TimeSlotsServiceImpl implements TimeSlotsService {
 			return optTimeSlots.get();
 		}
 		return null;
+	}
+
+	@Override
+	public void delete(TimeSlots timeslots) {
+		Event event = eventService.findByTimeSlotId(timeslots.getId());
+		eventService.delete(event);
+		timeSlotsRepo.delete(timeslots);
+		
 	}
 
 }
