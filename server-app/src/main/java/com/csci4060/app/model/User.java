@@ -15,12 +15,15 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.NaturalId;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Data;
 
 @Data
 @Entity
 public class User {
 
+	@JsonIgnore
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
@@ -29,6 +32,7 @@ public class User {
 	@Size(min=3, max=50)
 	private String name;
 	
+	@JsonIgnore
 	@NotBlank
 	@Size(max=50)
 	private String username;
@@ -39,13 +43,16 @@ public class User {
 	@Email
 	private String email;
 	
+	@JsonIgnore
 	@NotBlank
 	@Size(min=6, max=100)
 	private String password;
 	
+	@JsonIgnore
 	private boolean verified;
 	
 //	//Loads the roles of user only when needed i.e user.getRoles
+	@JsonIgnore
 	@ManyToMany(fetch = FetchType.LAZY, targetEntity = Role.class)
 	private Set<Role> roles = new HashSet<>();
 	

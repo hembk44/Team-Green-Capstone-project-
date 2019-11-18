@@ -3,7 +3,6 @@ package com.csci4060.app.model.event;
 import java.util.List;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -12,14 +11,12 @@ import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 
 import com.csci4060.app.model.User;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import lombok.Data;
 
 @Data
 @Entity
-public class Event {
-	
+public class Event{
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
@@ -32,12 +29,11 @@ public class Event {
 	@NotNull
 	String location;
 
-	@JsonIgnore
-	@ManyToMany(targetEntity = User.class, fetch = FetchType.LAZY)
+	@ManyToMany(targetEntity = User.class)
 	List<User> recipients;
-//	
-//	@ManyToMany(mappedBy = "events")
-//	List<Calendar> calendars =new ArrayList<>();
+
+	@ManyToMany(targetEntity =  User.class)
+	List<User> confirmedBy; 
 	
 	@NotNull
 	String start;
@@ -45,8 +41,7 @@ public class Event {
 	@NotNull
 	String end;
 	
-	@JsonIgnore
-	@OneToOne(targetEntity = User.class, fetch = FetchType.LAZY)
+	@OneToOne(targetEntity = User.class)
 	User createdBy;
 	
 	Boolean allDay;

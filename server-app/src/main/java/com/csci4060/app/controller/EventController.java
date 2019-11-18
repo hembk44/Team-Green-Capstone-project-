@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.security.sasl.AuthenticationException;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +25,7 @@ import com.csci4060.app.model.User;
 import com.csci4060.app.model.calendar.Calendar;
 import com.csci4060.app.model.event.Event;
 import com.csci4060.app.model.event.EventDummy;
+import com.csci4060.app.model.event.EventShare;
 import com.csci4060.app.services.CalendarService;
 import com.csci4060.app.services.EmailSenderService;
 import com.csci4060.app.services.EventService;
@@ -67,8 +70,8 @@ public class EventController {
 		List<String> actualRecipients = new ArrayList<>();
 
 		String backgroundColor = eventDummy.getBackgroundColor();
-		
-		if(backgroundColor == null) {
+
+		if (backgroundColor == null) {
 			backgroundColor = "";
 		}
 		for (String each : recepientsEmailList) {
@@ -86,7 +89,7 @@ public class EventController {
 		if (calendar == null) {
 			throw new FileNotFoundException("Calendar with given id is not present in the database");
 		}
-		
+
 		Event event = new Event(eventDummy.getTitle(), eventDummy.getDescription(), eventDummy.getLocation(),
 				recipientList, eventDummy.getStart(), eventDummy.getEnd(), createdBy, eventDummy.getAllDay(),
 				calendar.getColor(), backgroundColor);
@@ -118,7 +121,7 @@ public class EventController {
 		}
 
 		if (!actualRecipients.isEmpty()) {
-			
+
 			SimpleMailMessage mailMessage = new SimpleMailMessage();
 
 			String[] emails = actualRecipients.toArray(new String[actualRecipients.size()]);
@@ -136,4 +139,91 @@ public class EventController {
 		return new APIresponse(HttpStatus.CREATED.value(), "event created successfully", event);
 	}
 
+	@PostMapping(path = "/confirm/{id}", consumes = "application/json")
+	@PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
+	public APIresponse confirmEvent(@PathVariable("id") Long eventId) {
+
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		String creatorUsername = "";
+
+		if (principal instanceof UserDetails) {
+			creatorUsername = ((UserDetails) principal).getUsername();
+		}
+
+		User loggedInUser = userService.findByUsername(creatorUsername);
+
+		Event event = eventService.findById(eventId);
+
+		if (event == null) {
+			return new APIresponse(HttpStatus.NOT_FOUND.value(), "event does not exist in the database", null);
+		}
+
+		if (!event.getRecipients().contains(loggedInUser)) {
+			return new APIresponse(HttpStatus.BAD_REQUEST.value(), "You are not the recipient of this event", null);
+		}
+		
+		if(event.getConfirmedBy().contains(loggedInUser)) {
+			return new APIresponse(HttpStatus.BAD_REQUEST.value(), "You have already confirmed this event", null);
+		}
+
+		event.getConfirmedBy().add(loggedInUser);
+		eventService.save(event);
+
+		return new APIresponse(HttpStatus.CREATED.value(), "event confirmed successfully by "+loggedInUser.getName(), event);
+	}
+
+	@PostMapping(path = "/share")
+	@PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
+	public APIresponse shareGroup(@Valid @RequestBody EventShare eventShare) {
+
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		String username = "";
+
+		if (principal instanceof UserDetails) {
+			username = ((UserDetails) principal).getUsername();
+		}
+
+		User user = userService.findByUsername(username);
+
+		Long eventId = eventShare.getEventId();
+
+		Event event = eventService.findById(eventId);
+
+		if (event == null) {
+			return new APIresponse(HttpStatus.BAD_REQUEST.value(), "Event with id " + eventId + " does not exist",
+					null);
+		}
+
+		if (event.getCreatedBy() != user) {
+			return new APIresponse(HttpStatus.FORBIDDEN.value(), "You did not create the event. Authorization denied!",
+					null);
+		}
+
+		List<String> emailsFromJson = eventShare.getRecipients();
+		List<String> sharedWithList = new ArrayList<String>();
+
+		for (String email : emailsFromJson) {
+
+			User personToShare = userService.findByEmail(email);
+			if (personToShare != null) {
+				if (!event.getRecipients().contains(personToShare)) {
+
+					sharedWithList.add(email);
+					event.getRecipients().add(personToShare);
+					eventService.save(event);
+
+					Calendar recipientCalendar = calendarService.findByNameAndCreatedBy("Shared Event", personToShare);
+					recipientCalendar.addEvent(event);
+					calendarService.save(recipientCalendar);
+				}
+
+			}
+
+		}
+
+		return new APIresponse(HttpStatus.OK.value(),
+				"Event " + event.getTitle() + " has been shared to users: " + sharedWithList, event);
+	}
 }

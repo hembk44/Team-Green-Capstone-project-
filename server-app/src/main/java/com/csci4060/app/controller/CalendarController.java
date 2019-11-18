@@ -24,7 +24,6 @@ import com.csci4060.app.model.APIresponse;
 import com.csci4060.app.model.User;
 import com.csci4060.app.model.calendar.Calendar;
 import com.csci4060.app.model.calendar.CalendarCreate;
-import com.csci4060.app.model.calendar.CalendarResponse;
 import com.csci4060.app.model.calendar.CalendarShare;
 import com.csci4060.app.services.CalendarService;
 import com.csci4060.app.services.UserService;
@@ -75,15 +74,13 @@ public class CalendarController {
 			}
 		}
 
-		Calendar calendar = new Calendar(calendarName, calendarCreate.getColor(),null, recipients, createdBy, true, false);
+		Calendar calendar = new Calendar(calendarName, calendarCreate.getColor(), null, recipients, createdBy, true,
+				false);
 
 		calendarService.save(calendar);
 
-		CalendarResponse response = new CalendarResponse(calendar.getId(), calendar.getName(), calendar.getColor(),calendar.getEvents(),
-				createdBy.getUsername(), calendar.isShown(), calendar.isDefaultCalendar());
-
 		return new APIresponse(HttpStatus.CREATED.value(),
-				"Calendar with name " + calendarName + " has been succesfully created", response);
+				"Calendar with name " + calendarName + " has been succesfully created", calendar);
 
 	}
 
@@ -113,15 +110,7 @@ public class CalendarController {
 			allCalendars = ownedCalendars;
 		}
 
-		List<CalendarResponse> responses = new ArrayList<CalendarResponse>();
-
-		for (Calendar calendar : allCalendars) {
-
-			responses.add(new CalendarResponse(calendar.getId(), calendar.getName(), calendar.getColor(),calendar.getEvents(),
-					calendar.getCreatedBy().getUsername(), calendar.isShown(), calendar.isDefaultCalendar()));
-		}
-
-		return new APIresponse(HttpStatus.OK.value(), "All calendars successfully sent.", responses);
+		return new APIresponse(HttpStatus.OK.value(), "All calendars successfully sent.", allCalendars);
 
 	}
 
@@ -167,10 +156,7 @@ public class CalendarController {
 
 		}
 
-		CalendarResponse response = new CalendarResponse(calendar.getId(), calendar.getName(), calendar.getColor(),calendar.getEvents(),
-				calendar.getCreatedBy().getEmail(), calendar.isShown(), calendar.isDefaultCalendar());
-
 		return new APIresponse(HttpStatus.OK.value(),
-				"Calendar " + calendar.getName() + " has been shared to users: " + sharedWithList, response);
+				"Calendar " + calendar.getName() + " has been shared to users: " + sharedWithList, calendar);
 	}
 }

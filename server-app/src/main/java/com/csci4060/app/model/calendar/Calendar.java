@@ -13,8 +13,6 @@ import javax.validation.constraints.NotNull;
 
 import com.csci4060.app.model.User;
 import com.csci4060.app.model.event.Event;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import lombok.Data;
 
 @Data
@@ -33,11 +31,9 @@ public class Calendar {
 	@ManyToMany(targetEntity = Event.class, fetch = FetchType.LAZY)
 	List<Event> events;
 	
-	@JsonIgnore
 	@ManyToMany(targetEntity = User.class)
 	List<User> shareduser;
 	
-	@JsonIgnore
 	@ManyToOne(targetEntity = User.class)
 	User createdBy;
 	
