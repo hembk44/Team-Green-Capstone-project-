@@ -6,6 +6,7 @@ import java.util.Set;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.csci4060.app.model.RoleName;
 import com.csci4060.app.model.Role;
 import com.csci4060.app.model.User;
 

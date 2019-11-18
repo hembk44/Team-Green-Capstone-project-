@@ -6,6 +6,9 @@ import java.util.List;
 
 import javax.security.sasl.AuthenticationException;
 
+import javax.validation.Valid;
+
+
 import org.apache.commons.collections4.ListUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
@@ -20,11 +23,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+
+import com.csci4060.app.ExceptionResolver;
+
 import com.csci4060.app.model.APIresponse;
 import com.csci4060.app.model.User;
 import com.csci4060.app.model.calendar.Calendar;
 import com.csci4060.app.model.calendar.CalendarCreate;
-import com.csci4060.app.model.calendar.CalendarResponse;
 import com.csci4060.app.model.calendar.CalendarShare;
 import com.csci4060.app.services.CalendarService;
 import com.csci4060.app.services.UserService;
@@ -32,7 +37,10 @@ import com.csci4060.app.services.UserService;
 @RestController
 @CrossOrigin(origins = "*")
 @RequestMapping(path = "/api/calendar", produces = "application/json")
-public class CalendarController {
+
+public class CalendarController extends ExceptionResolver {
+
+
 
 	@Autowired
 	UserService userService;
@@ -42,7 +50,9 @@ public class CalendarController {
 
 	@PostMapping(path = "/create", produces = "application/json")
 	@PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
-	public APIresponse createCalendar(@RequestBody CalendarCreate calendarCreate) {
+
+	public APIresponse createCalendar(@Valid @RequestBody CalendarCreate calendarCreate) {
+
 
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -75,15 +85,13 @@ public class CalendarController {
 			}
 		}
 
-		Calendar calendar = new Calendar(calendarName, calendarCreate.getColor(),null, recipients, createdBy, true, false);
+		Calendar calendar = new Calendar(calendarName, calendarCreate.getColor(), null, recipients, createdBy, true,
+				false);
 
 		calendarService.save(calendar);
 
-		CalendarResponse response = new CalendarResponse(calendar.getId(), calendar.getName(), calendar.getColor(),calendar.getEvents(),
-				createdBy.getUsername(), calendar.isShown(), calendar.isDefaultCalendar());
-
 		return new APIresponse(HttpStatus.CREATED.value(),
-				"Calendar with name " + calendarName + " has been succesfully created", response);
+				"Calendar with name " + calendarName + " has been succesfully created", calendar);
 
 	}
 
@@ -113,21 +121,15 @@ public class CalendarController {
 			allCalendars = ownedCalendars;
 		}
 
-		List<CalendarResponse> responses = new ArrayList<CalendarResponse>();
-
-		for (Calendar calendar : allCalendars) {
-
-			responses.add(new CalendarResponse(calendar.getId(), calendar.getName(), calendar.getColor(),calendar.getEvents(),
-					calendar.getCreatedBy().getUsername(), calendar.isShown(), calendar.isDefaultCalendar()));
-		}
-
-		return new APIresponse(HttpStatus.OK.value(), "All calendars successfully sent.", responses);
+		return new APIresponse(HttpStatus.OK.value(), "All calendars successfully sent.", allCalendars);
 
 	}
 
 	@PostMapping(path = "/share", produces = "application/json")
 	@PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
-	public APIresponse shareCalendar(@RequestBody CalendarShare calendarShare)
+
+	public APIresponse shareCalendar(@Valid @RequestBody CalendarShare calendarShare)
+
 			throws FileNotFoundException, AuthenticationException {
 
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -167,10 +169,7 @@ public class CalendarController {
 
 		}
 
-		CalendarResponse response = new CalendarResponse(calendar.getId(), calendar.getName(), calendar.getColor(),calendar.getEvents(),
-				calendar.getCreatedBy().getEmail(), calendar.isShown(), calendar.isDefaultCalendar());
-
 		return new APIresponse(HttpStatus.OK.value(),
-				"Calendar " + calendar.getName() + " has been shared to users: " + sharedWithList, response);
+				"Calendar " + calendar.getName() + " has been shared to users: " + sharedWithList, calendar);
 	}
 }

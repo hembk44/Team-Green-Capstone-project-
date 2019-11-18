@@ -9,12 +9,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import com.csci4060.app.model.User;
 import com.csci4060.app.model.event.Event;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import lombok.Data;
 
 @Data
@@ -25,7 +24,7 @@ public class Calendar {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	long id;
 	
-	@NotNull
+	@NotEmpty(message= "Calendar name must not be empty!")
 	String name;
 	
 	String color;
@@ -33,11 +32,9 @@ public class Calendar {
 	@ManyToMany(targetEntity = Event.class, fetch = FetchType.LAZY)
 	List<Event> events;
 	
-	@JsonIgnore
 	@ManyToMany(targetEntity = User.class)
 	List<User> shareduser;
 	
-	@JsonIgnore
 	@ManyToOne(targetEntity = User.class)
 	User createdBy;
 	

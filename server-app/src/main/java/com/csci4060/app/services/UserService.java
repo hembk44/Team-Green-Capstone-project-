@@ -26,5 +26,7 @@ public interface UserService {
 	
 	Boolean existsByEmail(String email);
 	
-	List<User> findAllByRoles(Set<Role>roles ); 
+	List<User> findAllByRoles(Set<Role>roles );
+  	
+	List<User> findAllUserExcept(String userEmail);
 }

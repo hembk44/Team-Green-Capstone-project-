@@ -15,13 +15,11 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
 import com.csci4060.app.model.User;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "groups")
+@Table(name = "UserGroup")
 public class Group {
 
 	@Id
@@ -43,15 +41,12 @@ public class Group {
 	
 	private Date createdAt;
 	
-	@JsonIgnore
 	@ManyToMany(fetch = FetchType.LAZY, targetEntity = User.class)
 	private List<User> members;
 	
-	@JsonIgnore
 	@ManyToMany(fetch = FetchType.LAZY, targetEntity = User.class)
 	private List<User> otherOwners;
 	
-	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY, targetEntity = User.class)
 	private User createdBy;
 	

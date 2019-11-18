@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -24,9 +25,10 @@ public class AppointmentDate {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
+	@NotEmpty(message= "The appointment date must not be empty!")
 	private String date;
 	
-	@OneToMany(targetEntity = AppointmentTime.class, cascade = CascadeType.ALL)
+	@OneToMany(targetEntity = AppointmentTime.class)
 	private List<AppointmentTime> apptimes;
 	
 	public AppointmentDate(String date, List<AppointmentTime> times) {

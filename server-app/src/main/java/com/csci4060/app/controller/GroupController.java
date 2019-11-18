@@ -30,9 +30,7 @@ import com.csci4060.app.model.User;
 import com.csci4060.app.model.group.Group;
 import com.csci4060.app.model.group.GroupDummy;
 import com.csci4060.app.model.group.GroupEmail;
-import com.csci4060.app.model.group.GroupResponse;
 import com.csci4060.app.model.group.GroupShare;
-import com.csci4060.app.model.group.MemberNameAndEmail;
 import com.csci4060.app.services.EmailSenderService;
 import com.csci4060.app.services.GroupService;
 import com.csci4060.app.services.RoleService;
@@ -183,27 +181,27 @@ public class GroupController {
 					null);
 		}
 
-		if (group.getType().equals("Custom") && group.getCreatedBy() != user) {
+		if (group.getType().equals("Custom") && group.getCreatedBy() != user && !group.getOtherOwners().contains(user)) {
 			return new APIresponse(HttpStatus.FORBIDDEN.value(), "You did not create the group. Authorization denied!",
 					null);
 		}
 
-		List<User> membersList = group.getMembers();
+		//List<User> membersList = group.getMembers();
 
-		List<MemberNameAndEmail> nameAndEmail = new ArrayList<MemberNameAndEmail>();
+//		List<MemberNameAndEmail> nameAndEmail = new ArrayList<MemberNameAndEmail>();
+//
+//		for (User member : membersList) {
+//			nameAndEmail.add(new MemberNameAndEmail(member.getName(), member.getEmail()));
+//		}
 
-		for (User member : membersList) {
-			nameAndEmail.add(new MemberNameAndEmail(member.getName(), member.getEmail()));
-		}
+//		if (nameAndEmail.isEmpty()) {
+//			nameAndEmail = null;
+//		}
 
-		if (nameAndEmail.isEmpty()) {
-			nameAndEmail = null;
-		}
+//		GroupResponse response = new GroupResponse(group.getName(), group.getDescription(), group.getType(),
+//				group.getSemesterTerm(), group.getSemesterYear(), nameAndEmail);
 
-		GroupResponse response = new GroupResponse(group.getName(), group.getDescription(), group.getType(),
-				group.getSemesterTerm(), group.getSemesterYear(), nameAndEmail);
-
-		return new APIresponse(HttpStatus.OK.value(), "Group details successfully sent", response);
+		return new APIresponse(HttpStatus.OK.value(), "Group details successfully sent", group);
 	}
 
 	@PutMapping(path = "/edit/{id}")
