@@ -29,7 +29,7 @@ public class Appointment {
 	String name;
 	String description;
 
-	@OneToMany(targetEntity = AppointmentDate.class, cascade = CascadeType.ALL)
+	@OneToMany(targetEntity = AppointmentDate.class)
 	List<AppointmentDate> appdates;
 
 	@JsonIgnore

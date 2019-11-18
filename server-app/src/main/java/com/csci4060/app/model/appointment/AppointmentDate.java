@@ -28,7 +28,7 @@ public class AppointmentDate {
 	@NotEmpty(message= "The appointment date must not be empty!")
 	private String date;
 	
-	@OneToMany(targetEntity = AppointmentTime.class, cascade = CascadeType.ALL)
+	@OneToMany(targetEntity = AppointmentTime.class)
 	private List<AppointmentTime> apptimes;
 	
 	public AppointmentDate(String date, List<AppointmentTime> times) {

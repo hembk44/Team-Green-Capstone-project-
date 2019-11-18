@@ -74,6 +74,11 @@ public class EventController extends ExceptionResolver {
 
 		List<String> actualRecipients = new ArrayList<>();
 
+		String backgroundColor = eventDummy.getBackgroundColor();
+		
+		if(backgroundColor == null) {
+			backgroundColor = "";
+		}
 		for (String each : recepientsEmailList) {
 
 			User recipient = userService.findByEmail(each);
@@ -92,7 +97,7 @@ public class EventController extends ExceptionResolver {
 		
 		Event event = new Event(eventDummy.getTitle(), eventDummy.getDescription(), eventDummy.getLocation(),
 				recipientList, eventDummy.getStart(), eventDummy.getEnd(), createdBy, eventDummy.getAllDay(),
-				calendar.getColor(), eventDummy.getBackgroundColor());
+				calendar.getColor(), backgroundColor);
 
 		eventService.save(event);
 
