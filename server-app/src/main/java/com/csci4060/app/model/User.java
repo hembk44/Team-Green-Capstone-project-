@@ -1,16 +1,20 @@
 package com.csci4060.app.model;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.NaturalId;
@@ -28,24 +32,24 @@ public class User {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
-	@NotBlank
+	@NotEmpty(message="Name must not be empty!")
 	@Size(min=3, max=50)
 	private String name;
 	
 	@JsonIgnore
-	@NotBlank
+	@NotEmpty(message="Username must not be empty!")
 	@Size(max=50)
 	private String username;
 	
 	//What naturally identifies an entity. This improves performance during lookup
 	@NaturalId
 	@Size(min=6, max=100)
-	@Email
+	@Email(message= "Email is not valid!")
 	private String email;
 	
+	@NotEmpty(message="Password must not be empty")
+	@Size(min=6, max=100 , message = "Password must be minimum of 6 characters")
 	@JsonIgnore
-	@NotBlank
-	@Size(min=6, max=100)
 	private String password;
 	
 	@JsonIgnore

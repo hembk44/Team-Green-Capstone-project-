@@ -8,6 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import com.csci4060.app.model.User;
@@ -21,12 +22,16 @@ public class Event{
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
-	@NotNull
+
+	@NotEmpty(message= "Event name must not be empty")
+
 	String title;
 	
 	String description;
 
-	@NotNull
+
+	@NotEmpty(message= "Location must be specified")
+
 	String location;
 
 	@ManyToMany(targetEntity = User.class)
@@ -35,10 +40,10 @@ public class Event{
 	@ManyToMany(targetEntity =  User.class)
 	List<User> confirmedBy; 
 	
-	@NotNull
+	@NotEmpty(message= "Start time must be specified for the event!")
 	String start;
 	
-	@NotNull
+	@NotEmpty(message= "End time must be specified for the event!")
 	String end;
 	
 	@OneToOne(targetEntity = User.class)

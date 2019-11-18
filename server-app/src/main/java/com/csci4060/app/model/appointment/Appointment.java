@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 
 import com.csci4060.app.model.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -32,7 +34,7 @@ public class Appointment {
 
 	@JsonIgnore
 	@ManyToMany(targetEntity = User.class)
-	List<User> recepients;
+	List<@Email User> recepients;
 	
 	@JsonIgnore
 	@OneToOne(targetEntity = User.class)

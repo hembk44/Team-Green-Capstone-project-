@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
+import javax.validation.Valid;
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.mail.SimpleMailMessage;
@@ -21,6 +24,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.ResourceAccessException;
+
+
+import com.csci4060.app.ExceptionResolver;
 
 import com.csci4060.app.model.APIresponse;
 import com.csci4060.app.model.User;
@@ -45,7 +51,9 @@ import com.csci4060.app.services.UserService;
 @RestController
 @CrossOrigin(origins = "*")
 @RequestMapping(path = "/api/appointment", produces = "application/json")
-public class AppointmentController {
+
+public class AppointmentController extends ExceptionResolver {
+
 
 	@Autowired
 	UserService userService;
@@ -73,7 +81,9 @@ public class AppointmentController {
 
 	@PostMapping(path = "/set", consumes = "application/json")
 	@PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
-	public APIresponse setAppointment(@RequestBody AppointmentDummy appointmentDummy, HttpServletRequest request) {
+
+	public APIresponse setAppointment( @Valid @RequestBody AppointmentDummy appointmentDummy, HttpServletRequest request) {
+
 
 		List<User> recepientList = new ArrayList<User>();
 
@@ -449,7 +459,9 @@ public class AppointmentController {
 
 	@PostMapping(path = "/sendToCalendar/{appointmentId}", produces = "application/json")
 	@PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
-	public APIresponse sendToCalendar(@PathVariable("appointmentId") long id) {
+
+	public APIresponse sendToCalendar(@Valid @PathVariable("appointmentId") long id) {
+
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
 		String username = "";
@@ -485,7 +497,9 @@ public class AppointmentController {
 			System.out.println(endTime);
 
 			Event event = new Event(appointment.getName(), appointment.getDescription(), appointment.getLocation(),
+
 					null, startTime, endTime, currentUser, false, calendar.getColor(), "", slot.getId());
+
 
 			eventList.add(event);
 			System.out.println(event);
