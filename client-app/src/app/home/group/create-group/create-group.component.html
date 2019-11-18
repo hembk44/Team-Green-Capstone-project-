@@ -1,5 +1,5 @@
 <form class="example-container" [formGroup]="groupForm" (ngSubmit)="onSubmit()">
-  <mat-form-field *ngIf="isCourseGroup">
+  <mat-form-field *ngIf="isCourseGroup" style="cursor: pointer;width:50%;">
     <mat-label>Group Type</mat-label>
     <mat-select formControlName="groupType">
       <mat-option *ngFor="let grpType of groupTypes" [value]="grpType" disabled>
@@ -11,7 +11,7 @@
     >
   </mat-form-field>
 
-  <mat-form-field *ngIf="isCourseGroup">
+  <mat-form-field *ngIf="isCourseGroup" style="cursor: pointer;width:50%;">
     <mat-label>Select Major</mat-label>
     <mat-select
       formControlName="majorControl"
@@ -26,7 +26,7 @@
       >Please choose a Major</mat-error
     >
   </mat-form-field>
-  <mat-form-field *ngIf="isCourseGroup">
+  <mat-form-field *ngIf="isCourseGroup" style="cursor: pointer;width:50%;">
     <mat-label>Title</mat-label>
     <mat-select
       formControlName="title"
@@ -42,7 +42,7 @@
     >
   </mat-form-field>
 
-  <mat-form-field *ngIf="isCourseGroup">
+  <mat-form-field *ngIf="isCourseGroup" style="cursor: pointer;width:50%;">
     <mat-label>Description</mat-label>
     <mat-select formControlName="description">
       <mat-option>--</mat-option>
@@ -90,7 +90,7 @@
     >
   </mat-form-field>
 
-  <mat-form-field class="example-chip-list">
+  <mat-form-field class="example-chip-list" style="cursor: pointer;width:75%;">
     <mat-chip-list #chipList aria-label="adding emails">
       <mat-chip
         *ngFor="let email of emails"
@@ -141,8 +141,46 @@
       </mat-toolbar-row>
     </mat-toolbar>
   </div>
+  <div style="text-align: center; color: black; margin-top: 10px;">
+    <span>OR</span>
+  </div>
 
-  <mat-form-field>
+  <mat-form-field style="cursor: pointer;width:75%;">
+    <ngx-mat-file-input
+      #removableInput
+      formControlName="uploadFile"
+      placeholder="upload an excel file"
+      accept=".xlsx,.csv"
+      (change)="upload($event)"
+    ></ngx-mat-file-input>
+    <button
+      mat-icon-button
+      matSuffix
+      *ngIf="removableInput.empty"
+      (click)="removableInput.clear($event)"
+    >
+      <mat-icon>folder</mat-icon>
+    </button>
+    <mat-error *ngIf="groupForm.get('uploadFile').hasError('required')">
+      Please select a file
+    </mat-error>
+
+    <button
+      mat-icon-button
+      matSuffix
+      *ngIf="!removableInput.empty"
+      (click)="removableInput.clear($event)"
+    >
+      <mat-icon>delete</mat-icon>
+    </button>
+    <mat-error
+      *ngIf="isInvalid && !uploadForm.get('uploadFile').hasError('required')"
+    >
+      {{ invalidExtension }}
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field style="cursor: pointer;width:50%;">
     <mat-label>Semester Term</mat-label>
     <mat-select formControlName="semesterTerm">
       <mat-option>--</mat-option>
@@ -155,7 +193,7 @@
     >
   </mat-form-field>
 
-  <mat-form-field>
+  <mat-form-field style="cursor: pointer;width:50%;">
     <mat-label>Semester Year</mat-label>
     <mat-select formControlName="semesterYear">
       <mat-option>--</mat-option>

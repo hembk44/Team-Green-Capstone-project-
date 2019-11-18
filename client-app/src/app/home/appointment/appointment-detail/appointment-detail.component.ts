@@ -83,9 +83,8 @@ export class AppointmentDetailComponent implements OnInit {
       this.router.navigate(["./home/appointment/received"]);
     }
   }
-  onDeleteAppointment() {
-    // this.appointmentService.deleteAppointment(this.id);
-    // this.router.navigate(["./appointment/type"]);
+  onDeleteAppointment(id: number) {
+    this.dataStorage.deleteAppointment(id).subscribe(r => console.log(r));
   }
   onUpdateAppointment() {
     console.log("updated");

@@ -13,7 +13,6 @@ import { MatChipInputEvent } from "@angular/material/chips";
 import { GroupDataStorageService } from "../group-data-storage.service";
 import { GroupCreateNavigationService } from "../group/group-create-navigation.service";
 import { Group } from "../models-group/group";
-// import { Majors, MajorType } from "./majors";
 
 export interface courseGroup {
   title: string;
@@ -98,6 +97,14 @@ export class CreateGroupComponent implements OnInit {
   isEmailValid: boolean = false;
   groupToEdit: any;
   customGroupEmails: string[] = [];
+  courseGroupEmails: string[] = [];
+
+  validFileExtensions: string[] = ["xlsx", "csv"];
+  invalidExtension: string;
+  isInvalid: boolean = false;
+
+  selectedFiles: FileList;
+  currentFileUpload: File;
 
   // use dynamic method to add values in date
 
@@ -118,7 +125,8 @@ export class CreateGroupComponent implements OnInit {
       semesterTerm: ["", Validators.required],
       semesterYear: ["", Validators.required],
       majorControl: ["", Validators.required],
-      editEmail: ["", Validators.required]
+      editEmail: ["", Validators.required],
+      uploadFile: [undefined, [Validators.required]]
     });
 
     this.groupTypeNavigation.groupType.subscribe(type => {
@@ -141,7 +149,6 @@ export class CreateGroupComponent implements OnInit {
   }
 
   private initForm() {
-    let groupEmailsArray = new FormArray([]);
     if (this.editMode) {
       this.groupDataStorageService
         .displayGroupDetails(this.id)
@@ -152,16 +159,7 @@ export class CreateGroupComponent implements OnInit {
           if (this.groupToEdit.type === "Custom") {
             this.isCourseGroup = false;
             this.groupForm.get("groupType").setValue(this.groupToEdit.type);
-            // this.groupForm.get("title").setValue(this.groupToEdit.name);
-            // this.groupForm
-            //   .get("description")
-            //   .setValue(this.groupToEdit.description);
-            // this.groupForm
-            //   .get("semesterYear")
-            //   .setValue(this.groupToEdit.semesterYear);
-            // this.groupForm
-            //   .get("semesterTerm")
-            //   .setValue(this.groupToEdit.semesterTerm);
+
             const customGroupMembers = this.groupToEdit.members;
             console.log(customGroupMembers);
 
@@ -169,15 +167,6 @@ export class CreateGroupComponent implements OnInit {
               this.customGroupEmails.push(member.email);
               console.log(this.customGroupEmails);
             }
-            // for (let email of this.customGroupEmails) {
-            //   this.groupForm.get("editEmail").setValue(email);
-            //   groupEmailsArray.push({
-            //     new FormGroup({
-            //       editEmail : new FormControl(email)
-            //     })
-            //   });
-            // }
-
             this.groupForm = this.formBuilder.group({
               groupType: [this.groupToEdit.type],
               title: [this.groupToEdit.name],
@@ -188,16 +177,32 @@ export class CreateGroupComponent implements OnInit {
           } else {
             this.isCourseGroup = true;
             this.groupForm.get("groupType").setValue("Course");
+            console.log(
+              this.groupForm.get("majorControl").setValue("Computer Science")
+            );
+            console.log(
+              this.groupForm.get("title").setValue(this.groupToEdit.name)
+            );
+
+            const courseGroupMembers = this.groupToEdit.members;
+            console.log(courseGroupMembers);
+
+            for (let member of courseGroupMembers) {
+              this.courseGroupEmails.push(member.email);
+              console.log(this.courseGroupEmails);
+            }
+
+            this.groupForm = this.formBuilder.group({
+              groupType: [this.groupToEdit.type],
+              description: [this.groupToEdit.description],
+              semesterTerm: [this.groupToEdit.semesterTerm],
+              semesterYear: [this.groupToEdit.semesterYear]
+            });
           }
         });
     }
   }
 
-  // createEmail(){
-  //   return this.formBuilder.group{{
-  //     editEmail: ['', Validators.required]
-  //   }}
-  // }
   get major(): any {
     return this.groupForm.get("majorControl");
   }
@@ -285,6 +290,14 @@ export class CreateGroupComponent implements OnInit {
       .setValue(this.selectedCourseGroupDetail.description);
   }
 
+  upload(event: any) {
+    this.selectedFiles = event.target.files;
+    this.isInvalid = false;
+    if (!this.validateFile(this.selectedFiles[0].name)) {
+      this.isInvalid = true;
+      console.log(this.invalidExtension);
+    }
+  }
   onSubmit() {
     const groupFormValues = this.groupForm.value;
     if (this.editMode) {
@@ -316,7 +329,23 @@ export class CreateGroupComponent implements OnInit {
         semesterTerm: groupFormValues.semesterTerm,
         semesterYear: groupFormValues.semesterYear
       };
-      console.log(obj);
+
+      const objUser = {
+        name: groupFormValues.title,
+        description: groupFormValues.description,
+        type: groupFormValues.groupType,
+        semesterTerm: groupFormValues.semesterTerm,
+        semesterYear: groupFormValues.semesterYear
+      };
+
+      console.log(objUser);
+      this.currentFileUpload = this.selectedFiles.item(0);
+      console.log(this.currentFileUpload);
+      const formData = new FormData();
+      formData.append("user", JSON.stringify(objUser));
+      formData.append("file", this.currentFileUpload);
+      console.log(formData);
+
       this.groupDataStorageService.createGroup(obj).subscribe(result => {
         if (result) {
           console.log(result);
@@ -326,5 +355,16 @@ export class CreateGroupComponent implements OnInit {
         }
       });
     }
+  }
+
+  validateFile(name: String) {
+    var fileExt = name.substring(name.lastIndexOf(".") + 1);
+    console.log("Input files extension: " + fileExt);
+    for (let ext of this.validFileExtensions) {
+      if (fileExt.toLowerCase() == ext) {
+        return true;
+      }
+    }
+    return false;
   }
 }

@@ -120,6 +120,16 @@ export class DataStorageService {
     );
   }
 
+  deleteAppointment(id: number) {
+    this.isLoadingSubject.next(true);
+    return this.http
+      .delete<ApiResponse>(this.baseUrlAppointment + "delete/" + id)
+      .pipe(
+        (map(data => data), catchError(error => throwError(error))),
+        finalize(() => this.isLoadingSubject.next(false))
+      );
+  }
+
   sendApptToCal(id: number) {
     this.isLoadingSubject.next(true);
     return this.http
@@ -334,11 +344,13 @@ export class DataStorageService {
   updateRoles(obj: Object) {
     console.log(obj);
     this.isLoadingSubject.next(true);
-    return this.http.put<Object>('http://localhost:8181/api/admin/changeRole', obj).pipe(
-      (map(data => data),
-      catchError(error => throwError(error)),
-      finalize(() => this.isLoadingSubject.next(false)))
-    );
+    return this.http
+      .put<Object>("http://localhost:8181/api/admin/changeRole", obj)
+      .pipe(
+        (map(data => data),
+        catchError(error => throwError(error)),
+        finalize(() => this.isLoadingSubject.next(false)))
+      );
   }
 
   deleteUsers(obj: Object) {
@@ -366,7 +378,7 @@ export class DataStorageService {
       });
   }
 
-  editEvent(obj: Object){
+  editEvent(obj: Object) {
     console.log(obj);
     // this.isLoadingSubject.next(true);
     // return this.http
@@ -378,16 +390,16 @@ export class DataStorageService {
     // );
   }
 
-  deleteEvent(id: number){
+  deleteEvent(id: number) {
     console.log(id);
     // this.isLoadingSubject.next(false);
     // this.http.delete<ApiResponse>('delete url' + id)
-    // .pipe(map(data=>data), 
+    // .pipe(map(data=>data),
     // catchError(error => throwError(error))),
     // finalize(()=>this.isLoadingSubject.next(false));
   }
 
-  deleteCalendar(id: number){
+  deleteCalendar(id: number) {
     console.log(id);
     // this.isLoadingSubject.next(false);
     // this.http.delete<ApiResponse>('delete url' + id)
@@ -395,5 +407,4 @@ export class DataStorageService {
     // catchError(error=>throwError(error))),
     // finalize(()=>this.isLoadingSubject.next(false));
   }
-
 }
