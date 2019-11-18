@@ -1,6 +1,5 @@
 .example-container {
-    display: flex;
-    flex-direction: column;
+    width:60%;
     margin: 20px;
     padding: 10px;
     color: #800029;
@@ -24,6 +23,11 @@
 
   .cancel-button{
     margin-left:20px;
+  }
+
+  .example-chip-list{
+    width:60%;
+    margin-right:5px;
   }
   
   .example-spacer {

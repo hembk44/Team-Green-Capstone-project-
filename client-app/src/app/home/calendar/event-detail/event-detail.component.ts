@@ -4,6 +4,7 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { CalEvent } from '../events.model';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material';
 import { DataStorageService } from '../../shared/data-storage.service';
+import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
   selector: 'app-event-detail',
@@ -12,12 +13,15 @@ import { DataStorageService } from '../../shared/data-storage.service';
 })
 export class EventDetailComponent implements OnInit {
   id:number;
-  event: CalEvent;
+  event: any;
   newEnd: Date;
+  isAppt: boolean;
+  username: string;
 
   constructor(private calService: CalendarService,
     private router: Router,
     private ref: MatDialogRef<EventDetailComponent>,
+    private authService: AuthService,
     private dialog: MatDialog,
     private dataStorage: DataStorageService,
     @Inject(MAT_DIALOG_DATA)public data: CalEvent) { 
@@ -25,11 +29,18 @@ export class EventDetailComponent implements OnInit {
 
   ngOnInit() {
     this.event = this.data;
+    this.username = this.authService.name;
     if(this.event.allDay && this.event.end){
       this.newEnd = this.event.end;
       this.newEnd.setDate(this.event.end.getDate()-1);
       console.log(this.newEnd);
       console.log(this.event.id);
+    }
+    console.log(this.event);
+    if(this.event.extendedProps.timeSlotId){
+      this.isAppt = true;
+    } else{
+      this.isAppt = false;
     }
   }
 

@@ -83,9 +83,7 @@ export class CalendarService{
 
     //sets calendar list
     setCalendars(cals: Calendar[]){
-        console.log(cals);
         this.calendars = cals;
-        console.log(this.calendars);
     }
 
     getEvents(){

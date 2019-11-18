@@ -163,11 +163,17 @@ export class AppointmentCreateComponent implements OnInit {
     // this.emails.push(this.appointmentForm.value.email);
     console.log(appointmentFormValues.dateRange);
     for(let date of appointmentFormValues.dateRange){
+      if(date.start.substring(0,1)!=='1'){
+        date.start = '0'.concat(date.start);
+      }
+      if(date.end.substring(0,1)!=='1'){
+        date.end = '0'.concat(date.end);
+      }
       this.dateRangeArray.push({
         date: date.date.toLocaleDateString(),
         apptimes: [{
-          startTime: '0'.concat(date.start),
-          endTime: '0'.concat(date.end),
+          startTime: date.start,
+          endTime: date.end,
           interv: date.interval
         }]
       })
@@ -191,34 +197,6 @@ export class AppointmentCreateComponent implements OnInit {
       }
     });
 
-    // console.log('sending to calendar')
-    // console.log(this.dateRangeArray);
-    // for(let date of this.dateRangeArray){
-    //   console.log(date);
-    //   const eventDate = date.date;
-    //   console.log(eventDate);
-    //   const eventstart = date.apptimes[0].startTime.substring(0,5).concat(' ').concat(date.apptimes[0].startTime.substring(5,7));
-    //   console.log(eventstart);
-    //   const eventEnd = date.apptimes[date.apptimes.length-1].endTime.substring(0,5).concat(' ').concat(date.apptimes[date.apptimes.length-1].endTime.substring(5,7));
-    //   console.log(eventEnd)
-    //   const eventtimes = new EventTime(eventstart,eventEnd);
-    //   console.log(eventtimes);
-    //   const eventdaterate = new EventDate(eventDate, [eventtimes]);
-    //   console.log(eventdaterate);
-    //   const obj2 = {
-    //     name: appointmentFormValues.title,
-    //     description: appointmentFormValues.description,
-    //     eventdates: [eventdaterate],
-    //     receipients: [this.email],
-    //     location: 'unspecified location'
-    //   }
-    //   console.log(obj2);
-    //   this.dataStorage.storeEvent(obj2).subscribe(result =>{
-    //     if(result){
-    //       this.dataStorage.fetchEvents();
-    //     }
-    //   })
-    // }
   }
 
   groupSelect(){

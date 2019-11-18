@@ -26,11 +26,10 @@ export class CalendarListComponent implements OnInit {
     this.username = this.authService.name;
     this.dataStorage.isLoading.subscribe(loading =>  {
       if(!loading){
-        this.calendars = this.calendarService.getCalendars().filter(cal => cal.createdBy === this.username);
-        this.sharedCals = this.calendarService.getCalendars().filter(cal => cal.createdBy !== this.username);
+        this.calendars = this.calendarService.getCalendars().filter(cal => cal.createdBy.email === this.username);
+        this.sharedCals = this.calendarService.getCalendars().filter(cal => cal.createdBy.email !== this.username);
       }
     })//gets calendars from service
-    console.log(this.calendars);
   }
 
   //toggle view of calendars
