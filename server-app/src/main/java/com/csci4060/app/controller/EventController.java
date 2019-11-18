@@ -66,6 +66,11 @@ public class EventController {
 
 		List<String> actualRecipients = new ArrayList<>();
 
+		String backgroundColor = eventDummy.getBackgroundColor();
+		
+		if(backgroundColor == null) {
+			backgroundColor = "";
+		}
 		for (String each : recepientsEmailList) {
 
 			User recipient = userService.findByEmail(each);
@@ -84,7 +89,7 @@ public class EventController {
 		
 		Event event = new Event(eventDummy.getTitle(), eventDummy.getDescription(), eventDummy.getLocation(),
 				recipientList, eventDummy.getStart(), eventDummy.getEnd(), createdBy, eventDummy.getAllDay(),
-				calendar.getColor(), eventDummy.getBackgroundColor());
+				calendar.getColor(), backgroundColor);
 
 		eventService.save(event);
 

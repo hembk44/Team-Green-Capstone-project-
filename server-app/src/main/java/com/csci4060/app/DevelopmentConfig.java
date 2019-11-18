@@ -28,18 +28,18 @@
 //				roleRepository.save(new Role(RoleName.ROLE_PM));
 //				roleRepository.save(new Role(RoleName.ROLE_ADMIN));
 //				
-//				Set<Role> role = new HashSet<>();
-//				Role userRole = roleRepository.findByName(RoleName.ROLE_ADMIN).get();
-//				role.add(userRole);
-//				
-//				User user = new User("Rohan Maharjan","Rohan9841@gmail.com","Rohan9841@gmail.com","capstone",true);
-//				user.setRoles(role);
-//				
-//				calendarRepository.save(new Calendar("Main","#800029", null, null, user, true, true));
-//				calendarRepository.save(new Calendar("Appointment","#800029", null, null, user, true, true));
-//				calendarRepository.save(new Calendar("Shared Event","#800029", null, null, user, true, true));
-//				
-//				userRepository.save(user);
+////				Set<Role> role = new HashSet<>();
+////				Role userRole = roleRepository.findByName(RoleName.ROLE_ADMIN).get();
+////				role.add(userRole);
+////				
+////				User user = new User("Rohan Maharjan","Rohan9841@gmail.com","Rohan9841@gmail.com","capstone",true);
+////				user.setRoles(role);
+////				
+////				calendarRepository.save(new Calendar("Main","#800029", null, null, user, true, true));
+////				calendarRepository.save(new Calendar("Appointment","#800029", null, null, user, true, true));
+////				calendarRepository.save(new Calendar("Shared Event","#800029", null, null, user, true, true));
+////				
+////				userRepository.save(user);
 //			}
 //		};
 //	}

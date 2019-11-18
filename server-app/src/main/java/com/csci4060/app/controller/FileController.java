@@ -20,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -44,6 +45,7 @@ import com.csci4060.app.services.RoleService;
 import com.csci4060.app.services.UserService;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("api/file")
 public class FileController {
 
