@@ -2,9 +2,11 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { CalendarService } from '../calendar-list/calendar.service';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { CalEvent } from '../events.model';
-import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog, MatSnackBar } from '@angular/material';
 import { DataStorageService } from '../../shared/data-storage.service';
 import { AuthService } from 'src/app/auth/auth.service';
+import { ShareEvent } from './share-event';
+import { RecursiveTemplateAstVisitor } from '@angular/compiler';
 
 @Component({
   selector: 'app-event-detail',
@@ -23,6 +25,7 @@ export class EventDetailComponent implements OnInit {
     private ref: MatDialogRef<EventDetailComponent>,
     private authService: AuthService,
     private dialog: MatDialog,
+    private snackbar: MatSnackBar,
     private dataStorage: DataStorageService,
     @Inject(MAT_DIALOG_DATA)public data: CalEvent) { 
     }
@@ -66,6 +69,32 @@ export class EventDetailComponent implements OnInit {
       if(result === 'confirmed'){
         this.dataStorage.deleteEvent(this.event.id);
       }
+    })
+  }
+
+  shareEvent(){
+    const dialogRef = this.dialog.open(ShareEvent, {
+      width: "400px",
+      height: "350px"
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result !== 'cancel'){
+        const obj = {
+          id: this.event.id,
+          recipients: RecursiveTemplateAstVisitor
+        }
+        this.dataStorage.shareEvent(obj).subscribe(result => {
+          console.log(result);
+        });
+      }
+    })
+
+  }
+
+  confirmAttendance(){
+    this.dataStorage.userConfirmEvent(this.event.id).subscribe(result => {
+      this.snackbar.open(result.message, 'OK',{duration: 5000})
     })
   }
 

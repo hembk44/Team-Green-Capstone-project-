@@ -20,7 +20,8 @@
     <mat-menu #menu class="options-button primary">
         <button mat-menu-item (click)="editEvent()" *ngIf="event.extendedProps.createdBy.email === username" class="option">Edit Event</button>
         <button mat-menu-item (click)="deleteEvent()" *ngIf="event.extendedProps.createdBy.email === username" class="option">Delete</button>
-        <button mat-menu-item *ngIf="event.extendedProps.createdBy.email !== username" class="option">Confirm Attendance</button>
+        <button mat-menu-item (click)="shareEvent()" *ngIf="event.extendedProps.createdBy.email===username" class="option">Share</button>
+        <button mat-menu-item *ngIf="event.extendedProps.createdBy.email !== username" class="option" (click)="confirmAttendance()">Confirm Attendance</button>
         <button mat-menu-item *ngIf="event.extendedProps.createdBy.email === username" class="option">View Attendees</button>
     </mat-menu>
     <mat-hint *ngIf="isAppt">Please see the appointments section to make changes.</mat-hint>

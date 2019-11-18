@@ -4,7 +4,7 @@ import {
   HttpErrorResponse,
   HttpHeaders
 } from "@angular/common/http";
-import { map, tap, catchError, finalize } from "rxjs/operators";
+import { map, tap, catchError, finalize, share } from "rxjs/operators";
 
 import { throwError, Observable, BehaviorSubject } from "rxjs";
 import { ApiResponse } from "src/app/auth/api.response";
@@ -291,6 +291,15 @@ export class DataStorageService {
     );
   }
 
+  shareEvent(obj: Object){
+    console.log(obj);
+    this.isLoadingSubject.next(true);
+    return this.http.post<ApiResponse>(this.baseUrlEvent + share, obj).pipe(
+      (map(data=>data),catchError(error=>throwError(error))),
+      finalize(()=>this.isLoadingSubject.next(false))
+    );
+  }
+
   fetchCalendars() {
     this.isLoadingSubject.next(true);
     this.http
@@ -304,6 +313,16 @@ export class DataStorageService {
         this.calSubject.next(result.result);
         this.calService.setCalendars(result.result);
       });
+  }
+
+  userConfirmEvent(id: number){
+    this.isLoadingSubject.next(true);
+    return this.http.post<ApiResponse>(this.baseUrlEvent + "confirm/" + id, id)
+    .pipe(
+      (map(data => data),
+      catchError(error => throwError(error))),
+      finalize(()=>this.isLoadingSubject.next(false))
+    );
   }
 
   newCalendar(obj: Object) {
@@ -343,21 +362,11 @@ export class DataStorageService {
   updateRoles(obj: Object) {
     console.log(obj);
     this.isLoadingSubject.next(true);
-<<<<<<< HEAD
     return this.http.put<ApiResponse>('http://localhost:8181/api/admin/changeRole', obj).pipe(
       (map(data => data),
       catchError(error => throwError(error)),
       finalize(() => this.isLoadingSubject.next(false)))
     );
-=======
-    return this.http
-      .put<Object>("http://localhost:8181/api/admin/changeRole", obj)
-      .pipe(
-        (map(data => data),
-        catchError(error => throwError(error)),
-        finalize(() => this.isLoadingSubject.next(false)))
-      );
->>>>>>> 9c8d87155c0f7d6ac9ad101b5a72d949a6a6f690
   }
 
   deleteUsers(obj: Object) {
