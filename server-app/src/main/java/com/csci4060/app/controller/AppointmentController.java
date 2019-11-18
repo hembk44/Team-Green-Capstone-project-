@@ -525,21 +525,31 @@ public class AppointmentController extends ExceptionResolver {
 		User currentUser = userService.findByUsername(username);
 
 		List<TimeSlots> allSlotsFromAppointment = new ArrayList<TimeSlots>();
-		for (Appointment app : appointmentService.findAllByCreatedBy(currentUser)) {
-			allSlotsFromAppointment.addAll(timeSlotsService.findAllByAppointment(app));
+		List<Appointment> allAppointments = appointmentService.findAllByCreatedBy(currentUser);
+		
+		if (allAppointments == null)
+		{
+			return new APIresponse(HttpStatus.BAD_REQUEST.value(), "You have not created any appointment! Please create appointment and assign appointees!",
+					null);
 		}
-
-		List<TimeSlotResponse> slotResponses = new ArrayList<TimeSlotResponse>();
-		for (TimeSlots slots : allSlotsFromAppointment) {
-			if (slots.getSelectedBy() != null) {
-				slotResponses.add(new TimeSlotResponse(slots.getId(), slots.getStartTime(), slots.getEndTime(),
-						slots.getAppdates().getDate(), slots.getSelectedBy().getName(),
-						slots.getSelectedBy().getEmail(), slots.getAppointment().getName(),
-						slots.getAppointment().getDescription(), slots.getAppointment().getCreatedBy().getName()));
+		else
+		{
+			for (Appointment app : allAppointments) {
+				allSlotsFromAppointment.addAll(timeSlotsService.findAllByAppointment(app));
 			}
+	
+			List<TimeSlotResponse> slotResponses = new ArrayList<TimeSlotResponse>();
+			for (TimeSlots slots : allSlotsFromAppointment) {
+				if (slots.getSelectedBy() != null) {
+					slotResponses.add(new TimeSlotResponse(slots.getId(), slots.getStartTime(), slots.getEndTime(),
+							slots.getAppdates().getDate(), slots.getSelectedBy().getName(),
+							slots.getSelectedBy().getEmail(), slots.getAppointment().getName(),
+							slots.getAppointment().getDescription(), slots.getAppointment().getCreatedBy().getName()));
+				}
+			}
+			return new APIresponse(HttpStatus.OK.value(), "All  selected time slots from appointments successfully sent.",
+					slotResponses);
 		}
-		return new APIresponse(HttpStatus.OK.value(), "All  selected time slots from appointments successfully sent.",
-				slotResponses);
 
 	}
 
