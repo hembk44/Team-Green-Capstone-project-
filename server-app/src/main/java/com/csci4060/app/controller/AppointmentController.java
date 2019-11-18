@@ -497,15 +497,10 @@ public class AppointmentController extends ExceptionResolver {
 			System.out.println(endTime);
 
 			Event event = new Event(appointment.getName(), appointment.getDescription(), appointment.getLocation(),
-<<<<<<< HEAD
 
-					null, startTime, endTime, currentUser, false, calendar.getColor(), "",slot.getId());
-
-			
-=======
 					null, startTime, endTime, currentUser, false, calendar.getColor(), "", slot.getId());
 
->>>>>>> cbe404c6ed217a86d40b7a1456ee88213233010c
+
 			eventList.add(event);
 			System.out.println(event);
 			eventService.save(event);
