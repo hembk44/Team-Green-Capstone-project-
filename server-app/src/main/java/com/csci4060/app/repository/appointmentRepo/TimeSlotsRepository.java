@@ -13,4 +13,6 @@ public interface TimeSlotsRepository extends JpaRepository<TimeSlots, Long>{
 
 	Optional<List<TimeSlots>> findAllByAppointment(Appointment appointment);
 	Optional<List<TimeSlots>> findAllBySelectedBy(User selectedBy);
+	
+	void delete(TimeSlots timeslots);
 }

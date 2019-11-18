@@ -15,4 +15,6 @@ public interface AppointmentRepository extends JpaRepository<Appointment,Long>{
 	Optional<List<Appointment>> findAllByCreatedBy(User createdBy);
 	
 	Optional<Appointment> findById(Long id);
+	
+	void delete(Appointment appointment);
 }

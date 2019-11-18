@@ -17,6 +17,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -378,85 +379,6 @@ public class AppointmentController extends ExceptionResolver {
 		return new APIresponse(HttpStatus.GONE.value(), "User has selected the timeslot.", response);
 	}
 
-//	@GetMapping(path = "/sendToCalendar", produces = "application/json")
-//	@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-//	public APIresponse getCalendarAppointments() {
-//		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//
-//		String username = "";
-//
-//		if (principal instanceof UserDetails) {
-//			username = ((UserDetails) principal).getUsername();
-//		}
-//
-//		User currentUser = userService.findByUsername(username);
-//		Set<Role> role = currentUser.getRoles();
-//
-//		Boolean contains = false;
-//		Iterator<Role> value = role.iterator();
-//
-//		while (value.hasNext()) {
-//			Role role2 = (Role) value.next();
-//
-//			if (role2.getName().toString().equals("ROLE_USER")) {
-//				contains = true;
-//			}
-//
-//		}
-//
-//		if (contains) {
-//			List<TimeSlots> slotsToCalendar = timeSlotsService.findAllBySelectedBy(currentUser);
-//			List<TimeSlotResponse> slotResponses = new ArrayList<TimeSlotResponse>();
-//
-//			if (slotsToCalendar.size() == 0) {
-//				return new APIresponse(HttpStatus.OK.value(), "User doesnt have any appointments right now!", null);
-//			}
-//
-//			else {
-//				for (TimeSlots timeSlots : slotsToCalendar) {
-//					slotResponses.add(new TimeSlotResponse(timeSlots.getStartTime(), timeSlots.getEndTime(),
-//							timeSlots.getAppdates().getDate(), timeSlots.getAppointment().getName(),
-//							timeSlots.getAppointment().getDescription(),
-//							timeSlots.getAppointment().getCreatedBy().getName()));
-//
-//				}
-//				return new APIresponse(HttpStatus.OK.value(),
-//						"All  selected time slots from appointments successfully sent.", slotResponses);
-//			}
-//
-//		}
-//
-//		else {
-//			List<TimeSlots> slotsToCalendar = new ArrayList<TimeSlots>();
-//			List<TimeSlotResponse> slotResponses = new ArrayList<TimeSlotResponse>();
-//
-//			List<Appointment> appoi = appointmentService.findAllByCreatedBy(currentUser);
-//			for (Appointment appo : appoi) {
-//				List<TimeSlots> slots = timeSlotsService.findAllByAppointment(appo);
-//				slotsToCalendar.addAll(slots);
-//			}
-//
-//			if (slotsToCalendar.size() == 0) {
-//				return new APIresponse(HttpStatus.OK.value(), "User doesnt have any appointments right now!", null);
-//			}
-//
-//			else {
-//
-//				for (TimeSlots timeSlots : slotsToCalendar) {
-//					slotResponses.add(new TimeSlotResponse(timeSlots.getStartTime(), timeSlots.getEndTime(),
-//							timeSlots.getAppdates().getDate(), timeSlots.getAppointment().getName(),
-//							timeSlots.getAppointment().getDescription(),
-//							timeSlots.getAppointment().getCreatedBy().getName()));
-//
-//				}
-//				return new APIresponse(HttpStatus.OK.value(),
-//						"All  selected time slots from appointments successfully sent.", slotResponses);
-//			}
-//
-//		}
-//
-//	}
-
 	@PostMapping(path = "/sendToCalendar/{appointmentId}", produces = "application/json")
 	@PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
 
@@ -571,6 +493,36 @@ public class AppointmentController extends ExceptionResolver {
 		return new APIresponse(HttpStatus.OK.value(), "All  selected time slots from appointments successfully sent.",
 				slotResponses);
 
+	}
+	
+	@DeleteMapping(path = "/delete/{id}")
+	@PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
+	public APIresponse deleteAppointment(@PathVariable("id") Long appointmentId) {
+		
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		String username = "";
+
+		if (principal instanceof UserDetails) {
+			username = ((UserDetails) principal).getUsername();
+		}
+
+		User user = userService.findByUsername(username);
+
+		Appointment appointment = appointmentService.findById(appointmentId);
+		
+		if (appointment == null) {
+			return new APIresponse(HttpStatus.NOT_FOUND.value(), "Appointment with id " + appointmentId + " does not exists.", null);
+		}
+
+		if (appointment.getCreatedBy() != user) {
+			return new APIresponse(HttpStatus.FORBIDDEN.value(), "You did not create the appointment. Authorization denied!",
+					null);
+		}
+		
+		appointmentService.delete(appointment);
+		
+		return new APIresponse(HttpStatus.OK.value(), "Appointment was successfully deleted.",appointment);
 	}
 
 }

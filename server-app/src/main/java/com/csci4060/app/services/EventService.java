@@ -16,4 +16,6 @@ public interface EventService {
 	Event findById(Long id);
 	
 	Event findByTimeSlotId(Long timeSlotId);
+	
+	void delete(Event event);
 }

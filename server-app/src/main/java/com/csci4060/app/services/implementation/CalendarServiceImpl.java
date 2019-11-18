@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.csci4060.app.model.User;
 import com.csci4060.app.model.calendar.Calendar;
+import com.csci4060.app.model.event.Event;
 import com.csci4060.app.repository.calendarRepo.CalendarRepository;
 import com.csci4060.app.services.CalendarService;
 
@@ -64,5 +65,15 @@ public class CalendarServiceImpl implements CalendarService {
 		}
 		return null;
  	}
+
+	@Override
+	public List<Calendar> findAllByEvents(Event event) {
+		Optional<List<Calendar>> optCalendarList = calendarRepo.findAllByEvents(event);
+
+		if (optCalendarList.isPresent()) {
+			return optCalendarList.get();
+		}
+		return null;
+	}
 
 }

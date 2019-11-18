@@ -13,4 +13,6 @@ public interface AppointmentService {
 	List<Appointment> findAllByCreatedBy(User user);
 	
 	Appointment findById(Long id);
+	
+	void delete(Appointment appointment);
 }

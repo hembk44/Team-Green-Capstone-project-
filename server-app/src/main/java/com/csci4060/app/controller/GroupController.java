@@ -326,7 +326,7 @@ public class GroupController {
 		Group group = groupService.findById(groupId);
 
 		if (group == null) {
-			return new APIresponse(HttpStatus.OK.value(), "Group with id " + groupId + " does not exists.", null);
+			return new APIresponse(HttpStatus.NOT_FOUND.value(), "Group with id " + groupId + " does not exists.", null);
 		}
 
 		if (group.getCreatedBy() != user) {

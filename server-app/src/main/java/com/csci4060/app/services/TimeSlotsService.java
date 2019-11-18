@@ -13,5 +13,6 @@ public interface TimeSlotsService {
 	
 	TimeSlots findById(Long id);
 	List<TimeSlots> findAllBySelectedBy(User selectedBy);
- 
+	
+	void delete(TimeSlots timeslots);
 }

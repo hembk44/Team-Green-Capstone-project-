@@ -14,11 +14,13 @@ public class AppointmentDummy {
 	
 	@NotEmpty(message="Name must not be empty")
 	String name;
+	
 	String description;
-	List<@NotEmpty AppointmentDate> appdates;
+	
+	List<@NotNull AppointmentDate> appdates;
 	
 	
-	List<@NotEmpty @Email(message="Email is not valid") String> recepients;
+	List<@Email(message="Email is not valid") String> recepients;
 	
 	String location;
 	

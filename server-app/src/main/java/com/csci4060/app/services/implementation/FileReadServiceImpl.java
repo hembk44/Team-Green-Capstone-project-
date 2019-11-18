@@ -2,7 +2,6 @@ package com.csci4060.app.services.implementation;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -21,10 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.csci4060.app.configuration.fileStorage.FileReadException;
 import com.csci4060.app.model.Role;
-import com.csci4060.app.model.RoleName;
-import com.csci4060.app.model.User;
-import com.csci4060.app.model.authentication.ConfirmationToken;
-import com.csci4060.app.services.ConfirmationTokenService;
 import com.csci4060.app.model.User;
 import com.csci4060.app.services.FileReadService;
 import com.csci4060.app.services.RoleService;
