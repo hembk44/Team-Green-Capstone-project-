@@ -9,7 +9,7 @@
             <p>{{user.name}}({{user.email}}) &nbsp;&nbsp;
             <mat-form-field style="width:20%">
                 <mat-label>Role</mat-label>
-                <mat-select [(value)]="user.role">
+                <mat-select [(value)]="user.roles">
                     <mat-option value="ROLE_ADMIN" (click)="addUser(user.name,user.email,'ROLE_ADMIN')">Admin</mat-option>
                     <mat-option value="ROLE_PM" (click)="addUser(user.name,user.email,'ROLE_PM')">Faculty</mat-option>
                     <mat-option value="ROLE_MODERATOR" (click)="addUser(user.name,user.email,'ROLE_MO')">Moderator</mat-option>

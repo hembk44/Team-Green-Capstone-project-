@@ -77,7 +77,7 @@ const routes: Routes = [
         path: "appointment",
         component: AppointmentComponent,
         children: [
-          { path: "", component: AppointmentCreateComponent },
+          { path: "", redirectTo:"sent", pathMatch:"full" },
           {
             path: "create",
             component: AppointmentCreateComponent

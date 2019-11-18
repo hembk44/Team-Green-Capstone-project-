@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog, MatSnackBar } from '@angular/material';
 import { DataStorageService } from '../../shared/data-storage.service';
 
 @Component({
@@ -15,7 +15,8 @@ export class UpdateRolesComponent implements OnInit {
 
   constructor(
     private dialog: MatDialog,
-    private dataStorage: DataStorageService
+    private dataStorage: DataStorageService,
+    private snackbar: MatSnackBar
   ) { }
 
   ngOnInit() {
@@ -68,14 +69,15 @@ export class UpdateRolesComponent implements OnInit {
         if(result === 'confirmed'){
           this.dataStorage.updateRoles(this.updates).subscribe(result => {
             console.log(result);
+            this.snackbar.open(result.message, 'OK', {duration:3000})
           });
           this.updateEmails = [];
           this.updates = [];
-          console.log(this.updates);
-          console.log(this.updateEmails);
+          this.dataStorage.fetchUsers();
         }
+        
       })
-      this.dataStorage.fetchUsers();
+      
     }else{
       alert('Please make some changes first');
     }

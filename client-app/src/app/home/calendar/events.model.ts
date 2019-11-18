@@ -10,6 +10,7 @@ export class CalEvent{
         public start: Date,
         public end: Date,
         public allDay: boolean,
-        public email?: string[],
+        public timeSlotId: number,
+        public recipients: any[],
     ){}
 }

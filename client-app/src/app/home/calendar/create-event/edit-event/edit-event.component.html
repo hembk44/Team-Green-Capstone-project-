@@ -59,7 +59,7 @@
         [value]="event.start.toLocaleTimeString([], {hour: '2-digit',  minute:'2-digit'})"
         [ngxTimepicker]="starttime"
         readonly>
-        <ngx-material-timepicker #starttime [minutesGap]="5" [appendToInput]="true"></ngx-material-timepicker>
+        <ngx-material-timepicker #starttime [minutesGap]="5" [appendToInput]="true" [theme]="timeTheme"></ngx-material-timepicker>
       </mat-form-field><br>
       <mat-form-field id="end-date">
         <input
@@ -79,7 +79,7 @@
         [value]="event.end.toLocaleTimeString([], {hour: '2-digit',  minute:'2-digit'})"
         [ngxTimepicker]="endtime"
         readonly>
-        <ngx-material-timepicker #endtime [minutesGap]="5" [appendToInput]="true"></ngx-material-timepicker>
+        <ngx-material-timepicker #endtime [minutesGap]="5" [appendToInput]="true" [theme]="timeTheme"></ngx-material-timepicker>
       </mat-form-field><br>
       <mat-form-field id="primary-color">
         <input

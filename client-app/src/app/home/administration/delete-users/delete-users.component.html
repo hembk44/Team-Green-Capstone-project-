@@ -1,10 +1,10 @@
 <mat-card style="margin-top:2%;height:60%">
-    <mat-card-header>
-        <mat-card-title>
-            Delete Users
-        </mat-card-title>
-        <mat-toolbar style="width:80%;">
+        <mat-toolbar style="width:100%;">
             <mat-toolbar-row>
+                <h5>
+                    Delete Users
+                </h5>
+                <span class="spacer"></span>
                 <mat-form-field style="width:50%;">
                     <input
                         type="text"
@@ -17,7 +17,6 @@
                 <button mat-raised-button color="warn" (click)="onSubmit()" class="submit-button">OK</button>
             </mat-toolbar-row>        
         </mat-toolbar>
-    </mat-card-header>
     <mat-card-content class="users-wrap">
         <mat-checkbox *ngFor="let user of users | filterMember: searchText" color="warn" (click)="addUser(user.name,user.email)">{{user.name}} ({{user.email}})</mat-checkbox>
     </mat-card-content>

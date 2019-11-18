@@ -74,7 +74,7 @@ export class CreateEventComponent implements OnInit {
     console.log(this.username);
     this.calendars = this.calService
       .getCalendars()
-      .filter(cal => cal.createdBy === this.username);
+      .filter(cal => cal.createdBy.email === this.username);
     console.log(this.calendars);
     this.eventForm = new FormGroup({
       title: new FormControl("", [Validators.required]),
@@ -155,6 +155,7 @@ export class CreateEventComponent implements OnInit {
         };
       }
 
+      console.log(this.obj);
       //sending to database
       this.dataStorage.storeEvent(this.obj).subscribe(result => {
         if (result) {

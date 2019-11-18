@@ -8,6 +8,7 @@ import { AuthService } from 'src/app/auth/auth.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ENTER, COMMA } from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material';
+import { NgxMaterialTimepickerTheme } from 'ngx-material-timepicker';
 
 @Component({
   selector: 'app-edit-event',
@@ -35,6 +36,21 @@ export class EditEventComponent implements OnInit {
   addOnBlur = true;
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
 
+  //theme for time picker
+  timeTheme: NgxMaterialTimepickerTheme={
+    container: {
+      bodyBackgroundColor: 'darkgrey',
+      buttonColor: 'white'
+    },
+    dial: {
+      dialBackgroundColor: 'rgb(185, 163, 90)'
+    },
+    clockFace: {
+      clockHandColor: '#800029',
+
+    }
+  }
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -44,17 +60,22 @@ export class EditEventComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.dataStorage.fetchCalendars();
+    this.dataStorage.isLoading.subscribe(loading => {
+      if(!loading){
+        this.calendars = this.calService.getCalendars();
+      }
+    })
     this.route.params.subscribe((params: Params) => {
       this.id = +params["id"];
     });
     this.event = this.calService.getEvent(this.id);
     console.log(this.event);
-    this.emails=this.event.email;
     this.newEnd = this.event.end;
     this.newEnd.setDate(this.newEnd.getDate()-1);
     this.primaryColor = this.event.backgroundColor;
     this.username = this.authService.name;
-    this.calendars=this.calService.getCalendars().filter(cal => cal.createdBy === this.username);
+    this.calendars=this.calService.getCalendars().filter(cal => cal.createdBy.email === this.username);
     this.selectedCal = this.calService.getEventCal(this.event);
     console.log(this.selectedCal);
     this.allDay=(this.event.allDay);
@@ -72,6 +93,10 @@ export class EditEventComponent implements OnInit {
       allDay: new FormControl(this.event.allDay),
       calendar: new FormControl([Validators.required]),
     })
+
+    for(let user of this.event.recipients){
+      this.emails.push(user.email);
+    }
   }
 
   getErrorMessage(){

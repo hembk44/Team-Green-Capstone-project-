@@ -8,10 +8,10 @@
 <div class="user-wrap">
     <div *ngFor="let user of data">
         <p class="user"><mat-icon>person_outline</mat-icon>{{user.name}} - 
-            <span *ngIf="user.role==='ROLE_ADMIN'">Admin</span>
-            <span *ngIf="user.role==='ROLE_PM'">Faculty</span>
-            <span *ngIf="user.role==='ROLE_MO'">Moderator</span>
-            <span *ngIf="user.role==='ROLE_USER'">Student</span>
+            <span *ngIf="user.roles==='ROLE_ADMIN'">Admin</span>
+            <span *ngIf="user.roles==='ROLE_PM'">Faculty</span>
+            <span *ngIf="user.roles==='ROLE_MO'">Moderator</span>
+            <span *ngIf="user.roles==='ROLE_USER'">Student</span>
         </p>
     </div>
 </div>

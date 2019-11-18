@@ -17,7 +17,7 @@ export class CalendarItemComponent implements OnInit {
   @Input()index: number;//index of calendar in list
   @Input()calendar: Calendar;//calendar object to show
   checked = true;
-  username;
+  username: string;
 
   constructor(private calService: CalendarService,
     private dataStorage: DataStorageService,
@@ -25,7 +25,6 @@ export class CalendarItemComponent implements OnInit {
     private dialog: MatDialog) { }
 
   ngOnInit() {
-    console.log(this.calendar);
     this.username = this.authService.name;
   }
   
@@ -54,6 +53,7 @@ export class CalendarItemComponent implements OnInit {
   shareCal(){
     this.dialog.open(ShareCalendarComponent, {
       width: "500px",
+      height:"300px",
       data: this.calendar
     });
   }

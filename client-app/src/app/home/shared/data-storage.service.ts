@@ -114,7 +114,7 @@ export class DataStorageService {
 
   storeAppointment(obj: Object) {
     this.isLoadingSubject.next(true);
-    return this.http.post<Object>(this.baseUrlAppointment + "set", obj).pipe(
+    return this.http.post<ApiResponse>(this.baseUrlAppointment + "set", obj).pipe(
       (map(data => data), catchError(error => throwError(error))),
       finalize(() => this.isLoadingSubject.next(false))
     );
@@ -301,7 +301,6 @@ export class DataStorageService {
         finalize(() => this.isLoadingSubject.next(false)))
       )
       .subscribe((result: ApiResponse) => {
-        console.log(result.result);
         this.calSubject.next(result.result);
         this.calService.setCalendars(result.result);
       });
@@ -344,6 +343,13 @@ export class DataStorageService {
   updateRoles(obj: Object) {
     console.log(obj);
     this.isLoadingSubject.next(true);
+<<<<<<< HEAD
+    return this.http.put<ApiResponse>('http://localhost:8181/api/admin/changeRole', obj).pipe(
+      (map(data => data),
+      catchError(error => throwError(error)),
+      finalize(() => this.isLoadingSubject.next(false)))
+    );
+=======
     return this.http
       .put<Object>("http://localhost:8181/api/admin/changeRole", obj)
       .pipe(
@@ -351,6 +357,7 @@ export class DataStorageService {
         catchError(error => throwError(error)),
         finalize(() => this.isLoadingSubject.next(false)))
       );
+>>>>>>> 9c8d87155c0f7d6ac9ad101b5a72d949a6a6f690
   }
 
   deleteUsers(obj: Object) {

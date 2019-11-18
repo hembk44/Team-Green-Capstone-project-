@@ -4,7 +4,14 @@
 }
 .options-button{
     margin-bottom: 10px;
+    color: #800029;
 }
+
+.option:hover{
+    background-color: #800029;
+    color: white;
+}
+
 .spacer{
     flex: 1 1 auto;
 }

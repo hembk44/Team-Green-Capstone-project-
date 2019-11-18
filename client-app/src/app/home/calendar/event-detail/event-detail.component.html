@@ -16,10 +16,12 @@
     </div>
     <p *ngIf="event.extendedProps.location != ''"><b>Location:</b> {{ event.extendedProps.location }}</p>
     <p *ngIf="event.extendedProps.description != ''"><b>Description:</b> {{ event.extendedProps.description }}</p>
-    <button mat-raised-button [matMenuTriggerFor]="menu" class="options-button">Options</button> 
-    <mat-menu #menu>
-        <button mat-menu-item (click)="editEvent()">Edit Event</button>
-        <button mat-menu-item (click)="deleteEvent()">Delete</button>
-        <button mat-menu-item>Confirm Attendance</button>
+    <button mat-raised-button [matMenuTriggerFor]="menu" class="options-button" *ngIf="!isAppt">Options</button> 
+    <mat-menu #menu class="options-button primary">
+        <button mat-menu-item (click)="editEvent()" *ngIf="event.extendedProps.createdBy.email === username" class="option">Edit Event</button>
+        <button mat-menu-item (click)="deleteEvent()" *ngIf="event.extendedProps.createdBy.email === username" class="option">Delete</button>
+        <button mat-menu-item *ngIf="event.extendedProps.createdBy.email !== username" class="option">Confirm Attendance</button>
+        <button mat-menu-item *ngIf="event.extendedProps.createdBy.email === username" class="option">View Attendees</button>
     </mat-menu>
+    <mat-hint *ngIf="isAppt">Please see the appointments section to make changes.</mat-hint>
 </div>

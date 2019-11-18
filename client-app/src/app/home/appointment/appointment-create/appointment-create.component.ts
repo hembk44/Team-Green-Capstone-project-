@@ -57,6 +57,21 @@ export class AppointmentCreateComponent implements OnInit {
     }
   }
 
+  get date(){
+    return this.formBuilder.group({
+      date: ["", Validators.required],
+      time: this.formBuilder.array([this.time])
+    })
+  }
+
+  get time(){
+    return this.formBuilder.group({
+      start: ["", Validators.required],
+      end: ["", Validators.required],
+      interval: ["", Validators.required]
+    })
+  }
+
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
@@ -79,7 +94,7 @@ export class AppointmentCreateComponent implements OnInit {
     let description = '';
     let location = '';
     let email = this.email;
-    let dateRange = new FormArray([]);
+    let dateRange = new FormArray([this.date]);
 
     this.appointmentForm = new FormGroup({
       'title': new FormControl(title,[Validators.required]),
@@ -95,18 +110,19 @@ export class AppointmentCreateComponent implements OnInit {
   }
 
   addDate(){
-    (<FormArray>this.appointmentForm.get('dateRange')).push(
-      this.formBuilder.group({
-        date:[''],
-        start:[''],
-        end: [''],
-        interval:['']
-      })
-    );
+    (<FormArray>this.appointmentForm.get('dateRange')).push(this.date);
   }
 
   deleteDate(index:number){
     (<FormArray>this.appointmentForm.get('dateRange')).removeAt(index);
+  }
+
+  addTime(date){
+    date.get('time').push(this.time);
+  }
+
+  deleteTime(date, time){
+    date.get('time').removeAt(time);
   }
 
   // addEmails() {
@@ -156,21 +172,28 @@ export class AppointmentCreateComponent implements OnInit {
       this.dateRangeArray = result;
     });
   }
-  y;
 
   onSubmit() {
     const appointmentFormValues = this.appointmentForm.value;
     // this.emails.push(this.appointmentForm.value.email);
     console.log(appointmentFormValues.dateRange);
     for(let date of appointmentFormValues.dateRange){
-      this.dateRangeArray.push({
-        date: date.date,
-        apptimes: [{
-          startTime: '0'.concat(date.start),
-          endTime: '0'.concat(date.end),
-          interv: date.interval
-        }]
-      })
+      for(let time of date.time){
+        if(time.start.substring(1,2)===':'){
+          time.start = '0'.concat(time.start);
+        }
+        if(time.end.substring(1,2)===':'){
+          time.end='0'.concat(time.end);
+        }
+        this.dateRangeArray.push({
+          date: date.date.toLocaleDateString(),
+          apptimes: [{
+            startTime: time.start,
+            endTime: time.end,
+            interv: time.interval
+          }]
+        })
+      }
     }
     const obj = {
       name: appointmentFormValues.title,
@@ -184,41 +207,14 @@ export class AppointmentCreateComponent implements OnInit {
       if (result) {
         console.log(result);
         this.dataStorage.fetchAppointment();
-        // console.log(result.result.id);
-        // this.dataStorage.sendApptToCal(result.result.id).subscribe(result => {
-        //   console.log(result);
-        // });
+        console.log(result.result.id);
+        this.dataStorage.sendApptToCal(result.result.id).subscribe(result => {
+          console.log(result);
+          this.router.navigate(["home/appointment/sent"])
+        });
       }
     });
 
-    // console.log('sending to calendar')
-    // console.log(this.dateRangeArray);
-    // for(let date of this.dateRangeArray){
-    //   console.log(date);
-    //   const eventDate = date.date;
-    //   console.log(eventDate);
-    //   const eventstart = date.apptimes[0].startTime.substring(0,5).concat(' ').concat(date.apptimes[0].startTime.substring(5,7));
-    //   console.log(eventstart);
-    //   const eventEnd = date.apptimes[date.apptimes.length-1].endTime.substring(0,5).concat(' ').concat(date.apptimes[date.apptimes.length-1].endTime.substring(5,7));
-    //   console.log(eventEnd)
-    //   const eventtimes = new EventTime(eventstart,eventEnd);
-    //   console.log(eventtimes);
-    //   const eventdaterate = new EventDate(eventDate, [eventtimes]);
-    //   console.log(eventdaterate);
-    //   const obj2 = {
-    //     name: appointmentFormValues.title,
-    //     description: appointmentFormValues.description,
-    //     eventdates: [eventdaterate],
-    //     receipients: [this.email],
-    //     location: 'unspecified location'
-    //   }
-    //   console.log(obj2);
-    //   this.dataStorage.storeEvent(obj2).subscribe(result =>{
-    //     if(result){
-    //       this.dataStorage.fetchEvents();
-    //     }
-    //   })
-    // }
   }
 
   groupSelect(){

@@ -24,13 +24,14 @@ export class ShareCalendarComponent implements OnInit {
     private ref: MatDialogRef<ShareCalendarComponent>,
     private dataStorage: DataStorageService,
     private dialog: MatDialog,
-    @Inject(MAT_DIALOG_DATA)public data: Calendar
+    @Inject(MAT_DIALOG_DATA)public data: any
   ) { }
 
   ngOnInit() {
-    this.emails = this.data.recipients;
-    if(!this.emails){
-      this.emails = [];
+    this.emails = [];
+    console.log(this.data);
+    for(let user of this.data.shareduser){
+      this.emails.push(user.email);
     }
     this.shareForm = new FormGroup({
       recipients: new FormControl()

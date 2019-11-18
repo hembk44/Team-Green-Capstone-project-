@@ -3,7 +3,7 @@
   flex-direction: column;
   margin: 20px;
   padding: 10px;
-  width: 100%;
+  width: 80%;
   color: #800029;
   border: #800029 solid 1px;
   background-color: white;
@@ -40,4 +40,9 @@
   border: solid 0.5pt #800029;
   border-radius: 5px;
   width:100%;
+  margin-bottom:5px;
+}
+
+.time{
+  margin-left:10px;
 }
