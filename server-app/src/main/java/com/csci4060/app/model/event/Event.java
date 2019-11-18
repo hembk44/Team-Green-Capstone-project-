@@ -9,8 +9,6 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-
 import com.csci4060.app.model.User;
 import lombok.Data;
 
