@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -129,6 +130,19 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
 
 		if (optUser.isPresent()) {
 			return optUser.get();
+		}
+		
+		return null;
+
+	}
+
+
+	@Override
+	public List<User> findAllUserExcept(String userEmail) {
+		Optional<List<User>> allUsers = userRepo.findAllByEmailNot(userEmail);
+
+		if (allUsers.isPresent()) {
+			return allUsers.get();
 		}
 		
 		return null;

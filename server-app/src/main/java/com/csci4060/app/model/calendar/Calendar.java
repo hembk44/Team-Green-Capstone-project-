@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import com.csci4060.app.model.User;
@@ -25,7 +26,7 @@ public class Calendar {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	long id;
 	
-	@NotNull
+	@NotEmpty(message= "Calendar name must not be empty!")
 	String name;
 	
 	String color;
