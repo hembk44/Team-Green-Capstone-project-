@@ -108,6 +108,7 @@ import { ScheduledAppointmentSentPipe } from "./home/appointment/scheduled-appoi
 import { GroupEditComponent } from "./home/group/group-edit/group-edit.component";
 import { MessageGroupComponent } from "./home/group/message-group/message-group.component";
 import { ScheduledAppointmentReceivedPipe } from './home/appointment/scheduled-appointments/scheduled-appointment-received.pipe';
+import { ChangePasswordComponent } from './change-password/change-password.component';
 
 @NgModule({
   // declarations: [
@@ -202,7 +203,8 @@ import { ScheduledAppointmentReceivedPipe } from './home/appointment/scheduled-a
     GroupEditComponent,
     MessageGroupComponent,
     RoleConfirm,
-    ScheduledAppointmentReceivedPipe
+    ScheduledAppointmentReceivedPipe,
+    ChangePasswordComponent
   ],
   imports: [
     BrowserModule,

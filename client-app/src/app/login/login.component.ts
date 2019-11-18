@@ -29,14 +29,14 @@ export class LoginComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    // if (this.tokenStorage.getToken()) {
-    //   this.isLoggedIn = true;
-    //   this.roles = this.tokenStorage.getAuthorities();
-    // }
     this.loginForm = this.formBuilder.group({
       email: ["", Validators.required],
       password: ["", Validators.required]
     });
+  }
+
+  forgotPassword() {
+    this.router.navigate(["forgot-password"]);
   }
 
   onSubmit() {
