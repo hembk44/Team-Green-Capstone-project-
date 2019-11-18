@@ -36,6 +36,7 @@ import { CreateGroupComponent } from "./home/group/create-group/create-group.com
 import { GroupDetailComponent } from "./home/group/group-detail/group-detail.component";
 import { AdministrationComponent } from "./home/administration/administration.component";
 import { GroupEditComponent } from "./home/group/group-edit/group-edit.component";
+import { ChangePasswordComponent } from "./change-password/change-password.component";
 
 const routes: Routes = [
   {
@@ -49,6 +50,12 @@ const routes: Routes = [
 
     component: LoginComponent
   },
+  {
+    path: "forgot-password",
+
+    component: ChangePasswordComponent
+  },
+
   {
     path: "signup",
     component: RegisterComponent
