@@ -164,7 +164,7 @@ export class AppointmentCreateComponent implements OnInit {
     console.log(appointmentFormValues.dateRange);
     for(let date of appointmentFormValues.dateRange){
       this.dateRangeArray.push({
-        date: date.date,
+        date: date.date.toLocaleDateString(),
         apptimes: [{
           startTime: '0'.concat(date.start),
           endTime: '0'.concat(date.end),
@@ -184,10 +184,10 @@ export class AppointmentCreateComponent implements OnInit {
       if (result) {
         console.log(result);
         this.dataStorage.fetchAppointment();
-        // console.log(result.result.id);
-        // this.dataStorage.sendApptToCal(result.result.id).subscribe(result => {
-        //   console.log(result);
-        // });
+        console.log(result.result.id);
+        this.dataStorage.sendApptToCal(result.result.id).subscribe(result => {
+          console.log(result);
+        });
       }
     });
 

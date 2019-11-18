@@ -21,15 +21,15 @@ export class UpdateRolesComponent implements OnInit {
   ngOnInit() {
     this.updates = [];
     this.updateEmails = [];
-    this.dataStorage.fetchUsers();
-    this.dataStorage.isLoading.subscribe((loading => {
-      if(!loading){
-        this.users = this.dataStorage.users;
-        console.log(this.users);
-      }
-    }));
+    // this.dataStorage.fetchUsers();
+    // this.dataStorage.isLoading.subscribe((loading => {
+    //   if(!loading){
+    //     this.users = this.dataStorage.users;
+    //     console.log(this.users);
+    //   }
+    // }));
     
-    this.users.sort((a, b) => a.name.toLowerCase() < b.name.toLowerCase() ? -1 : a.name.toLowerCase() > b.name.toLowerCase() ? 1 : 0);
+    // this.users.sort((a, b) => a.name.toLowerCase() < b.name.toLowerCase() ? -1 : a.name.toLowerCase() > b.name.toLowerCase() ? 1 : 0);
   }
 
   addUser(name: string, email:string, role:string){
