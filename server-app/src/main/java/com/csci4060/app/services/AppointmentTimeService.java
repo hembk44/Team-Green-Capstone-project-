@@ -3,4 +3,6 @@ import com.csci4060.app.model.appointment.AppointmentTime;
 
 public interface AppointmentTimeService {
 	AppointmentTime save(AppointmentTime appointmentTime);
+	
+	void delete(AppointmentTime appointmentTime);
 }

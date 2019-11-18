@@ -6,4 +6,5 @@ import com.csci4060.app.model.appointment.AppointmentDate;
 
 public interface AppointmentDateRepository extends JpaRepository<AppointmentDate, Long>{
 
+	void delete(AppointmentDate appointmentDate);
 }
