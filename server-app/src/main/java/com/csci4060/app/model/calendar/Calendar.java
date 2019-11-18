@@ -29,7 +29,7 @@ public class Calendar {
 	
 	String color;
 	
-	@ManyToMany(targetEntity = Event.class, fetch = FetchType.LAZY)
+	@ManyToMany(targetEntity = Event.class)
 	List<Event> events;
 	
 	@ManyToMany(targetEntity = User.class)

@@ -1,19 +1,14 @@
 package com.csci4060.app.model;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
@@ -25,7 +20,7 @@ import lombok.Data;
 
 @Data
 @Entity
-public class User {
+public class User{
 
 	@JsonIgnore
 	@Id
@@ -57,7 +52,7 @@ public class User {
 	
 //	//Loads the roles of user only when needed i.e user.getRoles
 	@JsonIgnore
-	@ManyToMany(fetch = FetchType.LAZY, targetEntity = Role.class)
+	@ManyToMany(targetEntity = Role.class)
 	private Set<Role> roles = new HashSet<>();
 	
 	public User() {
