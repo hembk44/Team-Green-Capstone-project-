@@ -40,4 +40,9 @@
   border: solid 0.5pt #800029;
   border-radius: 5px;
   width:100%;
+  margin-bottom:5px;
+}
+
+.time{
+  margin-left:10px;
 }

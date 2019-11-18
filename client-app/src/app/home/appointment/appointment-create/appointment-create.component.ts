@@ -57,6 +57,21 @@ export class AppointmentCreateComponent implements OnInit {
     }
   }
 
+  get date(){
+    return this.formBuilder.group({
+      date: ["", Validators.required],
+      time: this.formBuilder.array([this.time])
+    })
+  }
+
+  get time(){
+    return this.formBuilder.group({
+      start: ["", Validators.required],
+      end: ["", Validators.required],
+      interval: ["", Validators.required]
+    })
+  }
+
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
@@ -79,7 +94,7 @@ export class AppointmentCreateComponent implements OnInit {
     let description = '';
     let location = '';
     let email = this.email;
-    let dateRange = new FormArray([]);
+    let dateRange = new FormArray([this.date]);
 
     this.appointmentForm = new FormGroup({
       'title': new FormControl(title,[Validators.required]),
@@ -95,18 +110,19 @@ export class AppointmentCreateComponent implements OnInit {
   }
 
   addDate(){
-    (<FormArray>this.appointmentForm.get('dateRange')).push(
-      this.formBuilder.group({
-        date:[''],
-        start:[''],
-        end: [''],
-        interval:['']
-      })
-    );
+    (<FormArray>this.appointmentForm.get('dateRange')).push(this.date);
   }
 
   deleteDate(index:number){
     (<FormArray>this.appointmentForm.get('dateRange')).removeAt(index);
+  }
+
+  addTime(date){
+    date.get('time').push(this.time);
+  }
+
+  deleteTime(date, time){
+    date.get('time').removeAt(time);
   }
 
   // addEmails() {
@@ -156,27 +172,28 @@ export class AppointmentCreateComponent implements OnInit {
       this.dateRangeArray = result;
     });
   }
-  y;
 
   onSubmit() {
     const appointmentFormValues = this.appointmentForm.value;
     // this.emails.push(this.appointmentForm.value.email);
     console.log(appointmentFormValues.dateRange);
     for(let date of appointmentFormValues.dateRange){
-      if(date.start.substring(0,1)!=='1'){
-        date.start = '0'.concat(date.start);
+      for(let time of date.time){
+        if(time.start.substring(1,2)===':'){
+          time.start = '0'.concat(time.start);
+        }
+        if(time.end.substring(1,2)===':'){
+          time.end='0'.concat(time.end);
+        }
+        this.dateRangeArray.push({
+          date: date.date.toLocaleDateString(),
+          apptimes: [{
+            startTime: time.start,
+            endTime: time.end,
+            interv: time.interval
+          }]
+        })
       }
-      if(date.end.substring(0,1)!=='1'){
-        date.end = '0'.concat(date.end);
-      }
-      this.dateRangeArray.push({
-        date: date.date.toLocaleDateString(),
-        apptimes: [{
-          startTime: date.start,
-          endTime: date.end,
-          interv: date.interval
-        }]
-      })
     }
     const obj = {
       name: appointmentFormValues.title,
@@ -193,6 +210,7 @@ export class AppointmentCreateComponent implements OnInit {
         console.log(result.result.id);
         this.dataStorage.sendApptToCal(result.result.id).subscribe(result => {
           console.log(result);
+          this.router.navigate(["home/appointment/sent"])
         });
       }
     });
