@@ -27,6 +27,7 @@
 //				roleRepository.save(new Role(RoleName.ROLE_USER));
 //				roleRepository.save(new Role(RoleName.ROLE_PM));
 //				roleRepository.save(new Role(RoleName.ROLE_ADMIN));
+//	      roleRepository.save(new Role(RoleName.ROLE_MODERATOR));
 //				
 ////				Set<Role> role = new HashSet<>();
 ////				Role userRole = roleRepository.findByName(RoleName.ROLE_ADMIN).get();

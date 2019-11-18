@@ -6,6 +6,9 @@ import java.util.List;
 
 import javax.security.sasl.AuthenticationException;
 
+import javax.validation.Valid;
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.mail.SimpleMailMessage;
@@ -17,6 +20,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.csci4060.app.ExceptionResolver;
 
 import com.csci4060.app.model.APIresponse;
 import com.csci4060.app.model.User;
@@ -31,7 +36,9 @@ import com.csci4060.app.services.UserService;
 @RestController
 @CrossOrigin(origins = "*")
 @RequestMapping(path = "/api/event", produces = "application/json")
-public class EventController {
+
+public class EventController extends ExceptionResolver {
+
 
 	@Autowired
 	UserService userService;
@@ -46,8 +53,9 @@ public class EventController {
 	CalendarService calendarService;
 
 	@PostMapping(path = "/set", consumes = "application/json")
-	@PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
-	public APIresponse setEvent(@RequestBody EventDummy eventDummy)
+	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('MODERATOR') or hasRole('USER')")
+	public APIresponse setEvent(@Valid @RequestBody EventDummy eventDummy)
+
 			throws FileNotFoundException, AuthenticationException {
 
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -94,7 +102,7 @@ public class EventController {
 		eventService.save(event);
 
 		Long newEventId = event.getId();
-		System.out.println(newEventId);
+
 
 		if (calendar.getCreatedBy() == createdBy) {
 			calendar.getEvents().add(event);

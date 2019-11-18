@@ -6,6 +6,9 @@ import java.util.List;
 
 import javax.security.sasl.AuthenticationException;
 
+import javax.validation.Valid;
+
+
 import org.apache.commons.collections4.ListUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
@@ -20,6 +23,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+
+import com.csci4060.app.ExceptionResolver;
+
 import com.csci4060.app.model.APIresponse;
 import com.csci4060.app.model.User;
 import com.csci4060.app.model.calendar.Calendar;
@@ -32,7 +38,10 @@ import com.csci4060.app.services.UserService;
 @RestController
 @CrossOrigin(origins = "*")
 @RequestMapping(path = "/api/calendar", produces = "application/json")
-public class CalendarController {
+
+public class CalendarController extends ExceptionResolver {
+
+
 
 	@Autowired
 	UserService userService;
@@ -42,7 +51,9 @@ public class CalendarController {
 
 	@PostMapping(path = "/create", produces = "application/json")
 	@PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
-	public APIresponse createCalendar(@RequestBody CalendarCreate calendarCreate) {
+
+	public APIresponse createCalendar(@Valid @RequestBody CalendarCreate calendarCreate) {
+
 
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -127,7 +138,9 @@ public class CalendarController {
 
 	@PostMapping(path = "/share", produces = "application/json")
 	@PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
-	public APIresponse shareCalendar(@RequestBody CalendarShare calendarShare)
+
+	public APIresponse shareCalendar(@Valid @RequestBody CalendarShare calendarShare)
+
 			throws FileNotFoundException, AuthenticationException {
 
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();

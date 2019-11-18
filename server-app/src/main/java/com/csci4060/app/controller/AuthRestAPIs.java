@@ -1,9 +1,13 @@
 package com.csci4060.app.controller;
 
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,6 +17,8 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.security.access.method.P;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -29,6 +35,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import com.csci4060.app.ExceptionResolver;
 
 import com.csci4060.app.configuration.jwt.JwtProvider;
 import com.csci4060.app.model.APIresponse;
@@ -63,7 +72,10 @@ import com.csci4060.app.services.UserService;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/auth")
-public class AuthRestAPIs {
+
+public class AuthRestAPIs extends ExceptionResolver {
+
+
 
 	@Autowired
 	AuthenticationManager authenticationManager;
@@ -284,7 +296,8 @@ public class AuthRestAPIs {
 	
 	
 	@PostMapping(value = "/processResetPassword")
-    public ModelAndView setNewPassword(@RequestBody Map<String, String> requestParams, RedirectAttributes redir, HttpServletResponse response) {
+	public ModelAndView setNewPassword(@Valid @RequestBody Map<String, String> requestParams, RedirectAttributes redir, HttpServletResponse response) {
+
         
         ConfirmationToken resetToken = confirmationTokenService.findByConfirmationToken(requestParams.get("resetToken"));
         User resetUser = resetToken.getUser();
