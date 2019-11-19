@@ -7,9 +7,6 @@ import java.util.List;
 import javax.security.sasl.AuthenticationException;
 import javax.validation.Valid;
 
-import javax.validation.Valid;
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.mail.SimpleMailMessage;
@@ -103,9 +100,6 @@ public class EventController extends ExceptionResolver {
 				calendar.getColor(), backgroundColor);
 
 		eventService.save(event);
-
-		Long newEventId = event.getId();
-
 
 		if (calendar.getCreatedBy() == createdBy) {
 			calendar.getEvents().add(event);
@@ -206,6 +200,11 @@ public class EventController extends ExceptionResolver {
 
 		if (event.getCreatedBy() != user) {
 			return new APIresponse(HttpStatus.FORBIDDEN.value(), "You did not create the event. Authorization denied!",
+					null);
+		}
+		
+		if(event.getTimeSlotId() == null) {
+			return new APIresponse(HttpStatus.FORBIDDEN.value(), "This is an appointment. Please go to the appointment tab to add/delete users",
 					null);
 		}
 

@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,6 +35,7 @@ import com.csci4060.app.model.User;
 import com.csci4060.app.model.appointment.Appointment;
 import com.csci4060.app.model.appointment.AppointmentDate;
 import com.csci4060.app.model.appointment.AppointmentDummy;
+import com.csci4060.app.model.appointment.AppointmentEdit;
 import com.csci4060.app.model.appointment.AppointmentResponse;
 import com.csci4060.app.model.appointment.AppointmentTime;
 import com.csci4060.app.model.appointment.TimeSlotResponse;
@@ -181,7 +183,7 @@ public class AppointmentController extends ExceptionResolver {
 			mailMessage.setSubject("Appointment Information");
 			mailMessage.setFrom("ulmautoemail@gmail.com");
 			mailMessage.setText(
-					"A faculty has set an appointment for you. Please log in to you ULM communication app and register for the appointment. "
+					"A faculty has set an appointment named "+appointment.getName()+" for you. Please log in to you ULM communication app and register for the appointment. "
 							+ "Thank you!");
 
 			emailSenderService.sendEmail(mailMessage);
@@ -495,6 +497,132 @@ public class AppointmentController extends ExceptionResolver {
 
 	}
 	
+	@PutMapping(path = "/edit/{id}")
+	@PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
+	public APIresponse editAppointment(@Valid @RequestBody AppointmentEdit appointmentEdit, @PathVariable("id") Long groupId) {
+
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		String username = "";
+
+		if (principal instanceof UserDetails) {
+			username = ((UserDetails) principal).getUsername();
+		}
+
+		User user = userService.findByUsername(username);
+
+		Appointment appointment = appointmentService.findById(groupId);
+
+		if (appointment == null) {
+			return new APIresponse(HttpStatus.BAD_REQUEST.value(), "Group with id " + groupId + " does not exist",
+					null);
+		}
+
+		if (appointment.getCreatedBy() != user) {
+			return new APIresponse(HttpStatus.FORBIDDEN.value(), "You did not create the group. Authorization denied!",
+					null);
+		}
+
+		appointment.setName(appointmentEdit.getName());
+		appointment.setDescription(appointmentEdit.getDescription());
+		appointment.setLocation(appointmentEdit.getLocation());
+		
+		List<TimeSlots> timeSlots = timeSlotsService.findAllByAppointment(appointment);
+		List<String> editedEmails = appointmentEdit.getRecepients();
+		
+		List<User> newRecipients = new ArrayList<>();
+		List<User> oldRecipients = appointment.getRecepients();
+		
+		List<User> deletedUsers = new ArrayList<User>();
+		List<String>deletedUserEmail = new ArrayList<String>();
+		
+		List<User> addedUsers = new ArrayList<User>();
+		List<String>addedUserEmail = new ArrayList<String>();
+		
+		int timeSlotCounter = timeSlots.size();
+		System.out.println("Timeslot size is "+ timeSlotCounter);
+		
+		int recipientsCounter = editedEmails.size();
+		System.out.println("Recipients size is "+ recipientsCounter);
+		
+		if(recipientsCounter > timeSlotCounter) {
+			return new APIresponse(HttpStatus.BAD_REQUEST.value(), "The number of recipients exceeds the number of timeslots. Please remove one or more recipients.",
+					null);
+		}
+		
+		for(String email:editedEmails) {
+			
+			User newRecipientUser = userService.findByEmail(email);
+			
+			if (newRecipientUser != null) {
+				newRecipients.add(userService.findByEmail(email));
+				if(!oldRecipients.contains(newRecipientUser)) {
+					addedUsers.add(newRecipientUser);
+				}
+			}
+		}
+		
+		for(User oldRecipient: oldRecipients) {
+			if(!newRecipients.contains(oldRecipient)) {
+				deletedUsers.add(oldRecipient);
+				for(TimeSlots slots: timeSlots) {
+					if(slots.getSelectedBy() == oldRecipient) {
+						return new APIresponse(HttpStatus.FORBIDDEN.value(), "This user has already selected a time slot from "+slots.getStartTime()+" to "+slots.getEndTime()+". You cannot remove this person from the appointment.",
+								null);
+					}
+				}
+				
+			}
+		}
+		
+		for(User newUser:addedUsers) {
+			addedUserEmail.add(newUser.getEmail());
+			appointment.getRecepients().add(newUser);
+		}
+		
+		for(User oldUser: deletedUsers) {
+			deletedUserEmail.add(oldUser.getEmail());
+			appointment.getRecepients().remove(oldUser);
+		}
+		
+		appointmentService.save(appointment);
+		
+		if (!addedUserEmail.isEmpty()) {
+
+			SimpleMailMessage mailMessage = new SimpleMailMessage();
+
+			String[] emails = addedUserEmail.toArray(new String[addedUserEmail.size()]);
+
+			mailMessage.setTo(emails);
+			mailMessage.setSubject("Appointment Information");
+			mailMessage.setFrom("ulmautoemail@gmail.com");
+			mailMessage.setText(
+					"A faculty has set an appointment named " + appointment.getName()
+							+ " for you. Please log in to you ULM communication app and register for the appointment. "
+							+ "Thank you!");
+
+			emailSenderService.sendEmail(mailMessage);
+		}
+		
+		if (!deletedUserEmail.isEmpty()) {
+
+			SimpleMailMessage mailMessage = new SimpleMailMessage();
+
+			String[] emails = deletedUserEmail.toArray(new String[deletedUserEmail.size()]);
+
+			mailMessage.setTo(emails);
+			mailMessage.setSubject("Appointment Information");
+			mailMessage.setFrom("ulmautoemail@gmail.com");
+			mailMessage.setText(
+					"A faculty has cancelled an appointment with name "+appointment.getName()+" Please disregard the previous email."
+							+ "Thank you!");
+
+			emailSenderService.sendEmail(mailMessage);
+		}
+
+		return new APIresponse(HttpStatus.OK.value(), "Appointment has been successfully edited", appointment);
+	}
+	
 	@DeleteMapping(path = "/delete/{id}")
 	@PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
 	public APIresponse deleteAppointment(@PathVariable("id") Long appointmentId) {
@@ -520,7 +648,32 @@ public class AppointmentController extends ExceptionResolver {
 					null);
 		}
 		
+		List<User> recipientsList = appointment.getRecepients();
+		List<String> recipientsEmailList = new ArrayList<String>();
+		
+		for(User recipient: recipientsList) {
+			recipientsEmailList.add(recipient.getEmail());
+		}
+		
+		System.out.println("Recipients list: "+recipientsList);
+				
 		appointmentService.delete(appointment);
+		
+		if (!recipientsEmailList.isEmpty()) {
+
+			SimpleMailMessage mailMessage = new SimpleMailMessage();
+
+			String[] emails = recipientsEmailList.toArray(new String[recipientsEmailList.size()]);
+
+			mailMessage.setTo(emails);
+			mailMessage.setSubject("Appointment Information");
+			mailMessage.setFrom("ulmautoemail@gmail.com");
+			mailMessage.setText(
+					"A faculty has cancelled an appointment with name "+appointment.getName()+" Please disregard the previous email."
+							+ "Thank you!");
+
+			emailSenderService.sendEmail(mailMessage);
+		}
 		
 		return new APIresponse(HttpStatus.OK.value(), "Appointment was successfully deleted.",appointment);
 	}

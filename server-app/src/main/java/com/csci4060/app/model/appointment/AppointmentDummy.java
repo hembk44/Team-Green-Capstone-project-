@@ -2,7 +2,6 @@ package com.csci4060.app.model.appointment;
 
 import java.util.List;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -17,10 +16,11 @@ public class AppointmentDummy {
 	
 	String description;
 	
+	//validation for @NotNull is needed
 	List<@NotNull AppointmentDate> appdates;
 	
 	
-	List<@Email(message="Email is not valid") String> recepients;
+	List<String> recepients;
 	
 	String location;
 	
