@@ -14,6 +14,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -38,7 +39,6 @@ import com.csci4060.app.services.UserService;
 @RequestMapping(path = "/api/event", produces = "application/json")
 
 public class EventController extends ExceptionResolver {
-
 
 	@Autowired
 	UserService userService;
@@ -164,15 +164,16 @@ public class EventController extends ExceptionResolver {
 		if (!event.getRecipients().contains(loggedInUser)) {
 			return new APIresponse(HttpStatus.BAD_REQUEST.value(), "You are not the recipient of this event", null);
 		}
-		
-		if(event.getConfirmedBy().contains(loggedInUser)) {
+
+		if (event.getConfirmedBy().contains(loggedInUser)) {
 			return new APIresponse(HttpStatus.BAD_REQUEST.value(), "You have already confirmed this event", null);
 		}
 
 		event.getConfirmedBy().add(loggedInUser);
 		eventService.save(event);
 
-		return new APIresponse(HttpStatus.CREATED.value(), "event confirmed successfully by "+loggedInUser.getName(), event);
+		return new APIresponse(HttpStatus.CREATED.value(), "event confirmed successfully by " + loggedInUser.getName(),
+				event);
 	}
 
 	@PostMapping(path = "/share")
@@ -202,10 +203,10 @@ public class EventController extends ExceptionResolver {
 			return new APIresponse(HttpStatus.FORBIDDEN.value(), "You did not create the event. Authorization denied!",
 					null);
 		}
-		
-		if(event.getTimeSlotId() == null) {
-			return new APIresponse(HttpStatus.FORBIDDEN.value(), "This is an appointment. Please go to the appointment tab to add/delete users",
-					null);
+
+		if (event.getTimeSlotId() != null) {
+			return new APIresponse(HttpStatus.FORBIDDEN.value(),
+					"This is an appointment. Please go to the appointment tab to add/delete users", null);
 		}
 
 		List<String> emailsFromJson = eventShare.getRecipients();
@@ -232,5 +233,65 @@ public class EventController extends ExceptionResolver {
 
 		return new APIresponse(HttpStatus.OK.value(),
 				"Event " + event.getTitle() + " has been shared to users: " + sharedWithList, event);
+	}
+
+	@DeleteMapping(path = "/delete/{id}")
+	@PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
+	public APIresponse deleteAppointment(@PathVariable("id") Long eventId) {
+
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		String username = "";
+
+		if (principal instanceof UserDetails) {
+			username = ((UserDetails) principal).getUsername();
+		}
+
+		User user = userService.findByUsername(username);
+
+		Event event = eventService.findById(eventId);
+
+		if (event == null) {
+			return new APIresponse(HttpStatus.NOT_FOUND.value(), "Event with id " + eventId + " does not exists.",
+					null);
+		}
+
+		if (event.getCreatedBy() != user) {
+			return new APIresponse(HttpStatus.FORBIDDEN.value(), "You did not create the event. Authorization denied!",
+					null);
+		}
+
+		if (event.getTimeSlotId() != null) {
+			return new APIresponse(HttpStatus.FORBIDDEN.value(),
+					"This is an appointment time slot. You cannot delete an individual time slot. Please go to the appointment tab to delete the whole appointment.",
+					null);
+		}
+
+		List<User> recipientsList = event.getRecipients();
+		List<String> recipientsEmailList = new ArrayList<String>();
+
+		for (User recipient : recipientsList) {
+			recipientsEmailList.add(recipient.getEmail());
+		}
+
+		eventService.delete(event);
+
+		if (!recipientsEmailList.isEmpty()) {
+
+			SimpleMailMessage mailMessage = new SimpleMailMessage();
+
+			String[] emails = recipientsEmailList.toArray(new String[recipientsEmailList.size()]);
+
+			mailMessage.setTo(emails);
+			mailMessage.setSubject("Event Cancelled");
+			mailMessage.setFrom("ulmautoemail@gmail.com");
+			mailMessage.setText("A faculty has cancelled an event with name " + event.getTitle()
+					+ " If you have confirmed to attend this event, we apologize for the inconvenience."
+					+ "Thank you!");
+
+			emailSenderService.sendEmail(mailMessage);
+		}
+
+		return new APIresponse(HttpStatus.OK.value(), "Appointment was successfully deleted.", event);
 	}
 }

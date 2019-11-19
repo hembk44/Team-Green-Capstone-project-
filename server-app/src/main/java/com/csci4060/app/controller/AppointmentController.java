@@ -350,6 +350,9 @@ public class AppointmentController extends ExceptionResolver {
 		}
 
 		User selectedBy = userService.findByUsername(username);
+		
+		List<User> confirmedBy = new ArrayList<User>();
+		confirmedBy.add(selectedBy);
 
 		TimeSlots slotToRemove = timeSlotsService.findById(id);
 
@@ -361,6 +364,7 @@ public class AppointmentController extends ExceptionResolver {
 		timeSlotsService.save(slotToRemove);
 
 		Event creatorsEvent = eventService.findByTimeSlotId(id);
+		creatorsEvent.setConfirmedBy(confirmedBy);
 
 		System.out.println("Event from timeslot: " + creatorsEvent);
 
@@ -372,6 +376,7 @@ public class AppointmentController extends ExceptionResolver {
 
 		System.out.println("calendar after adding event" + calendar);
 
+		eventService.save(creatorsEvent);
 		calendarService.save(calendar);
 
 		TimeSlotResponse response = new TimeSlotResponse(slotToRemove.getId(), slotToRemove.getStartTime(),

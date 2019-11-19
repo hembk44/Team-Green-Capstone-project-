@@ -76,9 +76,10 @@ public class EventServiceImpl implements EventService {
 		List<Calendar> calendars = calendarService.findAllByEvents(event);
 		
 		for(Calendar calendar:calendars) {
-			calendar.getEvents().remove(event);
+			calendar.removeEvent(event);
+			calendarService.save(calendar);
 		}
-				
+		
 		eventRepo.delete(event);
 	}
 

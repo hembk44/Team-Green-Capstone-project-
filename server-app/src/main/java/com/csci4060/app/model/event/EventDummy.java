@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 @Data
 @RequiredArgsConstructor
 public class EventDummy {
+	
 	@NotNull(message= " Host Calendar must be specified for this event")
 	Long calendarId;
 	
