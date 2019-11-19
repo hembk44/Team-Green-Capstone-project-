@@ -13,6 +13,7 @@ import { MatChipInputEvent } from "@angular/material/chips";
 import { GroupDataStorageService } from "../group-data-storage.service";
 import { GroupCreateNavigationService } from "../group/group-create-navigation.service";
 import { Group } from "../models-group/group";
+import { MatOptionSelectionChange, MatSelectChange } from "@angular/material";
 
 export interface courseGroup {
   title: string;
@@ -98,6 +99,7 @@ export class CreateGroupComponent implements OnInit {
   groupToEdit: any;
   customGroupEmails: string[] = [];
   courseGroupEmails: string[] = [];
+  editEmails: string[] = [];
 
   validFileExtensions: string[] = ["xlsx", "csv"];
   invalidExtension: string;
@@ -164,8 +166,8 @@ export class CreateGroupComponent implements OnInit {
             console.log(customGroupMembers);
 
             for (let member of customGroupMembers) {
-              this.customGroupEmails.push(member.email);
-              console.log(this.customGroupEmails);
+              this.editEmails.push(member.email);
+              console.log(this.editEmails);
             }
             this.groupForm = this.formBuilder.group({
               groupType: [this.groupToEdit.type],
@@ -177,32 +179,25 @@ export class CreateGroupComponent implements OnInit {
           } else {
             this.isCourseGroup = true;
             this.groupForm.get("groupType").setValue("Course");
-            console.log(
-              this.groupForm.get("majorControl").setValue("Computer Science")
-            );
-            console.log(
-              this.groupForm.get("title").setValue(this.groupToEdit.name)
-            );
-
             const courseGroupMembers = this.groupToEdit.members;
             console.log(courseGroupMembers);
 
             for (let member of courseGroupMembers) {
-              this.courseGroupEmails.push(member.email);
-              console.log(this.courseGroupEmails);
+              this.editEmails.push(member.email);
+              console.log(this.editEmails);
             }
-
             this.groupForm = this.formBuilder.group({
               groupType: [this.groupToEdit.type],
+              title: [this.groupToEdit.name],
               description: [this.groupToEdit.description],
               semesterTerm: [this.groupToEdit.semesterTerm],
-              semesterYear: [this.groupToEdit.semesterYear]
+              semesterYear: [this.groupToEdit.semesterYear],
+              majorControl: ["Computer Science"]
             });
           }
         });
     }
   }
-
   get major(): any {
     return this.groupForm.get("majorControl");
   }
@@ -212,11 +207,9 @@ export class CreateGroupComponent implements OnInit {
 
   add(event: MatChipInputEvent): void {
     const input = event.input;
-    // const value = event.value;
     this.email.setValue(event.value);
     console.log(this.email.hasError("email"));
     if (!this.email.hasError("email")) {
-      // if (!this.email.hasError("email")) {
       if (this.email.value.trim()) {
         this.isEmailValid = true;
         this.emails.push(this.email.value.trim());
@@ -248,24 +241,13 @@ export class CreateGroupComponent implements OnInit {
     }
   }
 
-  // getErrorMessage() {
-  //   return this.email.hasError("required")
-  //     ? "You must enter a valid email address"
-  //     : this.email.hasError("email")
-  //     ? "Not a valid email"
-  //     : "";
-  // }
   cancel() {
     this.router.navigate(["/home/group"]);
   }
-  // click() {
-  //   console.log(this.major);
-  // }
+
   onMajorChanged(event: any) {
-    // console.log(MajorType[event.value]);
     console.log(event.value);
     if (event.value === "Computer Science") {
-      // console.log("success!");
       this.courseGroupInfo = [
         { title: "CSCI 4060", description: "Software engineering" },
         {
@@ -321,39 +303,46 @@ export class CreateGroupComponent implements OnInit {
           }
         });
     } else {
-      const obj = {
-        name: groupFormValues.title,
-        description: groupFormValues.description,
-        recipients: this.emails,
-        type: groupFormValues.groupType,
-        semesterTerm: groupFormValues.semesterTerm,
-        semesterYear: groupFormValues.semesterYear
-      };
+      if (this.emails.length > 0) {
+        this.groupForm.get("uploadFile").clearValidators();
+        this.groupForm.get("uploadFile").updateValueAndValidity();
 
-      const objUser = {
-        name: groupFormValues.title,
-        description: groupFormValues.description,
-        type: groupFormValues.groupType,
-        semesterTerm: groupFormValues.semesterTerm,
-        semesterYear: groupFormValues.semesterYear
-      };
+        const obj = {
+          name: groupFormValues.title,
+          description: groupFormValues.description,
+          recipients: this.emails,
+          type: groupFormValues.groupType,
+          semesterTerm: groupFormValues.semesterTerm,
+          semesterYear: groupFormValues.semesterYear
+        };
 
-      console.log(objUser);
-      this.currentFileUpload = this.selectedFiles.item(0);
-      console.log(this.currentFileUpload);
-      const formData = new FormData();
-      formData.append("user", JSON.stringify(objUser));
-      formData.append("file", this.currentFileUpload);
-      console.log(formData);
+        this.groupDataStorageService.createGroup(obj).subscribe(result => {
+          if (result) {
+            console.log(result);
 
-      this.groupDataStorageService.createGroup(obj).subscribe(result => {
-        if (result) {
-          console.log(result);
+            this.groupDataStorageService.fetchGroup();
+            this.router.navigate(["/home/group"]);
+          }
+        });
+      } else {
+        // this.groupForm.get("email").clearValidators();
+        // this.groupForm.get("email").updateValueAndValidity();
+        const objUser = {
+          name: groupFormValues.title,
+          description: groupFormValues.description,
+          type: groupFormValues.groupType,
+          semesterTerm: groupFormValues.semesterTerm,
+          semesterYear: groupFormValues.semesterYear
+        };
 
-          this.groupDataStorageService.fetchGroup();
-          this.router.navigate(["/home/group"]);
-        }
-      });
+        console.log(objUser);
+        this.currentFileUpload = this.selectedFiles.item(0);
+        console.log(this.currentFileUpload);
+        const formData = new FormData();
+        formData.append("user", JSON.stringify(objUser));
+        formData.append("file", this.currentFileUpload);
+        console.log(formData);
+      }
     }
   }
 
