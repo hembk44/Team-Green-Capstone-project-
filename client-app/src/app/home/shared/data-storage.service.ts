@@ -4,7 +4,7 @@ import {
   HttpErrorResponse,
   HttpHeaders
 } from "@angular/common/http";
-import { map, tap, catchError, finalize } from "rxjs/operators";
+import { map, tap, catchError, finalize, share } from "rxjs/operators";
 
 import { throwError, Observable, BehaviorSubject } from "rxjs";
 import { ApiResponse } from "src/app/auth/api.response";
@@ -287,7 +287,16 @@ export class DataStorageService {
 
   storeEvent(obj: Object) {
     this.isLoadingSubject.next(true);
-    return this.http.post<Object>(this.baseUrlEvent + "set", obj).pipe(
+    return this.http.post<ApiResponse>(this.baseUrlEvent + "set", obj).pipe(
+      (map(data => data), catchError(error => throwError(error))),
+      finalize(() => this.isLoadingSubject.next(false))
+    );
+  }
+
+  shareEvent(obj: Object) {
+    console.log(obj);
+    this.isLoadingSubject.next(true);
+    return this.http.post<ApiResponse>(this.baseUrlEvent + "share", obj).pipe(
       (map(data => data), catchError(error => throwError(error))),
       finalize(() => this.isLoadingSubject.next(false))
     );
@@ -306,6 +315,20 @@ export class DataStorageService {
         this.calSubject.next(result.result);
         this.calService.setCalendars(result.result);
       });
+  }
+
+  userConfirmEvent(id: number) {
+    this.isLoadingSubject.next(true);
+    const obj = {
+      id: id
+    };
+
+    return this.http
+      .post<ApiResponse>(this.baseUrlEvent + "confirm/" + id, obj)
+      .pipe(
+        (map(data => data), catchError(error => throwError(error))),
+        finalize(() => this.isLoadingSubject.next(false))
+      );
   }
 
   newCalendar(obj: Object) {
@@ -379,25 +402,27 @@ export class DataStorageService {
       });
   }
 
-  editEvent(obj: Object) {
+  editEvent(id: number, obj: Object) {
     console.log(obj);
-    // this.isLoadingSubject.next(true);
-    // return this.http
-    // .post<Object>('edit api', obj)
-    // .pipe(
-    //   (map(data=>data),
-    //   catchError(error => throwError(error)),
-    //   finalize(()=>this.isLoadingSubject.next(false)))
-    // );
+    this.isLoadingSubject.next(true);
+    return this.http
+      .put<ApiResponse>(this.baseUrlEvent + "edit/" + id, obj)
+      .pipe(
+        (map(data => data),
+        catchError(error => throwError(error)),
+        finalize(() => this.isLoadingSubject.next(false)))
+      );
   }
 
   deleteEvent(id: number) {
     console.log(id);
-    // this.isLoadingSubject.next(false);
-    // this.http.delete<ApiResponse>('delete url' + id)
-    // .pipe(map(data=>data),
-    // catchError(error => throwError(error))),
-    // finalize(()=>this.isLoadingSubject.next(false));
+    this.isLoadingSubject.next(false);
+    return this.http
+      .delete<ApiResponse>(this.baseUrlEvent + "delete/" + id)
+      .pipe(
+        (map(data => data), catchError(error => throwError(error))),
+        finalize(() => this.isLoadingSubject.next(false))
+      );
   }
 
   deleteCalendar(id: number) {

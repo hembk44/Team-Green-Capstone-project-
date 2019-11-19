@@ -9,7 +9,8 @@ import {
   FormGroup,
   Validators,
   FormControl,
-  FormArray
+  FormArray,
+  ValidationErrors
 } from "@angular/forms";
 import { Router } from "@angular/router";
 import { Appointment } from "../models-appointments/appointment.model";
@@ -67,7 +68,10 @@ export class AppointmentCreateComponent implements OnInit {
     return this.formBuilder.group({
       start: ["", Validators.required],
       end: ["", Validators.required],
-      interval: ["", Validators.required]
+      interval: [
+        "",
+        [Validators.required, Validators.pattern(/^[1-9]+[0-9]*$/)]
+      ]
     });
   }
 
@@ -213,6 +217,25 @@ export class AppointmentCreateComponent implements OnInit {
           this.router.navigate(["home/appointment/sent"]);
         });
         this.dataStorage.fetchAppointment();
+      }
+    });
+  }
+
+  getFormValidationErrors() {
+    Object.keys(this.appointmentForm.controls).forEach(key => {
+      const controlErrors: ValidationErrors = this.appointmentForm.get(key)
+        .errors;
+      if (controlErrors != null) {
+        Object.keys(controlErrors).forEach(keyError => {
+          return (
+            "Key control: " +
+            key +
+            ", keyError: " +
+            keyError +
+            ", err value: " +
+            controlErrors[keyError]
+          );
+        });
       }
     });
   }

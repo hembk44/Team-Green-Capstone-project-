@@ -60,7 +60,7 @@ body {
 
 .primary {
   color: #800029;
-  border: #800029 solid 1px;
+  border: solid 1px #800029;
   /* background-color: blanchedalmond; */
   /* width: 10%; */
 }

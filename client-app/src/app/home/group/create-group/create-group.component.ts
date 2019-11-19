@@ -128,7 +128,7 @@ export class CreateGroupComponent implements OnInit {
       semesterYear: ["", Validators.required],
       majorControl: ["", Validators.required],
       editEmail: ["", Validators.required],
-      uploadFile: [undefined, [Validators.required]]
+      uploadFile: [undefined]
     });
 
     this.groupTypeNavigation.groupType.subscribe(type => {

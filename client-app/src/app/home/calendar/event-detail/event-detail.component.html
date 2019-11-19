@@ -1,27 +1,59 @@
 <mat-toolbar class="top-detail-row">
-    {{event.title}}<span class="spacer"></span><mat-icon (click)="close()" class="close-button" matTooltip="Close">clear</mat-icon>
+    <mat-toolbar-row>
+        <h5>{{event.title}}</h5>
+        <span class="spacer"></span>
+        <mat-form-field class="example-full-width" *ngIf="viewAttendees">
+            <input
+                type="text"
+                class="search-bar"
+                matInput
+                [(ngModel)]="searchText"
+                placeholder="Search guests"
+            />
+            <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+        <span class="spacer"></span><mat-icon (click)="close()" class="close-button" matTooltip="Close">clear</mat-icon>
+    </mat-toolbar-row>
 </mat-toolbar>
 
-<small *ngIf="event.allDay">* All Day</small>
-<div mat-dialog-content>
-    <div *ngIf="!event.allDay">
-        <p>{{ event.start.toLocaleString([], {month:'2-digit', day:'2-digit', year:'2-digit', hour: '2-digit',  minute:'2-digit'}) }} - 
-        {{event.end.toLocaleString([], {month:'2-digit', day:'2-digit', year:'2-digit', hour: '2-digit',  minute:'2-digit'}) }}</p>
+<div mat-dialog-content class="content">
+    <div class="event-wrap" *ngIf="!viewAttendees">
+        <small *ngIf="event.allDay">* All Day</small>
+        <div *ngIf="!event.allDay">
+            <p>{{ event.start.toLocaleString([], {month:'2-digit', day:'2-digit', year:'2-digit', hour: '2-digit',  minute:'2-digit'}) }} - 
+            {{event.end.toLocaleString([], {month:'2-digit', day:'2-digit', year:'2-digit', hour: '2-digit',  minute:'2-digit'}) }}</p>
+        </div>
+        <div *ngIf="event.allDay && event.start !== newEnd">
+            <p>{{event.start.toLocaleDateString()}} - {{newEnd.toLocaleDateString()}}</p>
+        </div>
+        <div *ngIf="event.allDay && event.start===newEnd">
+            <p>{{event.start.toLocaleDateString()}}</p>
+        </div>
+        <p *ngIf="event.extendedProps.location != ''"><b>Location:</b> {{ event.extendedProps.location }}</p>
+        <p *ngIf="event.extendedProps.description != ''"><b>Description:</b> {{ event.extendedProps.description }}</p>
     </div>
-    <div *ngIf="event.allDay && event.start !== newEnd">
-        <p>{{event.start.toLocaleDateString()}} - {{newEnd.toLocaleDateString()}}</p>
+    <div class="user-wrap" *ngIf="viewAttendees">
+        <mat-list>
+            <mat-list-item *ngFor="let user of guests | filterMember: searchText">
+                <mat-icon mat-list-icon>person_outline</mat-icon>
+                <h4 mat-line>{{user.name}}</h4>
+                <p mat-line>{{user.email}}</p>
+            </mat-list-item>
+        </mat-list>
     </div>
-    <div *ngIf="event.allDay && event.start===newEnd">
-        <p>{{event.start.toLocaleDateString()}}</p>
-    </div>
-    <p *ngIf="event.extendedProps.location != ''"><b>Location:</b> {{ event.extendedProps.location }}</p>
-    <p *ngIf="event.extendedProps.description != ''"><b>Description:</b> {{ event.extendedProps.description }}</p>
-    <button mat-raised-button [matMenuTriggerFor]="menu" class="options-button" *ngIf="!isAppt">Options</button> 
-    <mat-menu #menu class="options-button primary">
-        <button mat-menu-item (click)="editEvent()" *ngIf="event.extendedProps.createdBy.email === username" class="option">Edit Event</button>
-        <button mat-menu-item (click)="deleteEvent()" *ngIf="event.extendedProps.createdBy.email === username" class="option">Delete</button>
-        <button mat-menu-item *ngIf="event.extendedProps.createdBy.email !== username" class="option">Confirm Attendance</button>
-        <button mat-menu-item *ngIf="event.extendedProps.createdBy.email === username" class="option">View Attendees</button>
-    </mat-menu>
-    <mat-hint *ngIf="isAppt">Please see the appointments section to make changes.</mat-hint>
 </div>
+
+<mat-toolbar class="bottom-row">
+    <mat-toolbar-row>
+        <button mat-raised-button [matMenuTriggerFor]="menu" class="options-button" *ngIf="!isAppt">Options</button> 
+        <mat-menu #menu class="options-button primary">
+            <button mat-menu-item (click)="editEvent()" *ngIf="event.extendedProps.createdBy.email === username" class="option">Edit Event</button>
+            <button mat-menu-item (click)="deleteEvent()" *ngIf="event.extendedProps.createdBy.email === username" class="option">Delete</button>
+            <button mat-menu-item (click)="shareEvent()" *ngIf="event.extendedProps.createdBy.email===username" class="option">Share</button>
+            <button mat-menu-item *ngIf="event.extendedProps.createdBy.email !== username" class="option" (click)="confirmAttendance()">Confirm Attendance</button>
+            <button mat-menu-item *ngIf="event.extendedProps.createdBy.email === username && !viewAttendees" class="option" (click)="viewGuests()">View Attendees</button>
+            <button mat-menu-item *ngIf="event.extendedProps.createdBy.email === username && viewAttendees" class="option" (click)="viewGuests()">View Details</button>
+        </mat-menu>
+        <mat-hint *ngIf="isAppt">Please see the appointments section to make changes.</mat-hint>
+    </mat-toolbar-row>
+</mat-toolbar>
