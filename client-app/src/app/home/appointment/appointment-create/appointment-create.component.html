@@ -110,7 +110,7 @@
         <div formArrayName="time">
           <div class="time" *ngFor="let time of date.get('time').controls; let x = index" [formGroupName]="x">
             <button mat-icon-button type="button" (click)="deleteTime(date,x)" *ngIf="date.get('time').controls.length > 1"><mat-icon>clear</mat-icon></button>
-              <mat-form-field style="width:25%">
+              <mat-form-field style="width:15%">
                   <mat-label>Start Time</mat-label>
                   <input
                     matInput
@@ -125,8 +125,9 @@
                     [theme]="timeTheme"
                     [appendToInput]="true"
                   ></ngx-material-timepicker>
+                  <mat-icon matSuffix>access_time</mat-icon>
               </mat-form-field>&nbsp;
-              <mat-form-field style="width:20%">
+              <mat-form-field style="width:15%">
                   <mat-label>End Time</mat-label>
                   <input
                     matInput
@@ -141,10 +142,12 @@
                     [theme]="timeTheme"
                     [appendToInput]="true"
                   ></ngx-material-timepicker>
+                  <mat-icon matSuffix>access_time</mat-icon>
               </mat-form-field>&nbsp;
-              <mat-form-field style="width:10%">
+              <mat-form-field style="width:23%">
                 <mat-label>Length</mat-label>
                 <input matInput formControlName="interval" type="number">
+                <mat-hint>Length you want each time slot to be.</mat-hint>
               </mat-form-field>
           </div>
         </div>

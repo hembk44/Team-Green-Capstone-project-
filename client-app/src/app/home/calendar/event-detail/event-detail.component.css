@@ -12,12 +12,28 @@
     color: white;
 }
 
+.content{
+    width: 80%;
+    height: 65%;
+    overflow-y:auto;
+}
+
 .spacer{
     flex: 1 1 auto;
 }
-.top-detail-row{
+.top-detail-row, .bottom-row{
     background-color: white;
-    height: 50px;
+    height: 10%;
+}
+
+.search-bar{
+    font-size: 1em;
+    color: rgb(122, 121, 121);
+}
+
+.example-full-width{
+    font-size: 0.75em;
+    color: rgb(122, 121, 121);
 }
 
 mat-toolbar{

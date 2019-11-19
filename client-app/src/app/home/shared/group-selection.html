@@ -1,2 +1,3 @@
 <mat-icon (click)="close()" style="cursor:pointer">clear</mat-icon><br>
+<p *ngIf="groups.length === 0">You have no groups.</p>
 <mat-checkbox *ngFor="let group of groups" color="primary" (click)="addGroup(group.id)">{{group.name}} - {{group.semesterTerm}} {{group.semesterYear}}</mat-checkbox>

@@ -109,6 +109,7 @@ import { GroupEditComponent } from "./home/group/group-edit/group-edit.component
 import { MessageGroupComponent } from "./home/group/message-group/message-group.component";
 import { ScheduledAppointmentReceivedPipe } from './home/appointment/scheduled-appointments/scheduled-appointment-received.pipe';
 import { ChangePasswordComponent } from './change-password/change-password.component';
+import { ShareEvent } from './home/calendar/event-detail/share-event';
 
 @NgModule({
   // declarations: [
@@ -189,6 +190,7 @@ import { ChangePasswordComponent } from './change-password/change-password.compo
     AdministrationComponent,
     UpdateRolesComponent,
     DeleteUsersComponent,
+    ShareEvent,
     GroupListComponent,
     CreateGroupComponent,
     GroupItemComponent,
@@ -259,6 +261,7 @@ import { ChangePasswordComponent } from './change-password/change-password.compo
     MessageGroupComponent,
     DeleteUsers,
     SnackBarGroup,
+    ShareEvent,
     RoleConfirm
   ],
   providers: [

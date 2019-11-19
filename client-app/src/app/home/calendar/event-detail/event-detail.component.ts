@@ -2,9 +2,11 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { CalendarService } from '../calendar-list/calendar.service';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { CalEvent } from '../events.model';
-import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog, MatSnackBar } from '@angular/material';
 import { DataStorageService } from '../../shared/data-storage.service';
 import { AuthService } from 'src/app/auth/auth.service';
+import { ShareEvent } from './share-event';
+import { RecursiveTemplateAstVisitor } from '@angular/compiler';
 
 @Component({
   selector: 'app-event-detail',
@@ -17,31 +19,35 @@ export class EventDetailComponent implements OnInit {
   newEnd: Date;
   isAppt: boolean;
   username: string;
+  viewAttendees: boolean;
+  guests: any[];
 
   constructor(private calService: CalendarService,
     private router: Router,
     private ref: MatDialogRef<EventDetailComponent>,
     private authService: AuthService,
     private dialog: MatDialog,
+    private snackbar: MatSnackBar,
     private dataStorage: DataStorageService,
     @Inject(MAT_DIALOG_DATA)public data: CalEvent) { 
     }
 
   ngOnInit() {
+    this.viewAttendees = false;
     this.event = this.data;
     this.username = this.authService.name;
     if(this.event.allDay && this.event.end){
       this.newEnd = this.event.end;
       this.newEnd.setDate(this.event.end.getDate()-1);
-      console.log(this.newEnd);
-      console.log(this.event.id);
     }
-    console.log(this.event);
     if(this.event.extendedProps.timeSlotId){
       this.isAppt = true;
     } else{
       this.isAppt = false;
     }
+    this.guests = this.event.extendedProps.confirmedBy;
+    console.log(this.guests);
+    console.log(this.event);
   }
 
   close(){
@@ -50,6 +56,10 @@ export class EventDetailComponent implements OnInit {
 
   onNoClick(){
     this.ref.close();
+  }
+
+  viewGuests(){
+    this.viewAttendees = !this.viewAttendees;
   }
 
   editEvent(){
@@ -64,8 +74,39 @@ export class EventDetailComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if(result === 'confirmed'){
-        this.dataStorage.deleteEvent(this.event.id);
+        this.dataStorage.deleteEvent(this.event.id).subscribe(result => {
+          this.snackbar.open(result.message, 'OK', {duration: 5000});
+          this.ref.close();
+          this.dataStorage.fetchCalendars();
+        });
+
       }
+    })
+  }
+
+  shareEvent(){
+    const dialogRef = this.dialog.open(ShareEvent, {
+      width: "400px",
+      height: "350px"
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result !== 'cancel'){
+        const obj = {
+          eventId: +this.event.id,
+          recipients: result
+        }
+        this.dataStorage.shareEvent(obj).subscribe(result => {
+          this.snackbar.open(result.message, 'OK', {duration: 5000})
+        });
+      }
+    })
+
+  }
+
+  confirmAttendance(){
+    this.dataStorage.userConfirmEvent(this.event.id).subscribe(result => {
+      this.snackbar.open(result.message, 'OK',{duration: 5000})
     })
   }
 
