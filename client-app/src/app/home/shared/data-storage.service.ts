@@ -294,7 +294,7 @@ export class DataStorageService {
   shareEvent(obj: Object){
     console.log(obj);
     this.isLoadingSubject.next(true);
-    return this.http.post<ApiResponse>(this.baseUrlEvent + share, obj).pipe(
+    return this.http.post<ApiResponse>(this.baseUrlEvent + 'share', obj).pipe(
       (map(data=>data),catchError(error=>throwError(error))),
       finalize(()=>this.isLoadingSubject.next(false))
     );
@@ -317,7 +317,11 @@ export class DataStorageService {
 
   userConfirmEvent(id: number){
     this.isLoadingSubject.next(true);
-    return this.http.post<ApiResponse>(this.baseUrlEvent + "confirm/" + id, id)
+    const obj = {
+      id: id
+    };
+
+    return this.http.post<ApiResponse>(this.baseUrlEvent + "confirm/" + id, obj)
     .pipe(
       (map(data => data),
       catchError(error => throwError(error))),

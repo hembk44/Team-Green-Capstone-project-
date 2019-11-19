@@ -19,6 +19,8 @@ export class EventDetailComponent implements OnInit {
   newEnd: Date;
   isAppt: boolean;
   username: string;
+  viewAttendees: boolean;
+  guests: any[];
 
   constructor(private calService: CalendarService,
     private router: Router,
@@ -31,20 +33,21 @@ export class EventDetailComponent implements OnInit {
     }
 
   ngOnInit() {
+    this.viewAttendees = false;
     this.event = this.data;
     this.username = this.authService.name;
     if(this.event.allDay && this.event.end){
       this.newEnd = this.event.end;
       this.newEnd.setDate(this.event.end.getDate()-1);
-      console.log(this.newEnd);
-      console.log(this.event.id);
     }
-    console.log(this.event);
     if(this.event.extendedProps.timeSlotId){
       this.isAppt = true;
     } else{
       this.isAppt = false;
     }
+    this.guests = this.event.extendedProps.confirmedBy;
+    console.log(this.guests);
+    console.log(this.event);
   }
 
   close(){
@@ -53,6 +56,10 @@ export class EventDetailComponent implements OnInit {
 
   onNoClick(){
     this.ref.close();
+  }
+
+  viewGuests(){
+    this.viewAttendees = !this.viewAttendees;
   }
 
   editEvent(){
@@ -81,11 +88,11 @@ export class EventDetailComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if(result !== 'cancel'){
         const obj = {
-          id: this.event.id,
-          recipients: RecursiveTemplateAstVisitor
+          eventId: +this.event.id,
+          recipients: result
         }
         this.dataStorage.shareEvent(obj).subscribe(result => {
-          console.log(result);
+          this.snackbar.open(result.message, 'OK', {duration: 5000})
         });
       }
     })
