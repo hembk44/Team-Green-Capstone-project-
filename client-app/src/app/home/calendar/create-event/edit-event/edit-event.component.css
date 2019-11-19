@@ -20,6 +20,10 @@
   .cancel-button{
     margin-left:20px;
   }
+
+  .select-group{
+    margin-right: 20px;
+  }
   
   .example-spacer {
     flex: 1 1 auto;
@@ -36,9 +40,4 @@
   
   }
   
-  .primary {
-    color: #800029;
-    background-color: blanchedalmond;
-    /* width: 10%; */
-  }
   

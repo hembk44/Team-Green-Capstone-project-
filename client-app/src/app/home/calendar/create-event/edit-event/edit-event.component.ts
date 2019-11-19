@@ -7,8 +7,9 @@ import { DataStorageService } from 'src/app/home/shared/data-storage.service';
 import { AuthService } from 'src/app/auth/auth.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ENTER, COMMA } from '@angular/cdk/keycodes';
-import { MatChipInputEvent, MatSnackBar } from '@angular/material';
+import { MatChipInputEvent, MatSnackBar, MatDialog } from '@angular/material';
 import { NgxMaterialTimepickerTheme } from 'ngx-material-timepicker';
+import { GroupSelection } from 'src/app/home/shared/group-selection';
 
 @Component({
   selector: 'app-edit-event',
@@ -57,7 +58,8 @@ export class EditEventComponent implements OnInit {
     private authService: AuthService,
     private dataStorage: DataStorageService,
     private calService: CalendarService,
-    private snackbar: MatSnackBar
+    private snackbar: MatSnackBar,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit() {
@@ -196,6 +198,20 @@ export class EditEventComponent implements OnInit {
     if (index >= 0) {
       this.emails.splice(index, 1);
     }
+  }
+
+  groupSelect(){
+    const dialogRef = this.dialog.open(GroupSelection, {
+      width: '600px'
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(result);
+      for(let email of result){
+        if(!this.emails.includes(email)){
+          this.emails.push(email);
+        }
+      }
+    })
   }
 
 }

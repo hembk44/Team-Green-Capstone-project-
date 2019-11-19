@@ -402,7 +402,7 @@ export class DataStorageService {
     console.log(obj);
     this.isLoadingSubject.next(true);
     return this.http
-    .post<ApiResponse>(this.baseUrlEvent+'edit/'+id, obj)
+    .put<ApiResponse>(this.baseUrlEvent+'edit/'+id, obj)
     .pipe(
       (map(data=>data),
       catchError(error => throwError(error)),
