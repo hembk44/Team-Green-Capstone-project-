@@ -398,25 +398,27 @@ export class DataStorageService {
       });
   }
 
-  editEvent(obj: Object) {
+  editEvent(id: number,obj: Object) {
     console.log(obj);
-    // this.isLoadingSubject.next(true);
-    // return this.http
-    // .post<Object>('edit api', obj)
-    // .pipe(
-    //   (map(data=>data),
-    //   catchError(error => throwError(error)),
-    //   finalize(()=>this.isLoadingSubject.next(false)))
-    // );
+    this.isLoadingSubject.next(true);
+    return this.http
+    .post<ApiResponse>(this.baseUrlEvent+'edit/'+id, obj)
+    .pipe(
+      (map(data=>data),
+      catchError(error => throwError(error)),
+      finalize(()=>this.isLoadingSubject.next(false)))
+    );
   }
 
   deleteEvent(id: number) {
     console.log(id);
-    // this.isLoadingSubject.next(false);
-    // this.http.delete<ApiResponse>('delete url' + id)
-    // .pipe(map(data=>data),
-    // catchError(error => throwError(error))),
-    // finalize(()=>this.isLoadingSubject.next(false));
+    this.isLoadingSubject.next(false);
+    return this.http
+    .delete<ApiResponse>(this.baseUrlEvent+'delete/' + id)
+    .pipe(
+      (map(data=>data),
+      catchError(error => throwError(error))),
+      finalize(()=>this.isLoadingSubject.next(false)));
   }
 
   deleteCalendar(id: number) {

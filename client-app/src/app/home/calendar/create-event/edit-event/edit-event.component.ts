@@ -7,7 +7,7 @@ import { DataStorageService } from 'src/app/home/shared/data-storage.service';
 import { AuthService } from 'src/app/auth/auth.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ENTER, COMMA } from '@angular/cdk/keycodes';
-import { MatChipInputEvent } from '@angular/material';
+import { MatChipInputEvent, MatSnackBar } from '@angular/material';
 import { NgxMaterialTimepickerTheme } from 'ngx-material-timepicker';
 
 @Component({
@@ -56,7 +56,8 @@ export class EditEventComponent implements OnInit {
     private router: Router,
     private authService: AuthService,
     private dataStorage: DataStorageService,
-    private calService: CalendarService
+    private calService: CalendarService,
+    private snackbar: MatSnackBar
   ) { }
 
   ngOnInit() {
@@ -65,14 +66,13 @@ export class EditEventComponent implements OnInit {
       if(!loading){
         this.calendars = this.calService.getCalendars();
       }
-    })
+    });
     this.route.params.subscribe((params: Params) => {
       this.id = +params["id"];
     });
     this.event = this.calService.getEvent(this.id);
     console.log(this.event);
     this.newEnd = this.event.end;
-    this.newEnd.setDate(this.newEnd.getDate()-1);
     this.primaryColor = this.event.backgroundColor;
     this.username = this.authService.name;
     this.calendars=this.calService.getCalendars().filter(cal => cal.createdBy.email === this.username);
@@ -139,7 +139,7 @@ export class EditEventComponent implements OnInit {
         description: eventFormValues.description,
         start: eventFormValues.startDate,
         end: this.newEnd,
-        recipients: [eventFormValues.email],
+        recipients: this.emails,
         location: eventFormValues.location,
         backgroundColor: this.primaryColor,
         borderColor: this.primaryColor,
@@ -152,8 +152,15 @@ export class EditEventComponent implements OnInit {
     //     this.dataStorage.fetchCalendars();
     //   }
     // });
-    this.dataStorage.editEvent(this.obj);
-    this.router.navigate(["home/calendar"]);
+    this.dataStorage.editEvent(this.event.id,this.obj).subscribe(result => {
+      if(result) {
+        this.dataStorage.fetchCalendars();
+        this.snackbar.open(result.message, 'OK', {duration: 5000});
+        this.router.navigate(["home/calendar"]);
+      } else {
+        this.snackbar.open('Something went wrong', 'OK', {duration:5000});
+      }
+    });
   }
 
   setPrimary(color: string){
