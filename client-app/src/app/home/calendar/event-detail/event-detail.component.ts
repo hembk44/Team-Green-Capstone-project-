@@ -75,7 +75,9 @@ export class EventDetailComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if(result === 'confirmed'){
         this.dataStorage.deleteEvent(this.event.id).subscribe(result => {
-          this.snackbar.open(result.message, 'OK', {duration: 5000})
+          this.snackbar.open(result.message, 'OK', {duration: 5000});
+          this.ref.close();
+          this.dataStorage.fetchCalendars();
         });
 
       }

@@ -105,9 +105,6 @@ export class CreateEventComponent implements OnInit {
     if (eventFormValues.email) {
       this.emails = eventFormValues.email.split(",");
     }
-    console.log(eventFormValues.startDate.toLocaleDateString());
-    console.log(this.primaryColor);
-    console.log(this.secondaryColor);
     if(!this.allDay){
       this.startDate = new Date(eventFormValues.startDate
         .toDateString()
@@ -124,7 +121,7 @@ export class CreateEventComponent implements OnInit {
     }
     
     //checking if start comes before end
-    if (this.startDate <= this.endDate) {
+    if (this.startDate < this.endDate) {
       //creating event object based on allDay
       if (!this.allDay) {
         this.obj = {
@@ -160,12 +157,11 @@ export class CreateEventComponent implements OnInit {
       this.dataStorage.storeEvent(this.obj).subscribe(result => {
         if (result) {
           this.dataStorage.fetchCalendars();
+          //confirmation snackbar
+          this.snackbar.open(result.message, "OK", {
+            duration: 3000
+          });
         }
-      });
-
-      //confirmation snackbar
-      this.snackbar.open("Event created successfully", "OK", {
-        duration: 3000
       });
       this.router.navigate(["home/calendar"]);
     } else {

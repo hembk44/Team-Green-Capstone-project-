@@ -285,7 +285,7 @@ export class DataStorageService {
 
   storeEvent(obj: Object) {
     this.isLoadingSubject.next(true);
-    return this.http.post<Object>(this.baseUrlEvent + "set", obj).pipe(
+    return this.http.post<ApiResponse>(this.baseUrlEvent + "set", obj).pipe(
       (map(data => data), catchError(error => throwError(error))),
       finalize(() => this.isLoadingSubject.next(false))
     );
