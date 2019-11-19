@@ -545,10 +545,8 @@ public class AppointmentController extends ExceptionResolver {
 		List<String>addedUserEmail = new ArrayList<String>();
 		
 		int timeSlotCounter = timeSlots.size();
-		System.out.println("Timeslot size is "+ timeSlotCounter);
 		
 		int recipientsCounter = editedEmails.size();
-		System.out.println("Recipients size is "+ recipientsCounter);
 		
 		if(recipientsCounter > timeSlotCounter) {
 			return new APIresponse(HttpStatus.BAD_REQUEST.value(), "The number of recipients exceeds the number of timeslots. Please remove one or more recipients.",
@@ -560,7 +558,7 @@ public class AppointmentController extends ExceptionResolver {
 			User newRecipientUser = userService.findByEmail(email);
 			
 			if (newRecipientUser != null) {
-				newRecipients.add(userService.findByEmail(email));
+				newRecipients.add(newRecipientUser);
 				if(!oldRecipients.contains(newRecipientUser)) {
 					addedUsers.add(newRecipientUser);
 				}
@@ -591,6 +589,14 @@ public class AppointmentController extends ExceptionResolver {
 		}
 		
 		appointmentService.save(appointment);
+		
+		for(TimeSlots slots: timeSlots) {
+			Event event = eventService.findByTimeSlotId(slots.getId());
+			event.setTitle(appointmentEdit.getName());
+			event.setDescription(appointment.getDescription());
+			event.setLocation(appointment.getLocation());
+			eventService.save(event);
+		}
 		
 		if (!addedUserEmail.isEmpty()) {
 

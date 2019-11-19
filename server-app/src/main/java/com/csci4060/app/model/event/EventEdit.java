@@ -6,24 +6,22 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 
 @Data
-@RequiredArgsConstructor
-public class EventDummy {
+public class EventEdit {
 	
 	@NotNull(message= " Host Calendar must be specified for this event")
 	Long calendarId;
 	
-	@NotEmpty(message= "Event title must not be empty")
+	@NotEmpty(message="Name must not be empty")
 	String title;
 	
 	String description;
 	
+	List<String> recipients;
+	
 	@NotEmpty(message= "Location must be specified for the event")
 	String location;
-	
-	List<String> recipients;
 	
 	@NotEmpty(message= "Start time must be specified for the event!")
 	String start;
