@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,6 +29,7 @@ import com.csci4060.app.model.User;
 import com.csci4060.app.model.calendar.Calendar;
 import com.csci4060.app.model.event.Event;
 import com.csci4060.app.model.event.EventDummy;
+import com.csci4060.app.model.event.EventEdit;
 import com.csci4060.app.model.event.EventShare;
 import com.csci4060.app.services.CalendarService;
 import com.csci4060.app.services.EmailSenderService;
@@ -235,9 +237,138 @@ public class EventController extends ExceptionResolver {
 				"Event " + event.getTitle() + " has been shared to users: " + sharedWithList, event);
 	}
 
+	@PutMapping(path = "/edit/{id}")
+	@PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
+	public APIresponse editEvent(@Valid @RequestBody EventEdit eventEdit, @PathVariable("id") Long eventId) {
+
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		String username = "";
+
+		if (principal instanceof UserDetails) {
+			username = ((UserDetails) principal).getUsername();
+		}
+
+		User user = userService.findByUsername(username);
+
+		Event event = eventService.findById(eventId);
+
+		if (event == null) {
+			return new APIresponse(HttpStatus.BAD_REQUEST.value(), "Event with id " + eventId + " does not exist",
+					null);
+		}
+
+		if (event.getCreatedBy() != user) {
+			return new APIresponse(HttpStatus.FORBIDDEN.value(), "You did not create the event. Authorization denied!",
+					null);
+		}
+
+		if (event.getTimeSlotId() != null) {
+			return new APIresponse(HttpStatus.FORBIDDEN.value(),
+					"This is an appointment. Please go to the appointment tab to edit the appointment", null);
+		}
+
+		Calendar calendar = calendarService.findById(eventEdit.getCalendarId());
+
+		if (calendar == null) {
+			return new APIresponse(HttpStatus.BAD_REQUEST.value(),
+					"Calendar with id " + eventEdit.getCalendarId() + " does not exist", null);
+		}
+
+		if (calendar.getCreatedBy() != user) {
+			return new APIresponse(HttpStatus.FORBIDDEN.value(),
+					"You did not create the Calendar. So you cannot put the event in this calendar.", null);
+		}
+
+		event.setTitle(eventEdit.getTitle());
+		event.setDescription(eventEdit.getDescription());
+		event.setLocation(eventEdit.getLocation());
+		event.setStart(eventEdit.getStart());
+		event.setEnd(eventEdit.getEnd());
+		event.setBackgroundColor(eventEdit.getBackgroundColor());
+		event.setBorderColor(calendar.getColor());
+		event.setAllDay(eventEdit.getAllDay());
+
+		List<String> editedEmails = eventEdit.getRecipients();
+
+		List<User> confirmedUser = event.getConfirmedBy();
+
+		List<User> newRecipients = new ArrayList<>();
+		List<User> oldRecipients = event.getRecipients();
+
+		List<User> deletedUsers = new ArrayList<User>();
+		List<String> deletedUserEmail = new ArrayList<String>();
+
+		List<User> addedUsers = new ArrayList<User>();
+		List<String> addedUserEmail = new ArrayList<String>();
+
+		for (String email : editedEmails) {
+			User newRecipientUser = userService.findByEmail(email);
+			if (newRecipientUser != null) {
+				newRecipients.add(newRecipientUser);
+				if (!oldRecipients.contains(newRecipientUser)) {
+					addedUsers.add(newRecipientUser);
+				}
+			}
+		}
+
+		for (User oldRecipient : oldRecipients) {
+			if (!newRecipients.contains(oldRecipient)) {
+				deletedUsers.add(oldRecipient);
+			}
+		}
+
+		for (User newUser : addedUsers) {
+			addedUserEmail.add(newUser.getEmail());
+			event.getRecipients().add(newUser);
+		}
+
+		for (User oldUser : deletedUsers) {
+			deletedUserEmail.add(oldUser.getEmail());
+			event.getRecipients().remove(oldUser);
+
+			if (confirmedUser.contains(oldUser)) {
+				event.getConfirmedBy().remove(oldUser);
+			}
+		}
+
+		eventService.save(event);
+
+		if (!addedUserEmail.isEmpty()) {
+
+			SimpleMailMessage mailMessage = new SimpleMailMessage();
+
+			String[] emails = addedUserEmail.toArray(new String[addedUserEmail.size()]);
+
+			mailMessage.setTo(emails);
+			mailMessage.setSubject("Event Information");
+			mailMessage.setFrom("ulmautoemail@gmail.com");
+			mailMessage.setText(
+					"A faculty has set an event for you. Please log in to you ULM communication app and register for the event. Thank you!");
+			emailSenderService.sendEmail(mailMessage);
+		}
+
+		if (!deletedUserEmail.isEmpty()) {
+
+			SimpleMailMessage mailMessage = new SimpleMailMessage();
+
+			String[] emails = deletedUserEmail.toArray(new String[deletedUserEmail.size()]);
+
+			mailMessage.setTo(emails);
+			mailMessage.setSubject("Event Information");
+			mailMessage.setFrom("ulmautoemail@gmail.com");
+			mailMessage.setText("A faculty has cancelled an event with name " + event.getTitle()
+					+ " If you have cofirmed the event, we apologize for the inconvenience." + "Thank you!");
+
+			emailSenderService.sendEmail(mailMessage);
+		}
+
+		return new APIresponse(HttpStatus.OK.value(), "Appointment has been successfully edited", event);
+	}
+
 	@DeleteMapping(path = "/delete/{id}")
 	@PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
-	public APIresponse deleteAppointment(@PathVariable("id") Long eventId) {
+	public APIresponse deleteEvent(@PathVariable("id") Long eventId) {
 
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -292,6 +423,6 @@ public class EventController extends ExceptionResolver {
 			emailSenderService.sendEmail(mailMessage);
 		}
 
-		return new APIresponse(HttpStatus.OK.value(), "Appointment was successfully deleted.", event);
+		return new APIresponse(HttpStatus.OK.value(), "Event was successfully deleted.", event);
 	}
 }

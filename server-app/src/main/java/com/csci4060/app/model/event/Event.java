@@ -8,7 +8,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
-import javax.validation.constraints.NotEmpty;
 import com.csci4060.app.model.User;
 import lombok.Data;
 
@@ -19,17 +18,8 @@ public class Event{
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	
-
-	@NotEmpty(message= "Event name must not be empty")
-
 	String title;
-	
 	String description;
-
-
-	@NotEmpty(message= "Location must be specified")
-
 	String location;
 
 	@ManyToMany(targetEntity = User.class)
@@ -38,10 +28,10 @@ public class Event{
 	@ManyToMany(targetEntity =  User.class)
 	List<User> confirmedBy; 
 	
-	@NotEmpty(message= "Start time must be specified for the event!")
+	
 	String start;
 	
-	@NotEmpty(message= "End time must be specified for the event!")
+	
 	String end;
 	
 	@OneToOne(targetEntity = User.class)
