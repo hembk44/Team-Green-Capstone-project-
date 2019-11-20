@@ -130,7 +130,7 @@
       <mat-icon matSuffix>mode_edit</mat-icon>
     </mat-form-field> -->
     <mat-toolbar class="primary" style="margin: 10px auto; padding-left: 10px;">
-      <mat-toolbar-row *ngFor="let e of customGroupEmails; let i = index">
+      <mat-toolbar-row *ngFor="let e of editEmails; let i = index">
         <mat-icon mat-list-icon>person_outline</mat-icon>
         <span>{{ e }}</span> &nbsp;
         <!-- <span class="example-spacer"></span> -->
@@ -141,11 +141,14 @@
       </mat-toolbar-row>
     </mat-toolbar>
   </div>
-  <div style="text-align: center; color: black; margin-top: 10px;">
+  <div
+    style="text-align: center; color: black; margin-top: 10px;"
+    *ngIf="!editMode"
+  >
     <span>OR</span>
   </div>
 
-  <mat-form-field style="cursor: pointer;width:75%;">
+  <mat-form-field style="cursor: pointer;width:75%;" *ngIf="!editMode">
     <ngx-mat-file-input
       #removableInput
       formControlName="uploadFile"

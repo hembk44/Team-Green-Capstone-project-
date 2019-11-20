@@ -23,8 +23,8 @@ import { EventDate } from "../../calendar/event-date.model";
 
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
 import { MatChipInputEvent } from "@angular/material/chips";
-import { GroupSelection } from '../../shared/group-selection';
-import { NgxMaterialTimepickerTheme } from 'ngx-material-timepicker';
+import { GroupSelection } from "../../shared/group-selection";
+import { NgxMaterialTimepickerTheme } from "ngx-material-timepicker";
 
 @Component({
   selector: "app-appointment-create",
@@ -44,33 +44,35 @@ export class AppointmentCreateComponent implements OnInit {
   emails: string[] = [];
 
   //theme for time picker
-  timeTheme: NgxMaterialTimepickerTheme={
+  timeTheme: NgxMaterialTimepickerTheme = {
     container: {
-      bodyBackgroundColor: 'darkgrey',
-      buttonColor: 'white'
+      bodyBackgroundColor: "darkgrey",
+      buttonColor: "white"
     },
     dial: {
-      dialBackgroundColor: 'rgb(185, 163, 90)'
+      dialBackgroundColor: "rgb(185, 163, 90)"
     },
     clockFace: {
-      clockHandColor: '#800029',
-
+      clockHandColor: "#800029"
     }
-  }
+  };
 
-  get date(){
+  get date() {
     return this.formBuilder.group({
       date: ["", Validators.required],
       time: this.formBuilder.array([this.time])
-    })
+    });
   }
 
-  get time(){
+  get time() {
     return this.formBuilder.group({
       start: ["", Validators.required],
       end: ["", Validators.required],
-      interval: ["", [Validators.required,Validators.pattern(/^[1-9]+[0-9]*$/)]]
-    })
+      interval: [
+        "",
+        [Validators.required, Validators.pattern(/^[1-9]+[0-9]*$/)]
+      ]
+    });
   }
 
   constructor(
@@ -90,40 +92,40 @@ export class AppointmentCreateComponent implements OnInit {
     this.initForm();
   }
 
-  private initForm(){
-    let title = '';
-    let description = '';
-    let location = '';
+  private initForm() {
+    let title = "";
+    let description = "";
+    let location = "";
     let email = this.email;
     let dateRange = new FormArray([this.date]);
 
     this.appointmentForm = new FormGroup({
-      'title': new FormControl(title,[Validators.required]),
-      'description': new FormControl(description),
-      'location': new FormControl(location),
-      'email': email,
-      'dateRange': dateRange
-    })    
+      title: new FormControl(title, [Validators.required]),
+      description: new FormControl(description),
+      location: new FormControl(location),
+      email: email,
+      dateRange: dateRange
+    });
   }
 
   cancel() {
     this.router.navigate(["/home/appointment/sent"]);
   }
 
-  addDate(){
-    (<FormArray>this.appointmentForm.get('dateRange')).push(this.date);
+  addDate() {
+    (<FormArray>this.appointmentForm.get("dateRange")).push(this.date);
   }
 
-  deleteDate(index:number){
-    (<FormArray>this.appointmentForm.get('dateRange')).removeAt(index);
+  deleteDate(index: number) {
+    (<FormArray>this.appointmentForm.get("dateRange")).removeAt(index);
   }
 
-  addTime(date){
-    date.get('time').push(this.time);
+  addTime(date) {
+    date.get("time").push(this.time);
   }
 
-  deleteTime(date, time){
-    date.get('time').removeAt(time);
+  deleteTime(date, time) {
+    date.get("time").removeAt(time);
   }
 
   // addEmails() {
@@ -178,22 +180,24 @@ export class AppointmentCreateComponent implements OnInit {
     const appointmentFormValues = this.appointmentForm.value;
     // this.emails.push(this.appointmentForm.value.email);
     console.log(appointmentFormValues.dateRange);
-    for(let date of appointmentFormValues.dateRange){
-      for(let time of date.time){
-        if(time.start.substring(1,2)===':'){
-          time.start = '0'.concat(time.start);
+    for (let date of appointmentFormValues.dateRange) {
+      for (let time of date.time) {
+        if (time.start.substring(1, 2) === ":") {
+          time.start = "0".concat(time.start);
         }
-        if(time.end.substring(1,2)===':'){
-          time.end='0'.concat(time.end);
+        if (time.end.substring(1, 2) === ":") {
+          time.end = "0".concat(time.end);
         }
         this.dateRangeArray.push({
           date: date.date.toLocaleDateString(),
-          apptimes: [{
-            startTime: time.start,
-            endTime: time.end,
-            interv: time.interval
-          }]
-        })
+          apptimes: [
+            {
+              startTime: time.start,
+              endTime: time.end,
+              interv: time.interval
+            }
+          ]
+        });
       }
     }
     const obj = {
@@ -207,42 +211,47 @@ export class AppointmentCreateComponent implements OnInit {
     this.dataStorage.storeAppointment(obj).subscribe(result => {
       if (result) {
         console.log(result);
-        this.dataStorage.fetchAppointment();
         console.log(result.result.id);
         this.dataStorage.sendApptToCal(result.result.id).subscribe(result => {
           console.log(result);
-          this.router.navigate(["home/appointment/sent"])
+          this.router.navigate(["home/appointment/sent"]);
         });
+        this.dataStorage.fetchAppointment();
       }
     });
-
   }
 
   getFormValidationErrors() {
     Object.keys(this.appointmentForm.controls).forEach(key => {
-  
-    const controlErrors: ValidationErrors = this.appointmentForm.get(key).errors;
-    if (controlErrors != null) {
-          Object.keys(controlErrors).forEach(keyError => {
-            return('Key control: ' + key + ', keyError: ' + keyError + ', err value: ' + controlErrors[keyError]);
-          });
-        }
-      });
+      const controlErrors: ValidationErrors = this.appointmentForm.get(key)
+        .errors;
+      if (controlErrors != null) {
+        Object.keys(controlErrors).forEach(keyError => {
+          return (
+            "Key control: " +
+            key +
+            ", keyError: " +
+            keyError +
+            ", err value: " +
+            controlErrors[keyError]
+          );
+        });
+      }
+    });
   }
 
-
-  groupSelect(){
+  groupSelect() {
     const dialogRef = this.dialog.open(GroupSelection, {
-      width: '600px'
+      width: "600px"
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log(result);
-      for(let email of result){
-        if(!this.emails.includes(email)){
+      for (let email of result) {
+        if (!this.emails.includes(email)) {
           this.emails.push(email);
         }
       }
-    })
+    });
   }
 }
 
@@ -298,7 +307,6 @@ export class DialogDateTimeIntervalDialog implements OnInit {
     // Prevent Saturday and Sunday from being selected.
     return day !== 0 && day !== 6;
   };
-
 }
 
 @Component({

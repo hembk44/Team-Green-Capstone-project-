@@ -16,6 +16,7 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
   appointment: Appointment;
   currentRole: string;
   searchText = "";
+  appointmentsExists: boolean = false;
   private appointmentTypeSubscription: Subscription;
   constructor(
     private router: Router,
@@ -42,10 +43,17 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
         status => {
           console.log(status);
           if (status === "sent") {
+            console.log(this.appointmentsExists);
             this.dataStorage.fetchAppointment();
             this.dataStorage.isLoading.subscribe(loading => {
               if (!loading) {
+                this.appointmentsExists = true;
+                console.log(this.appointmentsExists);
+
                 this.appointments = this.dataStorage.appointmentLists;
+              } else {
+                this.appointmentsExists = false;
+                console.log(this.appointmentsExists);
               }
             });
           } else {
@@ -62,6 +70,6 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    // this.appointmentTypeSubscription.unsubscribe();
+    this.appointmentTypeSubscription.unsubscribe();
   }
 }

@@ -18,3 +18,8 @@
 .example-spacer {
   flex: 1 1 auto;
 }
+
+.appt-wrap {
+  height: 100%;
+  overflow-y: auto;
+}
