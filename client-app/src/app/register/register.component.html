@@ -1,10 +1,10 @@
-<mat-card style="height:90%">
-    <mat-card-header>
+<mat-card style="height:90%" class="wrap">
+    <mat-card-header class="top-row">
         <mat-card-title>
             Register Individual User
         </mat-card-title>
     </mat-card-header>
-    <mat-card-content>
+    <mat-card-content class="content">
         <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
             <mat-form-field>
                <input 
@@ -25,11 +25,6 @@
             </mat-form-field><br>
             <mat-form-field>
                 <input matInput
-                formControlName="username"
-                placeholder="Username">
-            </mat-form-field><br>
-            <mat-form-field>
-                <input matInput
                 formControlName="password"
                 type="password"
                 placeholder="Password">
@@ -40,8 +35,11 @@
                 type="password"
                 placeholder="Confirm Password">
             </mat-form-field><br>
-            <button mat-raised-button type="submit" class="primary submit-button">Confirm</button>
-            <button mat-raised-button type="button" class="primary submit-button" (click)="clearForm()">Clear</button>
+            <div class="bottom-row">
+               <button mat-raised-button type="submit" class="primary submit-button">Confirm</button>
+                <button mat-raised-button type="button" class="primary submit-button" (click)="clearForm()">Clear</button> 
+            </div>
+            
         </form>
     </mat-card-content>
 </mat-card>

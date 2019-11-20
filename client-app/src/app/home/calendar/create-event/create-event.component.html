@@ -10,13 +10,16 @@
           >{{ cal.name }}</mat-option
         >
       </mat-select>
+      <mat-error *ngIf="eventForm.controls['calendar'].hasError('required')">Please choose a calendar</mat-error>
     </mat-form-field>
     <mat-form-field>
       <input
         matInput
         placeholder="Event Title"
         formControlName="title"
-      /> </mat-form-field
+      /> 
+        <mat-error *ngIf="eventForm.controls['title'].hasError('required')">Title is required</mat-error>
+      </mat-form-field
     ><br />
 
 
@@ -45,6 +48,7 @@
         placeholder="Start Date"
         formControlName="startDate"
         [matDatepicker]="startpicker"
+        readonly
       />
       <mat-datepicker-toggle
         matSuffix
@@ -74,6 +78,7 @@
         placeholder="End Date"
         formControlName="endDate"
         [matDatepicker]="endpicker"
+        readonly
       />
       <mat-datepicker-toggle
         matSuffix
@@ -137,23 +142,27 @@
           [removable]="removable"
           (removed)="remove(email)"
         >
+          <mat-icon mat-list-icon>person_outline</mat-icon>
           {{ email }}
           <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
         </mat-chip>
         <input
           placeholder="Enter Emails"
+          matInput
+          [formControl]="email"
           [matChipInputFor]="chipList"
           [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
           [matChipInputAddOnBlur]="addOnBlur"
           (matChipInputTokenEnd)="add($event)"
         />
       </mat-chip-list>
+      <mat-error *ngIf="!isEmailValid">{{ errorMessage }}</mat-error>
       <mat-hint>Use commas or hit ENTER for multiple emails.</mat-hint>
     </mat-form-field>&nbsp;
-    <mat-checkbox formControlName="allDay" (click)="allday()" class="primary"
+    <mat-checkbox formControlName="allDay" (click)="allday()" color="primary"
       >All Day</mat-checkbox
     >&nbsp;&nbsp;
-    <button mat-raised-button type="button" class="primary" (click)="groupSelect()">Select Groups</button>
+    <button mat-raised-button type="button" class="primary" (click)="groupSelect()" *ngIf="role !== 'ROLE_USER'">Select Groups</button>
 
     <mat-toolbar>
       <mat-toolbar-row>

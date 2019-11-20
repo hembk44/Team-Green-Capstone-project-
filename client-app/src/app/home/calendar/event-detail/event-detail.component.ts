@@ -99,6 +99,7 @@ export class EventDetailComponent implements OnInit {
         this.dataStorage.shareEvent(obj).subscribe(result => {
           this.snackbar.open(result.message, 'OK', {duration: 5000})
         });
+        this.dataStorage.fetchCalendars();
       }
     })
 

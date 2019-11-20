@@ -77,9 +77,10 @@
     padding: 2px;
 }
 .create-button{
-    background-color: rgb(25, 204, 25);
+    background-color: white;
     margin-left:5px;
-    color:white;
+    color: #800029;
+    border: solid 1px #800029;
 }
 
 .side-nav-toggle{

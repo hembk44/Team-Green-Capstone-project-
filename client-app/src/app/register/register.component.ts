@@ -32,7 +32,6 @@ export class RegisterComponent implements OnInit {
       fname: new FormControl("",[Validators.required]),
       lname: new FormControl("",[Validators.required]),
       email: new FormControl("",[Validators.required, Validators.email]),
-      username: new FormControl("",[Validators.required]),
       password: new FormControl("",[Validators.required]),
       confirmPwd: new FormControl("",[Validators.required])
     });
@@ -46,7 +45,7 @@ export class RegisterComponent implements OnInit {
     }
     this.signupPayload = new SignUpInfo(
       signupFormValues.fname + " " + signupFormValues.lname,
-      signupFormValues.username,
+      signupFormValues.email,
       signupFormValues.email,
       signupFormValues.password
     );

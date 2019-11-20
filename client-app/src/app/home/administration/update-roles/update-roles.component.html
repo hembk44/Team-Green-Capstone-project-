@@ -12,7 +12,7 @@
                 <mat-select [(value)]="user.roles">
                     <mat-option value="ROLE_ADMIN" (click)="addUser(user.name,user.email,'ROLE_ADMIN')">Admin</mat-option>
                     <mat-option value="ROLE_PM" (click)="addUser(user.name,user.email,'ROLE_PM')">Faculty</mat-option>
-                    <mat-option value="ROLE_MODERATOR" (click)="addUser(user.name,user.email,'ROLE_MO')">Moderator</mat-option>
+                    <mat-option value="ROLE_MODERATOR" (click)="addUser(user.name,user.email,'ROLE_MODERATOR')">Moderator</mat-option>
                     <mat-option value="ROLE_USER" (click)="addUser(user.name,user.email,'ROLE_USER')">Student</mat-option>
                 </mat-select>   
             </mat-form-field>

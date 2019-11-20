@@ -27,6 +27,22 @@
 
 }
 
+.wrap>*{
+  width:80%;
+  margin-left:10%;
+  margin-right: 10%;
+}
+
+mat-form-field{
+  width: 100%;
+}
+
+.bottom-row{
+  position:absolute;
+  bottom:0;
+  margin-bottom:7%;
+}
+
 
 .container {
   background-image: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), url(https://webservices.ulm.edu/apps/system/files/logos/ulm_academic_maroon_white.png);

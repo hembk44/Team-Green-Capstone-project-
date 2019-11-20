@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import {
   FormGroup,
   FormControl,
@@ -24,7 +24,7 @@ import { GroupSelection } from '../../shared/group-selection';
 export class CreateEventComponent implements OnInit {
   eventForm: FormGroup;
   eventData: CalEvent;
-  email = new FormControl();
+  email = new FormControl("",[Validators.email]);
   dateRangeArray: EventDate[] = [];
   primaryColor: string = "#5484ed";
   secondaryColor: string = "";
@@ -43,6 +43,10 @@ export class CreateEventComponent implements OnInit {
   removable = true;
   addOnBlur = true;
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
+  isEmailValid = true;
+  errorMessage: string;
+  @ViewChild("chipList", { static: false }) chipList;
+  role: string;
 
   constructor(
     private router: Router,
@@ -71,6 +75,7 @@ export class CreateEventComponent implements OnInit {
   ngOnInit() {
     this.emails = [];
     this.username = this.authService.name;
+    this.role = this.authService.user;
     console.log(this.username);
     this.calendars = this.calService
       .getCalendars()
@@ -78,12 +83,12 @@ export class CreateEventComponent implements OnInit {
     console.log(this.calendars);
     this.eventForm = new FormGroup({
       title: new FormControl("", [Validators.required]),
-      description: new FormControl(""),
-      location: new FormControl(""),
+      description: new FormControl("",[Validators.required]),
+      location: new FormControl("",[Validators.required]),
       email: this.email,
-      startDate: new FormControl(new Date()),
+      startDate: new FormControl(new Date(),[Validators.required]),
       startTime: new FormControl(),
-      endDate: new FormControl(new Date()),
+      endDate: new FormControl(new Date(),[Validators.required]),
       endTime: new FormControl(),
       primary: new FormControl([Validators.required]),
       allDay: new FormControl(),
@@ -110,18 +115,17 @@ export class CreateEventComponent implements OnInit {
         .toDateString()
         .concat(" ")
         .concat(eventFormValues.startTime));
-        console.log(this.startDate);
       this.endDate = new Date(eventFormValues.endDate
         .toDateString()
         .concat(" ")
         .concat(eventFormValues.endTime));
     } else{
-      this.startDate = new Date(eventFormValues.startDate);
-      this.endDate = new Date(eventFormValues.endDate);
+      this.startDate = new Date(eventFormValues.startDate.toLocaleDateString());
+      this.endDate = new Date(eventFormValues.endDate.toLocaleDateString());
     }
-    
+    console.log(this.startDate,this.endDate);
     //checking if start comes before end
-    if (this.startDate < this.endDate) {
+    if ((this.startDate <= this.endDate && this.allDay) || (this.startDate<this.endDate && !this.allDay)) {
       //creating event object based on allDay
       if (!this.allDay) {
         this.obj = {
@@ -188,14 +192,28 @@ export class CreateEventComponent implements OnInit {
     console.log(this.selectedCal);
   }
   
-  //adding email to list
   add(event: MatChipInputEvent): void {
     const input = event.input;
-    const value = event.value;
-
-    // Add emails
-    if (value.trim()) {
-      this.emails.push(value.trim());
+    // const value = event.value;
+    this.email.setValue(event.value);
+    console.log(this.email.hasError("email"));
+    if (!this.email.hasError("email")) {
+      // if (!this.email.hasError("email")) {
+      if (this.email.value.trim()) {
+        this.isEmailValid = true;
+        this.emails.push(this.email.value.trim());
+        console.log(this.emails);
+      } else if (this.email.value === "" && this.emails.length < 0) {
+        this.chipList.errorState = true;
+        this.isEmailValid = false;
+        this.errorMessage = "please enter a valid email address";
+      } else {
+        this.chipList.errorState = false;
+      }
+    } else {
+      this.chipList.errorState = true;
+      this.isEmailValid = false;
+      this.errorMessage = "please enter a valid email address";
     }
 
     // Reset the input value

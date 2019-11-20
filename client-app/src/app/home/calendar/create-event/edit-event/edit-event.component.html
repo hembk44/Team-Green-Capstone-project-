@@ -46,7 +46,8 @@
         matInput
         placeholder="Start Date"
         formControlName="startDate"
-        [matDatepicker]="startpicker">
+        [matDatepicker]="startpicker"
+        readonly>
         <mat-datepicker-toggle matSuffix [for]="startpicker"></mat-datepicker-toggle>
         <mat-datepicker touchUi #startpicker></mat-datepicker>
       </mat-form-field>
@@ -66,7 +67,8 @@
         matInput
         placeholder="End Date"
         formControlName="endDate"
-        [matDatepicker]="endpicker">
+        [matDatepicker]="endpicker"
+        readonly>
         <mat-datepicker-toggle matSuffix [for]="endpicker"></mat-datepicker-toggle>
         <mat-datepicker touchUi #endpicker></mat-datepicker>
       </mat-form-field>

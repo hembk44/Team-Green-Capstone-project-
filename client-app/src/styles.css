@@ -23,10 +23,38 @@
 }
 
 .fc-button {
-  background-color: #800029;
-  border: none;
+  background-color: white;
+  border: solid 1px #800029;
+  color: #800029;
   background-image: none;
   text-transform: capitalize;
+}
+
+.fc-button-primary:not(:disabled).fc-button-active{
+  background-color: white;
+  color: #800029;
+}
+
+.fc-button:hover{
+  background-color: #800029;
+}
+
+.fc-button:disabled{
+  background-color: white;
+  color: #800029;
+}
+
+.fc-left .fc-button{
+  border: none;
+}
+
+.fc-left .fc-button:hover{
+  background-color: white;
+  color: #800029;
+}
+
+.fc-button:focus,.fc-button-primary:focus{
+  box-shadow: none;
 }
 
 .fc-event {
