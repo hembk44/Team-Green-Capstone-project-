@@ -61,6 +61,19 @@ body {
 .primary {
   color: #800029;
   border: solid 1px #800029;
-  /* background-color: blanchedalmond; */
-  /* width: 10%; */
 }
+
+.button-maroon {
+  color: white;
+  background-color: #800029
+}
+
+/* .button-red {
+  color: white;
+  background-color: red;
+} */
+
+/* .mat-raised-button.submit :hover {
+  color: #800029;
+  background: white;
+} */

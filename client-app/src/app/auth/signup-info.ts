@@ -12,6 +12,5 @@ export class SignUpInfo {
     this.email = email;
     this.password = password;
     this.role = ["user"];
-    // this.verified = false;
   }
 }

@@ -1,7 +1,7 @@
-.wrapper{
-    padding-left: 5vw;
-    padding-right: 5vw;
-    padding-top: 5vh;
-    overflow-y: hidden;
-    height:90%;
+.wrapper {
+  padding-left: 5vw;
+  padding-right: 5vw;
+  padding-top: 5vh;
+  overflow-y: hidden;
+  height: 100%;
 }

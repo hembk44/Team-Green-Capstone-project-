@@ -1,8 +1,16 @@
-<div class="wrapper" fxLayoutAlign="space-evenly">
-  <div fxFlex="33%">
+<div
+  fxLayout
+  fxLayout.xs="column"
+  fxLayoutAlign="flex-start"
+  fxLayoutGap="10px"
+  fxLayoutGap.xs="10px"
+  style="margin: 10px;"
+>
+  <div fxFlex="35%">
     <app-register-users></app-register-users>
+    <br />
     <app-delete-users></app-delete-users>
   </div>
-  <app-register fxFlex="33%"></app-register>
-  <app-update-roles fxFlex="33%" class="update-roles"></app-update-roles>
+  <app-register fxFlex="30%"></app-register>
+  <app-update-roles fxFlex="35%" class="update-roles"></app-update-roles>
 </div>

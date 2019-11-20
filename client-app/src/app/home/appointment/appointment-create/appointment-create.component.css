@@ -29,20 +29,17 @@
 
 }
 
-.primary {
-  color: #800029;
-  border: #800029 solid 1px;
-  /* background-color: blanchedalmond; */
-  /* width: 10%; */
-}
-
-.date{
+.date {
   border: solid 0.5pt #800029;
   border-radius: 5px;
-  width:100%;
-  margin-bottom:5px;
+  width: 100%;
+  margin-bottom: 5px;
 }
 
-.time{
-  margin-left:10px;
+.time {
+  margin-left: 10px;
+}
+
+.mat-form-width {
+  width: 50%
 }

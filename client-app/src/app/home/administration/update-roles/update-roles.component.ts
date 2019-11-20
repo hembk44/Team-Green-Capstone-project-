@@ -1,48 +1,61 @@
-import { Component, OnInit, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA, MatDialog, MatSnackBar } from '@angular/material';
-import { DataStorageService } from '../../shared/data-storage.service';
+import { Component, OnInit, Inject } from "@angular/core";
+import {
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatSnackBar
+} from "@angular/material";
+import { DataStorageService } from "../../shared/data-storage.service";
 
 @Component({
-  selector: 'app-update-roles',
-  templateUrl: './update-roles.component.html',
-  styleUrls: ['./update-roles.component.css','../register-users/register-users.component.css']
+  selector: "app-update-roles",
+  templateUrl: "./update-roles.component.html",
+  styleUrls: [
+    "./update-roles.component.css",
+    "../register-users/register-users.component.css"
+  ]
 })
 export class UpdateRolesComponent implements OnInit {
-
   updates: any[];
   updateEmails: string[];
-  users = []
+  users = [];
+  searchText = "";
 
   constructor(
     private dialog: MatDialog,
     private dataStorage: DataStorageService,
     private snackbar: MatSnackBar
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.updates = [];
     this.updateEmails = [];
     this.dataStorage.fetchUsers();
-    this.dataStorage.isLoading.subscribe((loading => {
-      if(!loading){
+    this.dataStorage.isLoading.subscribe(loading => {
+      if (!loading) {
         this.users = this.dataStorage.users;
         console.log(this.users);
       }
-    }));
-    
-    this.users.sort((a, b) => a.name.toLowerCase() < b.name.toLowerCase() ? -1 : a.name.toLowerCase() > b.name.toLowerCase() ? 1 : 0);
+    });
+
+    this.users.sort((a, b) =>
+      a.name.toLowerCase() < b.name.toLowerCase()
+        ? -1
+        : a.name.toLowerCase() > b.name.toLowerCase()
+        ? 1
+        : 0
+    );
   }
 
-  addUser(name: string, email:string, role:string){
-    
-    if(this.updateEmails.includes(email)){
-      this.updates.splice(this.updateEmails.indexOf(email),1);
+  addUser(name: string, email: string, role: string) {
+    if (this.updateEmails.includes(email)) {
+      this.updates.splice(this.updateEmails.indexOf(email), 1);
       this.updates.push({
         name: name,
         email: email,
         roles: role
       });
-    } else{
+    } else {
       this.updates.push({
         name: name,
         email: email,
@@ -53,57 +66,55 @@ export class UpdateRolesComponent implements OnInit {
 
     console.log(this.updateEmails);
     console.log(this.updates);
-    
   }
 
-  onSubmit(){
+  onSubmit() {
     console.log(this.updateEmails.length);
-    if(this.updateEmails.length !== 0){
+    if (this.updateEmails.length !== 0) {
       const dialogRef = this.dialog.open(RoleConfirm, {
         width: "650px",
         height: "400px",
         data: this.updates
-      })
+      });
 
       dialogRef.afterClosed().subscribe(result => {
-        if(result === 'confirmed'){
+        if (result === "confirmed") {
           this.dataStorage.updateRoles(this.updates).subscribe(result => {
             console.log(result);
-            this.snackbar.open(result.message, 'OK', {duration:3000})
+            this.snackbar.open(result.message, "OK", { duration: 3000 });
           });
           this.updateEmails = [];
           this.updates = [];
           this.dataStorage.fetchUsers();
         }
-        
-      })
-      
-    }else{
-      alert('Please make some changes first');
+      });
+    } else {
+      alert("Please make some changes first");
     }
-    
   }
-
 }
 
 @Component({
-  selector:'role-confirm-dialog',
-  templateUrl: 'role-confirm.html',
-  styleUrls: ['role-confirm.css','update-roles.component.css','../register-users/register-users.component.css']
+  selector: "role-confirm-dialog",
+  templateUrl: "role-confirm.html",
+  styleUrls: [
+    "role-confirm.css",
+    "update-roles.component.css",
+    "../register-users/register-users.component.css"
+  ]
 })
-export class RoleConfirm{
+export class RoleConfirm {
   constructor(
     private dialog: MatDialogRef<RoleConfirm>,
-    @Inject(MAT_DIALOG_DATA)private data: any[]
-  ){}
+    @Inject(MAT_DIALOG_DATA) private data: any[]
+  ) {}
 
-  confirm(){
+  confirm() {
     console.log(this.data);
-    this.dialog.close('confirmed');
+    this.dialog.close("confirmed");
   }
 
-  cancel(){
-    this.dialog.close('cancel');
+  cancel() {
+    this.dialog.close("cancel");
   }
-
 }

@@ -1,18 +1,25 @@
 import { Component, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup, Validators, FormControl } from "@angular/forms";
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  FormControl
+} from "@angular/forms";
 import { Router } from "@angular/router";
 
 import { AuthService } from "../auth/auth.service";
 import { SignUpInfo } from "../auth/signup-info";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Component({
   selector: "app-register",
   templateUrl: "./register.component.html",
-  styleUrls: ["./register.component.css","../home/administration/register-users/register-users.component.css"]
+  styleUrls: [
+    "./register.component.css",
+    "../home/administration/register-users/register-users.component.css"
+  ]
 })
 export class RegisterComponent implements OnInit {
-  // form: any = {};
-  // signupInfo: SignUpInfo;
   signupForm: FormGroup;
   signupPayload: SignUpInfo;
 
@@ -24,17 +31,25 @@ export class RegisterComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private formBuilder: FormBuilder,
+    private _snackBar: MatSnackBar,
     private router: Router
   ) {}
 
   ngOnInit() {
-    this.signupForm = new FormGroup({
-      fname: new FormControl("",[Validators.required]),
-      lname: new FormControl("",[Validators.required]),
-      email: new FormControl("",[Validators.required, Validators.email]),
-      username: new FormControl("",[Validators.required]),
-      password: new FormControl("",[Validators.required]),
-      confirmPwd: new FormControl("",[Validators.required])
+    // this.signupForm = new FormGroup({
+    //   fname: new FormControl("", [Validators.required]),
+    //   lname: new FormControl("", [Validators.required]),
+    //   email: new FormControl("", [Validators.required, Validators.email]),
+    //   password: new FormControl("", [Validators.required]),
+    //   confirmPwd: new FormControl("", [Validators.required])
+    // });
+
+    this.signupForm = this.formBuilder.group({
+      fname: ["", [Validators.required]],
+      lname: ["", [Validators.required]],
+      email: ["", [Validators.required, Validators.email]],
+      password: ["", [Validators.required]],
+      confirmPwd: ["", [Validators.required]]
     });
   }
 
@@ -46,7 +61,7 @@ export class RegisterComponent implements OnInit {
     }
     this.signupPayload = new SignUpInfo(
       signupFormValues.fname + " " + signupFormValues.lname,
-      signupFormValues.username,
+      signupFormValues.email,
       signupFormValues.email,
       signupFormValues.password
     );
@@ -55,6 +70,10 @@ export class RegisterComponent implements OnInit {
     this.authService.signUp(this.signupPayload).subscribe(
       data => {
         console.log(data);
+        this._snackBar.open("Successfully registered!!!", "close", {
+          duration: 3500,
+          panelClass: ["standard"]
+        });
         this.isSignedUp = true;
         this.isLoading = false;
         this.isSignUpFailed = false;
@@ -67,12 +86,12 @@ export class RegisterComponent implements OnInit {
         this.isSignUpFailed = true;
       }
     );
-    this.signupForm.reset();
-    this.signupForm.clearValidators();
-    // this.router.navigate(["login"]);
+    this.router.navigate(["/login"]);
+    // this.signupForm.reset();
+    // this.signupForm.clearValidators();
   }
 
-  clearForm(){
+  clearForm() {
     this.signupForm.reset();
     this.signupForm.clearValidators();
   }
