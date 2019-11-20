@@ -1,4 +1,4 @@
-<mat-card style="height:25%">
+<mat-card>
   <mat-card-header>
     <mat-card-title>
       User File Upload
@@ -11,7 +11,7 @@
       (ngSubmit)="onSubmit()"
       enctype="multipart/form-data"
     >
-      <mat-form-field style="cursor: pointer;width:75%;">
+      <mat-form-field style="cursor: pointer;width:60%;">
         <ngx-mat-file-input
           #removableInput
           formControlName="uploadFile"
@@ -45,13 +45,10 @@
       >
         {{ invalidExtension }}
       </mat-error>
-      <mat-toolbar>
-        <mat-toolbar-row>
-          <button type="submit" mat-raised-button class="primary submit-button">
-            Ok
-          </button>
-        </mat-toolbar-row>
-      </mat-toolbar>
+      &nbsp;
+      <button type="submit" mat-raised-button class="button-maroon">
+        Ok
+      </button>
     </form>
   </mat-card-content>
 </mat-card>

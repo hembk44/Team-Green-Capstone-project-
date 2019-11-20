@@ -1,24 +1,44 @@
 <mat-card style="margin-top:2%;height:60%">
-        <mat-toolbar style="width:100%;">
-            <mat-toolbar-row>
-                <h5>
-                    Delete Users
-                </h5>
-                <span class="spacer"></span>
-                <mat-form-field style="width:50%;">
-                    <input
-                        type="text"
-                        matInput
-                        [(ngModel)]="searchText"
-                        placeholder="Search"
-                    />
-                    <mat-icon matSuffix>search</mat-icon>
-                </mat-form-field><span class="spacer"></span>
-                <button mat-raised-button color="warn" (click)="onSubmit()" class="submit-button">OK</button>
-            </mat-toolbar-row>        
-        </mat-toolbar>
-    <mat-card-content class="users-wrap">
-        <mat-checkbox *ngFor="let user of users | filterMember: searchText" color="warn" (click)="addUser(user.name,user.email)">{{user.name}} ({{user.email}})</mat-checkbox>
-    </mat-card-content>
-    
+  <mat-toolbar style="width:100%;">
+    <mat-toolbar-row>
+      <h5>
+        Delete Users
+      </h5>
+      <span class="spacer"></span>
+      <mat-form-field style="width:50%;">
+        <input
+          type="text"
+          matInput
+          [(ngModel)]="searchText"
+          placeholder="Search"
+        />
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+      <!-- <span class="spacer"></span> -->
+      <!-- <button
+        mat-raised-button
+        color="warn"
+        (click)="onSubmit()"
+        class="submit-button"
+      >
+        OK
+      </button> -->
+    </mat-toolbar-row>
+  </mat-toolbar>
+  <mat-card-content class="users-wrap">
+    <section *ngFor="let user of users | filterMember: searchText">
+      <mat-checkbox color="warn" (click)="addUser(user.name, user.email)"
+        >{{ user.name }} ({{ user.email }})</mat-checkbox
+      >
+    </section>
+    <br />
+    <button
+      mat-raised-button
+      color="warn"
+      (click)="onSubmit()"
+      class="submit-button"
+    >
+      OK
+    </button>
+  </mat-card-content>
 </mat-card>

@@ -39,9 +39,6 @@
 .primary {
   color: white;
   background-color: #800029
-    /* border: #800029 solid 1px; */
-    /* background-color: blanchedalmond; */
-    /* width: 10%; */
 }
 
 .example-card {
@@ -50,8 +47,6 @@
   width: 250px;
   margin: 30px auto;
   padding: 20px;
-
-  /* padding-top: 20px; */
 }
 
 .example-full-width {

@@ -1,45 +1,70 @@
-<mat-card style="height:90%" class="wrap">
-    <mat-card-header class="top-row">
-        <mat-card-title>
-            Register Individual User
-        </mat-card-title>
-    </mat-card-header>
-    <mat-card-content class="content">
-        <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
-            <mat-form-field>
-               <input 
-                matInput
-                formControlName="fname"
-                placeholder="First Name"> 
-            </mat-form-field><br>
-            <mat-form-field>
-                <input
-                matInput
-                formControlName="lname"
-                placeholder="Last Name">
-            </mat-form-field><br>
-            <mat-form-field>
+<mat-card class="example-card">
+  <mat-card-header>
+    <mat-card-title>
+      Register Individual User
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+      <mat-form-field>
+        <input
+          matInput
+          formControlName="fname"
+          placeholder="First Name"
+        /> </mat-form-field
+      ><br />
+      <mat-form-field>
+        <input
+          matInput
+          formControlName="lname"
+          placeholder="Last Name"
+        /> </mat-form-field
+      ><br />
+      <mat-form-field>
+        <input
+          matInput
+          formControlName="email"
+          placeholder="E-mail"
+        /> </mat-form-field
+      ><br />
+      <!-- <mat-form-field>
                 <input matInput
-                formControlName="email"
-                placeholder="E-mail">
-            </mat-form-field><br>
-            <mat-form-field>
-                <input matInput
-                formControlName="password"
-                type="password"
-                placeholder="Password">
-            </mat-form-field><br>
-            <mat-form-field>
-                <input matInput
-                formControlName="confirmPwd"
-                type="password"
-                placeholder="Confirm Password">
-            </mat-form-field><br>
-            <div class="bottom-row">
-               <button mat-raised-button type="submit" class="primary submit-button">Confirm</button>
-                <button mat-raised-button type="button" class="primary submit-button" (click)="clearForm()">Clear</button> 
-            </div>
-            
-        </form>
-    </mat-card-content>
+                formControlName="username"
+                placeholder="Username">
+            </mat-form-field><br> -->
+      <mat-form-field>
+        <input
+          matInput
+          formControlName="password"
+          type="password"
+          placeholder="Password"
+        /> </mat-form-field
+      ><br />
+      <mat-form-field>
+        <input
+          matInput
+          formControlName="confirmPwd"
+          type="password"
+          placeholder="Confirm Password"
+        /> </mat-form-field
+      ><br />
+      <button
+        mat-raised-button
+        type="submit"
+        class="button-maroon"
+        [disabled]="!signupForm.valid"
+      >
+        Confirm
+      </button>
+      &nbsp;
+      <button
+        mat-raised-button
+        type="button"
+        color="warn"
+        (click)="clearForm()"
+      >
+        Clear
+      </button>
+    </form>
+  </mat-card-content>
 </mat-card>

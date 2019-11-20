@@ -1,80 +1,88 @@
-.wrapper{
-    width:100%;
-    height:90%;
-    background-color:white;
-}
-.right-view{
-    margin-top:10px;
-    margin-left:10px;
-    padding-left:5px;
-    height:88vh;
-    border-left:0.5pt solid darkgrey;
-}
-.left-view{
-    height:88vh;
-}
-.cal-month-view .cal-event{
-    opacity: 0%;
-}
-#cal-heading{
-    font-size:1rem;
-    font-weight:bold;
-    height:3em;
-    background-color:white;
+.wrapper {
+  width: 100%;
+  height: 90%;
+  background-color: white;
 }
 
-.top-row-wrap{
-    background-color: white;
+.right-view {
+  margin-top: 10px;
+  margin-left: 10px;
+  padding-left: 5px;
+  height: 88vh;
+  border-left: 0.5pt solid darkgrey;
 }
 
-.spacer{
-    flex: 1 1 auto;
+.left-view {
+  height: 88vh;
 }
 
-.today-button{
-    color:#800029;
-}
-.today-button:hover{
-    background-color:darkgrey
-}
-.view-button{
-    color: #800029;
-    text-transform: capitalize;
-}
-.view-button:hover{
-    background-color:darkgrey
+.cal-month-view .cal-event {
+  opacity: 0%;
 }
 
-#calendar{
-    margin-top: 5px;
-    margin-left: 5px;
-    margin-right: 5px;
+#cal-heading {
+  font-size: 1rem;
+  font-weight: bold;
+  height: 3em;
+  background-color: white;
 }
 
-.top-row{
-    display:inline-block;
-    margin-top:10px;
+.top-row-wrap {
+  background-color: white;
 }
 
-.events-list{
-    height:40%;
+.spacer {
+  flex: 1 1 auto;
 }
 
-.event-wrapper:hover{
-    cursor: pointer;
-    background-color: rgba(216, 214, 214, 0.514);
+.today-button {
+  color: #800029;
 }
 
-.day-title{
-    margin-left:6px;
-    margin-right:6px;
-    margin-top:15px;
-    text-align: center;
+.today-button:hover {
+  background-color: darkgrey
 }
-.menutoggle{
-    height:2em;
-    background-color:white;
-    padding: 2px;
+
+.view-button {
+  color: #800029;
+  text-transform: capitalize;
+}
+
+.view-button:hover {
+  background-color: darkgrey
+}
+
+#calendar {
+  margin-top: 5px;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.top-row {
+  display: inline-block;
+  margin-top: 10px;
+}
+
+.events-list {
+  height: 40%;
+}
+
+.event-wrapper:hover {
+  cursor: pointer;
+  background-color: rgba(216, 214, 214, 0.514);
+}
+
+.day-title {
+  margin-left: 6px;
+  margin-right: 6px;
+  margin-top: 15px;
+  text-align: center;
+}
+
+.menutoggle {
+  height: 2em;
+  background-color: white;
+  padding: 2px;
 }
 .create-button{
     background-color: white;
@@ -83,17 +91,26 @@
     border: solid 1px #800029;
 }
 
-.side-nav-toggle{
-    background-color:white;
+/* .create-button{
+    background-color: rgb(25, 204, 25);
+    margin-left:5px;
+    color:white;
+} */
+
+.side-nav-toggle {
+  background-color: white;
 }
-.toggle-button{
-    vertical-align: middle;
-    color: darkgrey;
+
+.toggle-button {
+  vertical-align: middle;
+  color: darkgrey;
 }
-.close-button{
-    color:darkgrey;
-    margin-top:10px;
+
+.close-button {
+  color: darkgrey;
+  margin-top: 10px;
 }
-.event-times{
-    font-size:0.8em;
+
+.event-times {
+  font-size: 0.8em;
 }
