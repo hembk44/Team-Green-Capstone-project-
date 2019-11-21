@@ -73,6 +73,16 @@ public class GroupServiceImpl implements GroupService{
 	}
 
 	@Override
+	public List<Group> findAllByMembers(User user) {
+		Optional<List<Group>> optGroup = groupRepo.findAllByMembersOrderByCreatedAtDesc(user);
+
+		if (optGroup.isPresent()) {
+			return optGroup.get();
+		}
+		return null;
+	}
+	
+	@Override
 	public void delete(Group group) {
 		
 		group.getMembers().clear();

@@ -12,5 +12,6 @@ public interface GroupService {
 	List<Group> findAllByCreatedBy(User user);
 	Group findById(Long id);
 	List<Group> findAllByOtherOwners(User otherOwner);
+	List<Group> findAllByMembers(User user);
 	void delete(Group group);
 }

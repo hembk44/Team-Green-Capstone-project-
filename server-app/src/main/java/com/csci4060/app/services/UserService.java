@@ -29,4 +29,6 @@ public interface UserService {
 	List<User> findAllByRoles(Set<Role>roles );
   	
 	List<User> findAllUserExcept(String userEmail);
+	
+	void delete(User user);
 }
