@@ -179,16 +179,15 @@ export class DataStorageService {
       );
   }
 
-  updateCalendar(obj: Object) {
-    // this.isLoadingSubject.next(true);
-    // return this.http
-    // .post<Object>(this.baseUrlCalendar+'edit or whatever', obj)
-    // .pipe(
-    //   (map(data => data),
-    //   catchError(error => throwError(error)),
-    //   finalize(()=>this.isLoadingSubject.next(false)))
-    // );
-    console.log(obj);
+  updateCalendar(obj: Object, id: number) {
+    this.isLoadingSubject.next(true);
+    return this.http
+    .put<ApiResponse>(this.baseUrlCalendar+'edit/'+id, obj)
+    .pipe(
+      (map(data => data),
+      catchError(error => throwError(error)),
+      finalize(()=>this.isLoadingSubject.next(false)))
+    );
   }
 
   updateRoles(obj: Object) {

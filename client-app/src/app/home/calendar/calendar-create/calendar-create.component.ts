@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialogRef, MatChipInputEvent, MatDialog, MatSnackBar } from '@angular/material';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { DataStorageService } from '../../shared/data-storage.service';
 import { ENTER, COMMA } from '@angular/cdk/keycodes';
 import { GroupSelection } from '../../shared/group-selection';
@@ -18,7 +18,11 @@ export class CalendarCreateComponent implements OnInit {
   selectable = true;
   removable = true;
   addOnBlur = true;
+  email = new FormControl("",[Validators.email]);
+  isEmailValid: boolean;
+  @ViewChild("chipList", { static: false }) chipList;
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
+  errorMessage: string;
 
   constructor(
     private ref: MatDialogRef<CalendarCreateComponent>,
@@ -31,7 +35,7 @@ export class CalendarCreateComponent implements OnInit {
     this.emails=[];
     this.calForm = new FormGroup({
       name: new FormControl(),
-      recipients: new FormControl(),
+      email: this.email,
       color: new FormControl()
     })
   }
@@ -54,24 +58,52 @@ export class CalendarCreateComponent implements OnInit {
       console.log(obj);
       if (result) {
         this.snackbar.open(result.message)
-        this.dataStorage.fetchCalendars();
+        if(result.status === 200){
+          this.dataStorage.fetchCalendars();
+          this.ref.close();
+        }
+        
       }
     });
-    this.ref.close();
+    
   }
   add(event: MatChipInputEvent): void {
     const input = event.input;
-    const value = event.value;
-
-    // Add emails
-    if (value.trim()) {
-      this.emails.push(value.trim());
+    // const value = event.value;
+    this.email.setValue(event.value);
+    console.log(this.email.hasError("email"));
+    if (!this.email.hasError("email")) {
+      // if (!this.email.hasError("email")) {
+      if (this.email.value.trim()) {
+        this.isEmailValid = true;
+        this.emails.push(this.email.value.trim());
+        this.emails.sort((a, b) =>
+          a.toLowerCase() < b.toLowerCase()
+            ? -1
+            : a.toLowerCase() > b.toLowerCase()
+            ? 1
+            : 0
+        );
+        console.log(this.emails);
+      } else if (this.email.value === "" && this.emails.length < 0) {
+        this.chipList.errorState = true;
+        this.isEmailValid = false;
+        this.errorMessage = "please enter a valid email address";
+      } else {
+        this.chipList.errorState = false;
+      }
+    } else {
+      this.chipList.errorState = true;
+      this.isEmailValid = false;
+      this.errorMessage = "please enter a valid email address";
     }
 
     // Reset the input value
     if (input) {
       input.value = "";
     }
+
+    
   }
 
   remove(email: string): void {
