@@ -76,4 +76,12 @@ public class CalendarServiceImpl implements CalendarService {
 		return null;
 	}
 
+	@Override
+	public void delete(Calendar calendar) {
+		calendar.getShareduser().clear();
+		calendar.getEvents().clear();
+		calendarRepo.delete(calendar);
+		
+	}
+
 }
