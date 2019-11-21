@@ -19,4 +19,6 @@ public interface CalendarService {
 	Calendar findByNameAndCreatedBy(String name, User user);
 	
 	List<Calendar> findAllByEvents(Event event);
+	
+	void delete(Calendar calendar);
 }

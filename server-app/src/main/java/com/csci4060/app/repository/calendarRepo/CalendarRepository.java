@@ -18,4 +18,6 @@ public interface CalendarRepository extends JpaRepository<Calendar, Long>{
 	Optional<Calendar> findByNameAndCreatedBy(String name, User user);
 	
 	Optional<List<Calendar>> findAllByEvents(Event event);
+	
+	void delete(Calendar calendar);
 }
