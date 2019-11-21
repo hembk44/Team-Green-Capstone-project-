@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.csci4060.app.ExceptionResolver;
 import com.csci4060.app.model.APIresponse;
+import com.csci4060.app.model.EmailWrapper;
 import com.csci4060.app.model.Role;
 import com.csci4060.app.model.User;
 import com.csci4060.app.model.UserDetailDummy;
@@ -91,27 +92,30 @@ public class AdminController extends ExceptionResolver {
 		return new APIresponse(HttpStatus.OK.value(), "All users in the system are provided", response);
 	}
 
-	@DeleteMapping(path = "/deleteUser/{id}")
+	@DeleteMapping(path = "/deleteUser")
 	@PreAuthorize("hasRole('ADMIN')")
-	public APIresponse deleteUser(@PathVariable("id") Long userId) {
+	public APIresponse deleteUser(@RequestBody EmailWrapper emailWrapper) {
 
-		User user = userService.findById(userId);
+		List<String> emails = emailWrapper.getEmails();
+		
+		for (String email : emails) {
+			User user = userService.findByEmail(email);
 
-		if (user == null) {
-			return new APIresponse(HttpStatus.NOT_FOUND.value(), "User with id " + userId + " does not exist.", null);
+			if (user != null) {
+				userService.delete(user);
+
+				SimpleMailMessage mailMessage = new SimpleMailMessage();
+
+				mailMessage.setTo(user.getEmail());
+				mailMessage.setSubject("User Removed");
+				mailMessage.setFrom("ulmautoemail@gmail.com");
+				mailMessage.setText("You have been removed from the ulm communication app. " + "Thank you!");
+
+				emailSenderService.sendEmail(mailMessage);
+			}
+
 		}
 
-		userService.delete(user);
-		
-		SimpleMailMessage mailMessage = new SimpleMailMessage();
-
-		mailMessage.setTo(user.getEmail());
-		mailMessage.setSubject("Event Cancelled");
-		mailMessage.setFrom("ulmautoemail@gmail.com");
-		mailMessage.setText("You have been removed from the ulm communication app. " + "Thank you!");
-
-		emailSenderService.sendEmail(mailMessage);
-
-		return new APIresponse(HttpStatus.OK.value(), "User was successfully deleted.", user);
+		return new APIresponse(HttpStatus.OK.value(), "User was successfully deleted.", emails);
 	}
 }
