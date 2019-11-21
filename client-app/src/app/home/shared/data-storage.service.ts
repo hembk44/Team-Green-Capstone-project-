@@ -13,13 +13,11 @@ import { CalEvent } from "../calendar/events.model";
 import { AuthService } from "src/app/auth/auth.service";
 import { Calendar } from "../calendar/calendar-list/calendar.model";
 import { CalendarService } from "../calendar/calendar-list/calendar.service";
-import { TokenStorageService } from "src/app/auth/token-storage.service";
 
 @Injectable({
   providedIn: "root"
 })
 export class DataStorageService {
-  private baseUrlAppointment = "http://localhost:8181/api/appointment/";
   private baseUrlEvent = "http://localhost:8181/api/event/";
   private baseUrlCalendar = "http://localhost:8181/api/calendar/";
 
@@ -27,10 +25,6 @@ export class DataStorageService {
     boolean
   >(false);
   public isLoading: Observable<boolean> = this.isLoadingSubject.asObservable();
-
-  private appointmentSubject: BehaviorSubject<any> = new BehaviorSubject<any>(
-    {}
-  );
 
   private eventSubject: BehaviorSubject<any> = new BehaviorSubject<any>({});
 
@@ -47,17 +41,8 @@ export class DataStorageService {
   constructor(
     private http: HttpClient,
     private authService: AuthService,
-    private calService: CalendarService,
-    private token: TokenStorageService
+    private calService: CalendarService
   ) {}
-
-  get appointmentLists(): Appointment[] {
-    if (!this.appointmentSubject.value) {
-      return [];
-    } else {
-      return this.appointmentSubject.value;
-    }
-  }
 
   get appointmentsReceived(): Appointment[] {
     if (!this.adminAppointmentReceived.value) {
@@ -81,22 +66,6 @@ export class DataStorageService {
 
   registerUsers(file: File) {
     this.isLoadingSubject.next(true);
-    const token = this.token.getToken();
-    console.log(token);
-    const headers_object = new HttpHeaders().set(
-      "Authorization",
-      "Bearer " + token
-    );
-    const httpOptions = {
-      headers: headers_object
-    };
-    console.log(headers_object);
-    // httpOptions.headers = httpOptions.headers.set(
-    //   "Authorization",
-    //   "Bearer " + this.token.getToken()
-    // );
-    // console.log(httpOptions.headers);
-
     var formdata: FormData = new FormData();
     formdata.append("file", file);
     console.log(formdata);
@@ -109,149 +78,6 @@ export class DataStorageService {
       .pipe(
         (map(data => data), catchError(error => throwError(error))),
         finalize(() => this.isLoadingSubject.next(false))
-      );
-  }
-
-  storeAppointment(obj: Object) {
-    this.isLoadingSubject.next(true);
-    return this.http
-      .post<ApiResponse>(this.baseUrlAppointment + "set", obj)
-      .pipe(
-        (map(data => data), catchError(error => throwError(error))),
-        finalize(() => this.isLoadingSubject.next(false))
-      );
-  }
-
-  deleteAppointment(id: number) {
-    this.isLoadingSubject.next(true);
-    return this.http
-      .delete<ApiResponse>(this.baseUrlAppointment + "delete/" + id)
-      .pipe(
-        (map(data => data), catchError(error => throwError(error))),
-        finalize(() => this.isLoadingSubject.next(false))
-      );
-  }
-
-  sendApptToCal(id: number) {
-    this.isLoadingSubject.next(true);
-    return this.http
-      .post<Object>(this.baseUrlAppointment + "sendToCalendar/" + id, id)
-      .pipe(
-        (map(data => data), catchError(error => throwError(error))),
-        finalize(() => this.isLoadingSubject.next(false))
-      );
-  }
-
-  userSelectTimeSlot(id: number) {
-    this.isLoadingSubject.next(true);
-    return this.http
-      .post<Object>(this.baseUrlAppointment + "timeslots/postSlot/" + id, id)
-      .pipe(
-        (map(data => data), catchError(error => throwError(error))),
-        finalize(() => this.isLoadingSubject.next(false))
-      );
-  }
-
-  fetchAppointment() {
-    this.isLoadingSubject.next(true);
-    this.http
-      .get<ApiResponse>(this.baseUrlAppointment + "created/allAppointments")
-      .pipe(
-        (map(data => data),
-        catchError(error => throwError(error)),
-        finalize(() => this.isLoadingSubject.next(false)))
-      )
-      .subscribe((result: ApiResponse) => {
-        console.log("Faculty appointments!");
-        console.log(result);
-        if (result.status == 200 && result.result) {
-          this.appointmentSubject.next(result.result);
-        } else {
-          this.appointmentSubject.next([]);
-        }
-      });
-  }
-
-  fetchUserAppointment() {
-    this.isLoadingSubject.next(true);
-    this.http
-      .get<ApiResponse>(this.baseUrlAppointment + "received/allAppointments")
-      .pipe(
-        (map(data => data),
-        catchError(error => throwError("there was an error" + error)),
-        finalize(() => this.isLoadingSubject.next(false)))
-      )
-      .subscribe((result: ApiResponse) => {
-        if (result.status == 200 && result.result) {
-          console.log(result.result);
-          this.appointmentSubject.next(result.result);
-          this.adminAppointmentReceived.next(true);
-        } else {
-          this.appointmentSubject.next([]);
-        }
-      });
-  }
-
-  fetchUserAppointmentForCal() {
-    this.isLoadingSubject.next(true);
-    this.http
-      .get<ApiResponse>(this.baseUrlAppointment + "calendar/user")
-      .pipe(
-        (map(data => data),
-        catchError(error => throwError("there was an error" + error)),
-        finalize(() => this.isLoadingSubject.next(false)))
-      )
-      .subscribe((result: ApiResponse) => {
-        if (result.status == 200 && result.result) {
-          //console.log(result.result);
-          this.appointmentSubject.next(result.result);
-        }
-      });
-  }
-
-  displayAppointmentDetails(id: number) {
-    this.isLoadingSubject.next(true);
-    return this.http
-      .get<ApiResponse>(this.baseUrlAppointment + "timeslots/faculty/" + id)
-      .pipe(
-        (map(data => data),
-        catchError(error => throwError(error)),
-        finalize(() => this.isLoadingSubject.next(false)))
-      );
-  }
-
-  displayUserAppointmentDetails(id: number) {
-    this.isLoadingSubject.next(true);
-    return this.http
-      .get<ApiResponse>(this.baseUrlAppointment + "timeslots/user/" + id)
-      .pipe(
-        (map(data => data),
-        catchError(error => throwError(error)),
-        finalize(() => this.isLoadingSubject.next(false)))
-      );
-  }
-
-  adminScheduledAppointmentsRecipients() {
-    this.isLoadingSubject.next(true);
-    return this.http
-      .get<ApiResponse>(this.baseUrlAppointment + "getScheduledAppointments")
-      .pipe(
-        (map(data => data),
-        catchError(error => throwError(error)),
-        finalize(() => this.isLoadingSubject.next(false)))
-      );
-  }
-
-  userScheduledAppointments() {
-    this.isLoadingSubject.next(true);
-    return this.http
-      .get<ApiResponse>(
-        this.baseUrlAppointment + "getScheduledAppointmentsUser"
-      )
-      .pipe(
-        (map(data => data),
-        catchError(error => throwError(error)),
-        finalize(() => this.isLoadingSubject.next(false)))
       );
   }
 

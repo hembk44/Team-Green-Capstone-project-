@@ -5,6 +5,7 @@ import { Appointment } from "../models-appointments/appointment.model";
 import { AuthService } from "src/app/auth/auth.service";
 import { AppointmentsNavigationAdminService } from "../appointments-navigation-admin.service";
 import { Subscription } from "rxjs";
+import { DataStorageAppointmentService } from "../data-storage-appointment.service";
 
 @Component({
   selector: "app-appointment-list",
@@ -16,13 +17,14 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
   appointment: Appointment;
   currentRole: string;
   searchText = "";
-  appointmentsExists: boolean = false;
+  // appointmentsExists: boolean = false;
   private appointmentTypeSubscription: Subscription;
   constructor(
     private router: Router,
     private dataStorage: DataStorageService,
     private role: AuthService,
-    private appointmentNavigationAdmin: AppointmentsNavigationAdminService
+    private appointmentNavigationAdmin: AppointmentsNavigationAdminService,
+    private dataStorageAppointment: DataStorageAppointmentService
   ) {}
 
   ngOnInit() {
@@ -30,10 +32,13 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
     console.log(this.role.user);
     if (this.currentRole === "ROLE_USER") {
       console.log("user data here!!!");
-      this.dataStorage.fetchUserAppointment();
-      this.dataStorage.isLoading.subscribe(loading => {
+      this.dataStorageAppointment.fetchUserAppointment();
+      this.dataStorageAppointment.isLoading.subscribe(loading => {
+        console.log(loading);
+
         if (!loading) {
-          this.appointments = this.dataStorage.appointmentLists;
+          console.log(this.dataStorageAppointment.appointmentLists);
+          this.appointments = this.dataStorageAppointment.appointmentLists;
         }
       });
     } else {
@@ -43,24 +48,24 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
         status => {
           console.log(status);
           if (status === "sent") {
-            console.log(this.appointmentsExists);
-            this.dataStorage.fetchAppointment();
-            this.dataStorage.isLoading.subscribe(loading => {
+            // console.log(this.appointmentsExists);
+            this.dataStorageAppointment.fetchAppointment();
+            this.dataStorageAppointment.isLoading.subscribe(loading => {
               if (!loading) {
-                this.appointmentsExists = true;
-                console.log(this.appointmentsExists);
+                // this.appointmentsExists = true;
+                // console.log(this.appointmentsExists);
 
-                this.appointments = this.dataStorage.appointmentLists;
+                this.appointments = this.dataStorageAppointment.appointmentLists;
               } else {
-                this.appointmentsExists = false;
-                console.log(this.appointmentsExists);
+                // this.appointmentsExists = false;
+                // console.log(this.appointmentsExists);
               }
             });
-          } else {
-            this.dataStorage.fetchUserAppointment();
-            this.dataStorage.isLoading.subscribe(loading => {
+          } else if (status === "received") {
+            this.dataStorageAppointment.fetchUserAppointment();
+            this.dataStorageAppointment.isLoading.subscribe(loading => {
               if (!loading) {
-                this.appointments = this.dataStorage.appointmentLists;
+                this.appointments = this.dataStorageAppointment.appointmentLists;
               }
             });
           }

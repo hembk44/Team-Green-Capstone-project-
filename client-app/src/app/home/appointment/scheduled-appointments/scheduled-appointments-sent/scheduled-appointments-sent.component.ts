@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { DataStorageService } from "src/app/home/shared/data-storage.service";
 import { AuthService } from "src/app/auth/auth.service";
+import { DataStorageAppointmentService } from "../../data-storage-appointment.service";
 @Component({
   selector: "app-scheduled-appointments-sent",
   templateUrl: "./scheduled-appointments-sent.component.html",
@@ -13,7 +14,7 @@ export class ScheduledAppointmentsSentComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private dataStorage: DataStorageService
+    private dataStorageAppointment: DataStorageAppointmentService
   ) {}
 
   ngOnInit() {
@@ -21,7 +22,7 @@ export class ScheduledAppointmentsSentComponent implements OnInit {
     if (this.currentRole === "ROLE_ADMIN") {
       console.log("admin data here!");
 
-      this.dataStorage
+      this.dataStorageAppointment
         .adminScheduledAppointmentsRecipients()
         .subscribe(result => {
           console.log(result.result);
@@ -29,10 +30,12 @@ export class ScheduledAppointmentsSentComponent implements OnInit {
         });
     } else {
       console.log("user data here!!!");
-      this.dataStorage.userScheduledAppointments().subscribe(result => {
-        console.log(result.result);
-        this.appointments = result.result;
-      });
+      this.dataStorageAppointment
+        .userScheduledAppointments()
+        .subscribe(result => {
+          console.log(result.result);
+          this.appointments = result.result;
+        });
     }
   }
 }

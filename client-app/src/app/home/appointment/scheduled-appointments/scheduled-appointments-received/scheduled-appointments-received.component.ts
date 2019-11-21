@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { DataStorageService } from "src/app/home/shared/data-storage.service";
+import { DataStorageAppointmentService } from "../../data-storage-appointment.service";
 
 @Component({
   selector: "app-scheduled-appointments-received",
@@ -9,12 +9,14 @@ import { DataStorageService } from "src/app/home/shared/data-storage.service";
 export class ScheduledAppointmentsReceivedComponent implements OnInit {
   appointments: string;
   searchText = "";
-  constructor(private dataStorageService: DataStorageService) {}
+  constructor(private dataStorageAppointment: DataStorageAppointmentService) {}
 
   ngOnInit() {
-    this.dataStorageService.userScheduledAppointments().subscribe(result => {
-      console.log(result);
-      this.appointments = result.result;
-    });
+    this.dataStorageAppointment
+      .userScheduledAppointments()
+      .subscribe(result => {
+        console.log(result);
+        this.appointments = result.result;
+      });
   }
 }

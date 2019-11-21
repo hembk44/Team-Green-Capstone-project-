@@ -68,12 +68,7 @@ body {
   background-color: #800029
 }
 
-/* .button-red {
+.mat-menu-item:hover:not([disabled]) {
   color: white;
-  background-color: red;
-} */
-
-/* .mat-raised-button.submit :hover {
-  color: #800029;
-  background: white;
-} */
+  background: #800029;
+}

@@ -25,6 +25,7 @@ import { COMMA, ENTER } from "@angular/cdk/keycodes";
 import { MatChipInputEvent } from "@angular/material/chips";
 import { GroupSelection } from "../../shared/group-selection";
 import { NgxMaterialTimepickerTheme } from "ngx-material-timepicker";
+import { DataStorageAppointmentService } from "../data-storage-appointment.service";
 
 @Component({
   selector: "app-appointment-create",
@@ -79,7 +80,8 @@ export class AppointmentCreateComponent implements OnInit {
     private formBuilder: FormBuilder,
     private router: Router,
     public dialog: MatDialog,
-    private dataStorage: DataStorageService
+    private dataStorage: DataStorageService,
+    private dataStorageAppointment: DataStorageAppointmentService
   ) {}
 
   ngOnInit() {
@@ -208,15 +210,18 @@ export class AppointmentCreateComponent implements OnInit {
       appdates: this.dateRangeArray
     };
     console.log(obj);
-    this.dataStorage.storeAppointment(obj).subscribe(result => {
+    this.dataStorageAppointment.storeAppointment(obj).subscribe(result => {
       if (result) {
         console.log(result);
         console.log(result.result.id);
-        this.dataStorage.sendApptToCal(result.result.id).subscribe(result => {
-          console.log(result);
-          this.router.navigate(["home/appointment/sent"]);
-        });
-        this.dataStorage.fetchAppointment();
+        // send appointments to calendar
+        this.dataStorageAppointment
+          .sendApptToCal(result.result.id)
+          .subscribe(result => {
+            console.log(result);
+            this.router.navigate(["home/appointment/sent"]);
+          });
+        this.dataStorageAppointment.fetchAppointment();
       }
     });
   }

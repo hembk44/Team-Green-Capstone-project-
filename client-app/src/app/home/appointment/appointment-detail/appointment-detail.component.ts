@@ -9,6 +9,7 @@ import { AuthService } from "src/app/auth/auth.service";
 import { EventTime } from "../../calendar/event-times.model";
 import { EventDate } from "../../calendar/event-date.model";
 import { AppointmentsNavigationAdminService } from "../appointments-navigation-admin.service";
+import { DataStorageAppointmentService } from "../data-storage-appointment.service";
 
 @Component({
   selector: "app-appointment-detail",
@@ -27,7 +28,7 @@ export class AppointmentDetailComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private dataService: DataStorageService,
+    private dataServiceAppointment: DataStorageAppointmentService,
     private authService: AuthService,
     private dataStorage: DataStorageService,
     private _snackBar: MatSnackBar,
@@ -46,18 +47,29 @@ export class AppointmentDetailComponent implements OnInit {
       );
       if (this.currentRole === "ROLE_ADMIN") {
         console.log("admin data here!");
-        this.dataService
-          .displayAppointmentDetails(this.id)
-          .subscribe(result => {
-            this.appointment = result.result;
-            console.log(this.appointment);
-            this.appointmentName = this.appointment[0].appointmentName;
-            this.appointmentDesc = this.appointment[0].appointmentDescription;
-            this.appointmentDate = this.appointment[0].date;
-          });
+        if (this.appointmentType === "sent") {
+          this.dataServiceAppointment
+            .displayAppointmentDetails(this.id)
+            .subscribe(result => {
+              this.appointment = result.result;
+              console.log(this.appointment);
+              this.appointmentName = this.appointment[0].appointmentName;
+              this.appointmentDesc = this.appointment[0].appointmentDescription;
+              this.appointmentDate = this.appointment[0].date;
+            });
+        } else {
+          // debugger;
+          this.dataServiceAppointment
+            .displayUserAppointmentDetails(this.id)
+            .subscribe(result => {
+              this.appointment = result.result;
+
+              console.log(this.appointment);
+            });
+        }
       } else {
         console.log("user data here!!!");
-        this.dataService
+        this.dataServiceAppointment
           .displayUserAppointmentDetails(this.id)
           .subscribe(result => {
             this.appointment = result.result;
@@ -69,13 +81,14 @@ export class AppointmentDetailComponent implements OnInit {
   }
 
   onConfirm(id: number) {
-    this.dataStorage.userSelectTimeSlot(id).subscribe(result => {
+    this.dataServiceAppointment.userSelectTimeSlot(id).subscribe(result => {
       if (result) {
         console.log(result);
       }
     });
     this._snackBar.openFromComponent(TimeSlotSnackComponent, {
-      duration: 5000
+      duration: 5000,
+      panelClass: ["standard"]
     });
     if (this.appointmentType === "sent") {
       this.router.navigate(["./home/appointment/sent"]);
@@ -84,7 +97,9 @@ export class AppointmentDetailComponent implements OnInit {
     }
   }
   onDeleteAppointment(id: number) {
-    this.dataStorage.deleteAppointment(id).subscribe(r => console.log(r));
+    this.dataServiceAppointment
+      .deleteAppointment(id)
+      .subscribe(r => console.log(r));
   }
   onUpdateAppointment() {
     console.log("updated");
@@ -93,14 +108,6 @@ export class AppointmentDetailComponent implements OnInit {
 
 @Component({
   selector: "snack-bar-component-time-slot",
-  templateUrl: "snack-bar-component-time-slot.html",
-  styles: [
-    `
-      .time-slot {
-        color: #800029;
-        background-color: blanchedalmond;
-      }
-    `
-  ]
+  templateUrl: "snack-bar-component-time-slot.html"
 })
 export class TimeSlotSnackComponent {}
