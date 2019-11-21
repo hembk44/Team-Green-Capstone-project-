@@ -11,7 +11,7 @@ import { Subscription } from "rxjs";
   styleUrls: ["./appointment-item.component.css"]
 })
 export class AppointmentItemComponent implements OnInit, OnDestroy {
-  @Input() appointment: Appointment;
+  @Input() appointment: any;
   @Input() id: number;
   @Input() dates: DateRange[];
   status: string;
@@ -23,6 +23,11 @@ export class AppointmentItemComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    console.log(this.appointment);
+    console.log(this.id);
+    for (let date of this.dates) {
+      console.log(date);
+    }
     this.appointmentTypeSubscription = this.appointmentNavigationAdmin.appointmentStatusItem.subscribe(
       status => {
         this.status = status;
@@ -38,6 +43,6 @@ export class AppointmentItemComponent implements OnInit, OnDestroy {
     }
   }
   ngOnDestroy() {
-    this.appointmentTypeSubscription.unsubscribe();
+    // this.appointmentTypeSubscription.unsubscribe();
   }
 }

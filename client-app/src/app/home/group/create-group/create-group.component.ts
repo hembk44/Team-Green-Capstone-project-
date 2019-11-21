@@ -13,7 +13,11 @@ import { MatChipInputEvent } from "@angular/material/chips";
 import { GroupDataStorageService } from "../group-data-storage.service";
 import { GroupCreateNavigationService } from "../group/group-create-navigation.service";
 import { Group } from "../models-group/group";
-import { MatOptionSelectionChange, MatSelectChange } from "@angular/material";
+import {
+  MatOptionSelectionChange,
+  MatSelectChange,
+  MatSelect
+} from "@angular/material";
 
 export interface courseGroup {
   title: string;
@@ -107,6 +111,7 @@ export class CreateGroupComponent implements OnInit {
 
   selectedFiles: FileList;
   currentFileUpload: File;
+  source: MatSelect;
 
   // use dynamic method to add values in date
 
@@ -179,6 +184,9 @@ export class CreateGroupComponent implements OnInit {
           } else {
             this.isCourseGroup = true;
             this.groupForm.get("groupType").setValue("Course");
+            this.onMajorChanged(
+              new MatSelectChange(this.source, "Computer Science")
+            );
             const courseGroupMembers = this.groupToEdit.members;
             console.log(courseGroupMembers);
 

@@ -19,7 +19,7 @@
     <input matInput placeholder="Location" formControlName="location" />
   </mat-form-field>
 
-  <mat-form-field class="example-chip-list">
+  <mat-form-field class="example-chip-list" style="width: 50%;">
     <mat-chip-list #chipList aria-label="adding emails">
       <mat-chip
         *ngFor="let email of emails"
@@ -40,6 +40,7 @@
     </mat-chip-list>
     <mat-hint>Use comma or hit ENTER to enter multiple emails!</mat-hint>
   </mat-form-field>
+
   <button
     mat-raised-button
     type="button"
@@ -74,9 +75,9 @@
     </mat-toolbar-row>
   </mat-toolbar> -->
 
-  <mat-toolbar>
+  <!-- <mat-toolbar>
     <mat-toolbar-row>
-      <!--<p>Please select date and time interval:</p>
+      <p>Please select date and time interval:</p>
       <span class="example-spacer"></span>
       <button
         type="button"
@@ -86,7 +87,7 @@
         (click)="openDateRangeDialog()"
       >
         select date and time
-      </button>-->
+      </button>
       <button
         type="button"
         class="button-maroon"
@@ -97,7 +98,8 @@
       </button>
       <span class="example-spacer"></span>
     </mat-toolbar-row>
-  </mat-toolbar>
+  </mat-toolbar> -->
+
   <div
     formArrayName="dateRange"
     *ngFor="
@@ -113,14 +115,14 @@
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker touchUi #picker></mat-datepicker> </mat-form-field
       >&nbsp;
-      <button
+      <!-- <button
         mat-raised-button
         type="button"
         class="button-maroon"
         (click)="addTime(date)"
       >
         Add Time
-      </button>
+      </button> -->
       <span class="example-spacer"></span>
       <button
         mat-icon-button
@@ -133,6 +135,7 @@
         <div
           class="time"
           *ngFor="let time of date.get('time').controls; let x = index"
+          style="padding-bottom: 10px ;"
           [formGroupName]="x"
         >
           <button
@@ -180,12 +183,44 @@
           <mat-form-field style="width:23%">
             <mat-label>Length</mat-label>
             <input matInput formControlName="interval" type="number" />
-            <mat-hint>Length you want each time slot to be.</mat-hint>
+            <mat-hint>Length of each time slots in MINUTES.</mat-hint>
           </mat-form-field>
         </div>
+        <button
+          mat-raised-button
+          type="button"
+          class="button-maroon"
+          (click)="addTime(date)"
+        >
+          Add Time
+        </button>
       </div>
     </div>
   </div>
+  <mat-toolbar>
+    <mat-toolbar-row>
+      <!--<p>Please select date and time interval:</p>
+      <span class="example-spacer"></span>
+      <button
+        type="button"
+        class="primary"
+        mat-raised-button
+        matTooltip="click to select date and time intervals"
+        (click)="openDateRangeDialog()"
+      >
+        select date and time
+      </button>-->
+      <button
+        type="button"
+        class="button-maroon"
+        mat-raised-button
+        (click)="addDate()"
+      >
+        Add Date
+      </button>
+      <span class="example-spacer"></span>
+    </mat-toolbar-row>
+  </mat-toolbar>
 
   <!-- <mat-toolbar-row>
       <button
