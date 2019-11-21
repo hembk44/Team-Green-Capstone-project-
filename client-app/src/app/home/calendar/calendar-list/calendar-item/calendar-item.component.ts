@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Inject } from '@angular/core';
 import { Calendar } from '../calendar.model';
 import { CalendarService } from '../calendar.service';
 import { AuthService } from 'src/app/auth/auth.service';
-import { MatDialogRef, MatDialog, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialogRef, MatDialog, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
 import { FormGroup, FormControl } from '@angular/forms';
 import { ShareCalendarComponent } from '../../share-calendar/share-calendar.component';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
@@ -22,7 +22,8 @@ export class CalendarItemComponent implements OnInit {
   constructor(private calService: CalendarService,
     private dataStorage: DataStorageService,
     private authService: AuthService,
-    private dialog: MatDialog) { }
+    private dialog: MatDialog,
+    private snackbar: MatSnackBar) { }
 
   ngOnInit() {
     this.username = this.authService.name;
@@ -38,7 +39,16 @@ export class CalendarItemComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(result => {
       if(result === 'confirmed'){
-        this.dataStorage.deleteCalendar(this.calendar.id);
+        this.dataStorage.deleteCalendar(this.calendar.id).subscribe(result => {
+          if(result){
+            this.snackbar.open(result.message, 'OK',{duration: 5000});
+          }
+        });
+        this.dataStorage.isLoading.subscribe(loading => {
+          if(!loading){
+            this.dataStorage.fetchCalendars();
+          }
+        })
       }
     })
   }

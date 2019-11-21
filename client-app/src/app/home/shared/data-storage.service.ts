@@ -426,11 +426,12 @@ export class DataStorageService {
   }
 
   deleteCalendar(id: number) {
-    console.log(id);
-    // this.isLoadingSubject.next(false);
-    // this.http.delete<ApiResponse>('delete url' + id)
-    // .pipe(map(data=>data),
-    // catchError(error=>throwError(error))),
-    // finalize(()=>this.isLoadingSubject.next(false));
+    this.isLoadingSubject.next(true);
+    return this.http
+      .delete<ApiResponse>(this.baseUrlCalendar + "delete/" + id)
+      .pipe(
+        (map(data => data), catchError(error => throwError(error))),
+        finalize(() => this.isLoadingSubject.next(false))
+      );
   }
 }
