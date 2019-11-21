@@ -15,5 +15,6 @@ public interface GroupRepository extends JpaRepository<Group, Long>{
 	Optional<List<Group>> findAllByCreatedByOrderByCreatedAtDesc(User user);
 	Optional<Group> findById(Long id);
 	Optional<List<Group>> findAllByOtherOwnersOrderByCreatedAtDesc(User otherOwner);
+	Optional<List<Group>> findAllByMembersOrderByCreatedAtDesc(User user);
 	void delete(Group group);
 }
