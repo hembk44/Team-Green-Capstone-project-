@@ -435,7 +435,10 @@ public class AppointmentController extends ExceptionResolver {
 
 	}
 
-	@GetMapping(path = "/getScheduledAppointments", produces = "application/json")
+	
+	// sends all the timeslots to admin/creator of appointment that are already selected by receipients 
+	@SuppressWarnings("unused")
+	@GetMapping(path = "/getScheduledAppointmentsForAdmin", produces = "application/json") 
 	@PreAuthorize("hasRole('ADMIN') or hasRole('PM')")
 	public APIresponse scheduledAppointmentsByUser() {
 
@@ -447,7 +450,8 @@ public class AppointmentController extends ExceptionResolver {
 		User currentUser = userService.findByUsername(username);
 
 		List<TimeSlots> allSlotsFromAppointment = new ArrayList<TimeSlots>();
-		List<Appointment> allAppointments = appointmentService.findAllByCreatedBy(currentUser);
+		List<Appointment> allAppointments = new ArrayList<Appointment>();
+		allAppointments = appointmentService.findAllByCreatedBy(currentUser);
 		
 		if (allAppointments == null)
 		{
@@ -469,15 +473,26 @@ public class AppointmentController extends ExceptionResolver {
 							slots.getAppointment().getDescription(), slots.getAppointment().getCreatedBy().getName()));
 				}
 			}
-			return new APIresponse(HttpStatus.OK.value(), "All  selected time slots from appointments successfully sent.",
-					slotResponses);
+			
+			if (slotResponses == null)
+			{
+				return new APIresponse(HttpStatus.OK.value(), "Appointment reciepient has not selected their choices of timeslot for created appointments! Wait before schduled Appointments can be seen",
+						null);
+			}
+			else
+			{
+				return new APIresponse(HttpStatus.OK.value(), "All  selected time slots from appointments successfully sent.",
+						slotResponses);
+			}
+		
+			
 		}
 
 	}
 
-	@GetMapping(path = "/getScheduledAppointmentsUser", produces = "application/json")
-	@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-	public APIresponse scheduledAppointmentsForUser() {
+	@GetMapping(path = "/getScheduledAppointmentsForUsers", produces = "application/json")
+	@PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('MODERATOR') or hasRole('ADMIN')")
+	public APIresponse scheduledAppointments() {
 
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		String username = "";
