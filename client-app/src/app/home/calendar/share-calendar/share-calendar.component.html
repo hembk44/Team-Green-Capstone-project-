@@ -3,26 +3,29 @@
 </mat-toolbar>
 <div mat-dialog-content>
     <form [formGroup]="shareForm" (ngSubmit)="onSubmit()">
-            <mat-form-field class="example-chip-list" style="width:90%">
-                <mat-chip-list #chipList aria-label="adding emails">
-                    <mat-chip
-                    *ngFor="let email of emails"
-                    [selectable]="selectable"
-                    [removable]="removable"
-                    (removed)="remove(email)"
-                    >
-                    {{ email }}
-                    <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
-                    </mat-chip>
-                    <input
-                    placeholder="Enter Emails"
-                    [matChipInputFor]="chipList"
-                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                    [matChipInputAddOnBlur]="addOnBlur"
-                    (matChipInputTokenEnd)="add($event)"
-                    />
-                </mat-chip-list>
-            </mat-form-field>
+        <mat-chip-list #chipList aria-label="adding emails">
+            <mat-chip
+              *ngFor="let email of emails"
+              [selectable]="selectable"
+              [removable]="removable"
+              (removed)="remove(email)"
+            >
+              <mat-icon mat-list-icon>person_outline</mat-icon>
+              {{ email }}
+              <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+            </mat-chip>
+            <input
+              placeholder="Enter Emails"
+              matInput
+              [formControl]="email"
+              [matChipInputFor]="chipList"
+              [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+              [matChipInputAddOnBlur]="addOnBlur"
+              (matChipInputTokenEnd)="add($event)"
+            />
+          </mat-chip-list>
+          <mat-error *ngIf="!isEmailValid">{{ errorMessage }}</mat-error>
+          <mat-hint>Use commas or hit ENTER for multiple emails.</mat-hint>
         <mat-toolbar>
             <button
             mat-raised-button

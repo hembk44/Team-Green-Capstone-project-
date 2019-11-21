@@ -160,7 +160,7 @@ export class DataStorageService {
   newCalendar(obj: Object) {
     this.isLoadingSubject.next(true);
     return this.http
-      .post<Object>(this.baseUrlCalendar + "create", obj)
+      .post<ApiResponse>(this.baseUrlCalendar + "create", obj)
       .pipe(
         (map(data => data),
         catchError(error => throwError(error)),
@@ -205,12 +205,12 @@ export class DataStorageService {
 
   deleteUsers(obj: Object) {
     console.log(obj);
-    // this.isLoadingSubject.next(true);
-    // return this.http.post<Object>('delete api', obj).pipe(
-    //   (map(data => data),
-    //   catchError(error => throwError(error)),
-    //   finalize(() => this.isLoadingSubject.next(false)))
-    // );
+    this.isLoadingSubject.next(true);
+    return this.http.put<ApiResponse>('http://localhost:8181/api/admin/deleteUser', obj).pipe(
+      (map(data => data),
+      catchError(error => throwError(error)),
+      finalize(() => this.isLoadingSubject.next(false)))
+    );
   }
 
   fetchUsers() {

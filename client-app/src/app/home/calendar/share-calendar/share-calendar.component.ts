@@ -19,7 +19,9 @@ export class ShareCalendarComponent implements OnInit {
   removable = true;
   addOnBlur = true;
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
-  
+  errorMessage: string;
+  isEmailValid = true;
+
   constructor(
     private ref: MatDialogRef<ShareCalendarComponent>,
     private dataStorage: DataStorageService,
@@ -30,9 +32,6 @@ export class ShareCalendarComponent implements OnInit {
   ngOnInit() {
     this.emails = [];
     console.log(this.data);
-    for(let user of this.data.shareduser){
-      this.emails.push(user.email);
-    }
     this.shareForm = new FormGroup({
       recipients: new FormControl()
     })

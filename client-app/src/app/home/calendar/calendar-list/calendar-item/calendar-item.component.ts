@@ -3,10 +3,11 @@ import { Calendar } from '../calendar.model';
 import { CalendarService } from '../calendar.service';
 import { AuthService } from 'src/app/auth/auth.service';
 import { MatDialogRef, MatDialog, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ShareCalendarComponent } from '../../share-calendar/share-calendar.component';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { DataStorageService } from 'src/app/home/shared/data-storage.service';
+import { ENTER, COMMA } from '@angular/cdk/keycodes';
 
 @Component({
   selector: 'app-calendar-item',
@@ -79,6 +80,13 @@ export class CalRename implements OnInit{
   nameForm: FormGroup;
   cal: Calendar;
   primaryColor: string;
+  emails: string[];
+  visible = true;
+  selectable = true;
+  removable = true;
+  addOnBlur = true;
+  email = new FormControl("",[Validators.email]);
+  readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   constructor (
     private ref: MatDialogRef<CalRename>,
     private dataStorage: DataStorageService,
@@ -87,9 +95,14 @@ export class CalRename implements OnInit{
   ngOnInit(){
     this.cal = this.data;
     console.log(this.cal);
+    this.emails=[];
+    for(let user of this.cal.shareduser){
+      this.emails.push(user.email);
+    }
     this.primaryColor = this.cal.color;
     this.nameForm = new FormGroup({
-      name: new FormControl(this.cal.name),
+      name: new FormControl(this.cal.name, [Validators.required]),
+      email: this.email,
       color: new FormControl()
     })
   }

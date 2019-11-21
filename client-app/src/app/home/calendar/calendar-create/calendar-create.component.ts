@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialogRef, MatChipInputEvent, MatDialog } from '@angular/material';
+import { MatDialogRef, MatChipInputEvent, MatDialog, MatSnackBar } from '@angular/material';
 import { FormGroup, FormControl } from '@angular/forms';
 import { DataStorageService } from '../../shared/data-storage.service';
 import { ENTER, COMMA } from '@angular/cdk/keycodes';
@@ -23,7 +23,8 @@ export class CalendarCreateComponent implements OnInit {
   constructor(
     private ref: MatDialogRef<CalendarCreateComponent>,
     private dataStorage: DataStorageService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private snackbar: MatSnackBar
   ) { }
 
   ngOnInit() {
@@ -52,6 +53,7 @@ export class CalendarCreateComponent implements OnInit {
     this.dataStorage.newCalendar(obj).subscribe(result => {
       console.log(obj);
       if (result) {
+        this.snackbar.open(result.message)
         this.dataStorage.fetchCalendars();
       }
     });
