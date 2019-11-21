@@ -103,7 +103,7 @@ public class FileController {
 
 			for (User user : usersList) {
 
-				if (!userService.existsByUsername(user.getUsername())) {
+				if (userService.findByEmail(user.getEmail()) != null) {
 					newUsersEmailList.add(user.getEmail());
 					userService.save(user);
 					calendarService.save(new Calendar("Main", "#800029",null, null, user, true, true));
