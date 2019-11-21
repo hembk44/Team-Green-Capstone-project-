@@ -1,13 +1,10 @@
 package com.csci4060.app.controller;
 
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,8 +14,6 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.mail.SimpleMailMessage;
-import org.springframework.security.access.method.P;
-
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -35,8 +30,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
 import com.csci4060.app.ExceptionResolver;
 
 import com.csci4060.app.configuration.jwt.JwtProvider;
@@ -209,37 +202,7 @@ public class AuthRestAPIs extends ExceptionResolver {
 		
 		
 	}
-//	@PostMapping(path = "verifyEmail", produces = "application/json")
-//	public APIresponse verifyEmail(@RequestBody Map<String,String> emailJson) {
-//		
-//		String email = emailJson.get(email);
-//		System.out.println("The email is: "+ emailJson.get(email));
-//		
-//		String baseUrl = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
-//		
-//		User user = userService.findByEmail(email);
-//		System.out.println(user);
-//		if (user != null) {
-//			ConfirmationToken token = new ConfirmationToken(user);
-//			confirmationTokenService.save(token);
-//
-//			SimpleMailMessage mailMessage = new SimpleMailMessage();
-//			mailMessage.setTo(email);
-//			mailMessage.setSubject("Verify Email");
-//			mailMessage.setFrom("ulmautoemail@gmail.com");
-//			mailMessage.setText("To confirm your account, please click here : " + baseUrl + "api/auth/confirm-account/"
-//					+ token.getConfirmationToken());
-//
-//			emailSenderService.sendEmail(mailMessage);
-//
-//			return new APIresponse(HttpStatus.OK.value(), "VerificationToken has been sent for " + user.getUsername(),
-//					null);
-//		}
-//		return new APIresponse(HttpStatus.UNAUTHORIZED.value(), "User email is not in the database", null);
-//	}
 
-	
-	
 	@PostMapping(value = "/forgot")
 	public APIresponse processForgotPasswordForm( @RequestParam("email") String userEmail, HttpServletRequest request) {
 
