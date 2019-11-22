@@ -1,6 +1,8 @@
 .primary {
   color: #800029;
   border: #800029 solid 1px;
+
+
 }
 
 .mat-menu-item:hover:not([disabled]) {
@@ -27,4 +29,17 @@ example-icon {
 .mat-form-field {
   font-size: 14px;
   font-weight: 400;
+}
+
+.mat-menu-item .mat-icon-no-color,
+.mat-menu-item-submenu-trigger::after {
+  color: inherit;
+}
+
+.container-detail {
+  margin: 100px auto;
+}
+
+.container {
+  margin: 15px auto;
 }

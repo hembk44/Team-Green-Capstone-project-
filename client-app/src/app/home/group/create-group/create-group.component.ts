@@ -18,6 +18,7 @@ import {
   MatSelectChange,
   MatSelect
 } from "@angular/material";
+import { callbackify } from "util";
 
 export interface courseGroup {
   title: string;
@@ -42,9 +43,16 @@ export class CreateGroupComponent implements OnInit {
   emails: string[] = [];
   groupTypes: string[] = ["Course", "Custom"];
   semesterTerm: string[] = ["Fall", "Spring"];
-  semesterYear: number[] = [2019, 2020, 2021];
+  currentYear: number = new Date().getFullYear();
+  semesterYear: number[] = [
+    this.currentYear - 2,
+    this.currentYear - 1,
+    this.currentYear,
+    this.currentYear + 1,
+    this.currentYear + 2
+  ];
   isCourseGroup: boolean = false;
-  // majors = Majors.getMajors();
+
   majors: string[] = [
     "Accounting",
     "Agribusiness",
@@ -103,7 +111,6 @@ export class CreateGroupComponent implements OnInit {
   groupToEdit: any;
   customGroupEmails: string[] = [];
   courseGroupEmails: string[] = [];
-  editEmails: string[] = [];
 
   validFileExtensions: string[] = ["xlsx", "csv"];
   invalidExtension: string;
@@ -168,11 +175,8 @@ export class CreateGroupComponent implements OnInit {
             this.groupForm.get("groupType").setValue(this.groupToEdit.type);
 
             const customGroupMembers = this.groupToEdit.members;
-            console.log(customGroupMembers);
-
             for (let member of customGroupMembers) {
-              this.editEmails.push(member.email);
-              console.log(this.editEmails);
+              this.emails.push(member.email);
             }
             this.groupForm = this.formBuilder.group({
               groupType: [this.groupToEdit.type],
@@ -188,11 +192,10 @@ export class CreateGroupComponent implements OnInit {
               new MatSelectChange(this.source, "Computer Science")
             );
             const courseGroupMembers = this.groupToEdit.members;
-            console.log(courseGroupMembers);
 
             for (let member of courseGroupMembers) {
-              this.editEmails.push(member.email);
-              console.log(this.editEmails);
+              this.emails.push(member.email);
+              console.log(this.emails);
             }
             this.groupForm = this.formBuilder.group({
               groupType: [this.groupToEdit.type],
@@ -294,7 +297,7 @@ export class CreateGroupComponent implements OnInit {
       const obj = {
         name: groupFormValues.title,
         description: groupFormValues.description,
-        recipients: this.customGroupEmails,
+        recipients: this.emails,
         type: groupFormValues.groupType,
         semesterTerm: groupFormValues.semesterTerm,
         semesterYear: groupFormValues.semesterYear
@@ -349,7 +352,10 @@ export class CreateGroupComponent implements OnInit {
         const formData = new FormData();
         formData.append("user", JSON.stringify(objUser));
         formData.append("file", this.currentFileUpload);
-        console.log(formData);
+        // console.log(formData);
+        this.groupDataStorageService
+          .createGroupWithFile(formData)
+          .subscribe(r => console.log(r));
       }
     }
   }

@@ -3,10 +3,44 @@
     Create Group
   </button>
 </div> -->
+<div style=" margin: 10px;">
+  <button
+    mat-stroked-button
+    class="primary"
+    [matMenuTriggerFor]="createGroup"
+    aria-label="Example icon-button with a menu"
+    matTooltip="create course or custom group"
+  >
+    Create group<mat-icon>expand_more </mat-icon>
+  </button>
 
-<app-group-item
-  *ngFor="let g of group; let i = index"
-  [eachGroup]="g"
-  [id]="g.id"
->
-</app-group-item>
+  <mat-menu #createGroup="matMenu">
+    <button mat-menu-item (click)="createCourseGroup()">
+      <mat-icon>school</mat-icon>
+
+      <span>Course Group</span>
+    </button>
+    <button mat-menu-item (click)="createCustomGroup()">
+      <mat-icon>build </mat-icon>
+      <span>Custom Group</span>
+    </button>
+  </mat-menu>
+</div>
+<mat-form-field style=" margin-left: 10px; padding: 10px;">
+  <input
+    type="text"
+    matInput
+    [(ngModel)]="searchText"
+    placeholder="Search group"
+  />
+  <mat-icon matSuffix>search</mat-icon>
+  <mat-hint>Search by group name or description</mat-hint>
+</mat-form-field>
+<div class="group-wrap">
+  <app-group-item
+    *ngFor="let g of group | groupFilter: searchText; let i = index"
+    [eachGroup]="g"
+    [id]="g.id"
+  >
+  </app-group-item>
+</div>

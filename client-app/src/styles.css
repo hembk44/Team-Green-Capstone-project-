@@ -72,3 +72,65 @@ body {
   color: white;
   background: #800029;
 }
+
+
+
+
+@media screen and (min-width: 1200px) {
+  .view-more-width {
+    max-width: 70%;
+  }
+
+  .view-less-width {
+    max-width: 35%
+  }
+
+  .example-container-width {
+    max-width: 60%
+  }
+}
+
+@media screen and (min-width: 992px) and (max-width: 1199px) {
+  .view-more-width {
+    max-width: 90%;
+  }
+
+  .view-less-width {
+    max-width: 50%
+  }
+
+  .example-container-width {
+    max-width: 60%
+  }
+}
+
+
+/* On screens that are 992px wide or less */
+@media screen and (max-width: 992px) {
+  .view-more-width {
+    max-width: 80%;
+  }
+
+  .view-less-width {
+    max-width: 50%
+  }
+
+  .example-container-width {
+    max-width: 60%
+  }
+}
+
+/* On screens that are 600px wide or less */
+@media screen and (max-width: 600px) {
+  .view-more-width {
+    max-width: 100%;
+  }
+
+  .view-less-width {
+    max-width: 80%
+  }
+
+  .example-container-width {
+    max-width: 90%
+  }
+}

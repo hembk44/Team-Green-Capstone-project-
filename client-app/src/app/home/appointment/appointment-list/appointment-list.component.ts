@@ -13,8 +13,10 @@ import { DataStorageAppointmentService } from "../data-storage-appointment.servi
   styleUrls: ["./appointment-list.component.css"]
 })
 export class AppointmentListComponent implements OnInit, OnDestroy {
-  appointments: Appointment[] = [];
-  appointment: Appointment;
+  appointments: any[] = [];
+  appointment: any;
+  location: string;
+  dates: string[] = [];
   currentRole: string;
   searchText = "";
   // appointmentsExists: boolean = false;
@@ -56,6 +58,7 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
                 // console.log(this.appointmentsExists);
 
                 this.appointments = this.dataStorageAppointment.appointmentLists;
+                console.log(this.appointments);
               } else {
                 // this.appointmentsExists = false;
                 // console.log(this.appointmentsExists);

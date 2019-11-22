@@ -23,9 +23,9 @@ export class GroupDataStorageService {
 
   get groupLists(): Group[] {
     console.log(this.groupSubject.value);
-    if(!this.groupSubject.value){
+    if (!this.groupSubject.value) {
       return [];
-    } else{
+    } else {
       return this.groupSubject.value;
     }
   }
@@ -34,6 +34,18 @@ export class GroupDataStorageService {
     this.isLoadingSubject.next(true);
     return this.http
       .post<Object>(this.baseUrlGroup + "createFromList", obj)
+      .pipe(
+        (map(data => data), catchError(error => throwError(error))),
+        finalize(() => this.isLoadingSubject.next(false))
+      );
+  }
+
+  createGroupWithFile(formData: FormData) {
+    return this.http
+      .post<ApiResponse>(
+        "http://localhost:8181/api/group/createFromFile",
+        formData
+      )
       .pipe(
         (map(data => data), catchError(error => throwError(error))),
         finalize(() => this.isLoadingSubject.next(false))
@@ -54,7 +66,7 @@ export class GroupDataStorageService {
         console.log(result);
         if (result.status == 200 && result.result) {
           this.groupSubject.next(result.result);
-        } else{
+        } else {
           this.groupSubject.next([]);
         }
       });

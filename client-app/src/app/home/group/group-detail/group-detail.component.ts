@@ -19,6 +19,7 @@ import { GroupCreateNavigationService } from "../group/group-create-navigation.s
 import { share } from "rxjs/operators";
 import { MessageGroupComponent } from "../message-group/message-group.component";
 import { GroupDetailDataShareService } from "./group-detail-data-share.service";
+import { MatListOption } from "@angular/material/list";
 
 @Component({
   selector: "app-group-detail",
@@ -37,6 +38,7 @@ export class GroupDetailComponent implements OnInit {
   searchText = "";
   currentRole: string;
   groupType: string;
+  selectedGroupMembers: string[] = [];
 
   constructor(
     private groupDataStorage: GroupDataStorageService,
@@ -68,6 +70,12 @@ export class GroupDetailComponent implements OnInit {
         });
       }
     });
+  }
+
+  onSelectChange(options: MatListOption[]) {
+    console.log(options.map(o => o.value));
+    this.selectedGroupMembers = options.map(o => o.value);
+    console.log(this.selectedGroupMembers);
   }
 
   shareGroup(): void {

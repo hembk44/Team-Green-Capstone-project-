@@ -1,62 +1,128 @@
-<mat-card>
-  <h5>{{ appointmentName }}</h5>
-  <p>{{ appointmentDesc }}</p>
-  <p>{{ appointmentDate | date }}</p>
-  <p
-    *ngIf="
-      currentRole == 'ROLE_USER' ||
-      (currentRole === 'ROLE_ADMIN' && appointmentType === 'received')
-    "
-  >
-    Please select any one of the time slots below:
-  </p>
-  <mat-card-content *ngFor="let time of appointment">
-    <div *ngIf="currentRole === 'ROLE_ADMIN' && appointmentType === 'sent'">
-      <button mat-raised-button class="primary">
-        {{ time.startTime }} - {{ time.endTime }}
-      </button>
-      - {{ time.selectorName }}
-    </div>
-    <div
+<mat-card style="margin-top: 82px; border: #800029 solid 1px; ">
+  <mat-card-header>
+    <!-- <div mat-card-avatar class="example-header-image"></div> -->
+    <mat-card-title>{{ appointmentName }}</mat-card-title>
+    <mat-card-subtitle>{{ appointmentDesc }}</mat-card-subtitle>
+  </mat-card-header>
+
+  <div style="padding-left: 10px;">
+    <p>Location: &nbsp;{{ appointmentLocation }}</p>
+    <p
       *ngIf="
         currentRole == 'ROLE_USER' ||
         (currentRole === 'ROLE_ADMIN' && appointmentType === 'received')
       "
     >
-      <button
-        mat-raised-button
-        class="primary"
-        [matMenuTriggerFor]="menu"
-        matTooltip="Please click to confirm"
-      >
-        {{ time.startTime }} - {{ time.endTime }}
-      </button>
-      <mat-menu #menu="matMenu">
-        <button mat-menu-item (click)="onConfirm(time.id)">confirm</button>
-        <button mat-menu-item>cancel</button>
-      </mat-menu>
-    </div>
-  </mat-card-content>
+      Please select any one of the time slots below:
+    </p>
+    <mat-card-content *ngFor="let time of appointments">
+      Date: {{ time.date }}
 
-  <button
-    mat-raised-button
-    class="primary"
-    [matMenuTriggerFor]="manage"
-    *ngIf="currentRole === 'ROLE_ADMIN' && appointmentType === 'sent'"
-    matTooltip="Please click to delete or update"
-  >
-    Manage<mat-icon>expand_more </mat-icon>
-  </button>
-  <mat-menu #manage="matMenu">
-    <button mat-menu-item>
-      <a style="cursor: pointer;" (click)="onDeleteAppointment(id)"
-        ><mat-icon>delete</mat-icon>Delete</a
+      <div
+        *ngIf="currentRole === 'ROLE_ADMIN' && appointmentType === 'sent'"
+        style="margin-top: 10px;"
       >
-    </button>
-    <button mat-menu-item>
-      <a style="cursor: pointer;" (click)="onUpdateAppointment()">
-        <mat-icon>edit</mat-icon>Edit</a
+        <div *ngFor="let timeSlot of time.response">
+          <button
+            mat-raised-button
+            class="primary"
+            style="margin-bottom: 10px;"
+          >
+            {{ timeSlot.startTime }} - {{ timeSlot.endTime }}
+          </button>
+          - &nbsp;Selected by: &nbsp; {{ timeSlot.selectorName }}
+        </div>
+        <br />
+      </div>
+      <div
+        *ngIf="
+          currentRole == 'ROLE_USER' ||
+          (currentRole === 'ROLE_ADMIN' && appointmentType === 'received')
+        "
+        style="margin-top: 10px;"
       >
+        <div *ngFor="let timeSlot of time.response">
+          <button
+            mat-raised-button
+            class="primary"
+            [matMenuTriggerFor]="menu"
+            matTooltip="Please click to confirm"
+            style="margin-bottom: 10px;"
+          >
+            {{ timeSlot.startTime }} - {{ timeSlot.endTime }}
+          </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="onConfirm(timeSlot.id)">
+              confirm
+            </button>
+            <button mat-menu-item>cancel</button>
+          </mat-menu>
+        </div>
+      </div>
+    </mat-card-content>
+
+    <mat-accordion
+      *ngIf="currentRole === 'ROLE_ADMIN' && appointmentType === 'sent'"
+    >
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title> Pending recipients </mat-panel-title>
+          <mat-panel-description>
+            All recipients who didn't confirm appointment
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <mat-selection-list
+          #users
+          (selectionChange)="onSelectChange(users.selectedOptions.selected)"
+        >
+          <mat-list-option
+            *ngFor="let user of pendingUsers"
+            [value]="user.email"
+          >
+            <mat-icon mat-list-icon>person_outline</mat-icon>
+            <p mat-line>{{ user.name }}</p>
+            <h4 mat-line>{{ user.email }}</h4>
+            <!-- {{ user.name }}
+            <p>{{ user.email }}</p> -->
+          </mat-list-option>
+        </mat-selection-list>
+
+        <p>
+          Pending users selected:&nbsp;
+          {{ users.selectedOptions.selected.length }}
+        </p>
+        <button
+          mat-raised-button
+          class="button-maroon"
+          (click)="messageSelectedRecipients()"
+          matTooltip="click to message selected recipients"
+        >
+          <mat-icon mat-list-icon>email</mat-icon> &nbsp; Email selected
+          recipients
+        </button>
+      </mat-expansion-panel>
+    </mat-accordion>
+    <br />
+    <button
+      mat-raised-button
+      class="primary"
+      [matMenuTriggerFor]="manage"
+      *ngIf="currentRole === 'ROLE_ADMIN' && appointmentType === 'sent'"
+      matTooltip="Please click to delete or update"
+    >
+      Manage<mat-icon>expand_more </mat-icon>
     </button>
-  </mat-menu>
+    <mat-menu #manage="matMenu">
+      <button mat-menu-item>
+        <a style="cursor: pointer;" (click)="onDeleteAppointment(id)"
+          ><mat-icon>delete</mat-icon>Delete</a
+        >
+      </button>
+      <button mat-menu-item>
+        <a style="cursor: pointer;" (click)="onUpdateAppointment()">
+          <mat-icon>edit</mat-icon>Edit</a
+        >
+      </button>
+    </mat-menu>
+  </div>
 </mat-card>
