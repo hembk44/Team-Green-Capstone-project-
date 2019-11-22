@@ -1,6 +1,7 @@
 package com.csci4060.app.controller;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import javax.validation.Valid;
 
@@ -13,11 +14,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.csci4060.app.ExceptionResolver;
 import com.csci4060.app.model.APIresponse;
@@ -25,7 +28,9 @@ import com.csci4060.app.model.EmailWrapper;
 import com.csci4060.app.model.Role;
 import com.csci4060.app.model.User;
 import com.csci4060.app.model.UserDetailDummy;
+import com.csci4060.app.model.major.Major;
 import com.csci4060.app.services.EmailSenderService;
+import com.csci4060.app.services.MajorService;
 import com.csci4060.app.services.RoleService;
 import com.csci4060.app.services.UserService;
 
@@ -43,6 +48,9 @@ public class AdminController extends ExceptionResolver {
 	@Autowired
 	EmailSenderService emailSenderService;
 
+	@Autowired
+	MajorService majorService;
+	
 	@PutMapping(path = "/changeRole")
 	@PreAuthorize("hasRole('ADMIN')")
 	public APIresponse changeRoles(@Valid @RequestBody List<UserDetailDummy> userDetail) {
@@ -97,7 +105,7 @@ public class AdminController extends ExceptionResolver {
 	public APIresponse deleteUser(@RequestBody EmailWrapper emailWrapper) {
 
 		List<String> emails = emailWrapper.getEmails();
-		
+
 		for (String email : emails) {
 			User user = userService.findByEmail(email);
 
@@ -117,5 +125,52 @@ public class AdminController extends ExceptionResolver {
 		}
 
 		return new APIresponse(HttpStatus.OK.value(), "User was successfully deleted.", emails);
+	}
+
+	@PostMapping(path = "/uploadMajor")
+	@PreAuthorize("hasRole('ADMIN')")
+	public APIresponse uploadMajor() {
+		List<String> majors = Arrays.asList("Accounting", "Agribusiness", "Art", "Atmospheric Science", "Biology",
+				"Business", "Communication", "Computer Information Systems", "Computer Science",
+				"Construction Management", "Counseling", "Criminal Justice", "Dental Hygiene",
+				"Education: Curriculum and Instruction", "Educational Leadership", "English", "Finance",
+				"General Studies", "Gerontology", "Health Studies", "History", "Kinesiology", "Management", "Marketing",
+				"Marriage & Family Therapy", "Mathematics", "Medical Laboratory Science", "Music", "Nursing",
+				"Occupational Therapy", "Pharmacy", "Political Science", "Psychology", "Radiologic Technology",
+				"Risk Management & Insurance", "Social Work", "Speech-Language Pathology", "Toxicology",
+				"Unmanned Aircraft Systems Management", "World Langauges: French", "World Langauges: Spanish");
+
+		for(String major:majors) {
+			
+			Major majorObject = majorService.findByName(major);
+			
+			if(majorObject == null) {
+				
+				Major newMajor = new Major(major,null);
+				majorService.save(newMajor);
+			}
+		}
+
+		return new APIresponse(HttpStatus.CREATED.value(), "All majors have been successfully added.", majors);
+	}
+
+	@GetMapping(path = "/getAllMajors")
+	@PreAuthorize("hasRole('ADMIN')")
+	public APIresponse getAllMajors() {
+		
+		List<Major> majors = majorService.findAll();
+		
+		if(majors == null) {
+			return new APIresponse(HttpStatus.NOT_FOUND.value(), "No majors in the database yet", null);
+		}
+		
+		return new APIresponse(HttpStatus.OK.value(), "All majors have been successfully sent.", majors);
+	}
+	
+	@PostMapping(path = "/uploadCourses")
+	@PreAuthorize("hasRole('ADMIN')")
+	public APIresponse uploadCourse(@RequestParam("file") MultipartFile file, @RequestParam("major") String majorName){
+		return null;
+		
 	}
 }
