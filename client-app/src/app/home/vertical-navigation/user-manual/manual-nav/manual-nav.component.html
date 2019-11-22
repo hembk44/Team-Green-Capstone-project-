@@ -1,0 +1,48 @@
+<div
+  class="container"
+  fxLayout
+  fxLayout.xs="column"
+  fxLayoutAlign="flex-start"
+  fxLayoutGap="10px"
+  fxLayoutGap.xs="10px"
+>
+  <button
+    mat-stroked-button
+    class="button-maroon"
+    (click)="admin()"
+    *ngIf="currentRole == 'ROLE_ADMIN'"
+    
+  >Administration
+  </button>&nbsp;
+  <button
+    mat-stroked-button
+    class="button-maroon"
+    (click)="calendar()"
+    
+  >Calendar
+  </button>&nbsp;
+  <button
+    mat-stroked-button
+    class="button-maroon"
+    (click)="appointment()"
+    
+  >Appointments
+  </button>&nbsp;
+  <button
+    mat-stroked-button
+    class="button-maroon"
+    (click)="groups()"
+    *ngIf="currentRole == 'ROLE_ADMIN' || currentRole == 'ROLE_PM' || currentRole=='ROLE_MODERATOR'"
+    
+  >Groups
+  </button>&nbsp;
+  <button
+    mat-stroked-button
+    class="button-maroon"
+    (click)="broadcast()"
+    *ngIf="currentRole == 'ROLE_ADMIN'"
+    
+  >Broadcast
+  </button>&nbsp;
+</div>
+

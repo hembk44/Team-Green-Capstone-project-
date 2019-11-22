@@ -128,6 +128,7 @@ import { CalComponent } from './home/vertical-navigation/user-manual/cal/cal.com
 import { ApptComponent } from './home/vertical-navigation/user-manual/appt/appt.component';
 import { GrpsComponent } from './home/vertical-navigation/user-manual/grps/grps.component';
 import { BrdcastComponent } from './home/vertical-navigation/user-manual/brdcast/brdcast.component';
+import { ManualNavComponent } from './home/vertical-navigation/user-manual/manual-nav/manual-nav.component';
 
 @NgModule({
   // declarations: [
@@ -235,6 +236,7 @@ import { BrdcastComponent } from './home/vertical-navigation/user-manual/brdcast
     ApptComponent,
     GrpsComponent,
     BrdcastComponent,
+    ManualNavComponent,
   ],
   imports: [
     BrowserModule,

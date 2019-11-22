@@ -40,6 +40,11 @@ import { ChangePasswordComponent } from "./change-password/change-password.compo
 import { BroadcastComponent } from './broadcast/broadcast.component';
 import { BroadcastManagementComponent } from './home/administration/broadcast-management/broadcast-management.component';
 import { UserManualComponent } from './home/vertical-navigation/user-manual/user-manual.component';
+import { AdminComponent } from './home/vertical-navigation/user-manual/admin/admin.component';
+import { ApptComponent } from './home/vertical-navigation/user-manual/appt/appt.component';
+import { BrdcastComponent } from './home/vertical-navigation/user-manual/brdcast/brdcast.component';
+import { CalComponent } from './home/vertical-navigation/user-manual/cal/cal.component';
+import { GrpsComponent } from './home/vertical-navigation/user-manual/grps/grps.component';
 
 const routes: Routes = [
   {
@@ -70,7 +75,13 @@ const routes: Routes = [
     children: [
       { path: "", redirectTo: "dashboard", pathMatch: "full" },
       { path: "dashboard", component: DashboardComponent },
-      { path: "user-manual", component: UserManualComponent },
+      { path: "user-manual", component: UserManualComponent, children: [
+        { path: "administration", component: AdminComponent },
+        { path: "appointments", component: ApptComponent },
+        { path: "broadcast", component: BrdcastComponent },
+        { path: "calendar", component: CalComponent },
+        { path: "groups", component: GrpsComponent }
+      ] },
       { path: "admin", component: AdministrationComponent },
       { path: "broadcast-management", component: BroadcastManagementComponent },
       { path: "calendar", component: CalendarComponent },
