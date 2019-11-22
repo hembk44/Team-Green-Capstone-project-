@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.csci4060.app.model.User;
 import com.csci4060.app.model.appointment.Appointment;
+import com.csci4060.app.model.appointment.AppointmentDate;
 import com.csci4060.app.model.appointment.TimeSlots;
 import com.csci4060.app.model.event.Event;
 import com.csci4060.app.repository.appointmentRepo.TimeSlotsRepository;
@@ -66,6 +67,16 @@ public class TimeSlotsServiceImpl implements TimeSlotsService {
 		eventService.delete(event);
 		timeSlotsRepo.delete(timeslots);
 		
+	}
+
+	@Override
+	public List<TimeSlots> allTimeslotsByAppdate(AppointmentDate date) {
+		Optional<List<TimeSlots>> slotsByAppDate = timeSlotsRepo.findAllByAppdates(date);
+
+		if (slotsByAppDate.isPresent()) {
+			return slotsByAppDate.get();
+		}
+		return null;
 	}
 
 }
