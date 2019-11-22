@@ -18,6 +18,18 @@ public class Major {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
+	String name;
+	
 	@OneToMany(targetEntity = Course.class)
 	List<Course> courses;
+	
+	public Major(String name, List<Course> courses) {
+		this.name = name;
+		this.courses = courses;
+	}
+
+	public Major() {
+		super();
+	}
+	
 }

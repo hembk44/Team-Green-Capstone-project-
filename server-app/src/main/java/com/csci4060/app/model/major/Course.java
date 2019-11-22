@@ -23,4 +23,10 @@ public class Course {
 		this.title = title;
 		this.description = title;
 	}
+
+	public Course() {
+		super();
+	}
+	
+	
 }
