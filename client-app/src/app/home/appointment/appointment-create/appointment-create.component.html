@@ -28,7 +28,7 @@
           [removable]="removable"
           (removed)="remove(email)"
         >
-          {{ email }}
+          <mat-icon mat-list-icon>person_outline</mat-icon> {{ email }}
           <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
         </mat-chip>
         <input
@@ -187,7 +187,7 @@
             <input matInput formControlName="interval" type="number" />
             <mat-hint>Length of each time slots in MINUTES.</mat-hint>
           </mat-form-field>
-          &nbsp;
+          <!-- &nbsp;
           <button
             mat-raised-button
             type="button"
@@ -195,8 +195,22 @@
             (click)="addTime(date)"
           >
             Add Time
-          </button>
+          </button> -->
         </div>
+        <mat-toolbar>
+          <mat-toolbar-row>
+            <button
+              mat-raised-button
+              type="button"
+              class="button-maroon"
+              (click)="addTime(date)"
+              style="margin: 10px"
+            >
+              Add Time
+            </button>
+            <span class="example-spacer"></span>
+          </mat-toolbar-row>
+        </mat-toolbar>
         <!-- <button
           mat-raised-button
           type="button"

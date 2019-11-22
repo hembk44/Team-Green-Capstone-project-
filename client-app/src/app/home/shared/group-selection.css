@@ -1,0 +1,18 @@
+.example-card {
+  /* max-width: 100%; */
+  margin: 10px;
+  border: #800029 solid 1px;
+}
+
+.example-spacer {
+  flex: 1 1 auto;
+}
+
+.mat-toolbar {
+  background: white;
+}
+
+.group-select-wrap {
+  height: 50%;
+  overflow: auto
+}

@@ -1,3 +1,41 @@
-<mat-icon (click)="close()" style="cursor:pointer">clear</mat-icon><br>
-<p *ngIf="groups.length === 0">You have no groups.</p>
-<mat-checkbox *ngFor="let group of groups" color="primary" (click)="addGroup(group.id)">{{group.name}} - {{group.semesterTerm}} {{group.semesterYear}}</mat-checkbox>
+<!-- <div>
+  <span class="example-spacer"></span>
+  <mat-icon (click)="close()" style="cursor:pointer">clear</mat-icon><br />
+</div> -->
+
+<!-- <div class="example-card">
+  <p *ngIf="groups.length === 0">You have no groups.</p>
+  <mat-checkbox
+    *ngFor="let group of groups"
+    color="primary"
+    (click)="addGroup(group.id)"
+    >{{group.name}} - {{group.semesterTerm}}
+    {{group.semesterYear}}</mat-checkbox
+  >
+</div> -->
+<mat-toolbar>
+  <mat-toolbar-row>
+    <span class="example-spacer"></span>
+    <mat-icon (click)="close()" style="cursor:pointer" aria-hidden="false"
+      >clear</mat-icon
+    >
+  </mat-toolbar-row>
+</mat-toolbar>
+<div class="group-select-wrap example-card">
+  <div *ngIf="groups.length > 0; else elseBlock">
+    <mat-selection-list #users>
+      <mat-list-option
+        *ngFor="let group of groups"
+        (click)="addGroup(group.id)"
+        [value]="group.name"
+      >
+        <mat-icon mat-list-icon>group</mat-icon>
+        <p mat-line><strong>{{ group.name }}</strong></p>
+        <h4 mat-line>{{ group.semesterTerm }}-{{ group.semesterYear }}</h4>
+      </mat-list-option>
+    </mat-selection-list>
+  </div>
+</div>
+<ng-template #elseBlock>
+  <p>You have no group yet!</p>
+</ng-template>
