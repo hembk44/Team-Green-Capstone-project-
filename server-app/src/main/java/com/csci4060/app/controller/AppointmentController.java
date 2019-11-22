@@ -38,6 +38,7 @@ import com.csci4060.app.model.appointment.AppointmentDummy;
 import com.csci4060.app.model.appointment.AppointmentEdit;
 import com.csci4060.app.model.appointment.AppointmentResponse;
 import com.csci4060.app.model.appointment.AppointmentTime;
+import com.csci4060.app.model.appointment.DateAndTimeSlotResponse;
 import com.csci4060.app.model.appointment.TimeSlotResponse;
 import com.csci4060.app.model.appointment.TimeSlots;
 import com.csci4060.app.model.calendar.Calendar;
@@ -157,6 +158,28 @@ public class AppointmentController extends ExceptionResolver {
 					slotStartTime = slotEndTime;
 				}
 
+			}
+
+		}
+		
+		System.out.println(timeSlots.size());
+		System.out.println(recepientsEmailList.size());
+		
+
+		if (timeSlots.size() < emailFromDummy.size())
+		{
+			return new APIresponse(HttpStatus.FORBIDDEN.value(), "Sorry! The generated Appointment Slots are not enough for provided numbers of Recepients! Please add more time slots or reduce number of recepients!", null);
+		}
+		
+		
+		
+		
+		for (AppointmentDate date : dates) {
+
+			List<AppointmentTime> times = date.getApptimes();
+
+			for (AppointmentTime time : times) {
+
 				// saving the time before date in the database to avoid transient error(appdate
 				// references apptime)
 				appointmentTimeService.save(time);
@@ -167,7 +190,10 @@ public class AppointmentController extends ExceptionResolver {
 		}
 		// saving the appointment in the database
 		appointmentService.save(appointment);
-
+		
+		
+		
+		
 		//Going through each timeslots and saving in the database.
 		for (TimeSlots slots : timeSlots) {
 			timeSlotsService.save(slots);
@@ -223,7 +249,7 @@ public class AppointmentController extends ExceptionResolver {
 			}
 
 			allAppointments
-					.add(new AppointmentResponse(app.getId(), app.getName(), app.getDescription(), responseDate));
+					.add(new AppointmentResponse(app.getId(), app.getName(), app.getDescription(), app.getLocation(), responseDate));
 
 		}
 
@@ -262,7 +288,7 @@ public class AppointmentController extends ExceptionResolver {
 			}
 
 			allAppointments
-					.add(new AppointmentResponse(app.getId(), app.getName(), app.getDescription(), responseDate));
+					.add(new AppointmentResponse(app.getId(), app.getName(), app.getDescription(), app.getLocation(), responseDate));
 
 		}
 
@@ -285,7 +311,8 @@ public class AppointmentController extends ExceptionResolver {
 		User user = userService.findByUsername(username);
 
 		Appointment appointment = appointmentService.findById(appointmentId);
-
+		
+		
 		List<TimeSlots> slotsFromAppointment = timeSlotsService.findAllByAppointment(appointment);
 
 		List<TimeSlotResponse> timeSlotResponses = new ArrayList<TimeSlotResponse>();
@@ -307,34 +334,54 @@ public class AppointmentController extends ExceptionResolver {
 	@GetMapping(path = "/timeslots/faculty/{id}")
 	@PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
 	public APIresponse getSlotsForFaculty(@PathVariable("id") Long appointmentId) {
+		
+		
+		
+		List<DateAndTimeSlotResponse> response = new ArrayList<DateAndTimeSlotResponse>();
+
 
 		Appointment appointment = appointmentService.findById(appointmentId);
+		List<User> allRecepients = appointment.getRecepients();
+		List<User> confirmedUsers = new ArrayList<User>();
+ 		
+		
+		List<AppointmentDate> dates = appointment.getAppdates();
+		
+		for (AppointmentDate date: dates)
+		{
+			List<TimeSlots> slotsFromAppdate= timeSlotsService.allTimeslotsByAppdate(date);
+			
+			List<TimeSlotResponse> timeSlotResponses = new ArrayList<TimeSlotResponse>();
+			for (TimeSlots slots : slotsFromAppdate) {
 
-		List<TimeSlots> slotsFromAppointment = timeSlotsService.findAllByAppointment(appointment);
+				String selectorName = "Not selected";
+				String selectorEmail = "Not selected";
 
-		List<TimeSlotResponse> timeSlotResponses = new ArrayList<TimeSlotResponse>();
+				if (slots.getSelectedBy() != null)
+				{
+					
+					
+					User selectedBy = slots.getSelectedBy();
+					confirmedUsers.add(selectedBy);
 
-		for (TimeSlots slots : slotsFromAppointment) {
+					selectorName = selectedBy.getName();
+					selectorEmail = selectedBy.getEmail();
 
-			String selectorName = "Not selected";
-			String selectorEmail = "Not selected";
+				}
 
-			if (slots.getSelectedBy() != null) {
-
-				User selectedBy = slots.getSelectedBy();
-
-				selectorName = selectedBy.getName();
-				selectorEmail = selectedBy.getEmail();
+				timeSlotResponses.add(new TimeSlotResponse(slots.getId(), slots.getStartTime(), slots.getEndTime(),
+						slots.getAppdates().getDate(), selectorName, selectorEmail, appointment.getName(),
+						appointment.getDescription(), appointment.getCreatedBy().getName()));
 
 			}
-
-			timeSlotResponses.add(new TimeSlotResponse(slots.getId(), slots.getStartTime(), slots.getEndTime(),
-					slots.getAppdates().getDate(), selectorName, selectorEmail, appointment.getName(),
-					appointment.getDescription(), appointment.getCreatedBy().getName()));
-
+			
+			boolean pending = allRecepients.removeAll(confirmedUsers);
+			
+			response.add(new DateAndTimeSlotResponse(date.getDate(), timeSlotResponses, allRecepients));
 		}
 
-		return new APIresponse(HttpStatus.OK.value(), "Time slots successfully sent.", timeSlotResponses);
+
+		return new APIresponse(HttpStatus.OK.value(), "Time slots successfully sent.", response);
 	}
 
 	@PostMapping(path = "timeslots/postSlot/{timeSlotId}", produces = "application/json")
@@ -442,7 +489,10 @@ public class AppointmentController extends ExceptionResolver {
 
 	}
 
-	@GetMapping(path = "/getScheduledAppointments", produces = "application/json")
+	
+	// sends all the timeslots to admin/creator of appointment that are already selected by receipients 
+	@SuppressWarnings("unused")
+	@GetMapping(path = "/getScheduledAppointmentsForAdmin", produces = "application/json") 
 	@PreAuthorize("hasRole('ADMIN') or hasRole('PM')")
 	public APIresponse scheduledAppointmentsByUser() {
 
@@ -454,27 +504,49 @@ public class AppointmentController extends ExceptionResolver {
 		User currentUser = userService.findByUsername(username);
 
 		List<TimeSlots> allSlotsFromAppointment = new ArrayList<TimeSlots>();
-		for (Appointment app : appointmentService.findAllByCreatedBy(currentUser)) {
-			allSlotsFromAppointment.addAll(timeSlotsService.findAllByAppointment(app));
+		List<Appointment> allAppointments = new ArrayList<Appointment>();
+		allAppointments = appointmentService.findAllByCreatedBy(currentUser);
+		
+		if (allAppointments == null)
+		{
+			return new APIresponse(HttpStatus.BAD_REQUEST.value(), "You have not created any appointment! Please create appointment and assign appointees!",
+					null);
 		}
-
-		List<TimeSlotResponse> slotResponses = new ArrayList<TimeSlotResponse>();
-		for (TimeSlots slots : allSlotsFromAppointment) {
-			if (slots.getSelectedBy() != null) {
-				slotResponses.add(new TimeSlotResponse(slots.getId(), slots.getStartTime(), slots.getEndTime(),
-						slots.getAppdates().getDate(), slots.getSelectedBy().getName(),
-						slots.getSelectedBy().getEmail(), slots.getAppointment().getName(),
-						slots.getAppointment().getDescription(), slots.getAppointment().getCreatedBy().getName()));
+		else
+		{
+			for (Appointment app : allAppointments) {
+				allSlotsFromAppointment.addAll(timeSlotsService.findAllByAppointment(app));
 			}
+	
+			List<TimeSlotResponse> slotResponses = new ArrayList<TimeSlotResponse>();
+			for (TimeSlots slots : allSlotsFromAppointment) {
+				if (slots.getSelectedBy() != null) {
+					slotResponses.add(new TimeSlotResponse(slots.getId(), slots.getStartTime(), slots.getEndTime(),
+							slots.getAppdates().getDate(), slots.getSelectedBy().getName(),
+							slots.getSelectedBy().getEmail(), slots.getAppointment().getName(),
+							slots.getAppointment().getDescription(), slots.getAppointment().getCreatedBy().getName()));
+				}
+			}
+			
+			if (slotResponses == null)
+			{
+				return new APIresponse(HttpStatus.OK.value(), "Appointment reciepient has not selected their choices of timeslot for created appointments! Wait before schduled Appointments can be seen",
+						null);
+			}
+			else
+			{
+				return new APIresponse(HttpStatus.OK.value(), "All  selected time slots from appointments successfully sent.",
+						slotResponses);
+			}
+		
+			
 		}
-		return new APIresponse(HttpStatus.OK.value(), "All  selected time slots from appointments successfully sent.",
-				slotResponses);
 
 	}
 
-	@GetMapping(path = "/getScheduledAppointmentsUser", produces = "application/json")
-	@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-	public APIresponse scheduledAppointmentsForUser() {
+	@GetMapping(path = "/getScheduledAppointmentsForUsers", produces = "application/json")
+	@PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('MODERATOR') or hasRole('ADMIN')")
+	public APIresponse scheduledAppointments() {
 
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		String username = "";

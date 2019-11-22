@@ -3,6 +3,7 @@ package com.csci4060.app.services;
 import java.util.List;
 import com.csci4060.app.model.User;
 import com.csci4060.app.model.appointment.Appointment;
+import com.csci4060.app.model.appointment.AppointmentDate;
 import com.csci4060.app.model.appointment.TimeSlots;
 
 public interface TimeSlotsService {
@@ -13,6 +14,8 @@ public interface TimeSlotsService {
 	
 	TimeSlots findById(Long id);
 	List<TimeSlots> findAllBySelectedBy(User selectedBy);
+	
+	List<TimeSlots> allTimeslotsByAppdate(AppointmentDate date);
 	
 	void delete(TimeSlots timeslots);
 }
