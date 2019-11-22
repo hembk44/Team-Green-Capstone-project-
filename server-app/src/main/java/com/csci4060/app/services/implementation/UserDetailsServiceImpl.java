@@ -245,7 +245,7 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
 		
 		if(memberGroups != null) {
 			for(Group group: memberGroups) {
-				group.getMembers().clear();
+				group.getMembers().remove(user);
 				groupService.save(group);
 			}
 		}

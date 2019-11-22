@@ -145,11 +145,11 @@ public class GroupController {
 				"Group with name " + groupName + " has been succesfully created", group);
 	}
 
-	@PostMapping(path = "/createFromFile", consumes = "application/json")
+	@PostMapping(path = "/createFromFile")
 	@PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
 	public APIresponse createGroupFromFile(@RequestParam("file") MultipartFile file,
 			@RequestParam("user") String groupDetails) throws IOException {
-
+		
 		GroupDummyForFile groupDummy = new ObjectMapper().readValue(groupDetails, GroupDummyForFile.class);
 		
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
