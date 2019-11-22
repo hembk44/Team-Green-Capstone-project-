@@ -1,5 +1,5 @@
-<mat-card
-  class="example-card"
+<!-- <mat-card
+  class="example-card example-card-width"
   (click)="showDetails(id)"
   style="cursor: pointer;"
 >
@@ -9,4 +9,18 @@
     </p>
     <p>{{ eachGroup.description }}</p>
   </mat-card-content>
-</mat-card>
+</mat-card> -->
+
+<mat-list
+  class="example-card example-card-width"
+  (click)="showDetails(id)"
+  style="cursor: pointer;"
+>
+  <mat-list-item>
+    <mat-icon mat-list-icon>group</mat-icon>
+    <h5 mat-line>
+      <strong>{{ eachGroup.name }}</strong>
+    </h5>
+    <p mat-line>{{ eachGroup.description }}</p>
+  </mat-list-item>
+</mat-list>

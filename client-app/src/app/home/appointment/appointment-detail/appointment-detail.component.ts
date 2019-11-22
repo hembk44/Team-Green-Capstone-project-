@@ -10,6 +10,9 @@ import { EventTime } from "../../calendar/event-times.model";
 import { EventDate } from "../../calendar/event-date.model";
 import { AppointmentsNavigationAdminService } from "../appointments-navigation-admin.service";
 import { DataStorageAppointmentService } from "../data-storage-appointment.service";
+import { AppointmentDataCommunicationService } from "../appointment-data-communication.service";
+import { FormControl } from "@angular/forms";
+import { MatSelectionListChange, MatListOption } from "@angular/material/list";
 
 @Component({
   selector: "app-appointment-detail",
@@ -17,13 +20,19 @@ import { DataStorageAppointmentService } from "../data-storage-appointment.servi
   styleUrls: ["./appointment-detail.component.css"]
 })
 export class AppointmentDetailComponent implements OnInit {
-  appointment: any;
+  pendingUser = new FormControl();
+  appointments: any;
+  detailResponse: any;
+  timeslots: any[] = [];
   id: number;
+  eachTimeSlot: any;
   appointmentName: string;
   appointmentDesc: string;
-  appointmentDate: string;
+  appointmentLocation: string;
   currentRole: string;
   appointmentType: string;
+  pendingUsers: string[] = [];
+  selectedPendingRecipients: string[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -32,7 +41,8 @@ export class AppointmentDetailComponent implements OnInit {
     private authService: AuthService,
     private dataStorage: DataStorageService,
     private _snackBar: MatSnackBar,
-    private appointmentNavigationAdmin: AppointmentsNavigationAdminService
+    private appointmentNavigationAdmin: AppointmentsNavigationAdminService,
+    private appointmentDataCoomunication: AppointmentDataCommunicationService
   ) {}
 
   ngOnInit() {
@@ -45,26 +55,43 @@ export class AppointmentDetailComponent implements OnInit {
           this.appointmentType = type;
         }
       );
+      // this.appointmentDataCoomunication.appointmentData.subscribe(data => {
+      //   this.appointmentName = data.title;
+      //   this.appointmentDesc = data.description;
+      //   this.appointmentLocation = data.location;
+      // });
       if (this.currentRole === "ROLE_ADMIN") {
         console.log("admin data here!");
         if (this.appointmentType === "sent") {
           this.dataServiceAppointment
             .displayAppointmentDetails(this.id)
             .subscribe(result => {
-              this.appointment = result.result;
-              console.log(this.appointment);
-              this.appointmentName = this.appointment[0].appointmentName;
-              this.appointmentDesc = this.appointment[0].appointmentDescription;
-              this.appointmentDate = this.appointment[0].date;
+              this.detailResponse = result.result;
+              console.log(result);
+              console.log(this.detailResponse);
+              this.pendingUsers = this.detailResponse.pendingUsers;
+              this.appointments = this.detailResponse.response;
+              for (let i of this.appointments) {
+                this.timeslots.push(i.response);
+                this.appointmentLocation = i.location;
+              }
+              console.log(this.pendingUsers);
+              console.log(this.appointments);
+              console.log(this.timeslots);
+              for (let timeslot of this.timeslots) {
+                this.appointmentName = timeslot[0].appointmentName;
+                this.appointmentDesc = timeslot[0].appointmentDescription;
+              }
+              console.log(this.appointmentName);
             });
         } else {
           // debugger;
           this.dataServiceAppointment
             .displayUserAppointmentDetails(this.id)
             .subscribe(result => {
-              this.appointment = result.result;
+              // this.appointments = result.result;
 
-              console.log(this.appointment);
+              console.log(result);
             });
         }
       } else {
@@ -72,9 +99,21 @@ export class AppointmentDetailComponent implements OnInit {
         this.dataServiceAppointment
           .displayUserAppointmentDetails(this.id)
           .subscribe(result => {
-            this.appointment = result.result;
+            // this.appointments = result.result;
 
-            console.log(this.appointment);
+            // console.log(this.appointments);
+            console.log(result);
+            this.appointments = result.result;
+            for (let i of this.appointments) {
+              this.timeslots.push(i.response);
+              this.appointmentLocation = i.location;
+            }
+            console.log(this.appointments);
+            console.log(this.timeslots);
+            for (let timeslot of this.timeslots) {
+              this.appointmentName = timeslot[0].appointmentName;
+              this.appointmentDesc = timeslot[0].appointmentDescription;
+            }
           });
       }
     });
@@ -95,6 +134,15 @@ export class AppointmentDetailComponent implements OnInit {
     } else {
       this.router.navigate(["./home/appointment/received"]);
     }
+  }
+
+  onSelectChange(options: MatListOption[]) {
+    console.log(options.map(o => o.value));
+    this.selectedPendingRecipients = options.map(o => o.value);
+    // console.log(this.selectedPendingRecipients);
+  }
+  messageSelectedRecipients() {
+    console.log(this.selectedPendingRecipients);
   }
   onDeleteAppointment(id: number) {
     this.dataServiceAppointment

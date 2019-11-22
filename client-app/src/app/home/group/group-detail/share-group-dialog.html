@@ -9,7 +9,7 @@
           [removable]="removable"
           (removed)="remove(email)"
         >
-          {{ email }}
+          <mat-icon mat-list-icon>person_outline</mat-icon>{{ email }}
           <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
         </mat-chip>
         <input
@@ -30,7 +30,12 @@
     Cancel
   </button>
 
-  <button mat-button class="primary" (click)="saveDialogData()" cdkFocusInitial>
+  <button
+    mat-button
+    class="button-maroon"
+    (click)="saveDialogData()"
+    cdkFocusInitial
+  >
     Ok
   </button>
 </div>

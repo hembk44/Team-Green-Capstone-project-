@@ -1,5 +1,40 @@
 .example-card {
-  max-width: 100%;
+  /* max-width: 100%; */
   margin: 10px;
   border: #800029 solid 1px;
+}
+
+
+
+@media screen and (min-width: 1200px) {
+
+  .example-card-width {
+    max-width: 100%
+  }
+}
+
+@media screen and (min-width: 992px) and (max-width: 1199px) {
+
+
+  .example-card-width {
+    max-width: 100%
+  }
+}
+
+
+/* On screens that are 992px wide or less */
+@media screen and (min-width: 600px) and (max-width: 991px) {
+
+  .example-card-width {
+    max-width: 80%
+  }
+}
+
+/* On screens that are 600px wide or less */
+@media screen and (max-width: 600px) {
+
+
+  .example-card-width {
+    max-width: 100%
+  }
 }

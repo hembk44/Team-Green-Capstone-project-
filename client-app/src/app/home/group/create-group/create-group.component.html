@@ -1,5 +1,13 @@
-<form class="example-container" [formGroup]="groupForm" (ngSubmit)="onSubmit()">
-  <mat-form-field *ngIf="isCourseGroup" style="cursor: pointer;width:50%;">
+<form
+  class="example-container example-container-width "
+  [formGroup]="groupForm"
+  (ngSubmit)="onSubmit()"
+>
+  <mat-form-field
+    *ngIf="isCourseGroup"
+    style="cursor: pointer;"
+    class="view-less-width"
+  >
     <mat-label>Group Type</mat-label>
     <mat-select formControlName="groupType">
       <mat-option *ngFor="let grpType of groupTypes" [value]="grpType" disabled>
@@ -11,7 +19,11 @@
     >
   </mat-form-field>
 
-  <mat-form-field *ngIf="isCourseGroup" style="cursor: pointer;width:50%;">
+  <mat-form-field
+    *ngIf="isCourseGroup"
+    style="cursor: pointer;"
+    class="view-more-width"
+  >
     <mat-label>Select Major</mat-label>
     <mat-select
       formControlName="majorControl"
@@ -26,7 +38,11 @@
       >Please choose a Major</mat-error
     >
   </mat-form-field>
-  <mat-form-field *ngIf="isCourseGroup" style="cursor: pointer;width:50%;">
+  <mat-form-field
+    *ngIf="isCourseGroup"
+    style="cursor: pointer;"
+    class="view-more-width"
+  >
     <mat-label>Title</mat-label>
     <mat-select
       formControlName="title"
@@ -42,7 +58,11 @@
     >
   </mat-form-field>
 
-  <mat-form-field *ngIf="isCourseGroup" style="cursor: pointer;width:50%;">
+  <mat-form-field
+    *ngIf="isCourseGroup"
+    style="cursor: pointer;"
+    class="view-more-width"
+  >
     <mat-label>Description</mat-label>
     <mat-select formControlName="description">
       <mat-option>--</mat-option>
@@ -59,7 +79,7 @@
     >
   </mat-form-field>
 
-  <mat-form-field *ngIf="!isCourseGroup">
+  <mat-form-field *ngIf="!isCourseGroup" class="view-less-width">
     <mat-label>Group Type</mat-label>
     <mat-select formControlName="groupType">
       <mat-option *ngFor="let grpType of groupTypes" [value]="grpType" disabled>
@@ -72,14 +92,14 @@
     >
   </mat-form-field>
 
-  <mat-form-field *ngIf="!isCourseGroup">
+  <mat-form-field *ngIf="!isCourseGroup" class="view-more-width">
     <input matInput placeholder="Group Title" formControlName="title" />
     <mat-error *ngIf="groupForm.controls['title'].hasError('required')"
       >Please enter group title</mat-error
     >
   </mat-form-field>
 
-  <mat-form-field *ngIf="!isCourseGroup">
+  <mat-form-field *ngIf="!isCourseGroup" class="view-more-width">
     <textarea
       matInput
       placeholder="Group Description"
@@ -89,8 +109,11 @@
       >Please enter group description</mat-error
     >
   </mat-form-field>
-
-  <mat-form-field class="example-chip-list" style="cursor: pointer;width:75%;">
+  <mat-form-field
+    class="example-chip-list"
+    class="view-more-width"
+    style=" cursor: pointer;"
+  >
     <mat-chip-list #chipList aria-label="adding emails">
       <mat-chip
         *ngFor="let email of emails"
@@ -116,31 +139,6 @@
 
     <mat-hint>Use comma or hit ENTER to enter multiple emails!</mat-hint>
   </mat-form-field>
-  <div *ngIf="editMode">
-    <!-- <mat-form-field
-      class="example-full-width"
-      *ngFor="let g of groupForm.get('editEmailsArray').controls; let i = index"
-    >
-      <input
-        type="email"
-        matInput
-        placeholder="Telephone"
-        formControlName="editEmail"
-      />
-      <mat-icon matSuffix>mode_edit</mat-icon>
-    </mat-form-field> -->
-    <mat-toolbar class="primary" style="margin: 10px auto; padding-left: 10px;">
-      <mat-toolbar-row *ngFor="let e of editEmails; let i = index">
-        <mat-icon mat-list-icon>person_outline</mat-icon>
-        <span>{{ e }}</span> &nbsp;
-        <!-- <span class="example-spacer"></span> -->
-
-        <a style="cursor: pointer;" (click)="deleteEmail(i)"
-          ><mat-icon matSuffix>delete</mat-icon></a
-        >
-      </mat-toolbar-row>
-    </mat-toolbar>
-  </div>
   <div
     style="text-align: center; color: black; margin-top: 10px;"
     *ngIf="!editMode"
@@ -148,7 +146,11 @@
     <span>OR</span>
   </div>
 
-  <mat-form-field style="cursor: pointer;width:75%;" *ngIf="!editMode">
+  <mat-form-field
+    style="cursor: pointer;"
+    class="view-more-width"
+    *ngIf="!editMode"
+  >
     <ngx-mat-file-input
       #removableInput
       formControlName="uploadFile"
@@ -183,7 +185,7 @@
     </mat-error>
   </mat-form-field>
 
-  <mat-form-field style="cursor: pointer;width:50%;">
+  <mat-form-field style="cursor: pointer;" class="view-less-width">
     <mat-label>Semester Term</mat-label>
     <mat-select formControlName="semesterTerm">
       <mat-option>--</mat-option>
@@ -196,7 +198,7 @@
     >
   </mat-form-field>
 
-  <mat-form-field style="cursor: pointer;width:50%;">
+  <mat-form-field style="cursor: pointer;" class="view-less-width">
     <mat-label>Semester Year</mat-label>
     <mat-select formControlName="semesterYear">
       <mat-option>--</mat-option>

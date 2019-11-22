@@ -1,76 +1,71 @@
 <div *ngIf="currentRole == 'ROLE_ADMIN'">
-  <mat-toolbar>
-    <mat-toolbar-row>
-      <div
-        class="container"
-        fxLayout
-        fxLayout.xs="column"
-        fxLayoutAlign="flex-start"
-        fxLayoutGap="10px"
-        fxLayoutGap.xs="10px"
+  <div
+    class="container"
+    fxLayout="row"
+    fxLayout.xs="column"
+    fxLayoutAlign="flex-start"
+    fxLayoutGap="5px"
+    fxLayoutGap.xs="0"
+  >
+    <div fxFlex>
+      <button
+        mat-stroked-button
+        class="button-maroon"
+        (click)="create()"
+        *ngIf="currentRole == 'ROLE_ADMIN' || currentRole == 'ROLE_PM'"
+        matTooltip="create appointments"
       >
-        <div fxFlex="30%">
-          <button
-            mat-stroked-button
-            class="button-maroon"
-            (click)="create()"
-            *ngIf="currentRole == 'ROLE_ADMIN' || currentRole == 'ROLE_PM'"
-            matTooltip="create appointments"
-          >
-            <span> Create Appointment</span>
-          </button>
-        </div>
-        &nbsp;
+        <mat-icon>add </mat-icon>Create Appointment
+      </button>
+    </div>
+    &nbsp;
 
-        <div fxFlex="35%">
-          <button
-            mat-stroked-button
-            class="primary"
-            [matMenuTriggerFor]="type"
-            aria-label="Example icon-button with a menu"
-            matTooltip="check sent and received appointments or create appointments"
-          >
-            Your Appointments <mat-icon>expand_more </mat-icon>
-          </button>
-          <mat-menu #type="matMenu">
-            <button mat-menu-item (click)="navigateToReceive()">
-              <span
-                ><mat-icon>assignment_returned</mat-icon> Created for you</span
-              >
-            </button>
-            <button mat-menu-item (click)="navigateToSent()">
-              <mat-icon>assignment_turned_in</mat-icon>
-              <span>Created by you</span>
-            </button>
-          </mat-menu>
-        </div>
-        &nbsp;
-        <div fxFlex="35%">
-          <button
-            mat-stroked-button
-            class="primary"
-            [matMenuTriggerFor]="schedule"
-            aria-label="Example icon-button with a menu"
-            matTooltip="check your all scheduled appointments"
-          >
-            Scheduled Appointments<mat-icon>expand_more </mat-icon>
-          </button>
+    <div fxFlex>
+      <button
+        mat-stroked-button
+        class="primary"
+        [matMenuTriggerFor]="type"
+        aria-label="Example icon-button with a menu"
+        matTooltip="check sent and received appointments"
+      >
+        Your Appointments <mat-icon>expand_more </mat-icon>
+      </button>
+      <mat-menu #type="matMenu">
+        <button mat-menu-item (click)="navigateToReceive()">
+          <span><mat-icon>assignment_returned</mat-icon> Created for you</span>
+        </button>
+        <button mat-menu-item (click)="navigateToSent()">
+          <mat-icon>assignment_turned_in</mat-icon>
+          <span>Created by you</span>
+        </button>
+      </mat-menu>
+    </div>
+    &nbsp;
+    <div fxFlex>
+      <button
+        mat-stroked-button
+        class="primary"
+        [matMenuTriggerFor]="schedule"
+        aria-label="Example icon-button with a menu"
+        matTooltip="check your all scheduled appointments"
+      >
+        Scheduled Appointments<mat-icon>expand_more </mat-icon>
+      </button>
 
-          <mat-menu #schedule="matMenu">
-            <button mat-menu-item (click)="navigateToScheduled()">
-              <mat-icon>schedule</mat-icon>
+      <mat-menu #schedule="matMenu">
+        <button mat-menu-item (click)="navigateToScheduled()">
+          <mat-icon>schedule</mat-icon>
 
-              <span>Created for you</span>
-            </button>
-            <button mat-menu-item (click)="navigateToScheduledRecipients()">
-              <mat-icon>schedule</mat-icon>
-              <span>Created by you</span>
-            </button>
-          </mat-menu>
-        </div>
-      </div>
-    </mat-toolbar-row>
-  </mat-toolbar>
+          <span>Created for you</span>
+        </button>
+        <button mat-menu-item (click)="navigateToScheduledRecipients()">
+          <mat-icon>schedule</mat-icon>
+          <span>Created by you</span>
+        </button>
+      </mat-menu>
+    </div>
+    <span fxFlex="grow"></span>
+  </div>
 </div>
 
 <div *ngIf="currentRole == 'ROLE_USER'">

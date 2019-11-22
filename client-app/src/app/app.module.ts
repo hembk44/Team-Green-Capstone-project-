@@ -37,6 +37,7 @@ import { MatSelectModule } from "@angular/material/select";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { MatChipsModule } from "@angular/material/chips";
+// import {MatExpansionModule} from '@angular/material/expansion';
 
 import { VerticalNavigationComponent } from "./home/vertical-navigation/vertical-navigation.component";
 import { NgxMaterialTimepickerModule } from "ngx-material-timepicker";
@@ -100,16 +101,23 @@ import {
 import { GroupComponent } from "./home/group/group/group.component";
 import { RegisterUsersComponent } from "./home/administration/register-users/register-users.component";
 import { AdministrationComponent } from "./home/administration/administration.component";
-import { UpdateRolesComponent, RoleConfirm } from "./home/administration/update-roles/update-roles.component";
-import { DeleteUsersComponent, DeleteUsers } from "./home/administration/delete-users/delete-users.component";
+import {
+  UpdateRolesComponent,
+  RoleConfirm
+} from "./home/administration/update-roles/update-roles.component";
+import {
+  DeleteUsersComponent,
+  DeleteUsers
+} from "./home/administration/delete-users/delete-users.component";
 import { FilterMemberPipe } from "./home/group/group-detail/filter-member.pipe";
 import { AppointmentFilterPipe } from "./home/appointment/appointment-list/appointment-filter.pipe";
 import { ScheduledAppointmentSentPipe } from "./home/appointment/scheduled-appointments/scheduled-appointments-sent/scheduled-appointment-sent.pipe";
 import { GroupEditComponent } from "./home/group/group-edit/group-edit.component";
 import { MessageGroupComponent } from "./home/group/message-group/message-group.component";
-import { ScheduledAppointmentReceivedPipe } from './home/appointment/scheduled-appointments/scheduled-appointment-received.pipe';
-import { ChangePasswordComponent } from './change-password/change-password.component';
-import { ShareEvent } from './home/calendar/event-detail/share-event';
+import { ScheduledAppointmentReceivedPipe } from "./home/appointment/scheduled-appointments/scheduled-appointment-received.pipe";
+import { ChangePasswordComponent } from "./change-password/change-password.component";
+import { ShareEvent } from "./home/calendar/event-detail/share-event";
+import { GroupFilterPipe } from './home/group/group-list/group-filter.pipe';
 import { UploadCoursesComponent } from './home/administration/upload-courses/upload-courses.component';
 
 @NgModule({
@@ -208,7 +216,8 @@ import { UploadCoursesComponent } from './home/administration/upload-courses/upl
     RoleConfirm,
     ScheduledAppointmentReceivedPipe,
     ChangePasswordComponent,
-    UploadCoursesComponent
+    UploadCoursesComponent,
+    GroupFilterPipe
   ],
   imports: [
     BrowserModule,

@@ -20,6 +20,6 @@
 }
 
 .appt-wrap {
-  height: auto;
-  overflow-y: auto;
+  height: 90%;
+  overflow: auto;
 }

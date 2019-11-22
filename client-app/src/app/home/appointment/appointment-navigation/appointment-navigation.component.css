@@ -14,3 +14,8 @@
 .mat-menu-item-submenu-trigger::after {
   color: inherit;
 }
+
+.container {
+  margin-top: 10px;
+  margin-left: 10px;
+}

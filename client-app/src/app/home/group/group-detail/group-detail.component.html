@@ -1,79 +1,116 @@
-<mat-card>
-  <h5>{{ groupName }}</h5>
-  <p>{{ groupDesc }}</p>
-
-  <mat-list>
-    <mat-toolbar>
-      <mat-toolbar-row>
-        <span
-          ><h3 mat-subheader>{{ numOfmembers }} &nbsp; members</h3></span
-        >
-        <span class="example-spacer"></span>
-        <mat-form-field class="example-full-width">
-          <input
-            type="text"
-            matInput
-            [(ngModel)]="searchText"
-            placeholder="Search members"
-          />
-          <mat-icon matSuffix>search</mat-icon>
-        </mat-form-field>
-      </mat-toolbar-row>
-    </mat-toolbar>
-    <!-- <h3 mat-subheader>{{ numOfmembers }} &nbsp; members</h3>
-    <span class="example-spacer"></span>
-    <mat-form-field class="example-full-width">
-      <input
-        type="text"
-        matInput
-        [(ngModel)]="searchText"
-        placeholder="Search members"
-      />
-      <mat-icon matSuffix>search</mat-icon>
-    </mat-form-field> -->
-
-    <!-- <mat-list>
-      <h3 mat-subheader>Folders</h3>
-      <mat-list-item *ngFor="let folder of folders">
-        <mat-icon mat-list-icon>folder</mat-icon>
-        <h4 mat-line>{{ folder.name }}</h4>
-        <p mat-line>{{ folder.updated | date }}</p>
-      </mat-list-item>
-    </mat-list> -->
-
-    <mat-list-item *ngFor="let email of groupemails | filterMember: searchText">
-      <mat-icon mat-list-icon>person_outline</mat-icon>
-      <!-- <a style="cursor: pointer;"
-        ><h4 mat-line>{{ email.name }}</h4>
-        <p mat-line>{{ email.email }}</p>
-      </a> -->
-
-      <h4 mat-line>{{ email.email }}</h4>
-      <p mat-line>{{ email.name }}</p>
-    </mat-list-item>
-  </mat-list>
-
-  <button
-    mat-raised-button
-    class="primary"
-    [matMenuTriggerFor]="manage"
-    matTooltip="click to edit or message group"
+<div class="container-detail">
+  <div
+    class="container"
+    fxLayout="row"
+    fxLayout.xs="column"
+    fxLayoutAlign="flex-end"
+    fxLayoutGap.xs="0"
   >
-    Manage
-  </button>
-  <mat-menu #manage="matMenu">
-    <button mat-menu-item *ngIf="groupType === 'custom'" (click)="shareGroup()">
-      <a style="cursor: pointer;">Share</a>
-    </button>
-    <button mat-menu-item (click)="editGroup()">
-      <a style="cursor: pointer;">Edit</a>
-    </button>
+    <span fxFlex="grow"></span>
+    <div fxFlex>
+      <button
+        mat-raised-button
+        class="button-maroon"
+        *ngIf="groupType === 'custom'"
+        (click)="shareGroup()"
+        matTooltip="click to share group"
+      >
+        <mat-icon mat-list-icon>share</mat-icon> &nbsp;Share group
+      </button>
+    </div>
+    &nbsp;
+    <div fxFlex>
+      <button
+        mat-raised-button
+        class="button-maroon"
+        *ngIf="selectedGroupMembers.length > 0"
+        (click)="messageGroup()"
+        matTooltip="click to message this group"
+      >
+        <mat-icon mat-list-icon>email</mat-icon> &nbsp; Email Selected members
+      </button>
+    </div>
+    &nbsp;
+    <div fxFlex>
+      <button
+        mat-raised-button
+        class="button-maroon"
+        (click)="messageGroup()"
+        matTooltip="click to message this group"
+      >
+        <mat-icon mat-list-icon>email</mat-icon> &nbsp; Email group
+      </button>
+    </div>
+  </div>
 
-    <button mat-menu-item (click)="deleteGroup(id)">
-      <a style="cursor: pointer;">Delete</a>
+  <mat-card class="primary">
+    <mat-card-header>
+      <!-- <div mat-card-avatar class="example-header-image"></div> -->
+      <mat-card-title>{{ groupName }}</mat-card-title>
+      <mat-card-subtitle>{{ groupDesc }}</mat-card-subtitle>
+    </mat-card-header>
+    <!-- <h5>{{ groupName }}</h5>
+    <p>{{ groupDesc }}</p> -->
+
+    <mat-list>
+      <mat-toolbar>
+        <mat-toolbar-row>
+          <span
+            ><h3 mat-subheader>{{ numOfmembers }} &nbsp; members</h3></span
+          >
+          <span class="example-spacer"></span>
+          <mat-form-field class="example-full-width">
+            <input
+              type="text"
+              matInput
+              [(ngModel)]="searchText"
+              placeholder="Search members"
+            />
+            <mat-icon matSuffix>search</mat-icon>
+          </mat-form-field>
+        </mat-toolbar-row>
+      </mat-toolbar>
+      <mat-selection-list
+        #users
+        (selectionChange)="onSelectChange(users.selectedOptions.selected)"
+      >
+        <mat-list-option
+          *ngFor="let email of groupemails | filterMember: searchText"
+          [value]="email.email"
+        >
+          <mat-icon mat-list-icon>person_outline</mat-icon>
+          <p mat-line>{{ email.name }}</p>
+          <h4 mat-line>{{ email.email }}</h4>
+        </mat-list-option>
+      </mat-selection-list>
+
+      <!-- <mat-list-item
+        *ngFor="let email of groupemails | filterMember: searchText"
+      >
+        <mat-icon mat-list-icon>person_outline</mat-icon>
+        <p mat-line>{{ email.name }}</p>
+        <h4 mat-line>{{ email.email }}</h4>
+      </mat-list-item> -->
+    </mat-list>
+
+    <button
+      mat-raised-button
+      class="primary"
+      [matMenuTriggerFor]="manage"
+      matTooltip="click to delete or edit group"
+      style="margin-left: 10px;"
+    >
+      Manage
+      <mat-icon>expand_more </mat-icon>
     </button>
-    <button mat-menu-item (click)="messageGroup()">
-      <a style="cursor: pointer;">Message</a>
-    </button>
-  </mat-menu>
-</mat-card>
+    <mat-menu #manage="matMenu">
+      <button mat-menu-item (click)="editGroup()">
+        <a style="cursor: pointer;"><mat-icon>edit</mat-icon>Edit</a>
+      </button>
+
+      <button mat-menu-item (click)="deleteGroup(id)">
+        <a style="cursor: pointer;"><mat-icon>delete</mat-icon>Delete</a>
+      </button>
+    </mat-menu>
+  </mat-card>
+</div>

@@ -68,7 +68,6 @@ export class DataStorageAppointmentService {
         finalize(() => this.isLoadingSubject.next(false)))
       )
       .subscribe((result: ApiResponse) => {
-        console.log("Faculty appointments!");
         console.log(result);
         if (result.status == 200 && result.result) {
           this.appointmentSubject.next(result.result);

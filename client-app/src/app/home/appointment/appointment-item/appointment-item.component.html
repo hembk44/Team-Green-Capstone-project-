@@ -27,15 +27,43 @@
 <!-- </mat-list-item>
 </mat-list> -->
 
-<mat-card
+<!-- <mat-card
   class="example-card"
   (click)="showDetails(id)"
   style="cursor: pointer;"
 >
   <mat-card-content>
     <p>
-      {{ appointment.name }}
+      {{ appointmentName }}
     </p>
-    <p>{{ appointment.description }}</p>
+    <p>{{ appointmentDescription }}</p>
+    <p>
+      <span><mat-icon>room</mat-icon></span
+      >{{ appointmentLocation }}
+    </p>
   </mat-card-content>
-</mat-card>
+</mat-card> -->
+
+<mat-list
+  class="example-card"
+  (click)="showDetails(id)"
+  style="cursor: pointer;"
+>
+  <mat-list-item>
+    <mat-icon mat-list-icon>insert_invitation</mat-icon>
+    <h5 mat-line>
+      <strong>{{ appointmentName }}</strong>
+    </h5>
+    <p mat-line>{{ appointmentDescription }}</p>
+    <p mat-line>
+      <!-- <mat-icon style="font-size: 14px; width: 17px ;">date_range</mat-icon
+      > -->
+      {{ appointmentDate }}
+    </p>
+    <p mat-line>
+      <mat-icon mat-list-icon style="font-size: 14px; width: 15px;"
+        >room</mat-icon
+      >{{ appointmentLocation }}
+    </p>
+  </mat-list-item>
+</mat-list>
