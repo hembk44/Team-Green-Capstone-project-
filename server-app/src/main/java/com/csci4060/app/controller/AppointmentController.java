@@ -39,6 +39,7 @@ import com.csci4060.app.model.appointment.AppointmentEdit;
 import com.csci4060.app.model.appointment.AppointmentResponse;
 import com.csci4060.app.model.appointment.AppointmentTime;
 import com.csci4060.app.model.appointment.DateAndTimeSlotResponse;
+import com.csci4060.app.model.appointment.ResponseWithPendingUser;
 import com.csci4060.app.model.appointment.TimeSlotResponse;
 import com.csci4060.app.model.appointment.TimeSlots;
 import com.csci4060.app.model.calendar.Calendar;
@@ -132,14 +133,20 @@ public class AppointmentController extends ExceptionResolver {
 
 				String result1 = LocalTime.parse(sTime.toString(), DateTimeFormatter.ofPattern("HH:mm"))
 						.format(DateTimeFormatter.ofPattern("hh:mm a"));
-				System.out.println("sTime is: " + result1);
+				
+				
 
 				String result2 = LocalTime.parse(eTime.toString(), DateTimeFormatter.ofPattern("HH:mm"))
 						.format(DateTimeFormatter.ofPattern("hh:mm a"));
-				System.out.println("sTime is: " + result2);
+				
 
 				long elapsedMinutes = Math.abs(Duration.between(sTime, eTime).toMinutes());
-
+				
+				if (Duration.between(sTime, eTime).toHours() > 8)
+				{
+					return new APIresponse(HttpStatus.FORBIDDEN.value(), "Sorry! The interval between start time and end time of your Appointment cannot be more than 8 hours! Please consider adding another time!", null);
+				}
+				
 				long maxAppointment = elapsedMinutes / time.getInterv();
 
 				LocalTime slotStartTime = sTime;
@@ -162,8 +169,7 @@ public class AppointmentController extends ExceptionResolver {
 
 		}
 		
-		System.out.println(timeSlots.size());
-		System.out.println(recepientsEmailList.size());
+		
 		
 
 		if (timeSlots.size() < emailFromDummy.size())
@@ -309,26 +315,36 @@ public class AppointmentController extends ExceptionResolver {
 		}
 
 		User user = userService.findByUsername(username);
+		
+		
 
 		Appointment appointment = appointmentService.findById(appointmentId);
+		List<AppointmentDate> dates = appointment.getAppdates();
 		
+		List<DateAndTimeSlotResponse> response = new ArrayList<DateAndTimeSlotResponse>();
 		
-		List<TimeSlots> slotsFromAppointment = timeSlotsService.findAllByAppointment(appointment);
+		for (AppointmentDate date: dates)
+		{
+			List<TimeSlots> slotsFromAppdate= timeSlotsService.allTimeslotsByAppdate(date);
+			
+			List<TimeSlotResponse> timeSlotResponses = new ArrayList<TimeSlotResponse>();
 
-		List<TimeSlotResponse> timeSlotResponses = new ArrayList<TimeSlotResponse>();
-
-		for (TimeSlots slots : slotsFromAppointment) {
-
-			if (slots.getSelectedBy() == null) {
-				timeSlotResponses.add(new TimeSlotResponse(slots.getId(), slots.getStartTime(), slots.getEndTime(),
-						slots.getAppdates().getDate(), appointment.getName(), appointment.getDescription(),
-						appointment.getCreatedBy().getName()));
-			} else if (slots.getSelectedBy() == user) {
-				return new APIresponse(HttpStatus.OK.value(), "User has already selected a slot.", null);
+			for (TimeSlots slots : slotsFromAppdate) {
+	
+				if (slots.getSelectedBy() == null) {
+					timeSlotResponses.add(new TimeSlotResponse(slots.getId(), slots.getStartTime(), slots.getEndTime(),
+							slots.getAppdates().getDate(), appointment.getName(), appointment.getDescription(),
+							appointment.getCreatedBy().getName()));
+				} else if (slots.getSelectedBy() == user) {
+					return new APIresponse(HttpStatus.OK.value(), "User has already selected a slot.", null);
+				}
 			}
+			
+			response.add(new DateAndTimeSlotResponse(date.getDate(), timeSlotResponses, appointment.getLocation()));
+			
 		}
 
-		return new APIresponse(HttpStatus.OK.value(), "Time slots successfully sent.", timeSlotResponses);
+		return new APIresponse(HttpStatus.OK.value(), "Time slots successfully sent.", response);
 	}
 
 	@GetMapping(path = "/timeslots/faculty/{id}")
@@ -338,14 +354,15 @@ public class AppointmentController extends ExceptionResolver {
 		
 		
 		List<DateAndTimeSlotResponse> response = new ArrayList<DateAndTimeSlotResponse>();
+		//ResponseWithPendingUser finalResponse = new ArrayList<ResponseWithPendingUser>();
 
 
 		Appointment appointment = appointmentService.findById(appointmentId);
+		List<AppointmentDate> dates = appointment.getAppdates();
+		
 		List<User> allRecepients = appointment.getRecepients();
 		List<User> confirmedUsers = new ArrayList<User>();
  		
-		
-		List<AppointmentDate> dates = appointment.getAppdates();
 		
 		for (AppointmentDate date: dates)
 		{
@@ -372,16 +389,18 @@ public class AppointmentController extends ExceptionResolver {
 				timeSlotResponses.add(new TimeSlotResponse(slots.getId(), slots.getStartTime(), slots.getEndTime(),
 						slots.getAppdates().getDate(), selectorName, selectorEmail, appointment.getName(),
 						appointment.getDescription(), appointment.getCreatedBy().getName()));
-
+				
 			}
 			
 			boolean pending = allRecepients.removeAll(confirmedUsers);
 			
-			response.add(new DateAndTimeSlotResponse(date.getDate(), timeSlotResponses, allRecepients));
+			response.add(new DateAndTimeSlotResponse(date.getDate(), timeSlotResponses, appointment.getLocation()));
 		}
+		
+		
+		ResponseWithPendingUser finalResponse = new ResponseWithPendingUser(response, allRecepients);
 
-
-		return new APIresponse(HttpStatus.OK.value(), "Time slots successfully sent.", response);
+		return new APIresponse(HttpStatus.OK.value(), "Time slots successfully sent.", finalResponse);
 	}
 
 	@PostMapping(path = "timeslots/postSlot/{timeSlotId}", produces = "application/json")
