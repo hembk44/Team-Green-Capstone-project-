@@ -119,6 +119,9 @@ import { ChangePasswordComponent } from "./change-password/change-password.compo
 import { ShareEvent } from "./home/calendar/event-detail/share-event";
 import { GroupFilterPipe } from './home/group/group-list/group-filter.pipe';
 import { UploadCoursesComponent } from './home/administration/upload-courses/upload-courses.component';
+import { BroadcastManagementComponent } from './home/administration/broadcast-management/broadcast-management.component';
+import { BroadcastComponent } from './broadcast/broadcast.component';
+import { MatCarouselModule } from '@ngmodule/material-carousel';
 
 @NgModule({
   // declarations: [
@@ -217,7 +220,9 @@ import { UploadCoursesComponent } from './home/administration/upload-courses/upl
     ScheduledAppointmentReceivedPipe,
     ChangePasswordComponent,
     UploadCoursesComponent,
-    GroupFilterPipe
+    GroupFilterPipe,
+    BroadcastManagementComponent,
+    BroadcastComponent
   ],
   imports: [
     BrowserModule,
@@ -250,12 +255,13 @@ import { UploadCoursesComponent } from './home/administration/upload-courses/upl
     MatTooltipModule,
     MatSnackBarModule,
     MatChipsModule,
+    MatCarouselModule.forRoot(),
     MaterialFileInputModule,
     CalendarModule.forRoot({
       provide: DateAdapter,
       useFactory: adapterFactory
     }),
-    FullCalendarModule
+    FullCalendarModule,
   ],
   entryComponents: [
     DialogDateTimeIntervalDialog,

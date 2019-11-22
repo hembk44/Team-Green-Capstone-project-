@@ -60,7 +60,7 @@ export class AppointmentDetailComponent implements OnInit {
       //   this.appointmentDesc = data.description;
       //   this.appointmentLocation = data.location;
       // });
-      if (this.currentRole === "ROLE_ADMIN") {
+      if (this.currentRole === "ROLE_ADMIN" || this.currentRole === 'ROLE_PM') {
         console.log("admin data here!");
         if (this.appointmentType === "sent") {
           this.dataServiceAppointment
@@ -89,7 +89,17 @@ export class AppointmentDetailComponent implements OnInit {
           this.dataServiceAppointment
             .displayUserAppointmentDetails(this.id)
             .subscribe(result => {
-              // this.appointments = result.result;
+              this.appointments = result.result;
+              for (let i of this.appointments) {
+                this.timeslots.push(i.response);
+                this.appointmentLocation = i.location;
+              }
+              console.log(this.appointments);
+              console.log(this.timeslots);
+              for (let timeslot of this.timeslots) {
+                this.appointmentName = timeslot[0].appointmentName;
+                this.appointmentDesc = timeslot[0].appointmentDescription;
+              }
 
               console.log(result);
             });

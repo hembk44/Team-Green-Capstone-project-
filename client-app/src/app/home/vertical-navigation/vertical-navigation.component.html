@@ -49,6 +49,14 @@
 
         Administration</a
       >
+      <a
+      mat-list-item
+      routerLink="/home/broadcast-management"
+      (click)="drawer.close()"
+      *ngIf="userRole === 'ROLE_ADMIN'">
+      <mat-icon aria-hidden="false" aria-label="example broadcast icon">dvr</mat-icon>
+        Broadcast
+      </a>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>

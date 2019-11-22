@@ -1,36 +1,23 @@
-<mat-card>
+<div class="wrapper">
+  <mat-card>
     <mat-card-header>
       <mat-card-title>
-        Upload Courses
+        Broadcast Management
       </mat-card-title>
     </mat-card-header>
     <mat-card-content>
       <form
         class="example-container"
-        [formGroup]="uploadForm"
+        [formGroup]="imageForm"
         (ngSubmit)="onSubmit()"
         enctype="multipart/form-data"
       >
-      <mat-form-field style="cursor: pointer;width:50%;">
-        <mat-label>Select Major</mat-label>
-        <mat-select
-          formControlName="major"
-        >
-          <mat-option>--</mat-option>
-          <mat-option *ngFor="let major of majors" [value]="major.name">
-            {{ major.name }}
-          </mat-option>
-        </mat-select>
-        <mat-error *ngIf="uploadForm.controls['major'].hasError('required')"
-          >Please choose a Major</mat-error
-        >
-      </mat-form-field>
         <mat-form-field style="cursor: pointer;width:60%;">
           <ngx-mat-file-input
             #removableInput
-            formControlName="uploadFile"
-            placeholder="upload an excel file"
-            accept=".xlsx,.csv"
+            formControlName="image"
+            placeholder="upload an image"
+            accept=".png,.jpg,.webp,.jpeg"
             (change)="upload($event)"
           ></ngx-mat-file-input>
           <button
@@ -41,7 +28,7 @@
           >
             <mat-icon>folder</mat-icon>
           </button>
-          <mat-error *ngIf="uploadForm.get('uploadFile').hasError('required')">
+          <mat-error *ngIf="imageForm.get('image').hasError('required')">
             Please select a file
           </mat-error>
   
@@ -60,9 +47,29 @@
           {{ invalidExtension }}
         </mat-error>
         &nbsp;
-        <button type="submit" mat-raised-button class="button-maroon" [disabled]="!uploadForm.valid">
+        <button type="submit" mat-raised-button class="button-maroon">
           Ok
         </button>
       </form>
     </mat-card-content>
   </mat-card>
+  <div class="img-wrap"
+  fxLayout
+  fxLayout.xs="column"
+  fxLayoutAlign="flex-start"
+  fxLayoutGap="10px"
+  fxLayoutGap.xs="10px"
+  style="margin: 10px;">
+    <mat-card fxFlex="30%">
+      <img mat-card-image src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-1.2.1&w=1000&q=80">
+      <mat-card-footer>
+        <button mat-raised-button type="button" (click)="deleteImg()" color="warn" style="margin:10px">Delete</button>
+      </mat-card-footer>
+    </mat-card>
+    
+  </div>
+  
+</div>
+
+
+  

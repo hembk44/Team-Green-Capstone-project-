@@ -37,6 +37,8 @@ import { GroupDetailComponent } from "./home/group/group-detail/group-detail.com
 import { AdministrationComponent } from "./home/administration/administration.component";
 import { GroupEditComponent } from "./home/group/group-edit/group-edit.component";
 import { ChangePasswordComponent } from "./change-password/change-password.component";
+import { BroadcastComponent } from './broadcast/broadcast.component';
+import { BroadcastManagementComponent } from './home/administration/broadcast-management/broadcast-management.component';
 
 const routes: Routes = [
   {
@@ -69,6 +71,7 @@ const routes: Routes = [
       { path: "dashboard", component: DashboardComponent },
 
       { path: "admin", component: AdministrationComponent },
+      { path: "broadcast-management", component: BroadcastManagementComponent },
       { path: "calendar", component: CalendarComponent },
       { path: "event/:id", component: EventDetailComponent },
       { path: "create-event", component: CreateEventComponent },
@@ -125,7 +128,8 @@ const routes: Routes = [
         ]
       }
     ]
-  }
+  },
+  { path: 'broadcast', component: BroadcastComponent}
 ];
 
 @NgModule({

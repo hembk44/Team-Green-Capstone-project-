@@ -4,6 +4,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { DataStorageService } from '../../shared/data-storage.service';
 import { ENTER, COMMA } from '@angular/cdk/keycodes';
 import { GroupSelection } from '../../shared/group-selection';
+import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
   selector: 'app-calendar-create',
@@ -14,6 +15,7 @@ export class CalendarCreateComponent implements OnInit {
   calForm: FormGroup;
   emails: string[];
   color: string = '#5484ed';
+  role:string;
   visible = true;
   selectable = true;
   removable = true;
@@ -28,10 +30,12 @@ export class CalendarCreateComponent implements OnInit {
     private ref: MatDialogRef<CalendarCreateComponent>,
     private dataStorage: DataStorageService,
     private dialog: MatDialog,
-    private snackbar: MatSnackBar
+    private snackbar: MatSnackBar,
+    private authService: AuthService
   ) { }
 
   ngOnInit() {
+    this.role = this.authService.user;
     this.emails=[];
     this.calForm = new FormGroup({
       name: new FormControl('',[Validators.required]),

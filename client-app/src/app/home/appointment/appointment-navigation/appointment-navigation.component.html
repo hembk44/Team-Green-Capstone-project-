@@ -1,4 +1,4 @@
-<div *ngIf="currentRole == 'ROLE_ADMIN'">
+<div *ngIf="currentRole == 'ROLE_ADMIN' || currentRole === 'ROLE_PM'">
   <div
     class="container"
     fxLayout="row"
@@ -68,7 +68,7 @@
   </div>
 </div>
 
-<div *ngIf="currentRole == 'ROLE_USER'">
+<div *ngIf="currentRole == 'ROLE_USER' || currentRole ==='ROLE_MODERATOR'">
   <mat-toolbar>
     <mat-toolbar-row>
       <div

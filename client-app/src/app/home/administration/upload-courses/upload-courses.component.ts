@@ -22,50 +22,8 @@ export class UploadCoursesComponent implements OnInit {
 
   currentRole: string;
 
-  majors: string[] = [
-    "Accounting",
-    "Agribusiness",
-    "Art",
-    "Atmospheric Science",
-    "Biology",
-    "Business",
-    "Communication",
-    "Computer Information Systems",
-    "Computer Science",
-    "Construction Management",
-    "Counseling",
-    "Criminal Justice",
-    "Dental Hygiene",
-    "Education: Curriculum and Instruction",
-    "Educational Leadership",
-    "English",
-    "Finance",
-    "General Studies",
-    "Gerontology",
-    "Health Studies",
-    "History",
-    "Kinesiology",
-    "Management",
-    "Marketing",
-    "Marriage & Family Therapy",
-    "Mathematics",
-    "Medical Laboratory Science",
-    "Music",
-    "Nursing",
-    "Occupational Therapy",
-    "Pharmacy",
-    "Political Science",
-    "Psychology",
-    "Radiologic Technology",
-    "Risk Management & Insurance",
-    "Social Work",
-    "Speech-Language Pathology",
-    "Toxicology",
-    "Unmanned Aircraft Systems Management",
-    "World Langauges: French",
-    "World Langauges: Spanish"
-  ];
-
+  majors: string[];
+  
   constructor(
     private formBuilder: FormBuilder,
     private dataStorage: DataStorageService,
@@ -75,6 +33,13 @@ export class UploadCoursesComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.majors = [];
+    this.dataStorage.getMajors();
+    this.dataStorage.isLoading.subscribe(loading => {
+      if(!loading){
+        this.majors = this.dataStorage.majors;
+      }
+    })
     this.currentRole = this.role.user;
     console.log(this.role.user);
     this.uploadForm = this.formBuilder.group({
@@ -90,27 +55,12 @@ export class UploadCoursesComponent implements OnInit {
       console.log("submitted");
       this.currentFileUpload = this.selectedFiles.item(0);
       console.log(this.currentFileUpload);
-
-      // this.dataStorage
-      //   .addCourses(this.currentFileUpload)
-      //   .subscribe(result => {
-      //     console.log(result);
-      //     if (result.status === 201) {
-      //       let snackBarRef = this._snackBar.open(
-      //         "All users are successfully registered!!!",
-      //         "close",
-      //         { duration: 10000, panelClass: ["standard"] }
-      //       );
-      //       snackBarRef
-      //         .onAction()
-      //         .subscribe(() => this.router.navigate(["/home/admin"]));
-      //       // this.groupDetailDataShare.passSharedMessage(result.message);
-      //       // this._snackBar.openFromComponent(SnackBarGroup, {
-      //       //   duration: 5000
-      //       // });
-      //     }
-      //   });
-      this.router.navigate(["/home/admin"]);
+      const formData = new FormData();
+      formData.append('major', this.uploadForm.value['major']);
+      formData.append('file', this.currentFileUpload);
+      this.dataStorage.addCourses(formData).subscribe(result => {
+        console.log(result);
+      })
     }
   }
 

@@ -13,6 +13,7 @@ import { CalEvent } from "../calendar/events.model";
 import { AuthService } from "src/app/auth/auth.service";
 import { Calendar } from "../calendar/calendar-list/calendar.model";
 import { CalendarService } from "../calendar/calendar-list/calendar.service";
+import { P } from '@angular/cdk/keycodes';
 
 @Injectable({
   providedIn: "root"
@@ -20,6 +21,7 @@ import { CalendarService } from "../calendar/calendar-list/calendar.service";
 export class DataStorageService {
   private baseUrlEvent = "http://localhost:8181/api/event/";
   private baseUrlCalendar = "http://localhost:8181/api/calendar/";
+  private baseUrlAdmin = "http://localhost:8181/api/admin/"
 
   private isLoadingSubject: BehaviorSubject<boolean> = new BehaviorSubject<
     boolean
@@ -35,6 +37,8 @@ export class DataStorageService {
   private adminAppointmentReceived: BehaviorSubject<any> = new BehaviorSubject<
     any
   >({});
+
+  private majorSubject: BehaviorSubject<any> = new BehaviorSubject<any>({});
 
   public eventList: Observable<CalEvent[]> = this.eventSubject.asObservable();
 
@@ -69,6 +73,15 @@ export class DataStorageService {
     }  
   }
 
+  get majors(): any[] {
+    if(this.majorSubject.value !== {}){
+      console.log(this.majorSubject.value);
+      return this.majorSubject.value;
+    } else{
+      return [];
+    }
+  }
+
   registerUsers(file: File) {
     this.isLoadingSubject.next(true);
     var formdata: FormData = new FormData();
@@ -77,7 +90,7 @@ export class DataStorageService {
     console.log("file upload!");
     return this.http
       .post<ApiResponse>(
-        "http://localhost:8181/api/file/uploadUser/faculty",
+        "http://localhost:8181/api/file/uploadUser/students",
         formdata
       )
       .pipe(
@@ -86,21 +99,41 @@ export class DataStorageService {
       );
   }
 
-  addCourses(file: File) {
+  uploadImage(file: File){
+    console.log(file);
+    // this.isLoadingSubject.next(true);
+    // var formData: FormData = new FormData();
+    // formData.append("file", file);
+    // return this.http.post<ApiResponse>(
+    //   'upload url', formData
+    // )
+    // .pipe(
+    //   (map(data => data), catchError(error => throwError(error))),
+    //   finalize(()=>this.isLoadingSubject.next(false))
+    // )
+  }
+
+  addCourses(formData: FormData) {
     this.isLoadingSubject.next(true);
-    var formdata: FormData = new FormData();
-    formdata.append("file", file);
-    console.log(formdata);
-    console.log("file upload!");
-    // return this.http
-    //   .post<ApiResponse>(
-    //     "upload courses API",
-    //     formdata
-    //   )
-    //   .pipe(
-    //     (map(data => data), catchError(error => throwError(error))),
-    //     finalize(() => this.isLoadingSubject.next(false))
-    //   );
+    return this.http
+      .post<ApiResponse>(
+        this.baseUrlAdmin + 'uploadCourses',
+        formData
+      )
+      .pipe(
+        (map(data => data), catchError(error => throwError(error))),
+        finalize(() => this.isLoadingSubject.next(false))
+      );
+  }
+
+  getMajors(){
+    this.isLoadingSubject.next(true);
+    this.http.get<ApiResponse>(this.baseUrlAdmin+'getAllMajors').pipe(
+      (map(data=>data), catchError(error => throwError(error))),
+      finalize(()=>this.isLoadingSubject.next(false))
+    ).subscribe(result => {
+      this.majorSubject.next(result.result);
+    });
   }
 
   // private handleError(errorRes: HttpErrorResponse) {
@@ -216,7 +249,7 @@ export class DataStorageService {
     console.log(obj);
     this.isLoadingSubject.next(true);
     return this.http
-      .put<ApiResponse>("http://localhost:8181/api/admin/changeRole", obj)
+      .put<ApiResponse>(this.baseUrlAdmin+"changeRole", obj)
       .pipe(
         (map(data => data),
         catchError(error => throwError(error)),
@@ -224,10 +257,19 @@ export class DataStorageService {
       );
   }
 
+  uploadMajors(){
+    this.isLoadingSubject.next(true);
+    return this.http.post<ApiResponse>(this.baseUrlAdmin+'uploadMajor','').pipe(
+      (map(data=>data),
+      catchError(error => throwError(error))),
+      finalize(()=>this.isLoadingSubject.next(false))
+    );
+  }
+
   deleteUsers(obj: Object) {
     console.log(obj);
     this.isLoadingSubject.next(true);
-    return this.http.delete<ApiResponse>('http://localhost:8181/api/admin/deleteUser', obj).pipe(
+    return this.http.delete<ApiResponse>(this.baseUrlAdmin+'deleteUser', obj).pipe(
       (map(data => data),
       catchError(error => throwError(error)),
       finalize(() => this.isLoadingSubject.next(false)))
@@ -237,7 +279,7 @@ export class DataStorageService {
   fetchUsers() {
     this.isLoadingSubject.next(true);
     this.http
-      .get<ApiResponse>("http://localhost:8181/api/admin/getAllUsers")
+      .get<ApiResponse>(this.baseUrlAdmin+"getAllUsers")
       .pipe(
         (map(data => data),
         catchError(error => throwError(error)),
