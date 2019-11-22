@@ -8,24 +8,9 @@ public class DateAndTimeSlotResponse {
 	
 	private String date;
 	private List<TimeSlotResponse> response;
-	private List<User> pendingUsers;
+	private String location;
 	
 	
-	public DateAndTimeSlotResponse(String date, List<TimeSlotResponse> response, List<User> pendingUsers) {
-		super();
-		this.date = date;
-		this.response = response;
-		this.pendingUsers = pendingUsers;
-	}
-	
-	
-	
-	public List<User> getPendingUsers() {
-		return pendingUsers;
-	}
-	public void setPendingUsers(List<User> pendingUsers) {
-		this.pendingUsers = pendingUsers;
-	}
 	public String getDate() {
 		return date;
 	}
@@ -46,10 +31,18 @@ public class DateAndTimeSlotResponse {
 	}
 	
 	
-	public DateAndTimeSlotResponse(String date, List<TimeSlotResponse> response) {
+	public DateAndTimeSlotResponse(String date, List<TimeSlotResponse> response, String location) {
 		super();
 		this.date = date;
 		this.response = response;
+		this.location = location;
+	}
+	
+	public String getLocation() {
+		return location;
+	}
+	public void setLocation(String location) {
+		this.location = location;
 	}
 	
 	
