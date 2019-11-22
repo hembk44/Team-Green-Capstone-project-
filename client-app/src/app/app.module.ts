@@ -122,6 +122,12 @@ import { UploadCoursesComponent } from './home/administration/upload-courses/upl
 import { BroadcastManagementComponent } from './home/administration/broadcast-management/broadcast-management.component';
 import { BroadcastComponent } from './broadcast/broadcast.component';
 import { MatCarouselModule } from '@ngmodule/material-carousel';
+import { UserManualComponent } from './home/vertical-navigation/user-manual/user-manual.component';
+import { AdminComponent } from './home/vertical-navigation/user-manual/admin/admin.component';
+import { CalComponent } from './home/vertical-navigation/user-manual/cal/cal.component';
+import { ApptComponent } from './home/vertical-navigation/user-manual/appt/appt.component';
+import { GrpsComponent } from './home/vertical-navigation/user-manual/grps/grps.component';
+import { BrdcastComponent } from './home/vertical-navigation/user-manual/brdcast/brdcast.component';
 
 @NgModule({
   // declarations: [
@@ -222,7 +228,13 @@ import { MatCarouselModule } from '@ngmodule/material-carousel';
     UploadCoursesComponent,
     GroupFilterPipe,
     BroadcastManagementComponent,
-    BroadcastComponent
+    BroadcastComponent,
+    UserManualComponent,
+    AdminComponent,
+    CalComponent,
+    ApptComponent,
+    GrpsComponent,
+    BrdcastComponent,
   ],
   imports: [
     BrowserModule,

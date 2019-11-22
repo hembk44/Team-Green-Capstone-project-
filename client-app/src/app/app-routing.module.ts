@@ -39,6 +39,7 @@ import { GroupEditComponent } from "./home/group/group-edit/group-edit.component
 import { ChangePasswordComponent } from "./change-password/change-password.component";
 import { BroadcastComponent } from './broadcast/broadcast.component';
 import { BroadcastManagementComponent } from './home/administration/broadcast-management/broadcast-management.component';
+import { UserManualComponent } from './home/vertical-navigation/user-manual/user-manual.component';
 
 const routes: Routes = [
   {
@@ -69,7 +70,7 @@ const routes: Routes = [
     children: [
       { path: "", redirectTo: "dashboard", pathMatch: "full" },
       { path: "dashboard", component: DashboardComponent },
-
+      { path: "user-manual", component: UserManualComponent },
       { path: "admin", component: AdministrationComponent },
       { path: "broadcast-management", component: BroadcastManagementComponent },
       { path: "calendar", component: CalendarComponent },

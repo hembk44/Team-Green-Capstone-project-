@@ -37,4 +37,8 @@ export class VerticalNavigationComponent implements OnInit {
     this.tokenStorageService.signOut();
     this.router.navigate(["/login"]);
   }
+
+  userManual(){
+    this.router.navigate(["home/user-manual"])
+  }
 }
