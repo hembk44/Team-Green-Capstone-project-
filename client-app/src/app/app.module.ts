@@ -110,6 +110,7 @@ import { MessageGroupComponent } from "./home/group/message-group/message-group.
 import { ScheduledAppointmentReceivedPipe } from './home/appointment/scheduled-appointments/scheduled-appointment-received.pipe';
 import { ChangePasswordComponent } from './change-password/change-password.component';
 import { ShareEvent } from './home/calendar/event-detail/share-event';
+import { UploadCoursesComponent } from './home/administration/upload-courses/upload-courses.component';
 
 @NgModule({
   // declarations: [
@@ -206,7 +207,8 @@ import { ShareEvent } from './home/calendar/event-detail/share-event';
     MessageGroupComponent,
     RoleConfirm,
     ScheduledAppointmentReceivedPipe,
-    ChangePasswordComponent
+    ChangePasswordComponent,
+    UploadCoursesComponent
   ],
   imports: [
     BrowserModule,

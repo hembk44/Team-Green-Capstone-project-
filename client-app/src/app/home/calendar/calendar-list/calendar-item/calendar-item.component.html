@@ -11,7 +11,8 @@
         </button>
         <button
         mat-menu-item
-        (click)="shareCal()">
+        (click)="shareCal()"
+        *ngIf="calendar.defaultCalendar">
             Share
         </button>
         <button

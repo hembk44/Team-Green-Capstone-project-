@@ -3,6 +3,7 @@
 </mat-toolbar>
 <div mat-dialog-content>
     <form [formGroup]="shareForm" (ngSubmit)="onSubmit()">
+      <mat-form-field>
         <mat-chip-list #chipList aria-label="adding emails">
             <mat-chip
               *ngFor="let email of emails"
@@ -26,12 +27,13 @@
           </mat-chip-list>
           <mat-error *ngIf="!isEmailValid">{{ errorMessage }}</mat-error>
           <mat-hint>Use commas or hit ENTER for multiple emails.</mat-hint>
+      </mat-form-field>
         <mat-toolbar>
             <button
             mat-raised-button
             type="submit"
-            class="submit">Share</button>&nbsp;&nbsp;
-            <button mat-raised-button type="button" (click)="groupSelect()">Select Groups</button>
+            class="button-maroon">Share</button>&nbsp;&nbsp;
+            <button mat-raised-button type="button" (click)="groupSelect()" class="button-maroon">Select Groups</button>
         </mat-toolbar>
     </form>
 </div>

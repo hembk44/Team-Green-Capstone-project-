@@ -34,7 +34,7 @@ export class CalendarCreateComponent implements OnInit {
   ngOnInit() {
     this.emails=[];
     this.calForm = new FormGroup({
-      name: new FormControl(),
+      name: new FormControl('',[Validators.required]),
       email: this.email,
       color: new FormControl()
     })
@@ -55,10 +55,9 @@ export class CalendarCreateComponent implements OnInit {
       color: this.color
     }
     this.dataStorage.newCalendar(obj).subscribe(result => {
-      console.log(obj);
       if (result) {
-        this.snackbar.open(result.message)
-        if(result.status === 200){
+        this.snackbar.open(result.message,'' ,{duration: 5000})
+        if(result.status === 201){
           this.dataStorage.fetchCalendars();
           this.ref.close();
         }

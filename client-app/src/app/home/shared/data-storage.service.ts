@@ -61,7 +61,12 @@ export class DataStorageService {
   }
 
   get users(): any[] {
-    return this.userSubject.value;
+    console.log(this.userSubject.value !== {});
+    if(this.userSubject.value.length !== {}){
+      return this.userSubject.value;
+    }else{
+      return [];
+    }  
   }
 
   registerUsers(file: File) {
@@ -79,6 +84,23 @@ export class DataStorageService {
         (map(data => data), catchError(error => throwError(error))),
         finalize(() => this.isLoadingSubject.next(false))
       );
+  }
+
+  addCourses(file: File) {
+    this.isLoadingSubject.next(true);
+    var formdata: FormData = new FormData();
+    formdata.append("file", file);
+    console.log(formdata);
+    console.log("file upload!");
+    // return this.http
+    //   .post<ApiResponse>(
+    //     "upload courses API",
+    //     formdata
+    //   )
+    //   .pipe(
+    //     (map(data => data), catchError(error => throwError(error))),
+    //     finalize(() => this.isLoadingSubject.next(false))
+    //   );
   }
 
   // private handleError(errorRes: HttpErrorResponse) {
@@ -171,7 +193,7 @@ export class DataStorageService {
   shareCalenar(obj: Object) {
     this.isLoadingSubject.next(true);
     return this.http
-      .post<Object>(this.baseUrlCalendar + "share", obj)
+      .post<ApiResponse>(this.baseUrlCalendar + "share", obj)
       .pipe(
         (map(data => data),
         catchError(error => throwError(error)),
@@ -205,7 +227,7 @@ export class DataStorageService {
   deleteUsers(obj: Object) {
     console.log(obj);
     this.isLoadingSubject.next(true);
-    return this.http.put<ApiResponse>('http://localhost:8181/api/admin/deleteUser', obj).pipe(
+    return this.http.delete<ApiResponse>('http://localhost:8181/api/admin/deleteUser', obj).pipe(
       (map(data => data),
       catchError(error => throwError(error)),
       finalize(() => this.isLoadingSubject.next(false)))
