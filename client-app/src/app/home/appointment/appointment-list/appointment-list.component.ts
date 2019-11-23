@@ -3,11 +3,10 @@ import { Router } from "@angular/router";
 import { DataStorageService } from "../../shared/data-storage.service";
 import { Appointment } from "../models-appointments/appointment.model";
 import { AuthService } from "src/app/auth/auth.service";
-import { AppointmentsNavigationAdminService } from "../appointments-navigation-admin.service";
+import { AppointmentsNavigationAdminService } from "../shared-appointment/appointments-navigation-admin.service";
 import { Subscription } from "rxjs";
-import { DataStorageAppointmentService } from "../data-storage-appointment.service";
+import { DataStorageAppointmentService } from "../shared-appointment/data-storage-appointment.service";
 import { MatDialog, MatPaginatorModule } from "@angular/material";
-import { NoAppointmentDialogComponent } from "./no-appointment-dialog/no-appointment-dialog.component";
 
 @Component({
   selector: "app-appointment-list",
@@ -23,6 +22,8 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
   searchText = "";
   status: string = "";
   p: number = 1;
+  isAppointmentEmpty: boolean = false;
+
   private appointmentTypeSubscription: Subscription;
   constructor(
     private router: Router,
@@ -55,9 +56,12 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
         status => {
           if (status) {
             this.status = status;
+            // console.log(this.status);
           }
         }
       );
+      console.log(this.status);
+
       if (this.status != null) {
         if (this.status === "sent") {
           this.dataStorageAppointment.fetchAppointment();
@@ -65,26 +69,14 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
             if (!loading) {
               this.appointments = this.dataStorageAppointment.appointmentLists;
 
-              if (this.appointments.length <= 0) {
-                console.log("no appointments!");
-                const dialogRef = this.dialog.open(
-                  NoAppointmentDialogComponent,
-                  {
-                    width: "300px"
-                  }
-                );
-                dialogRef.afterClosed().subscribe(result => {
-                  if (result) {
-                    console.log("The dialog was closed");
-                    this.router.navigate(["/home/appointment/create"]);
-                  }
-                });
-              }
               console.log(this.appointments);
-            } else {
+              if (this.appointments.length <= 0) {
+                this.isAppointmentEmpty = true;
+              }
             }
+            console.log(this.isAppointmentEmpty);
           });
-        } else if (status === "received") {
+        } else if (this.status === "received") {
           this.dataStorageAppointment.fetchUserAppointment();
           this.dataStorageAppointment.isLoading.subscribe(loading => {
             if (!loading) {

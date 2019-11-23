@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { BehaviorSubject, Observable, throwError } from "rxjs";
 import { HttpClient } from "@angular/common/http";
-import { Appointment } from "./models-appointments/appointment.model";
+import { Appointment } from "../models-appointments/appointment.model";
 import { ApiResponse } from "src/app/auth/api.response";
 import { catchError, map, finalize } from "rxjs/operators";
 import { delay } from "rxjs/operators";
@@ -52,7 +52,10 @@ export class DataStorageAppointmentService {
   userSelectTimeSlot(id: number) {
     this.isLoadingSubject.next(true);
     return this.http
-      .post<Object>(this.baseUrlAppointment + "timeslots/postSlot/" + id, id)
+      .post<ApiResponse>(
+        this.baseUrlAppointment + "timeslots/postSlot/" + id,
+        id
+      )
       .pipe(
         (map(data => data), catchError(error => throwError(error))),
         finalize(() => this.isLoadingSubject.next(false))
@@ -141,7 +144,9 @@ export class DataStorageAppointmentService {
   adminScheduledAppointmentsRecipients() {
     this.isLoadingSubject.next(true);
     return this.http
-      .get<ApiResponse>(this.baseUrlAppointment + "getScheduledAppointments")
+      .get<ApiResponse>(
+        this.baseUrlAppointment + "getScheduledAppointmentsForAdmin"
+      )
       .pipe(
         (map(data => data),
         catchError(error => throwError(error)),
@@ -153,7 +158,7 @@ export class DataStorageAppointmentService {
     this.isLoadingSubject.next(true);
     return this.http
       .get<ApiResponse>(
-        this.baseUrlAppointment + "getScheduledAppointmentsUser"
+        this.baseUrlAppointment + "getScheduledAppointmentsForUsers"
       )
       .pipe(
         (map(data => data),

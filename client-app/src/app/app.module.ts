@@ -9,8 +9,6 @@ import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
-// import { AppointmentModule } from "./home/appointment/appointment.module";
-
 import { LayoutModule } from "@angular/cdk/layout";
 import { FlexLayoutModule } from "@angular/flex-layout";
 import { MatToolbarModule } from "@angular/material/toolbar";
@@ -42,20 +40,15 @@ import { MatSelectModule } from "@angular/material/select";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { MatChipsModule } from "@angular/material/chips";
-// import {MatExpansionModule} from '@angular/material/expansion';
 
 import { VerticalNavigationComponent } from "./home/vertical-navigation/vertical-navigation.component";
 import { NgxMaterialTimepickerModule } from "ngx-material-timepicker";
 import { DashboardComponent } from "./home/dashboard/dashboard.component";
 import { CalendarComponent } from "./home/calendar/calendar.component";
 import { AppointmentComponent } from "./home/appointment/appointment/appointment.component";
-// import { ScheduledAppointmentComponent } from "./home/appointment/scheduled-appointment/scheduled-appointment.component";
 import { AppointmentItemComponent } from "./home/appointment/appointment-item/appointment-item.component";
 import { AppointmentNavigationComponent } from "./home/appointment/appointment-navigation/appointment-navigation.component";
-import {
-  AppointmentDetailComponent,
-  TimeSlotSnackComponent
-} from "./home/appointment/appointment-detail/appointment-detail.component";
+import { AppointmentDetailComponent } from "./home/appointment/appointment-detail/appointment-detail.component";
 import { AppointmentListComponent } from "./home/appointment/appointment-list/appointment-list.component";
 import {
   AppointmentCreateComponent,
@@ -93,7 +86,6 @@ import { CalendarCreateComponent } from "./home/calendar/calendar-create/calenda
 import { ShareCalendarComponent } from "./home/calendar/share-calendar/share-calendar.component";
 import { EditEventComponent } from "./home/calendar/create-event/edit-event/edit-event.component";
 
-// import { RegisterUsersComponent } from "./home/register-users/register-users.component";
 import { GroupListComponent } from "./home/group/group-list/group-list.component";
 import { CreateGroupComponent } from "./home/group/create-group/create-group.component";
 import { GroupItemComponent } from "./home/group/group-item/group-item.component";
@@ -123,47 +115,9 @@ import { ScheduledAppointmentReceivedPipe } from "./home/appointment/scheduled-a
 import { ChangePasswordComponent } from "./change-password/change-password.component";
 import { ShareEvent } from "./home/calendar/event-detail/share-event";
 import { GroupFilterPipe } from "./home/group/group-list/group-filter.pipe";
-import { NoAppointmentDialogComponent } from "./home/appointment/appointment-list/no-appointment-dialog/no-appointment-dialog.component";
+import { AppointmentSnackbarComponent } from "./home/appointment/shared-appointment/appointment-snackbar/appointment-snackbar.component";
 
 @NgModule({
-  // declarations: [
-  //   AppComponent,
-  //   AppComponent,
-  //   LoginComponent,
-  //   RegisterComponent,
-  //   LoadingSpinnerComponent,
-  //   VerticalNavigationComponent,
-  //   DashboardComponent,
-  //   CalendarComponent,
-  //   AppointmentComponent,
-  //   AppointmentItemComponent,
-  //   AppointmentNavigationComponent,
-  //   AppointmentDetailComponent,
-  //   AppointmentListComponent,
-  //   AppointmentCreateComponent,
-  //   DialogDateTimeIntervalDialog,
-  //   DialogTimeIntervalDialog,
-  //   EventTimeDialog,
-  //   EventTimeIntervalDialog,
-  //   CreateEventComponent,
-  //   CalendarListComponent,
-  //   CalendarItemComponent,
-  //   TimeSlotSnackComponent,
-  //   EventDetailComponent,
-  //   CalendarCreateComponent,
-  //   CalRename,
-  //   DeleteConfirm,
-  //   AppointmentStartComponent,
-  //   AppointmentSentComponent,
-  //   AppointmentReceivedComponent,
-  //   GroupComponent,
-  //   ShareCalendarComponent,
-  //   EditEventComponent,
-  //   EventDeleteConfirm,
-  //   RegisterUsersComponent,
-  //   ScheduledAppointmentsSentComponent,
-  //   ScheduledAppointmentsReceivedComponent
-  // ],
   declarations: [
     AppComponent,
     AppointmentComponent,
@@ -190,7 +144,6 @@ import { NoAppointmentDialogComponent } from "./home/appointment/appointment-lis
     CreateEventComponent,
     CalendarListComponent,
     CalendarItemComponent,
-    TimeSlotSnackComponent,
     EventDetailComponent,
     CalendarCreateComponent,
     CalRename,
@@ -222,7 +175,7 @@ import { NoAppointmentDialogComponent } from "./home/appointment/appointment-lis
     ScheduledAppointmentReceivedPipe,
     ChangePasswordComponent,
     GroupFilterPipe,
-    NoAppointmentDialogComponent
+    AppointmentSnackbarComponent
   ],
   imports: [
     BrowserModule,
@@ -269,7 +222,6 @@ import { NoAppointmentDialogComponent } from "./home/appointment/appointment-lis
     DialogDateTimeIntervalDialog,
     DialogTimeIntervalDialog,
     EventDetailComponent,
-    TimeSlotSnackComponent,
     CalendarCreateComponent,
     CalRename,
     DeleteConfirm,
@@ -282,7 +234,7 @@ import { NoAppointmentDialogComponent } from "./home/appointment/appointment-lis
     SnackBarGroup,
     ShareEvent,
     RoleConfirm,
-    NoAppointmentDialogComponent
+    AppointmentSnackbarComponent
   ],
   providers: [
     MatDatepickerModule,

@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { DataStorageAppointmentService } from "../../data-storage-appointment.service";
+import { DataStorageAppointmentService } from "../../shared-appointment/data-storage-appointment.service";
 
 @Component({
   selector: "app-scheduled-appointments-received",

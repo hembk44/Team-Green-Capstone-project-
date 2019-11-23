@@ -35,9 +35,11 @@ import { COMMA, ENTER } from "@angular/cdk/keycodes";
 import { MatChipInputEvent } from "@angular/material/chips";
 import { GroupSelection } from "../../shared/group-selection";
 import { NgxMaterialTimepickerTheme } from "ngx-material-timepicker";
-import { DataStorageAppointmentService } from "../data-storage-appointment.service";
+import { DataStorageAppointmentService } from "../shared-appointment/data-storage-appointment.service";
 import { Observable } from "rxjs";
 import { startWith, map } from "rxjs/operators";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { AppointmentSnackbarComponent } from "../shared-appointment/appointment-snackbar/appointment-snackbar.component";
 
 @Component({
   selector: "app-appointment-create",
@@ -57,6 +59,8 @@ export class AppointmentCreateComponent implements OnInit {
   dateRangeArray: DateRange[] = [];
   emails: string[] = [];
   userList: string[] = [];
+  idOfAppointmentCreated: number;
+
   @ViewChild("userInput", { static: false }) userInput: ElementRef<
     HTMLInputElement
   >;
@@ -99,7 +103,8 @@ export class AppointmentCreateComponent implements OnInit {
     private router: Router,
     public dialog: MatDialog,
     private dataStorage: DataStorageService,
-    private dataStorageAppointment: DataStorageAppointmentService
+    private dataStorageAppointment: DataStorageAppointmentService,
+    private _snackBar: MatSnackBar
   ) {
     this.dataStorage.getEmails();
     this.dataStorage.emails.subscribe((result: Emails[]) => {
@@ -264,16 +269,43 @@ export class AppointmentCreateComponent implements OnInit {
     this.dataStorageAppointment.storeAppointment(obj).subscribe(result => {
       if (result) {
         console.log(result);
-        console.log(result.result.id);
-        // send appointments to calendar
-        this.dataStorageAppointment
-          .sendApptToCal(result.result.id)
-          .subscribe((result: any) => {
-            if (result.status == 201) {
-              debugger;
-              this.router.navigate(["home/appointment/sent"]);
-            }
-          });
+        if (result.status == 201) {
+          // this._snackBar.openFromComponent(AppointmentSnackbarComponent, {
+          //   duration: 5000,
+          //   panelClass: ["standard"],
+          //   data: result.message
+          // });
+
+          console.log(result.result.id);
+          this.idOfAppointmentCreated = result.result.id;
+          console.log(this.idOfAppointmentCreated);
+
+          this.dataStorageAppointment
+            .sendApptToCal(this.idOfAppointmentCreated)
+            .subscribe((result: any) => {
+              console.log(result);
+              if (result.status == 201) {
+                this._snackBar.openFromComponent(AppointmentSnackbarComponent, {
+                  duration: 5000,
+                  panelClass: ["standard"],
+                  data:
+                    "Appointment has been successfully created and sent to calendar!"
+                });
+                this.router.navigate(["home/appointment/sent"]);
+              }
+            });
+        }
+        // console.log(result.result.id);
+        // this.idOfAppointmentCreated = result.result.id;
+        // console.log(this.idOfAppointmentCreated);
+
+        // this.dataStorageAppointment
+        //   .sendApptToCal(result.result.id)
+        //   .subscribe((result: any) => {
+        //     if (result.status == 201) {
+        //       this.router.navigate(["home/appointment/sent"]);
+        //     }
+        //   });
       }
     });
   }

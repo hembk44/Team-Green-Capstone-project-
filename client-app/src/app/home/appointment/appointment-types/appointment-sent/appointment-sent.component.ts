@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { AppointmentsNavigationAdminService } from "../../appointments-navigation-admin.service";
+import { AppointmentsNavigationAdminService } from "../../shared-appointment/appointments-navigation-admin.service";
 
 @Component({
   selector: "app-appointment-sent",
