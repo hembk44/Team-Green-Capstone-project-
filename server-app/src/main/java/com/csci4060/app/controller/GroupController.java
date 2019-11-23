@@ -37,6 +37,7 @@ import com.csci4060.app.model.group.GroupDummyForFile;
 import com.csci4060.app.model.group.GroupEmail;
 import com.csci4060.app.model.group.GroupShare;
 import com.csci4060.app.model.group.IndividualEmail;
+import com.csci4060.app.model.major.Course;
 import com.csci4060.app.model.major.Major;
 import com.csci4060.app.services.EmailSenderService;
 import com.csci4060.app.services.FileReadService;
@@ -516,5 +517,33 @@ public class GroupController {
 		emailSenderService.sendEmail(mailMessage);
 
 		return new APIresponse(HttpStatus.OK.value(), "Emails have been successfully sent", realEmails);
+	}
+	
+	@GetMapping(path = "/getAllMajors")
+	@PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
+	public APIresponse getAllMajors() {
+
+		List<Major> majors = majorService.findAll();
+
+		if (majors == null) {
+			return new APIresponse(HttpStatus.NOT_FOUND.value(), "No majors in the database yet", null);
+		}
+
+		return new APIresponse(HttpStatus.OK.value(), "All majors have been successfully sent.", majors);
+	}
+	
+	@GetMapping(path = "/getAllCourses/{id}")
+	@PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
+	public APIresponse getAllCourses(@PathVariable ("id") Long majorId) {
+
+		Major major = majorService.findById(majorId);
+
+		if (major == null) {
+			return new APIresponse(HttpStatus.NOT_FOUND.value(), "No major found in the database", null);
+		}
+
+		List<Course> courses = major.getCourses();
+		
+		return new APIresponse(HttpStatus.OK.value(), "All majors have been successfully sent.", major);
 	}
 }
