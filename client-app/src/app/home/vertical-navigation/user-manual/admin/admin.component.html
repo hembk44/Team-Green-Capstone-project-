@@ -1,1 +1,61 @@
-<p>admin works!</p>
+<div class="container">
+    <h2 class="heading">Site Administration</h2>
+    <p >The administration section of this website allows you to register new users (from a file or individually), update the permissions of users, upload courses
+        to be used in Course Group Creation, and delete users.
+    </p>
+    <h3 class="heading">Registering Users</h3>
+    <h5 class="subheading">Registering from a file</h5>
+    <p>Users can be registered either from a file, for multiple users, or directly through a form, for individual users. When registering users
+        from a file, it is important to make sure the file is in the correct format. The types of files this site is capable of registering users from
+        are the same as the ones that can be downloaded from a Moodle course (see figure 1). Both .csv and .xlsx file types are acceptable. 
+    </p>
+    <img src="..\..\..\..\..\assets\images\example-file-format.PNG" alt="Image Not Found" class="image">
+    <small>Figure 1: User File Format</small>
+    <p>To register uses from this file type, simply upload the file to the section labeled 'Register Users from File', click OK, and let 
+        the system take care of the rest. When the accounts are created, the users will be sent an email informing them of the new account. Their
+        usernames will be set as their email addresses and the default password will be there CWID. It is important to have the new users reset their password
+        to ensure maximum account security.
+    </p>
+    <h5 class="subheading">Registering Individual Users</h5>
+    <p>If, for some reason, you need to register an individual user, it may be easier to register them through a form instead of a file.
+        To do this, fill out the form in the section labeled 'Register Individual User' with the appropriate information and click confirm. The user
+        will be notified of their new account but you will need to inform of them of the password you set for them.
+    </p>
+    <h3 class="heading">Changing User Roles</h3>
+    <p>User roles are important to this system. They determine what users can can't interact with. There are four roles: Admins, Faculty 
+        Members, Moderators, and Students.
+    </p>
+    <ol class="list">
+        <li>Admins: The same permissions as you. Admins have full permissions on the system</li>
+        <li>Faculty: Faculty members can do everything you can do except view/interact with the Administration section or Broadcast management Section</li>
+        <li>Moderator: Moderators have the same permissions as students but with the ability to create groups. This is useful if you have a student, 
+            such as a club officer, who may need to be able to create groups to share calendars/events or message other users.
+        </li>
+        <li>Student: Students are only able to confirm appointment slots but have the same calendar permissions as other users, with the exception
+            that they can not share calendars or events to groups, since they do not have access to any groups.
+        </li>
+    </ol>
+    <p>To update the role of any users, select the menu next to their name in the 'Change User Roles' section and choose their new
+        role. You can reduce the number of users in the list by typing their name or email address into the search bar. The list will be automatically filtered
+        to reflect your input. When you are happy with your changes, click OK. A popup will appear asking you to confirm the roles. If you are happy 
+        with the changes, click confirm. If you want to make more changes, close the popup by clicking the 'x'. Your changes will be saved unless
+        you overwrite them or refresh the page.
+    </p>
+    <h3 class="heading">Uploading Courses</h3>
+    <p>To create groups for certain courses, the system needs to know which courses are available for which major. For now, a limited number of
+        Computer Science courses are available. As the need for more courses grows, you can update the list of available courses for each major
+        by uploading a file (see Figure 2) with the course information. Simply choose a major from the dropdown menu, upload the file, and submit it. The available 
+        courses will then be available for Course Group creation. 
+    </p>
+    <img src="..\..\..\..\..\assets\images\course-file.PNG" alt="Image Not Found">
+    <small>Figure 2: Course File Format</small>
+    <h3 class="heading">
+        Deleting Users
+    </h3>
+    <p>When a user leaves the University, it may become necessary to delete their account. This should only done if you are absolutely certain
+        it is necessary, as it can not be undone. All the data associated with that user will be deleted. To delete user accounts, click the check box
+        next to their name in the 'Delete Users' section. This list can be filtered in the same way as the list in the 'Update User Roles' section.
+        When you are happy with your changes, click OK. A popup will open asking you to confirm. To finalize deleting the accounts, click Confirm. If 
+        you want to make more changes, close the popup and continue. Your changes will be saved unless you overwrite them or refresh the page. 
+    </p>
+</div>

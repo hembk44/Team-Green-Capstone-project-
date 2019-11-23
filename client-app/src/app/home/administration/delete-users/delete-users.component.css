@@ -1,20 +1,25 @@
-.users-wrap{
-    overflow-y:auto;
-    height:74%;
-    padding:3px;
-    padding-left:8px;
+.users-wrap {
+  overflow-y: auto;
+  height: 74%;
+  padding: 3px;
+  padding-left: 8px;
 }
 
-mat-toolbar{
-    font-size:1em;
-    color: #800029;
-    height:1em;
+mat-toolbar {
+  font-size: 1em;
+  color: #800029;
+  height: 1em;
 }
 
-.spacer{
-    flex: 1 1 auto;
+.spacer {
+  flex: 1 1 auto;
 }
 
-.submit-button{
-    height: 2.5em;
+/* .submit-button {
+  height: 2.5em;
+} */
+
+.mat-card>.mat-card-actions:last-child {
+  margin-bottom: auto;
+  padding-bottom: 0;
 }

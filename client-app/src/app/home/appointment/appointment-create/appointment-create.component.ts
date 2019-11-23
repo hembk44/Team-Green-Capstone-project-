@@ -1,4 +1,10 @@
-import { Component, OnInit, Inject } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  Inject,
+  ViewChild,
+  ElementRef
+} from "@angular/core";
 import {
   MatDialog,
   MatDialogRef,
@@ -12,11 +18,15 @@ import {
   FormArray,
   ValidationErrors
 } from "@angular/forms";
+import {
+  MatAutocompleteSelectedEvent,
+  MatAutocomplete
+} from "@angular/material/autocomplete";
 import { Router } from "@angular/router";
 import { Appointment } from "../models-appointments/appointment.model";
 import { DateRange } from "../models-appointments/date-range.model";
 import { TimeInterval } from "../models-appointments/time-interval.model";
-import { DataStorageService } from "../../shared/data-storage.service";
+import { DataStorageService, Emails } from "../../shared/data-storage.service";
 import { ApiResponse } from "src/app/auth/api.response";
 import { EventTime } from "../../calendar/event-times.model";
 import { EventDate } from "../../calendar/event-date.model";
@@ -25,7 +35,11 @@ import { COMMA, ENTER } from "@angular/cdk/keycodes";
 import { MatChipInputEvent } from "@angular/material/chips";
 import { GroupSelection } from "../../shared/group-selection";
 import { NgxMaterialTimepickerTheme } from "ngx-material-timepicker";
-import { DataStorageAppointmentService } from "../data-storage-appointment.service";
+import { DataStorageAppointmentService } from "../shared-appointment/data-storage-appointment.service";
+import { Observable } from "rxjs";
+import { startWith, map } from "rxjs/operators";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { AppointmentSnackbarComponent } from "../shared-appointment/appointment-snackbar/appointment-snackbar.component";
 
 @Component({
   selector: "app-appointment-create",
@@ -39,10 +53,18 @@ export class AppointmentCreateComponent implements OnInit {
   addOnBlur = true;
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   appointmentForm: FormGroup;
-  email = new FormControl("", [Validators.required, Validators.email]);
+  email = new FormControl();
+  filteredUserList: Observable<string[]>;
   appointmentData: Appointment;
   dateRangeArray: DateRange[] = [];
   emails: string[] = [];
+  userList: string[] = [];
+  idOfAppointmentCreated: number;
+
+  @ViewChild("userInput", { static: false }) userInput: ElementRef<
+    HTMLInputElement
+  >;
+  @ViewChild("auto", { static: false }) matAutocomplete: MatAutocomplete;
 
   //theme for time picker
   timeTheme: NgxMaterialTimepickerTheme = {
@@ -81,8 +103,30 @@ export class AppointmentCreateComponent implements OnInit {
     private router: Router,
     public dialog: MatDialog,
     private dataStorage: DataStorageService,
-    private dataStorageAppointment: DataStorageAppointmentService
-  ) {}
+    private dataStorageAppointment: DataStorageAppointmentService,
+    private _snackBar: MatSnackBar
+  ) {
+    this.dataStorage.getEmails();
+    this.dataStorage.emails.subscribe((result: Emails[]) => {
+      if (result.length > 0) {
+        result.forEach(o => this.userList.push(o.email));
+      }
+    });
+
+    this.filteredUserList = this.email.valueChanges.pipe(
+      startWith(null),
+      map((user: string | null) =>
+        user ? this.filter(user) : this.userList.slice()
+      )
+    );
+  }
+
+  filter(value: string): string[] {
+    const filterValue = value.toLocaleLowerCase();
+    return this.userList.filter(user =>
+      user.toLocaleLowerCase().includes(filterValue)
+    );
+  }
 
   ngOnInit() {
     // this.appointmentForm = this.formBuilder.group({
@@ -108,6 +152,14 @@ export class AppointmentCreateComponent implements OnInit {
       email: email,
       dateRange: dateRange
     });
+  }
+
+  selected(event: MatAutocompleteSelectedEvent): void {
+    if (!this.emails.includes(event.option.value)) {
+      this.emails.push(event.option.value);
+      this.userInput.nativeElement.value = "";
+      this.email.setValue(null);
+    }
   }
 
   cancel() {
@@ -137,17 +189,20 @@ export class AppointmentCreateComponent implements OnInit {
   // }
 
   add(event: MatChipInputEvent): void {
-    const input = event.input;
-    const value = event.value;
+    if (!this.matAutocomplete.isOpen) {
+      const input = event.input;
+      const value = event.value;
 
-    // Add emails
-    if (value.trim()) {
-      this.emails.push(value.trim());
-    }
+      // Add emails
+      if (value.trim()) {
+        // this.emails.push(value.trim());
+      }
 
-    // Reset the input value
-    if (input) {
-      input.value = "";
+      // Reset the input value
+      if (input) {
+        input.value = "";
+      }
+      this.email.setValue(null);
     }
   }
 
@@ -181,6 +236,7 @@ export class AppointmentCreateComponent implements OnInit {
   onSubmit() {
     const appointmentFormValues = this.appointmentForm.value;
     // this.emails.push(this.appointmentForm.value.email);
+
     console.log(appointmentFormValues.dateRange);
     for (let date of appointmentFormValues.dateRange) {
       for (let time of date.time) {
@@ -209,19 +265,47 @@ export class AppointmentCreateComponent implements OnInit {
       location: appointmentFormValues.location,
       appdates: this.dateRangeArray
     };
-    console.log(obj);
+
     this.dataStorageAppointment.storeAppointment(obj).subscribe(result => {
       if (result) {
         console.log(result);
-        console.log(result.result.id);
-        // send appointments to calendar
-        this.dataStorageAppointment
-          .sendApptToCal(result.result.id)
-          .subscribe(result => {
-            console.log(result);
-            this.router.navigate(["home/appointment/sent"]);
-          });
-        this.dataStorageAppointment.fetchAppointment();
+        if (result.status == 201) {
+          // this._snackBar.openFromComponent(AppointmentSnackbarComponent, {
+          //   duration: 5000,
+          //   panelClass: ["standard"],
+          //   data: result.message
+          // });
+
+          console.log(result.result.id);
+          this.idOfAppointmentCreated = result.result.id;
+          console.log(this.idOfAppointmentCreated);
+
+          this.dataStorageAppointment
+            .sendApptToCal(this.idOfAppointmentCreated)
+            .subscribe((result: any) => {
+              console.log(result);
+              if (result.status == 201) {
+                this._snackBar.openFromComponent(AppointmentSnackbarComponent, {
+                  duration: 5000,
+                  panelClass: ["standard"],
+                  data:
+                    "Appointment has been successfully created and sent to calendar!"
+                });
+                this.router.navigate(["home/appointment/sent"]);
+              }
+            });
+        }
+        // console.log(result.result.id);
+        // this.idOfAppointmentCreated = result.result.id;
+        // console.log(this.idOfAppointmentCreated);
+
+        // this.dataStorageAppointment
+        //   .sendApptToCal(result.result.id)
+        //   .subscribe((result: any) => {
+        //     if (result.status == 201) {
+        //       this.router.navigate(["home/appointment/sent"]);
+        //     }
+        //   });
       }
     });
   }

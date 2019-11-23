@@ -2,9 +2,8 @@ import { Component, OnInit, Input, OnDestroy } from "@angular/core";
 import { Appointment } from "../models-appointments/appointment.model";
 import { DateRange } from "../models-appointments/date-range.model";
 import { Router } from "@angular/router";
-import { AppointmentsNavigationAdminService } from "../appointments-navigation-admin.service";
+import { AppointmentsNavigationAdminService } from "../shared-appointment/appointments-navigation-admin.service";
 import { Subscription } from "rxjs";
-import { AppointmentDataCommunicationService } from "../appointment-data-communication.service";
 
 @Component({
   selector: "app-appointment-item",
@@ -24,8 +23,7 @@ export class AppointmentItemComponent implements OnInit, OnDestroy {
 
   constructor(
     private router: Router,
-    private appointmentNavigationAdmin: AppointmentsNavigationAdminService,
-    private appointmentDataCoomunication: AppointmentDataCommunicationService
+    private appointmentNavigationAdmin: AppointmentsNavigationAdminService
   ) {}
 
   ngOnInit() {
@@ -67,11 +65,6 @@ export class AppointmentItemComponent implements OnInit, OnDestroy {
   showDetails(index: number) {
     if (this.status === "sent") {
       this.router.navigate(["home/appointment/sent", index]);
-      this.appointmentDataCoomunication.passData({
-        title: this.appointmentName,
-        description: this.appointmentDescription,
-        location: this.appointmentLocation
-      });
     } else {
       this.router.navigate(["home/appointment/received", index]);
     }

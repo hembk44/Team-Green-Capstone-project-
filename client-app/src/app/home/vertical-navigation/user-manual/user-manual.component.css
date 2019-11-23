@@ -1,0 +1,22 @@
+.container{
+    margin-left:15%;
+    margin-right:15%;
+    margin-bottom:2em;
+}
+
+.heading{
+    text-align:center;
+}
+
+.subheading{
+    font-size: 1em;
+}
+
+.image{
+    width: 75%;
+    height:12em;
+}
+
+.list{
+    width:75%;
+}

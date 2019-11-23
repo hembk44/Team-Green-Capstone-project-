@@ -33,15 +33,31 @@
         </mat-chip>
         <input
           placeholder="Enter Emails"
+          #userInput
+          [formControl]="email"
+          [matAutocomplete]="auto"
           [matChipInputFor]="chipList"
           [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
           [matChipInputAddOnBlur]="addOnBlur"
           (matChipInputTokenEnd)="add($event)"
         />
       </mat-chip-list>
-      <mat-hint>Use comma or hit ENTER to enter multiple emails!</mat-hint>
+
+      <mat-autocomplete
+        #auto="matAutocomplete"
+        (optionSelected)="selected($event)"
+      >
+        <mat-option
+          *ngFor="let user of filteredUserList | async"
+          [value]="user"
+        >
+          {{ user }}
+        </mat-option>
+      </mat-autocomplete>
+      <!-- <mat-hint>Use comma or hit ENTER to enter multiple emails!</mat-hint> -->
     </mat-form-field>
-    &nbsp; &nbsp; OR &nbsp; &nbsp;
+
+    &nbsp; &nbsp;
     <button
       mat-raised-button
       type="button"
@@ -52,6 +68,7 @@
       Select Groups
     </button>
   </div>
+  <br />
 
   <!-- <mat-toolbar color="primary">
     <mat-toolbar-row>

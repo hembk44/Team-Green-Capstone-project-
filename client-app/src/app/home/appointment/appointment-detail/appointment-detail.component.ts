@@ -8,11 +8,12 @@ import { DataStorageService } from "../../shared/data-storage.service";
 import { AuthService } from "src/app/auth/auth.service";
 import { EventTime } from "../../calendar/event-times.model";
 import { EventDate } from "../../calendar/event-date.model";
-import { AppointmentsNavigationAdminService } from "../appointments-navigation-admin.service";
-import { DataStorageAppointmentService } from "../data-storage-appointment.service";
-import { AppointmentDataCommunicationService } from "../appointment-data-communication.service";
+import { AppointmentsNavigationAdminService } from "../shared-appointment/appointments-navigation-admin.service";
+import { DataStorageAppointmentService } from "../shared-appointment/data-storage-appointment.service";
 import { FormControl } from "@angular/forms";
 import { MatSelectionListChange, MatListOption } from "@angular/material/list";
+import { AppointmentSnackbarComponent } from "../shared-appointment/appointment-snackbar/appointment-snackbar.component";
+import { ApiResponse } from "src/app/auth/api.response";
 
 @Component({
   selector: "app-appointment-detail",
@@ -33,6 +34,7 @@ export class AppointmentDetailComponent implements OnInit {
   appointmentType: string;
   pendingUsers: string[] = [];
   selectedPendingRecipients: string[] = [];
+  isScheduledAppointmentEmpty: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -41,8 +43,7 @@ export class AppointmentDetailComponent implements OnInit {
     private authService: AuthService,
     private dataStorage: DataStorageService,
     private _snackBar: MatSnackBar,
-    private appointmentNavigationAdmin: AppointmentsNavigationAdminService,
-    private appointmentDataCoomunication: AppointmentDataCommunicationService
+    private appointmentNavigationAdmin: AppointmentsNavigationAdminService
   ) {}
 
   ngOnInit() {
@@ -89,6 +90,7 @@ export class AppointmentDetailComponent implements OnInit {
           this.dataServiceAppointment
             .displayUserAppointmentDetails(this.id)
             .subscribe(result => {
+<<<<<<< HEAD
               this.appointments = result.result;
               for (let i of this.appointments) {
                 this.timeslots.push(i.response);
@@ -102,6 +104,25 @@ export class AppointmentDetailComponent implements OnInit {
               }
 
               console.log(result);
+=======
+              if (result.result == null) {
+                console.log(result.message);
+                this.isScheduledAppointmentEmpty = true;
+              } else {
+                this.isScheduledAppointmentEmpty = false;
+                this.appointments = result.result;
+                for (let i of this.appointments) {
+                  this.timeslots.push(i.response);
+                  this.appointmentLocation = i.location;
+                }
+                console.log(this.appointments);
+                console.log(this.timeslots);
+                for (let timeslot of this.timeslots) {
+                  this.appointmentName = timeslot[0].appointmentName;
+                  this.appointmentDesc = timeslot[0].appointmentDescription;
+                }
+              }
+>>>>>>> 67a69834816638210e90d545033c050789737bf1
             });
         }
       } else {
@@ -109,20 +130,20 @@ export class AppointmentDetailComponent implements OnInit {
         this.dataServiceAppointment
           .displayUserAppointmentDetails(this.id)
           .subscribe(result => {
-            // this.appointments = result.result;
-
-            // console.log(this.appointments);
-            console.log(result);
-            this.appointments = result.result;
-            for (let i of this.appointments) {
-              this.timeslots.push(i.response);
-              this.appointmentLocation = i.location;
-            }
-            console.log(this.appointments);
-            console.log(this.timeslots);
-            for (let timeslot of this.timeslots) {
-              this.appointmentName = timeslot[0].appointmentName;
-              this.appointmentDesc = timeslot[0].appointmentDescription;
+            if (result.result == null) {
+              console.log(result.message);
+            } else {
+              this.appointments = result.result;
+              for (let i of this.appointments) {
+                this.timeslots.push(i.response);
+                this.appointmentLocation = i.location;
+              }
+              console.log(this.appointments);
+              console.log(this.timeslots);
+              for (let timeslot of this.timeslots) {
+                this.appointmentName = timeslot[0].appointmentName;
+                this.appointmentDesc = timeslot[0].appointmentDescription;
+              }
             }
           });
       }
@@ -131,13 +152,14 @@ export class AppointmentDetailComponent implements OnInit {
 
   onConfirm(id: number) {
     this.dataServiceAppointment.userSelectTimeSlot(id).subscribe(result => {
-      if (result) {
-        console.log(result);
+      console.log(result);
+      if (result.status == 410) {
+        this._snackBar.openFromComponent(AppointmentSnackbarComponent, {
+          duration: 5000,
+          panelClass: ["standard"],
+          data: "Your appointment has been successfully confirmed!"
+        });
       }
-    });
-    this._snackBar.openFromComponent(TimeSlotSnackComponent, {
-      duration: 5000,
-      panelClass: ["standard"]
     });
     if (this.appointmentType === "sent") {
       this.router.navigate(["./home/appointment/sent"]);
@@ -155,17 +177,20 @@ export class AppointmentDetailComponent implements OnInit {
     console.log(this.selectedPendingRecipients);
   }
   onDeleteAppointment(id: number) {
-    this.dataServiceAppointment
-      .deleteAppointment(id)
-      .subscribe(r => console.log(r));
+    this.dataServiceAppointment.deleteAppointment(id).subscribe(result => {
+      console.log(result);
+      if (result.status == 200) {
+        this._snackBar.openFromComponent(AppointmentSnackbarComponent, {
+          duration: 5000,
+          panelClass: ["delete"],
+          data: result.message
+        });
+      }
+      this.dataServiceAppointment.fetchAppointment();
+    });
+    this.router.navigate(["./home/appointment/sent"]);
   }
   onUpdateAppointment() {
     console.log("updated");
   }
 }
-
-@Component({
-  selector: "snack-bar-component-time-slot",
-  templateUrl: "snack-bar-component-time-slot.html"
-})
-export class TimeSlotSnackComponent {}

@@ -21,11 +21,21 @@
     >
   </mat-toolbar-row>
 </mat-toolbar>
+<mat-form-field style=" margin-left: 10px; padding: 10px;">
+  <input
+    type="text"
+    matInput
+    [(ngModel)]="searchText"
+    placeholder="Search group"
+  />
+  <mat-icon matSuffix>search</mat-icon>
+  <mat-hint>Search by group name or description</mat-hint>
+</mat-form-field>
 <div class="group-select-wrap example-card">
   <div *ngIf="groups.length > 0; else elseBlock">
     <mat-selection-list #users>
       <mat-list-option
-        *ngFor="let group of groups"
+        *ngFor="let group of groups | groupFilter: searchText"
         (click)="addGroup(group.id)"
         [value]="group.name"
       >

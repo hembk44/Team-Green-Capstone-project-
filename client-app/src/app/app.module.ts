@@ -4,12 +4,10 @@ import { ReactiveFormsModule, FormsModule } from "@angular/forms";
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 
 import { MaterialFileInputModule } from "ngx-material-file-input";
-
+import { NgHttpLoaderModule } from "ng-http-loader";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-
-// import { AppointmentModule } from "./home/appointment/appointment.module";
 
 import { LayoutModule } from "@angular/cdk/layout";
 import { FlexLayoutModule } from "@angular/flex-layout";
@@ -23,10 +21,15 @@ import { MatTabsModule } from "@angular/material/tabs";
 import { MatGridListModule } from "@angular/material/grid-list";
 import { MatCardModule } from "@angular/material/card";
 import { MatFormFieldModule } from "@angular/material/form-field";
-import { MatInputModule, MatNativeDateModule } from "@angular/material";
+import {
+  MatInputModule,
+  MatNativeDateModule,
+  MatAutocompleteModule
+} from "@angular/material";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { CalendarModule, DateAdapter } from "angular-calendar";
 import { adapterFactory } from "angular-calendar/date-adapters/date-fns";
+import { NgxPaginationModule } from "ngx-pagination";
 import {
   MatDialogModule,
   MAT_DIALOG_DEFAULT_OPTIONS
@@ -37,20 +40,15 @@ import { MatSelectModule } from "@angular/material/select";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { MatChipsModule } from "@angular/material/chips";
-// import {MatExpansionModule} from '@angular/material/expansion';
 
 import { VerticalNavigationComponent } from "./home/vertical-navigation/vertical-navigation.component";
 import { NgxMaterialTimepickerModule } from "ngx-material-timepicker";
 import { DashboardComponent } from "./home/dashboard/dashboard.component";
 import { CalendarComponent } from "./home/calendar/calendar.component";
 import { AppointmentComponent } from "./home/appointment/appointment/appointment.component";
-// import { ScheduledAppointmentComponent } from "./home/appointment/scheduled-appointment/scheduled-appointment.component";
 import { AppointmentItemComponent } from "./home/appointment/appointment-item/appointment-item.component";
 import { AppointmentNavigationComponent } from "./home/appointment/appointment-navigation/appointment-navigation.component";
-import {
-  AppointmentDetailComponent,
-  TimeSlotSnackComponent
-} from "./home/appointment/appointment-detail/appointment-detail.component";
+import { AppointmentDetailComponent } from "./home/appointment/appointment-detail/appointment-detail.component";
 import { AppointmentListComponent } from "./home/appointment/appointment-list/appointment-list.component";
 import {
   AppointmentCreateComponent,
@@ -88,7 +86,6 @@ import { CalendarCreateComponent } from "./home/calendar/calendar-create/calenda
 import { ShareCalendarComponent } from "./home/calendar/share-calendar/share-calendar.component";
 import { EditEventComponent } from "./home/calendar/create-event/edit-event/edit-event.component";
 
-// import { RegisterUsersComponent } from "./home/register-users/register-users.component";
 import { GroupListComponent } from "./home/group/group-list/group-list.component";
 import { CreateGroupComponent } from "./home/group/create-group/create-group.component";
 import { GroupItemComponent } from "./home/group/group-item/group-item.component";
@@ -129,46 +126,9 @@ import { ApptComponent } from './home/vertical-navigation/user-manual/appt/appt.
 import { GrpsComponent } from './home/vertical-navigation/user-manual/grps/grps.component';
 import { BrdcastComponent } from './home/vertical-navigation/user-manual/brdcast/brdcast.component';
 import { ManualNavComponent } from './home/vertical-navigation/user-manual/manual-nav/manual-nav.component';
+import { AppointmentSnackbarComponent } from "./home/appointment/shared-appointment/appointment-snackbar/appointment-snackbar.component";
 
 @NgModule({
-  // declarations: [
-  //   AppComponent,
-  //   AppComponent,
-  //   LoginComponent,
-  //   RegisterComponent,
-  //   LoadingSpinnerComponent,
-  //   VerticalNavigationComponent,
-  //   DashboardComponent,
-  //   CalendarComponent,
-  //   AppointmentComponent,
-  //   AppointmentItemComponent,
-  //   AppointmentNavigationComponent,
-  //   AppointmentDetailComponent,
-  //   AppointmentListComponent,
-  //   AppointmentCreateComponent,
-  //   DialogDateTimeIntervalDialog,
-  //   DialogTimeIntervalDialog,
-  //   EventTimeDialog,
-  //   EventTimeIntervalDialog,
-  //   CreateEventComponent,
-  //   CalendarListComponent,
-  //   CalendarItemComponent,
-  //   TimeSlotSnackComponent,
-  //   EventDetailComponent,
-  //   CalendarCreateComponent,
-  //   CalRename,
-  //   DeleteConfirm,
-  //   AppointmentStartComponent,
-  //   AppointmentSentComponent,
-  //   AppointmentReceivedComponent,
-  //   GroupComponent,
-  //   ShareCalendarComponent,
-  //   EditEventComponent,
-  //   EventDeleteConfirm,
-  //   RegisterUsersComponent,
-  //   ScheduledAppointmentsSentComponent,
-  //   ScheduledAppointmentsReceivedComponent
-  // ],
   declarations: [
     AppComponent,
     AppointmentComponent,
@@ -195,7 +155,6 @@ import { ManualNavComponent } from './home/vertical-navigation/user-manual/manua
     CreateEventComponent,
     CalendarListComponent,
     CalendarItemComponent,
-    TimeSlotSnackComponent,
     EventDetailComponent,
     CalendarCreateComponent,
     CalRename,
@@ -237,20 +196,24 @@ import { ManualNavComponent } from './home/vertical-navigation/user-manual/manua
     GrpsComponent,
     BrdcastComponent,
     ManualNavComponent,
+    AppointmentSnackbarComponent
   ],
   imports: [
     BrowserModule,
     FlexLayoutModule,
     ReactiveFormsModule,
     FormsModule,
+    NgHttpLoaderModule.forRoot(),
     AppRoutingModule,
     BrowserAnimationsModule,
     ColorPickerModule,
     LayoutModule,
     MatToolbarModule,
+    NgxPaginationModule,
     NgxMaterialTimepickerModule,
     MatButtonModule,
     MatSidenavModule,
+    MatAutocompleteModule,
     MatIconModule,
     MatListModule,
     MatCheckboxModule,
@@ -281,7 +244,6 @@ import { ManualNavComponent } from './home/vertical-navigation/user-manual/manua
     DialogDateTimeIntervalDialog,
     DialogTimeIntervalDialog,
     EventDetailComponent,
-    TimeSlotSnackComponent,
     CalendarCreateComponent,
     CalRename,
     DeleteConfirm,
@@ -293,7 +255,8 @@ import { ManualNavComponent } from './home/vertical-navigation/user-manual/manua
     DeleteUsers,
     SnackBarGroup,
     ShareEvent,
-    RoleConfirm
+    RoleConfirm,
+    AppointmentSnackbarComponent
   ],
   providers: [
     MatDatepickerModule,

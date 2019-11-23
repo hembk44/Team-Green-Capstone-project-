@@ -11,6 +11,6 @@ export class SignUpInfo {
     this.username = username;
     this.email = email;
     this.password = password;
-    this.role = ["user"];
+    this.role = ["admin"];
   }
 }

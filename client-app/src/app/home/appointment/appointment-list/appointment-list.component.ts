@@ -1,11 +1,12 @@
-import { Component, OnInit, Inject, OnDestroy } from "@angular/core";
+import { Component, OnInit, Inject, OnDestroy, ViewChild } from "@angular/core";
 import { Router } from "@angular/router";
 import { DataStorageService } from "../../shared/data-storage.service";
 import { Appointment } from "../models-appointments/appointment.model";
 import { AuthService } from "src/app/auth/auth.service";
-import { AppointmentsNavigationAdminService } from "../appointments-navigation-admin.service";
+import { AppointmentsNavigationAdminService } from "../shared-appointment/appointments-navigation-admin.service";
 import { Subscription } from "rxjs";
-import { DataStorageAppointmentService } from "../data-storage-appointment.service";
+import { DataStorageAppointmentService } from "../shared-appointment/data-storage-appointment.service";
+import { MatDialog, MatPaginatorModule } from "@angular/material";
 
 @Component({
   selector: "app-appointment-list",
@@ -19,20 +20,29 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
   dates: string[] = [];
   currentRole: string;
   searchText = "";
-  // appointmentsExists: boolean = false;
+  status: string = "";
+  p: number = 1;
+  isAppointmentEmpty: boolean = false;
+
   private appointmentTypeSubscription: Subscription;
   constructor(
     private router: Router,
     private dataStorage: DataStorageService,
     private role: AuthService,
     private appointmentNavigationAdmin: AppointmentsNavigationAdminService,
-    private dataStorageAppointment: DataStorageAppointmentService
+    private dataStorageAppointment: DataStorageAppointmentService,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit() {
     this.currentRole = this.role.user;
     console.log(this.role.user);
+<<<<<<< HEAD
     if (this.currentRole === "ROLE_USER" || this.currentRole === 'ROLE_MODERATOR') {
+=======
+
+    if (this.currentRole === "ROLE_USER" || this.currentRole === "ROLE_PM") {
+>>>>>>> 67a69834816638210e90d545033c050789737bf1
       console.log("user data here!!!");
       this.dataStorageAppointment.fetchUserAppointment();
       this.dataStorageAppointment.isLoading.subscribe(loading => {
@@ -48,38 +58,47 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
 
       this.appointmentTypeSubscription = this.appointmentNavigationAdmin.appointmentStatus.subscribe(
         status => {
-          console.log(status);
-          if (status === "sent") {
-            // console.log(this.appointmentsExists);
-            this.dataStorageAppointment.fetchAppointment();
-            this.dataStorageAppointment.isLoading.subscribe(loading => {
-              if (!loading) {
-                // this.appointmentsExists = true;
-                // console.log(this.appointmentsExists);
-
-                this.appointments = this.dataStorageAppointment.appointmentLists;
-                console.log(this.appointments);
-              } else {
-                // this.appointmentsExists = false;
-                // console.log(this.appointmentsExists);
-              }
-            });
-          } else if (status === "received") {
-            this.dataStorageAppointment.fetchUserAppointment();
-            this.dataStorageAppointment.isLoading.subscribe(loading => {
-              if (!loading) {
-                this.appointments = this.dataStorageAppointment.appointmentLists;
-              }
-            });
+          if (status) {
+            this.status = status;
+            // console.log(this.status);
           }
         }
       );
+      console.log(this.status);
+
+      if (this.status != null) {
+        if (this.status === "sent") {
+          this.dataStorageAppointment.fetchAppointment();
+          this.dataStorageAppointment.isLoading.subscribe(loading => {
+            if (!loading) {
+              this.appointments = this.dataStorageAppointment.appointmentLists;
+
+              console.log(this.appointments);
+              if (this.appointments.length <= 0) {
+                this.isAppointmentEmpty = true;
+              }
+            }
+            console.log(this.isAppointmentEmpty);
+          });
+        } else if (this.status === "received") {
+          this.dataStorageAppointment.fetchUserAppointment();
+          this.dataStorageAppointment.isLoading.subscribe(loading => {
+            if (!loading) {
+              this.appointments = this.dataStorageAppointment.appointmentLists;
+            }
+          });
+        }
+      }
     }
   }
 
   ngOnDestroy() {
+<<<<<<< HEAD
     if(this.appointmentTypeSubscription){
       this.appointmentTypeSubscription.unsubscribe();
     }  
+=======
+    // this.appointmentTypeSubscription.unsubscribe();
+>>>>>>> 67a69834816638210e90d545033c050789737bf1
   }
 }

@@ -1,29 +1,43 @@
-<!-- <div class="appt-wrap" *ngIf="appointmentsExists; else elseBlock">
-   -->
-<!-- <div class="appt-wrap"></div> -->
-<mat-form-field style=" margin-left: 10px; padding: 10px;">
-  <input
-    type="text"
-    matInput
-    [(ngModel)]="searchText"
-    placeholder="Search Appointments"
-  />
-  <mat-icon matSuffix>search</mat-icon>
-  <mat-hint>Search by Appointment name or description</mat-hint>
-</mat-form-field>
-<div class="appt-wrap">
-  <app-appointment-item
-    *ngFor="let appointment of appointments | appointmentFilter: searchText"
-    [appointmentName]="appointment.name"
-    [appointmentDescription]="appointment.description"
-    [appointmentLocation]="appointment.location"
-    [id]="appointment.id"
-    [dates]="appointment.date"
-  >
-  </app-appointment-item>
+<div *ngIf="!isAppointmentEmpty; else elseBlock">
+  <mat-form-field style=" margin-left: 10px; padding: 10px;">
+    <input
+      type="text"
+      matInput
+      [(ngModel)]="searchText"
+      placeholder="Search Appointments"
+    />
+    <mat-icon matSuffix>search</mat-icon>
+    <mat-hint>Search by Appointment name or description</mat-hint>
+  </mat-form-field>
+  <div class="appt-wrap" *ngIf="appointments?.length > 0">
+    <app-appointment-item
+      *ngFor="
+        let appointment of appointments
+          | appointmentFilter: searchText
+          | paginate: { itemsPerPage: 4, currentPage: p }
+      "
+      [appointmentName]="appointment.name"
+      [appointmentDescription]="appointment.description"
+      [appointmentLocation]="appointment.location"
+      [id]="appointment.id"
+      [dates]="appointment.date"
+    >
+    </app-appointment-item>
+    <div>
+      <div style="margin: 0 auto;">
+        <pagination-controls
+          autoHide="true"
+          (pageChange)="p = $event"
+        ></pagination-controls>
+      </div>
+    </div>
+  </div>
 </div>
-
-<!-- </div>
-<ng-template #elseBlock
-  >No appointments exists. please create appointments! test</ng-template
-> -->
+<ng-template #elseBlock>
+  <div style=" margin: 10px;">
+    <strong
+      >You have not created any appointments yet. Please create
+      appointments!!!</strong
+    >
+  </div>
+</ng-template>
