@@ -11,4 +11,6 @@ public interface MajorService {
 	Major findByName(String name);
 	
 	List<Major> findAll();
+	
+	Major findById(Long id);
 }

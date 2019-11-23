@@ -21,7 +21,7 @@ public class Course {
 	
 	public Course(String title, String description) {
 		this.title = title;
-		this.description = title;
+		this.description = description;
 	}
 
 	public Course() {

@@ -10,4 +10,6 @@ public interface MajorRepository extends JpaRepository<Major,Long>{
 
 	
 	Optional<Major> findByNameIgnoreCase(String name);
+	
+	Optional<Major> findById(Long id);
 }

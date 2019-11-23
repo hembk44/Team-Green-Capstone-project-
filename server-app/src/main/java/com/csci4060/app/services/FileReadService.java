@@ -8,10 +8,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.csci4060.app.model.Role;
 import com.csci4060.app.model.User;
+import com.csci4060.app.model.major.Course;
 
 public interface FileReadService {
 
 	List<User> readFile(MultipartFile file, Set<Role> userRole) throws IOException;
 	
 	List<User> readFileForGroup(MultipartFile file) throws IOException;
+	
+	List<Course> readFileForCourse(MultipartFile file) throws IOException; 
 }

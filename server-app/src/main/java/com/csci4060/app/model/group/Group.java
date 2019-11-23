@@ -14,6 +14,8 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
 import com.csci4060.app.model.User;
+import com.csci4060.app.model.major.Major;
+
 import lombok.Data;
 
 @Data
@@ -36,6 +38,9 @@ public class Group {
 	@NotBlank
 	private String semesterTerm;
 	
+	@ManyToOne(targetEntity = Major.class)
+	private Major major;
+	
 	private int semesterYear;
 	
 	private Date createdAt;
@@ -54,10 +59,11 @@ public class Group {
 		this.createdAt = new Date();
 	}
 	
-	public Group(String name, String description, String type, String semesterTerm, int semesterYear, List<User> members, List<User> otherOwners, User createdBy) {
+	public Group(String name, String description, String type, Major major, String semesterTerm, int semesterYear, List<User> members, List<User> otherOwners, User createdBy) {
 		this.name = name;
 		this.description = description;
 		this.type = type;
+		this.major = major;
 		this.semesterTerm = semesterTerm;
 		this.semesterYear = semesterYear;
 		this.members = members;

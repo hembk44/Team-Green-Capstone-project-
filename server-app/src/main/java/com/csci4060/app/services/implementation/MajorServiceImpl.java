@@ -37,4 +37,15 @@ public class MajorServiceImpl implements MajorService {
 		return majorRepository.findAll();
 	}
 
+	@Override
+	public Major findById(Long id) {
+		Optional<Major> optMajor = majorRepository.findById(id);
+		
+		if(optMajor.isPresent()) {
+			return optMajor.get();
+		}
+		
+		return null;
+	}
+
 }

@@ -15,6 +15,8 @@ public class GroupDummyForFile {
 	@NotBlank
 	private String type;
 	
+	private String major;
+	
 	@NotBlank
 	private String semesterTerm;
 	
