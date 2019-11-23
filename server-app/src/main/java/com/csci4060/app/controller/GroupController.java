@@ -37,7 +37,6 @@ import com.csci4060.app.model.group.GroupDummyForFile;
 import com.csci4060.app.model.group.GroupEmail;
 import com.csci4060.app.model.group.GroupShare;
 import com.csci4060.app.model.group.IndividualEmail;
-import com.csci4060.app.model.major.Course;
 import com.csci4060.app.model.major.Major;
 import com.csci4060.app.services.EmailSenderService;
 import com.csci4060.app.services.FileReadService;
@@ -541,8 +540,6 @@ public class GroupController {
 		if (major == null) {
 			return new APIresponse(HttpStatus.NOT_FOUND.value(), "No major found in the database", null);
 		}
-
-		List<Course> courses = major.getCourses();
 		
 		return new APIresponse(HttpStatus.OK.value(), "All majors have been successfully sent.", major);
 	}

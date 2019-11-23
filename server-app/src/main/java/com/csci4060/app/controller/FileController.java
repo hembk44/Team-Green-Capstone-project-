@@ -76,10 +76,10 @@ public class FileController {
 	@PreAuthorize("hasRole('ADMIN')")
 	public APIresponse uploadFile(@RequestParam("file") MultipartFile file, @PathVariable("roleParam") String roleParam) throws IOException {
 
-		String fileName = fileStorageService.storeFile(file);
-
-		String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("api/file/downloadFile/")
-				.path(fileName).toUriString();
+//		String fileName = fileStorageService.storeFile(file);
+//
+//		String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("api/file/downloadFile/")
+//				.path(fileName).toUriString();
 		
 		Set<Role> role = new HashSet<>();
 		
@@ -130,10 +130,10 @@ public class FileController {
 				emailSenderService.sendEmail(mailMessage);
 			}
 
-			UploadFileResponse response = new UploadFileResponse(fileName, fileDownloadUri, file.getContentType(),
-					file.getSize());
+//			UploadFileResponse response = new UploadFileResponse(fileName, fileDownloadUri, file.getContentType(),
+//					file.getSize());
 
-			return new APIresponse(HttpStatus.CREATED.value(), "File was succesfully uploaded", response);
+			return new APIresponse(HttpStatus.CREATED.value(), "File was succesfully uploaded", newUsersEmailList);
 		}
 
 		throw new FileReadException("The file is empty. Please upload a new file.");
