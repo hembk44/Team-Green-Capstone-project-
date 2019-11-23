@@ -1,5 +1,6 @@
 package com.csci4060.app.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -14,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,8 +30,11 @@ import com.csci4060.app.model.EmailWrapper;
 import com.csci4060.app.model.Role;
 import com.csci4060.app.model.User;
 import com.csci4060.app.model.UserDetailDummy;
+import com.csci4060.app.model.major.Course;
 import com.csci4060.app.model.major.Major;
+import com.csci4060.app.services.CourseService;
 import com.csci4060.app.services.EmailSenderService;
+import com.csci4060.app.services.FileReadService;
 import com.csci4060.app.services.MajorService;
 import com.csci4060.app.services.RoleService;
 import com.csci4060.app.services.UserService;
@@ -50,7 +55,13 @@ public class AdminController extends ExceptionResolver {
 
 	@Autowired
 	MajorService majorService;
-	
+
+	@Autowired
+	FileReadService fileReadService;
+
+	@Autowired
+	CourseService courseService;
+
 	@PutMapping(path = "/changeRole")
 	@PreAuthorize("hasRole('ADMIN')")
 	public APIresponse changeRoles(@Valid @RequestBody List<UserDetailDummy> userDetail) {
@@ -140,13 +151,13 @@ public class AdminController extends ExceptionResolver {
 				"Risk Management & Insurance", "Social Work", "Speech-Language Pathology", "Toxicology",
 				"Unmanned Aircraft Systems Management", "World Langauges: French", "World Langauges: Spanish");
 
-		for(String major:majors) {
-			
+		for (String major : majors) {
+
 			Major majorObject = majorService.findByName(major);
-			
-			if(majorObject == null) {
-				
-				Major newMajor = new Major(major,null);
+
+			if (majorObject == null) {
+
+				Major newMajor = new Major(major, null);
 				majorService.save(newMajor);
 			}
 		}
@@ -157,20 +168,67 @@ public class AdminController extends ExceptionResolver {
 	@GetMapping(path = "/getAllMajors")
 	@PreAuthorize("hasRole('ADMIN')")
 	public APIresponse getAllMajors() {
-		
+
 		List<Major> majors = majorService.findAll();
-		
-		if(majors == null) {
+
+		if (majors == null) {
 			return new APIresponse(HttpStatus.NOT_FOUND.value(), "No majors in the database yet", null);
 		}
-		
+
 		return new APIresponse(HttpStatus.OK.value(), "All majors have been successfully sent.", majors);
 	}
 	
+	@GetMapping(path = "/getAllCourses/{id}")
+	@PreAuthorize("hasRole('ADMIN')")
+	public APIresponse getAllCourses(@PathVariable ("id") Long majorId) {
+
+		Major major = majorService.findById(majorId);
+
+		if (major == null) {
+			return new APIresponse(HttpStatus.NOT_FOUND.value(), "No major found in the database", null);
+		}
+
+		List<Course> courses = major.getCourses();
+		
+		return new APIresponse(HttpStatus.OK.value(), "All majors have been successfully sent.", major);
+	}
+
 	@PostMapping(path = "/uploadCourses")
 	@PreAuthorize("hasRole('ADMIN')")
-	public APIresponse uploadCourse(@RequestParam("file") MultipartFile file, @RequestParam("major") String majorName){
-		return null;
-		
+	public APIresponse uploadCourse(@RequestParam("file") MultipartFile file, @RequestParam("major") String majorName) {
+
+		Major major = majorService.findByName(majorName);
+
+		if (major == null) {
+			return new APIresponse(HttpStatus.NOT_FOUND.value(),
+					"No major with name " + majorName + " found in the database", null);
+		}
+
+		try {
+			List<Course> courses = fileReadService.readFileForCourse(file);
+
+			if (courses == null) {
+				return new APIresponse(HttpStatus.BAD_REQUEST.value(), "Please check that the excel file is not empty.",
+						null);
+			} else {
+
+				for (Course course : courses) {
+					
+					if(courseService.findByTitleAndDescription(course.getTitle(), course.getDescription()) == null) {
+						courseService.save(course);
+						major.getCourses().add(course);
+					}	
+				}
+				majorService.save(major);
+
+			}
+
+		} catch (IOException e) {
+			return new APIresponse(HttpStatus.BAD_REQUEST.value(),
+					"IO exception was caught. Please check cells are not empty and you're uploading sheet1 from excel file.",
+					null);
+		}
+		return new APIresponse(HttpStatus.OK.value(), "All courses added to major "+major.getName(), major);
+
 	}
 }

@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -37,9 +36,12 @@ import com.csci4060.app.model.group.GroupDummy;
 import com.csci4060.app.model.group.GroupDummyForFile;
 import com.csci4060.app.model.group.GroupEmail;
 import com.csci4060.app.model.group.GroupShare;
+import com.csci4060.app.model.group.IndividualEmail;
+import com.csci4060.app.model.major.Major;
 import com.csci4060.app.services.EmailSenderService;
 import com.csci4060.app.services.FileReadService;
 import com.csci4060.app.services.GroupService;
+import com.csci4060.app.services.MajorService;
 import com.csci4060.app.services.RoleService;
 import com.csci4060.app.services.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -63,6 +65,9 @@ public class GroupController {
 
 	@Autowired
 	FileReadService fileReadService;
+	
+	@Autowired
+	MajorService majorService;
 
 	@PostMapping(path = "/createFromList", consumes = "application/json")
 	@PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
@@ -80,6 +85,9 @@ public class GroupController {
 
 		String groupType = groupDummy.getType();
 		String groupName = groupDummy.getName();
+		String groupMajor = groupDummy.getMajor();
+		Major major = majorService.findByName(groupMajor);
+		
 		String groupSemesterTerm = groupDummy.getSemesterTerm();
 		int groupSemesterYear = groupDummy.getSemesterYear();
 
@@ -136,7 +144,7 @@ public class GroupController {
 			}
 		}
 
-		Group group = new Group(groupName, groupDummy.getDescription(), groupType, groupSemesterTerm, groupSemesterYear,
+		Group group = new Group(groupName, groupDummy.getDescription(), groupType, major, groupSemesterTerm, groupSemesterYear,
 				recipients, otherOwnersList, createdBy);
 
 		groupService.save(group);
@@ -164,6 +172,9 @@ public class GroupController {
 
 		String groupType = groupDummy.getType();
 		String groupName = groupDummy.getName();
+		String groupMajor = groupDummy.getMajor();
+		Major major = majorService.findByName(groupMajor);
+		
 		String groupSemesterTerm = groupDummy.getSemesterTerm();
 		int groupSemesterYear = groupDummy.getSemesterYear();
 
@@ -212,7 +223,7 @@ public class GroupController {
 
 		List<User> membersList = fileReadService.readFileForGroup(file);
 
-		Group group = new Group(groupName, groupDummy.getDescription(), groupType, groupSemesterTerm, groupSemesterYear,
+		Group group = new Group(groupName, groupDummy.getDescription(), groupType, major, groupSemesterTerm, groupSemesterYear,
 				membersList, otherOwnersList, createdBy);
 
 		groupService.save(group);
@@ -279,21 +290,6 @@ public class GroupController {
 			return new APIresponse(HttpStatus.FORBIDDEN.value(), "You did not create the group. Authorization denied!",
 					null);
 		}
-
-		// List<User> membersList = group.getMembers();
-
-//		List<MemberNameAndEmail> nameAndEmail = new ArrayList<MemberNameAndEmail>();
-//
-//		for (User member : membersList) {
-//			nameAndEmail.add(new MemberNameAndEmail(member.getName(), member.getEmail()));
-//		}
-
-//		if (nameAndEmail.isEmpty()) {
-//			nameAndEmail = null;
-//		}
-
-//		GroupResponse response = new GroupResponse(group.getName(), group.getDescription(), group.getType(),
-//				group.getSemesterTerm(), group.getSemesterYear(), nameAndEmail);
 
 		return new APIresponse(HttpStatus.OK.value(), "Group details successfully sent", group);
 	}
@@ -482,5 +478,43 @@ public class GroupController {
 		emailSenderService.sendEmail(mailMessage);
 
 		return new APIresponse(HttpStatus.OK.value(), "Emails have been successfully sent", emailList);
+	}
+	
+	@PostMapping(path = "/sendEmailToFew")
+	@PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
+	public APIresponse sendEmailToFew(@Valid @RequestBody IndividualEmail individualEmail) {
+
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		String username = "";
+
+		if (principal instanceof UserDetails) {
+			username = ((UserDetails) principal).getUsername();
+		}
+
+		User user = userService.findByUsername(username);
+		
+		List<String> emailsFromIndividualEmail = individualEmail.getRecipients();
+
+		List<String> realEmails = new ArrayList<String>();
+
+		for (String email : emailsFromIndividualEmail) {
+			if(userService.findByEmail(email) != null) {
+				realEmails.add(email);
+			}
+		}
+
+		String[] emails = realEmails.toArray(new String[realEmails.size()]);
+
+		SimpleMailMessage mailMessage = new SimpleMailMessage();
+
+		mailMessage.setTo(emails);
+		mailMessage.setSubject(individualEmail.getTitle());
+		mailMessage.setFrom(user.getEmail());
+		mailMessage.setText(individualEmail.getMessage());
+
+		emailSenderService.sendEmail(mailMessage);
+
+		return new APIresponse(HttpStatus.OK.value(), "Emails have been successfully sent", realEmails);
 	}
 }

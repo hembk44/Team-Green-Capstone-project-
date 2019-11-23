@@ -25,6 +25,7 @@ import com.csci4060.app.model.Role;
 import com.csci4060.app.model.RoleName;
 import com.csci4060.app.model.User;
 import com.csci4060.app.model.calendar.Calendar;
+import com.csci4060.app.model.major.Course;
 import com.csci4060.app.services.CalendarService;
 import com.csci4060.app.services.EmailSenderService;
 import com.csci4060.app.services.FileReadService;
@@ -197,6 +198,53 @@ public class FileReadServiceImpl implements FileReadService {
 				emailSenderService.sendEmail(mailMessage);
 			}
 			return groupMembers;
+		}
+
+		return null;
+	}
+	
+	@Override
+	public List<Course> readFileForCourse(MultipartFile file) throws IOException {
+		@SuppressWarnings("resource")
+		Workbook workbook = new XSSFWorkbook(file.getInputStream());
+		Sheet worksheet = workbook.getSheetAt(0);
+
+		DataFormatter formatter = new DataFormatter();
+
+		List<Course> courses = new ArrayList<Course>();
+
+		if (isSheetFull(worksheet) == true) {
+			// check cell name before writing the following code
+
+			for (int i = 1; i <= worksheet.getLastRowNum(); i++) {
+
+				Row row = worksheet.getRow(i);
+
+				if (isRowEmpty(row) == false) {
+
+					Cell descriptionCell = row.getCell(0);
+					Cell titleCell = row.getCell(1);
+
+					List<Cell> cellList = new ArrayList<>();
+					cellList.add(descriptionCell);
+					cellList.add(titleCell);
+		
+					if (isCellEmpty(cellList) == false) {
+
+						String description = formatter.formatCellValue(row.getCell(0));
+						String title = formatter.formatCellValue(row.getCell(1));
+						
+						courses.add(new Course(title,description));
+						
+						System.out.println("Description is: "+description);
+						System.out.println("Title is: "+title);
+						
+					} else {
+						throw new FileReadException("Description and title must not be empty.");
+					}
+				}
+			}
+			return courses;
 		}
 
 		return null;
