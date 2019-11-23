@@ -165,34 +165,6 @@ public class AdminController extends ExceptionResolver {
 		return new APIresponse(HttpStatus.CREATED.value(), "All majors have been successfully added.", majors);
 	}
 
-	@GetMapping(path = "/getAllMajors")
-	@PreAuthorize("hasRole('ADMIN')")
-	public APIresponse getAllMajors() {
-
-		List<Major> majors = majorService.findAll();
-
-		if (majors == null) {
-			return new APIresponse(HttpStatus.NOT_FOUND.value(), "No majors in the database yet", null);
-		}
-
-		return new APIresponse(HttpStatus.OK.value(), "All majors have been successfully sent.", majors);
-	}
-	
-	@GetMapping(path = "/getAllCourses/{id}")
-	@PreAuthorize("hasRole('ADMIN')")
-	public APIresponse getAllCourses(@PathVariable ("id") Long majorId) {
-
-		Major major = majorService.findById(majorId);
-
-		if (major == null) {
-			return new APIresponse(HttpStatus.NOT_FOUND.value(), "No major found in the database", null);
-		}
-
-		List<Course> courses = major.getCourses();
-		
-		return new APIresponse(HttpStatus.OK.value(), "All majors have been successfully sent.", major);
-	}
-
 	@PostMapping(path = "/uploadCourses")
 	@PreAuthorize("hasRole('ADMIN')")
 	public APIresponse uploadCourse(@RequestParam("file") MultipartFile file, @RequestParam("major") String majorName) {
