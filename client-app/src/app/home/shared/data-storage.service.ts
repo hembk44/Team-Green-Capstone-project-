@@ -31,13 +31,14 @@ export class DataStorageService {
   private calSubject: BehaviorSubject<any> = new BehaviorSubject<any>({});
 
   private userSubject: BehaviorSubject<any> = new BehaviorSubject<any>({});
-
+  private emailSubject: BehaviorSubject<any> = new BehaviorSubject<any>({});
+  public emails: Observable<Emails[]> = this.emailSubject.asObservable();
   private adminAppointmentReceived: BehaviorSubject<any> = new BehaviorSubject<
     any
   >({});
 
   public eventList: Observable<CalEvent[]> = this.eventSubject.asObservable();
-
+  allEmails: string[];
   constructor(
     private http: HttpClient,
     private authService: AuthService,
@@ -62,6 +63,22 @@ export class DataStorageService {
 
   get users(): any[] {
     return this.userSubject.value;
+  }
+
+  getEmails() {
+    this.isLoadingSubject.next(true);
+    this.http
+      .get<ApiResponse>("http://localhost:8181/api/admin/getAllUsers")
+      .pipe(
+        (map(data => data),
+        catchError(error => throwError(error)),
+        finalize(() => this.isLoadingSubject.next(false)))
+      )
+      .subscribe((result: ApiResponse) => {
+        if (result.status == 200) {
+          this.emailSubject.next(result.result);
+        }
+      });
   }
 
   registerUsers(file: File) {
@@ -259,4 +276,10 @@ export class DataStorageService {
     // catchError(error=>throwError(error))),
     // finalize(()=>this.isLoadingSubject.next(false));
   }
+}
+
+export interface Emails {
+  name: string;
+  email: string;
+  roles: string;
 }

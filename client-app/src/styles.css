@@ -14,6 +14,11 @@
   border-bottom: none;
 }
 
+.ngx-pagination .current {
+
+  background: #800029 !important;
+}
+
 .cal-event .cal-event-title {
   color: white;
 }

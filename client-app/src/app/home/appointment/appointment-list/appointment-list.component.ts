@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, OnDestroy } from "@angular/core";
+import { Component, OnInit, Inject, OnDestroy, ViewChild } from "@angular/core";
 import { Router } from "@angular/router";
 import { DataStorageService } from "../../shared/data-storage.service";
 import { Appointment } from "../models-appointments/appointment.model";
@@ -6,6 +6,8 @@ import { AuthService } from "src/app/auth/auth.service";
 import { AppointmentsNavigationAdminService } from "../appointments-navigation-admin.service";
 import { Subscription } from "rxjs";
 import { DataStorageAppointmentService } from "../data-storage-appointment.service";
+import { MatDialog, MatPaginatorModule } from "@angular/material";
+import { NoAppointmentDialogComponent } from "./no-appointment-dialog/no-appointment-dialog.component";
 
 @Component({
   selector: "app-appointment-list",
@@ -19,20 +21,23 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
   dates: string[] = [];
   currentRole: string;
   searchText = "";
-  // appointmentsExists: boolean = false;
+  status: string = "";
+  p: number = 1;
   private appointmentTypeSubscription: Subscription;
   constructor(
     private router: Router,
     private dataStorage: DataStorageService,
     private role: AuthService,
     private appointmentNavigationAdmin: AppointmentsNavigationAdminService,
-    private dataStorageAppointment: DataStorageAppointmentService
+    private dataStorageAppointment: DataStorageAppointmentService,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit() {
     this.currentRole = this.role.user;
     console.log(this.role.user);
-    if (this.currentRole === "ROLE_USER") {
+
+    if (this.currentRole === "ROLE_USER" || this.currentRole === "ROLE_PM") {
       console.log("user data here!!!");
       this.dataStorageAppointment.fetchUserAppointment();
       this.dataStorageAppointment.isLoading.subscribe(loading => {
@@ -48,36 +53,50 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
 
       this.appointmentTypeSubscription = this.appointmentNavigationAdmin.appointmentStatus.subscribe(
         status => {
-          console.log(status);
-          if (status === "sent") {
-            // console.log(this.appointmentsExists);
-            this.dataStorageAppointment.fetchAppointment();
-            this.dataStorageAppointment.isLoading.subscribe(loading => {
-              if (!loading) {
-                // this.appointmentsExists = true;
-                // console.log(this.appointmentsExists);
-
-                this.appointments = this.dataStorageAppointment.appointmentLists;
-                console.log(this.appointments);
-              } else {
-                // this.appointmentsExists = false;
-                // console.log(this.appointmentsExists);
-              }
-            });
-          } else if (status === "received") {
-            this.dataStorageAppointment.fetchUserAppointment();
-            this.dataStorageAppointment.isLoading.subscribe(loading => {
-              if (!loading) {
-                this.appointments = this.dataStorageAppointment.appointmentLists;
-              }
-            });
+          if (status) {
+            this.status = status;
           }
         }
       );
+      if (this.status != null) {
+        if (this.status === "sent") {
+          this.dataStorageAppointment.fetchAppointment();
+          this.dataStorageAppointment.isLoading.subscribe(loading => {
+            if (!loading) {
+              this.appointments = this.dataStorageAppointment.appointmentLists;
+
+              if (this.appointments.length <= 0) {
+                console.log("no appointments!");
+                const dialogRef = this.dialog.open(
+                  NoAppointmentDialogComponent,
+                  {
+                    width: "300px"
+                  }
+                );
+                dialogRef.afterClosed().subscribe(result => {
+                  if (result) {
+                    console.log("The dialog was closed");
+                    this.router.navigate(["/home/appointment/create"]);
+                  }
+                });
+              }
+              console.log(this.appointments);
+            } else {
+            }
+          });
+        } else if (status === "received") {
+          this.dataStorageAppointment.fetchUserAppointment();
+          this.dataStorageAppointment.isLoading.subscribe(loading => {
+            if (!loading) {
+              this.appointments = this.dataStorageAppointment.appointmentLists;
+            }
+          });
+        }
+      }
     }
   }
 
   ngOnDestroy() {
-    this.appointmentTypeSubscription.unsubscribe();
+    // this.appointmentTypeSubscription.unsubscribe();
   }
 }

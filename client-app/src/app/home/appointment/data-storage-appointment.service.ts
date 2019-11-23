@@ -4,6 +4,7 @@ import { HttpClient } from "@angular/common/http";
 import { Appointment } from "./models-appointments/appointment.model";
 import { ApiResponse } from "src/app/auth/api.response";
 import { catchError, map, finalize } from "rxjs/operators";
+import { delay } from "rxjs/operators";
 
 @Injectable({
   providedIn: "root"
@@ -62,6 +63,7 @@ export class DataStorageAppointmentService {
     this.isLoadingSubject.next(true);
     this.http
       .get<ApiResponse>(this.baseUrlAppointment + "created/allAppointments")
+
       .pipe(
         (map(data => data),
         catchError(error => throwError(error)),

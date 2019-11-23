@@ -1,11 +1,11 @@
-<mat-card style="height:90%;">
+<mat-card>
   <!-- <mat-card-header>
         <mat-card-title>
             Change User Roles
         </mat-card-title>
     </mat-card-header> -->
 
-  <mat-toolbar-row>
+  <mat-toolbar-row style="width:100%;">
     <h5>
       Change user roles
     </h5>
@@ -75,7 +75,10 @@
             </mat-form-field> 
         </mat-toolbar-row>
     </mat-toolbar> -->
-  <button mat-raised-button class="button-maroon" (click)="onSubmit()">
-    OK
-  </button>
+
+  <mat-card-actions>
+    <button mat-raised-button class="button-maroon" (click)="onSubmit()">
+      OK
+    </button>
+  </mat-card-actions>
 </mat-card>

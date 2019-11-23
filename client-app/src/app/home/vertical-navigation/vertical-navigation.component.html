@@ -1,3 +1,4 @@
+<ng-http-loader [backgroundColor]="'#800029'"></ng-http-loader>
 <mat-sidenav-container class="sidenav-container">
   <mat-sidenav
     #drawer
@@ -30,7 +31,12 @@
         >
         Appointments</a
       >
-      <a mat-list-item routerLink="/home/group" (click)="drawer.close()" *ngIf="userRole !== 'ROLE_USER'">
+      <a
+        mat-list-item
+        routerLink="/home/group"
+        (click)="drawer.close()"
+        *ngIf="userRole !== 'ROLE_USER'"
+      >
         <mat-icon aria-hidden="false" aria-label="Example group icon"
           >group</mat-icon
         >

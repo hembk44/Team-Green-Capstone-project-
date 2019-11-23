@@ -4,7 +4,7 @@ import { ReactiveFormsModule, FormsModule } from "@angular/forms";
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 
 import { MaterialFileInputModule } from "ngx-material-file-input";
-
+import { NgHttpLoaderModule } from "ng-http-loader";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
@@ -23,10 +23,15 @@ import { MatTabsModule } from "@angular/material/tabs";
 import { MatGridListModule } from "@angular/material/grid-list";
 import { MatCardModule } from "@angular/material/card";
 import { MatFormFieldModule } from "@angular/material/form-field";
-import { MatInputModule, MatNativeDateModule } from "@angular/material";
+import {
+  MatInputModule,
+  MatNativeDateModule,
+  MatAutocompleteModule
+} from "@angular/material";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { CalendarModule, DateAdapter } from "angular-calendar";
 import { adapterFactory } from "angular-calendar/date-adapters/date-fns";
+import { NgxPaginationModule } from "ngx-pagination";
 import {
   MatDialogModule,
   MAT_DIALOG_DEFAULT_OPTIONS
@@ -117,7 +122,8 @@ import { MessageGroupComponent } from "./home/group/message-group/message-group.
 import { ScheduledAppointmentReceivedPipe } from "./home/appointment/scheduled-appointments/scheduled-appointment-received.pipe";
 import { ChangePasswordComponent } from "./change-password/change-password.component";
 import { ShareEvent } from "./home/calendar/event-detail/share-event";
-import { GroupFilterPipe } from './home/group/group-list/group-filter.pipe';
+import { GroupFilterPipe } from "./home/group/group-list/group-filter.pipe";
+import { NoAppointmentDialogComponent } from "./home/appointment/appointment-list/no-appointment-dialog/no-appointment-dialog.component";
 
 @NgModule({
   // declarations: [
@@ -215,21 +221,25 @@ import { GroupFilterPipe } from './home/group/group-list/group-filter.pipe';
     RoleConfirm,
     ScheduledAppointmentReceivedPipe,
     ChangePasswordComponent,
-    GroupFilterPipe
+    GroupFilterPipe,
+    NoAppointmentDialogComponent
   ],
   imports: [
     BrowserModule,
     FlexLayoutModule,
     ReactiveFormsModule,
     FormsModule,
+    NgHttpLoaderModule.forRoot(),
     AppRoutingModule,
     BrowserAnimationsModule,
     ColorPickerModule,
     LayoutModule,
     MatToolbarModule,
+    NgxPaginationModule,
     NgxMaterialTimepickerModule,
     MatButtonModule,
     MatSidenavModule,
+    MatAutocompleteModule,
     MatIconModule,
     MatListModule,
     MatCheckboxModule,
@@ -271,7 +281,8 @@ import { GroupFilterPipe } from './home/group/group-list/group-filter.pipe';
     DeleteUsers,
     SnackBarGroup,
     ShareEvent,
-    RoleConfirm
+    RoleConfirm,
+    NoAppointmentDialogComponent
   ],
   providers: [
     MatDatepickerModule,

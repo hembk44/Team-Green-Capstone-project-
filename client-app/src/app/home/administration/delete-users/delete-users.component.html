@@ -1,4 +1,4 @@
-<mat-card style="margin-top:2%;height:60%">
+<mat-card>
   <mat-toolbar style="width:100%;">
     <mat-toolbar-row>
       <h5>
@@ -31,7 +31,8 @@
         >{{ user.name }} ({{ user.email }})</mat-checkbox
       >
     </section>
-    <br />
+  </mat-card-content>
+  <mat-card-actions>
     <button
       mat-raised-button
       color="warn"
@@ -40,5 +41,5 @@
     >
       OK
     </button>
-  </mat-card-content>
+  </mat-card-actions>
 </mat-card>

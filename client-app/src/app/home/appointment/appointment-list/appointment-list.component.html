@@ -11,9 +11,13 @@
   <mat-icon matSuffix>search</mat-icon>
   <mat-hint>Search by Appointment name or description</mat-hint>
 </mat-form-field>
-<div class="appt-wrap">
+<div class="appt-wrap" *ngIf="appointments?.length > 0">
   <app-appointment-item
-    *ngFor="let appointment of appointments | appointmentFilter: searchText"
+    *ngFor="
+      let appointment of appointments
+        | appointmentFilter: searchText
+        | paginate: { itemsPerPage: 4, currentPage: p }
+    "
     [appointmentName]="appointment.name"
     [appointmentDescription]="appointment.description"
     [appointmentLocation]="appointment.location"
@@ -21,6 +25,14 @@
     [dates]="appointment.date"
   >
   </app-appointment-item>
+  <div>
+    <div style="margin: 0 auto;">
+      <pagination-controls
+        autoHide="true"
+        (pageChange)="p = $event"
+      ></pagination-controls>
+    </div>
+  </div>
 </div>
 
 <!-- </div>
