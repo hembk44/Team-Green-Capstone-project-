@@ -37,6 +37,7 @@ export class BroadcastManagementComponent implements OnInit{
 
   ngOnInit() {
     this.images = [];
+    this.tempArr = [];
     this.newImgs = [];
     
     this.dataStorage.getImages().subscribe(result => {
@@ -52,6 +53,7 @@ export class BroadcastManagementComponent implements OnInit{
         // Replace extension according to your media type
         const imageName = date + '.' + text + '.jpeg';
         const imageFile = new File([newUrl], imageName, { type: 'image/jpeg' });
+        this.tempArr.push(imageFile);
         const reader = new FileReader();
         reader.readAsDataURL(imageFile);
         reader.onloadend = (_event) => { 
@@ -86,19 +88,25 @@ export class BroadcastManagementComponent implements OnInit{
     for (let i = 0; i < byteString.length; i++) {
       int8Array[i] = byteString.charCodeAt(i);
     }
-    const blob = new Blob([int8Array], { type: 'image/jpeg' });    
+    const blob = new Blob([int8Array], { type: 'image/png' });    
     return blob;
  }
 
   upload(event: any) {
-    const reader = new FileReader();
-    const file = <File>event.target.files[0];
-    reader.readAsDataURL(file);
-    reader.onloadend = (_event) => { 
-      this.newImgs.push(reader.result);
+    
+    const files = <File[]>event.target.files;
+    for(let file of files){
+      const reader = new FileReader();
+      this.tempArr.push(file);
+      console.log(this.tempArr);
+      reader.readAsDataURL(file);
+      reader.onloadend = (_event) => { 
+        this.newImgs.push(reader.result);
+      }
+      console.log(file);
+      this.userFile = file;
     }
-    console.log(file);
-    this.userFile = file;
+    console.log(this.tempArr)
 
   }
 
@@ -118,7 +126,7 @@ export class BroadcastManagementComponent implements OnInit{
   }
 
   onSubmit() {
-    this.dataStorage.uploadImage(this.newImgs).subscribe(result =>{
+    this.dataStorage.uploadImage(this.tempArr).subscribe(result =>{
       console.log(result);
     });
   }
@@ -129,18 +137,22 @@ export class BroadcastManagementComponent implements OnInit{
 
   saveForm(submitForm: FormGroup){
     if(submitForm.valid){
-      //this.tempArr.push(this.userFile);
-      const formData: FormData = new FormData();
-      for(let img of this.newImgs){
-        //this.tempArr.push(img);
-      }
-      console.log(this.tempArr);
-      //formData.append('file', this.tempArr);
-      console.log(formData.get('file'));
-      console.log(formData)
-      // this.dataStorage.uploadImage(formData).subscribe(result => {
-      //   console.log(result);
-      // });
+      // //this.tempArr.push(this.userFile);
+      // const formData: FormData = new FormData();
+      // for(let img of this.newImgs){
+      //   //this.tempArr.push(img);
+      // }
+      // console.log(this.tempArr);
+      // //formData.append('file', this.tempArr);
+      // console.log(formData.get('file'));
+      // console.log(formData)
+      // // this.dataStorage.uploadImage(formData).subscribe(result => {
+      // //   console.log(result);
+      // // });
+      this.dataStorage.uploadImage(this.tempArr).subscribe(result => {
+        console.log(result);
+      })
+      //location.reload();
     } 
   }
 

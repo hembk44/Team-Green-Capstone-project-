@@ -121,7 +121,15 @@ export class DataStorageService {
         finalize(() => this.isLoadingSubject.next(false)))
   }
 
-  uploadImage(formData: FormData): Observable<any>{
+  uploadImage(images): Observable<any>{
+    console.log(images);
+    var temp: FormData[] = [];
+    for(let image of images){
+      const formdata = new FormData();
+      formdata.append('file',image);
+      temp.push(formdata);
+    }
+    console.log(temp);
     //this.isLoadingSubject.next(true);
     // return this.http.post<ApiResponse>(this.baseUrlAdmin+'uploadImage', image).pipe(
     //   (map(data=>data)),
@@ -132,11 +140,10 @@ export class DataStorageService {
     // });
 
     this.isLoadingSubject.next(true);
-    console.log(formData.get("file"));
     return this.http
       .post<ApiResponse>(
         this.baseUrlAdmin+'uploadImages',
-        formData
+        temp
       )
       .pipe(
         (map(data => data), catchError(error => throwError(error))),

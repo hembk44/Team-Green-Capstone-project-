@@ -20,7 +20,7 @@ import {
 } from "@angular/material";
 import { GroupSnackbarComponent } from "../shared-group/group-snackbar/group-snackbar.component";
 import { Observable } from "rxjs";
-import { DataStorageService } from "../../shared/data-storage.service";
+import { DataStorageService, Emails } from "../../shared/data-storage.service";
 import { startWith, map } from "rxjs/operators";
 
 export interface courseGroup {
