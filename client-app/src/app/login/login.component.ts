@@ -55,9 +55,11 @@ export class LoginComponent implements OnInit {
     // this.loginInfo = new AuthLoginInfo(this.form.username, this.form.password);
     this.isLoading = true;
     this.authService.attemptAuth(loginPayload);
-    this.authService.isLoggedIn.subscribe(result => {
+    this.authService.isLoading.subscribe(result => {
       if(!result){
-        this.isLoginFailed = true;
+        this.authService.isLoggedIn.subscribe(result => {
+          this.isLoginFailed=result;
+        });
       }
     })
     // this.router.navigate(["home"]);

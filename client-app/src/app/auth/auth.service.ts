@@ -31,6 +31,8 @@ export class AuthService {
     boolean
   >(false);
   public isLoggedIn: Observable<boolean> = this.isLoggedin.asObservable();
+  private isLoadingSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  public isLoading: Observable<boolean> = this.isLoadingSubject.asObservable();
 
   get user(): string {
     this.userRoleSubject.next(this.tokenStorage.getAuthority());

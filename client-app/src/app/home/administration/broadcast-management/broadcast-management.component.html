@@ -43,7 +43,7 @@
           </button>
         </mat-form-field>
         <mat-error
-          *ngIf="isInvalid && !imageForm.get('imageFile').hasError('required')"
+          *ngIf="isInvalid && !imageForm.get('image').hasError('required')"
         >
           {{ invalidExtension }}
         </mat-error>

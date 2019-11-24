@@ -14,7 +14,7 @@ export class BroadcastManagementComponent implements OnInit{
 
   imageForm: FormGroup;
   images: any;
-  validFileExtensions: string[] = ["png","jpg","webp","jpeg","PNG","JPG","WEBP","JPEG"];
+  validFileExtensions: string[] = ["png","jpg","webp","jpeg","PNG","JPG","WEBP","JPEG","jfif"];
   invalidExtension: string;
   isInvalid: boolean = false;
   tempArr;
@@ -96,15 +96,18 @@ export class BroadcastManagementComponent implements OnInit{
     
     const files = <File[]>event.target.files;
     for(let file of files){
-      const reader = new FileReader();
-      this.tempArr.push(file);
-      console.log(this.tempArr);
-      reader.readAsDataURL(file);
-      reader.onloadend = (_event) => { 
-        this.newImgs.push(reader.result);
+      if(this.validateFile(file.name)){
+        const reader = new FileReader();
+        this.tempArr.push(file);
+        console.log(this.tempArr);
+        reader.readAsDataURL(file);
+        reader.onloadend = (_event) => { 
+          this.newImgs.push(reader.result);
+        }
+        console.log(file);
+        this.userFile = file;
       }
-      console.log(file);
-      this.userFile = file;
+      
     }
     console.log(this.tempArr)
 
@@ -112,6 +115,7 @@ export class BroadcastManagementComponent implements OnInit{
 
   delete(index: number){
     this.newImgs.splice(index, 1);
+    this.tempArr.splice(index, 1);
   }
 
   validateFile(name: String) {
