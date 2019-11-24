@@ -17,7 +17,7 @@
             #removableInput
             formControlName="image"
             placeholder="upload an image"
-            accept=".png,.jpg,.webp,.jpeg"
+            accept="image/*"
             (change)="upload($event)"
           ></ngx-mat-file-input>
           <button
@@ -42,12 +42,12 @@
           </button>
         </mat-form-field>
         <mat-error
-          *ngIf="isInvalid && !uploadForm.get('uploadFile').hasError('required')"
+          *ngIf="isInvalid && !imageForm.get('imageFile').hasError('required')"
         >
           {{ invalidExtension }}
         </mat-error>
         &nbsp;
-        <button type="submit" mat-raised-button class="button-maroon">
+        <button type="button" (click)="saveForm(imageForm)" mat-raised-button class="button-maroon">
           Confirm
         </button>
       </form>
@@ -60,16 +60,18 @@
   fxLayoutGap="10px"
   fxLayoutGap.xs="10px"
   style="margin: 10px;">
-    <div class="card" *ngFor="let image of images; let i = index" fxFlex="25%">
+    
+    <div class="card" *ngFor="let image of newImgs; let i = index" fxFlex="25%">
       <mat-card fxFlex="100%">
-        <!-- <img mat-card-image src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-1.2.1&w=1000&q=80"> -->
-        <img mat-card-image [src]="image" alt="Image Not Found">
+        <img mat-card-image [src]="image" alt="Image Not Found" style="height:250px;">
         <mat-card-footer>
           <button mat-raised-button type="button" (click)="delete(i)" color="warn" style="margin:10px">Delete</button>
         </mat-card-footer>
-      </mat-card> <br *ngIf="i%3 === 0">
-    </div>    
-  </div>s
+      </mat-card>
+    </div>
+      
+  </div>    
+
   
 </div>
 

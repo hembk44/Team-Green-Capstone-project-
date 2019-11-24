@@ -37,7 +37,8 @@ export class RegisterUsersComponent implements OnInit {
     this.currentRole = this.role.user;
     console.log(this.role.user);
     this.uploadForm = this.formBuilder.group({
-      uploadFile: [undefined, [Validators.required]]
+      uploadFile: [undefined, [Validators.required]],
+      role: [Validators.required]
     });
   }
 
@@ -59,9 +60,8 @@ export class RegisterUsersComponent implements OnInit {
       console.log("submitted");
       this.currentFileUpload = this.selectedFiles.item(0);
       console.log(this.currentFileUpload);
-
       this.dataStorage
-        .registerUsers(this.currentFileUpload)
+        .registerUsers(this.currentFileUpload, this.uploadForm.get('role').value)
         .subscribe(result => {
           console.log(result);
           if (result.status === 201) {

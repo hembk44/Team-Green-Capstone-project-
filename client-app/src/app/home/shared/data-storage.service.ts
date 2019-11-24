@@ -103,7 +103,8 @@ export class DataStorageService {
       });
   }
 
-  registerUsers(file: File) {
+  registerUsers(file: File, role:string) {
+    console.log(role);
     this.isLoadingSubject.next(true);
     var formdata: FormData = new FormData();
     formdata.append("file", file);
@@ -111,16 +112,15 @@ export class DataStorageService {
     console.log("file upload!");
     return this.http
       .post<ApiResponse>(
-        "http://localhost:8181/api/file/uploadUser/students",
+        "http://localhost:8181/api/file/uploadUser/"+role,
         formdata
       )
       .pipe(
         (map(data => data), catchError(error => throwError(error))),
-        finalize(() => this.isLoadingSubject.next(false))
-      );
+        finalize(() => this.isLoadingSubject.next(false)))
   }
 
-  uploadImage(file: File){
+  uploadImage(formData: FormData): Observable<any>{
     //this.isLoadingSubject.next(true);
     // return this.http.post<ApiResponse>(this.baseUrlAdmin+'uploadImage', image).pipe(
     //   (map(data=>data)),
@@ -131,13 +131,11 @@ export class DataStorageService {
     // });
 
     this.isLoadingSubject.next(true);
-    var formdata: FormData = new FormData();
-    formdata.append("file", file);
-    console.log(formdata.get("file"));
+    console.log(formData.get("file"));
     return this.http
       .post<ApiResponse>(
         this.baseUrlAdmin+'uploadImages',
-        formdata
+        formData
       )
       .pipe(
         (map(data => data), catchError(error => throwError(error))),
@@ -145,9 +143,21 @@ export class DataStorageService {
       );
   }
 
-  getImages(){
+  getImgName(){
     this.isLoadingSubject.next(true);
-    return this.http.get<ApiResponse>(this.baseUrlAdmin+'getImages');
+    return this.http.get<ApiResponse>(this.baseUrlAdmin+'getallfiles').pipe(
+      (map(data=>data)),
+      catchError(error => throwError(error)),
+      finalize(() => this.isLoadingSubject.next(false))
+    );
+  }
+
+  getImageByName(name: string){
+    return this.http.get<ApiResponse>(this.baseUrlAdmin+'files/'+name);
+  }
+
+  getImages(): Observable<any>{
+    return this.http.get(this.baseUrlAdmin+'getImages');
   }
 
   addCourses(formData: FormData) {

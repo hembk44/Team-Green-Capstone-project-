@@ -64,11 +64,6 @@ const routes: Routes = [
 
     component: ChangePasswordComponent
   },
-
-  {
-    path: "signup",
-    component: RegisterComponent
-  },
   {
     path: "home",
     component: VerticalNavigationComponent,

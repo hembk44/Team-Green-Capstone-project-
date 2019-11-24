@@ -21,6 +21,7 @@ export class EventDetailComponent implements OnInit {
   username: string;
   viewAttendees: boolean;
   guests: any[];
+  invitees: any[];
 
   constructor(private calService: CalendarService,
     private router: Router,
@@ -34,6 +35,7 @@ export class EventDetailComponent implements OnInit {
 
   ngOnInit() {
     this.viewAttendees = false;
+    this.invitees = [];
     this.event = this.data;
     this.username = this.authService.name;
     if(this.event.allDay && this.event.end){
@@ -46,6 +48,9 @@ export class EventDetailComponent implements OnInit {
       this.isAppt = false;
     }
     this.guests = this.event.extendedProps.confirmedBy;
+    for(let user of this.event.extendedProps.recipients){
+      this.invitees.push(user.email);
+    }
     console.log(this.guests);
     console.log(this.event);
   }

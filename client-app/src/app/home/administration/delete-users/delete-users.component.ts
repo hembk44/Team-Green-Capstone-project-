@@ -68,8 +68,10 @@ export class DeleteUsersComponent implements OnInit {
       });
       dialogRef.afterClosed().subscribe(result => {
         if (result === "confirmed") {
-
-          this.dataStorage.deleteUsers(this.updateEmails).subscribe(result => {
+          const obj = {
+            emails: this.updateEmails
+          };
+          this.dataStorage.deleteUsers(obj).subscribe(result => {
             console.log(result);
             if(result){
               this.snackbar.open(result.message, 'OK', {duration: 5000});

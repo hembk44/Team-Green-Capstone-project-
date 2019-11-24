@@ -23,6 +23,10 @@
   color: white;
 }
 
+::ng-deep .mat-accent{
+  color: #800029;
+}
+
 .mat-accent .mat-pseudo-checkbox-checked, .mat-accent .mat-pseudo-checkbox-indeterminate, .mat-pseudo-checkbox-checked, .mat-pseudo-checkbox-indeterminate{
   background: #800029;
 }

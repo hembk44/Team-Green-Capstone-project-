@@ -18,6 +18,8 @@ import { GroupSelection } from 'src/app/home/shared/group-selection';
 })
 export class EditEventComponent implements OnInit {
   id:number;
+  startDate;
+  endDate;
   event: CalEvent;
   eventForm: FormGroup;
   primaryColor: string='';
@@ -113,57 +115,77 @@ export class EditEventComponent implements OnInit {
     console.log(this.allDay)
   }
 
-  onSubmit(){
+  onSubmit() {
     const eventFormValues = this.eventForm.value;
-    const startDate = eventFormValues.startDate.toDateString().concat(' ').concat(eventFormValues.startTime);
-    const endDate = eventFormValues.endDate.toDateString().concat(' ').concat(eventFormValues.endTime);
-    if(eventFormValues.email){
-      this.emails=eventFormValues.email.split(',');
+    if (eventFormValues.email) {
+      this.emails = eventFormValues.email.split(",");
     }
     if(!this.allDay){
-      this.obj = {
-        calendarId: this.selectedCal,
-        title: eventFormValues.title,
-        description: eventFormValues.description,
-        start: startDate,
-        end: endDate,
-        recipients: this.emails,
-        location: eventFormValues.location,
-        backgroundColor: this.primaryColor,
-        borderColor: this.primaryColor,
-        allDay: this.allDay
+      this.startDate = new Date(eventFormValues.startDate
+        .toDateString()
+        .concat(" ")
+        .concat(eventFormValues.startTime));
+      this.endDate = new Date(eventFormValues.endDate
+        .toDateString()
+        .concat(" ")
+        .concat(eventFormValues.endTime));
+    } else{
+      this.startDate = new Date(eventFormValues.startDate.toLocaleDateString());
+      this.endDate = new Date(eventFormValues.endDate.toLocaleDateString());
+    }
+    console.log(this.startDate,this.endDate);
+    //checking if start comes before end
+    if ((this.startDate <= this.endDate && this.allDay) || (this.startDate<this.endDate && !this.allDay)) {
+      //creating event object based on allDay
+      if (!this.allDay) {
+        this.obj = {
+          calendarId: this.selectedCal,
+          title: eventFormValues.title,
+          description: eventFormValues.description,
+          start: this.startDate,
+          end: this.endDate,
+          recipients: this.emails,
+          location: eventFormValues.location,
+          backgroundColor: this.primaryColor,
+          borderColor: this.primaryColor,
+          allDay: this.allDay
+        };
+      } else {
+        eventFormValues.endDate.setDate(eventFormValues.endDate.getDate() + 1);
+        this.obj = {
+          calendarId: this.selectedCal,
+          title: eventFormValues.title,
+          description: eventFormValues.description,
+          start: eventFormValues.startDate,
+          end: eventFormValues.endDate.toISOString(),
+          recipients: this.emails,
+          location: eventFormValues.location,
+          backgroundColor: this.primaryColor,
+          borderColor: this.primaryColor,
+          allDay: this.allDay
+        };
       }
-    }else{
-      this.newEnd = eventFormValues.endDate;
-      this.newEnd.setDate(this.newEnd.getDate()+1);
-      this.obj = {
-        calendarId: this.selectedCal,
-        title: eventFormValues.title,
-        description: eventFormValues.description,
-        start: eventFormValues.startDate,
-        end: this.newEnd,
-        recipients: this.emails,
-        location: eventFormValues.location,
-        backgroundColor: this.primaryColor,
-        borderColor: this.primaryColor,
-        allDay: this.allDay
-      };
+
+      console.log(this.obj);
+
+      this.dataStorage.editEvent(this.event.id,this.obj).subscribe(result => {
+        if(result) {
+          this.dataStorage.fetchCalendars();
+          this.snackbar.open(result.message, 'OK', {duration: 5000});
+          this.router.navigate(["home/calendar"]);
+        } else {
+          this.snackbar.open('Something went wrong', 'OK', {duration:5000});
+        }
+      });
+      this.router.navigate(["home/calendar"]);
+
+    } else {
+      //warning for start not being before end
+      this.snackbar.open("Start must come before end.", "OK", {
+        duration: 5000
+      });
     }
 
-    // this.dataStorage.updateEvent(this.obj).subscribe(result => {
-    //   if(result){
-    //     this.dataStorage.fetchCalendars();
-    //   }
-    // });
-    this.dataStorage.editEvent(this.event.id,this.obj).subscribe(result => {
-      if(result) {
-        this.dataStorage.fetchCalendars();
-        this.snackbar.open(result.message, 'OK', {duration: 5000});
-        this.router.navigate(["home/calendar"]);
-      } else {
-        this.snackbar.open('Something went wrong', 'OK', {duration:5000});
-      }
-    });
   }
 
   setPrimary(color: string){
