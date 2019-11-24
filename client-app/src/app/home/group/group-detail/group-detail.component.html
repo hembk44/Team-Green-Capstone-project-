@@ -13,7 +13,7 @@
         class="button-maroon"
         *ngIf="groupType === 'custom'"
         (click)="shareGroup()"
-        matTooltip="click to share group"
+        matTooltip="Share group to other admin or faculty"
       >
         <mat-icon mat-list-icon>share</mat-icon> &nbsp;Share group
       </button>
@@ -24,8 +24,8 @@
         mat-raised-button
         class="button-maroon"
         *ngIf="selectedGroupMembers.length > 0"
-        (click)="messageGroup()"
-        matTooltip="click to message this group"
+        (click)="emailSelectedMembers()"
+        matTooltip="Email selected members"
       >
         <mat-icon mat-list-icon>email</mat-icon> &nbsp; Email Selected members
       </button>
@@ -36,7 +36,7 @@
         mat-raised-button
         class="button-maroon"
         (click)="messageGroup()"
-        matTooltip="click to message this group"
+        matTooltip="Email this group"
       >
         <mat-icon mat-list-icon>email</mat-icon> &nbsp; Email group
       </button>

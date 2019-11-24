@@ -289,6 +289,19 @@ export class DataStorageService {
         finalize(() => this.isLoadingSubject.next(false))
       );
   }
+
+  emailSelectedMembers(obj: Object) {
+    this.isLoadingSubject.next(true);
+    return this.http
+      .post<ApiResponse>(
+        "http://localhost:8181/api/group/" + "sendEmailToFew",
+        obj
+      )
+      .pipe(
+        (map(data => data), catchError(error => throwError(error))),
+        finalize(() => this.isLoadingSubject.next(false))
+      );
+  }
 }
 
 export interface Emails {
