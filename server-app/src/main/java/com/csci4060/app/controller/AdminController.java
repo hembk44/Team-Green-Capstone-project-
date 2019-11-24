@@ -40,8 +40,10 @@ import com.csci4060.app.model.EmailWrapper;
 import com.csci4060.app.model.Role;
 import com.csci4060.app.model.User;
 import com.csci4060.app.model.UserDetailDummy;
+import com.csci4060.app.model.broadcast.Broadcast;
 import com.csci4060.app.model.major.Course;
 import com.csci4060.app.model.major.Major;
+import com.csci4060.app.repository.broadcastRepo.BroadcastRepository;
 import com.csci4060.app.services.CourseService;
 import com.csci4060.app.services.EmailSenderService;
 import com.csci4060.app.services.FileReadService;
@@ -49,6 +51,7 @@ import com.csci4060.app.services.FileStorageService;
 import com.csci4060.app.services.MajorService;
 import com.csci4060.app.services.RoleService;
 import com.csci4060.app.services.UserService;
+import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 
 import ch.qos.logback.core.Context;
 
@@ -86,6 +89,9 @@ public class AdminController extends ExceptionResolver {
 	
 	@Autowired
 	ServletContext context;
+	
+	@Autowired
+	BroadcastRepository broadcastRepo;
 
 	@PutMapping(path = "/changeRole")
 	@PreAuthorize("hasRole('ADMIN')")
@@ -291,5 +297,23 @@ public class AdminController extends ExceptionResolver {
 		return new APIresponse(HttpStatus.OK.value(), "Images are successfully sent", images);
 	}
 	
+	@PostMapping("/uploadImageAsString")
+	 @PreAuthorize("hasRole('ADMIN')")
+	public APIresponse uploadImageAsString(String image) {
+		
+		Broadcast broadcast = new Broadcast(image);
+		broadcastRepo.save(broadcast);
+		
+		return new APIresponse(HttpStatus.OK.value(), "Files were succesfully uploaded", broadcast);
+	}
+	
+	@GetMapping("/getImagesAsString")
+	@PreAuthorize("hasRole('ADMIN')")
+	public APIresponse getImagesAsString() {
+		
+		List<Broadcast> broadcasts = broadcastRepo.findAll();
+		
+		return new APIresponse(HttpStatus.OK.value(), "Images are successfully sent", broadcasts);
+	}
 
 }
