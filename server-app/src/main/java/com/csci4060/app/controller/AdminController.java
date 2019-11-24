@@ -132,12 +132,15 @@ public class AdminController extends ExceptionResolver {
 
 		User loggedIn = userService.findByUsername(username);
 		List<User> allUsers = userService.findAllUserExcept(loggedIn.getEmail());
+		
+		if(allUsers == null) {
+			return new APIresponse(HttpStatus.OK.value(), "There are no users in the database.", null);
+		}
 
 		List<UserDetailDummy> response = new ArrayList<UserDetailDummy>();
 //	    RoleName rolename = "ROLE_USER";
 
 		for (User users : allUsers) {
-
 			response.add(new UserDetailDummy(users.getName(), users.getEmail(),
 					users.getRoles().iterator().next().getName()));
 		}

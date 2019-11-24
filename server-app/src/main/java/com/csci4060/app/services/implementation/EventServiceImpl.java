@@ -69,7 +69,7 @@ public class EventServiceImpl implements EventService {
 
 	@Override
 	public void delete(Event event) {
-
+		
 		event.getRecipients().clear();
 		event.getConfirmedBy().clear();
 		
