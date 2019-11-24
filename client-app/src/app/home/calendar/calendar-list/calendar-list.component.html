@@ -2,7 +2,7 @@
 <mat-expansion-panel class="cal-list" [expanded]="true">
     <mat-expansion-panel-header [expandedHeight]="'48px'">
         <mat-panel-title style="font-size: 0.8em;">
-            My Calendars
+            Your Calendars
         </mat-panel-title>
     </mat-expansion-panel-header>
     <app-calendar-item 
@@ -15,12 +15,25 @@
 <mat-expansion-panel class="cal-list" [expanded]="true">
     <mat-expansion-panel-header [expandedHeight]="'48px'">
         <mat-panel-title style="font-size: 0.8em;">
-            Shared
+            Custom Calendars
         </mat-panel-title>
     </mat-expansion-panel-header>
     <app-calendar-item
-    *ngFor= "let cal of sharedCals"
+    *ngFor= "let cal of customCals"
     [calendar]="cal"
     class="calendar-item">
     </app-calendar-item>
 </mat-expansion-panel>
+
+<mat-expansion-panel class="cal-list" [expanded]="true">
+        <mat-expansion-panel-header [expandedHeight]="'48px'">
+            <mat-panel-title style="font-size: 0.8em;">
+                Shared With You
+            </mat-panel-title>
+        </mat-expansion-panel-header>
+        <app-calendar-item
+        *ngFor= "let cal of sharedCals"
+        [calendar]="cal"
+        class="calendar-item">
+        </app-calendar-item>
+    </mat-expansion-panel>

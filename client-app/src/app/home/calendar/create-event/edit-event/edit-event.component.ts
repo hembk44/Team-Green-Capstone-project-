@@ -38,6 +38,7 @@ export class EditEventComponent implements OnInit {
   removable = true;
   addOnBlur = true;
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
+  role: string;
 
   //theme for time picker
   timeTheme: NgxMaterialTimepickerTheme={
@@ -65,6 +66,7 @@ export class EditEventComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.role = this.authService.user;
     this.dataStorage.fetchCalendars();
     this.dataStorage.isLoading.subscribe(loading => {
       if(!loading){
@@ -77,7 +79,10 @@ export class EditEventComponent implements OnInit {
     this.event = this.calService.getEvent(this.id);
     console.log(this.event);
     this.newEnd = this.event.end;
-    this.newEnd.setDate(this.newEnd.getDate()-1);
+    if(this.event.allDay){
+      this.newEnd.setDate(this.newEnd.getDate()-1);
+    }
+    
     this.primaryColor = this.event.backgroundColor;
     this.username = this.authService.name;
     this.calendars=this.calService.getCalendars().filter(cal => cal.createdBy.email === this.username);
@@ -87,8 +92,8 @@ export class EditEventComponent implements OnInit {
     console.log(this.allDay);
     this.eventForm = new FormGroup({
       title: new FormControl(this.event.title,[Validators.required]),
-      location: new FormControl(this.event.location),
-      description: new FormControl(this.event.description),
+      location: new FormControl(this.event.location, [Validators.required]),
+      description: new FormControl(this.event.description, [Validators.required]),
       email: this.email,
       startDate: new FormControl(this.event.start,[Validators.required]),
       endDate: new FormControl(this.newEnd,[Validators.required]),
@@ -181,7 +186,7 @@ export class EditEventComponent implements OnInit {
 
     } else {
       //warning for start not being before end
-      this.snackbar.open("Start must come before end.", "OK", {
+      this.snackbar.open("Start must come before end.", "", {
         duration: 5000
       });
     }

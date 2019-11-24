@@ -145,8 +145,8 @@
           <!-- <button type="button" mat-raised-button color="primary">
             Add Recipients
           </button> -->
-          <button type="button" mat-raised-button class="primary select-group" (click)="groupSelect()">Select Groups</button>&nbsp;&nbsp;
-          <button type="submit" mat-raised-button class="primary" [disabled]="!eventForm.valid">
+          <button type="button" mat-raised-button class="button-maroon" (click)="groupSelect()" *ngIf="role !== 'ROLE_USER'">Select Groups</button>&nbsp;&nbsp;
+          <button type="submit" mat-raised-button class="button-maroon" [disabled]="!eventForm.valid">
             Confirm
           </button>
           <button mat-raised-button color="warn" (click)="onNoClick()" class="cancel-button">Cancel</button>

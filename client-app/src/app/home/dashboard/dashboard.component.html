@@ -1,22 +1,22 @@
 <div class="broadcast-wrap">
   <app-broadcast></app-broadcast>
 </div>
-
+<mat-divider></mat-divider>
 <div class="wrapper">
-    
-    <full-calendar 
-    id="calendar"
-    defaultView="listWeek" 
-    [plugins]="calendarPlugins" 
-    [events]="events"
-    [nextDayThreshold]="'00:00:00'"
-    [themeSystem]="'standard'"
-    [eventLimit]="true"
-    [height]="'parent'"
-    [header]="{
-        left: none,
-        center: 'title',
-        right: none
-      }"
-    [weekends]="weekends"></full-calendar>
+  <h3 class="heading">Welcome, {{ name }}. Here are your Events and Appointments for today:</h3>
+  <full-calendar 
+  id="calendar"
+  defaultView="timeGridDay" 
+  [plugins]="calendarPlugins" 
+  [events]="events"
+  [nextDayThreshold]="'00:00:00'"
+  [themeSystem]="'standard'"
+  [eventLimit]="false"
+  [height]="'parent'"
+  [header]="{
+      left: none,
+      center: 'title',
+      right: none
+    }"></full-calendar>
 </div>
+<div class="space"></div>

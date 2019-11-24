@@ -5,6 +5,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { DataStorageService } from '../../shared/data-storage.service';
 import { ENTER, COMMA } from '@angular/cdk/keycodes';
 import { GroupSelection } from '../../shared/group-selection';
+import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
   selector: 'app-share-calendar',
@@ -22,17 +23,20 @@ export class ShareCalendarComponent implements OnInit {
   isEmailValid: boolean;
   @ViewChild("chipList", { static: false }) chipList;
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
-  errorMessage: string;
+  errorMessage: string;m
+  role: string;
 
   constructor(
     private ref: MatDialogRef<ShareCalendarComponent>,
     private dataStorage: DataStorageService,
     private dialog: MatDialog,
     private snackbar: MatSnackBar,
+    private authService: AuthService,
     @Inject(MAT_DIALOG_DATA)public data: any
   ) { }
 
   ngOnInit() {
+    this.role = this.authService.user;
     this.emails = [];
     console.log(this.data);
     this.shareForm = new FormGroup({

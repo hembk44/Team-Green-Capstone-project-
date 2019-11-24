@@ -3,6 +3,7 @@ import { FormGroup, Validators, FormControl } from '@angular/forms';
 import { MatDialogRef, MatDialog, MatChipInputEvent } from '@angular/material';
 import { GroupSelection } from '../../shared/group-selection';
 import { ENTER, COMMA } from '@angular/cdk/keycodes';
+import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
     selector: 'share-event',
@@ -20,14 +21,18 @@ export class ShareEvent implements OnInit{
 
     constructor(
         private ref: MatDialogRef<ShareEvent>,
-        private dialog: MatDialog
+        private dialog: MatDialog,
+        private authService: AuthService
     ){}
+
+    role:string;
 
     ngOnInit(){
         this.emails = []
         this.shareForm = new FormGroup({
             recipients: new FormControl("", [Validators.required])
-        })
+        });
+        this.role = this.authService.user;
     }
 
     groupSelect(){

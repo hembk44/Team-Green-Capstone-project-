@@ -13,9 +13,10 @@
 }
 
 .content{
-    width: 80%;
-    height: 65%;
+    width: 60%;
+    height: 50%;
     overflow-y:auto;
+    margin-left:15px;
 }
 
 .spacer{

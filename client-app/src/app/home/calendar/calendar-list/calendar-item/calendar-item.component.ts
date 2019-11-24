@@ -44,7 +44,7 @@ export class CalendarItemComponent implements OnInit {
         this.dataStorage.deleteCalendar(this.calendar.id).subscribe(result => {
           if(result){
             console.log(result);
-            this.snackbar.open(result.message, 'OK',{duration: 5000});
+            this.snackbar.open(result.message, '',{duration: 5000});
             if(result.status === 200){
               this.dataStorage.fetchCalendars();
             }
@@ -122,7 +122,7 @@ export class CalRename implements OnInit{
     this.dataStorage.updateCalendar(obj, this.cal.id).subscribe(result => {
       if(result){
         console.log(result);
-        this.snackbar.open(result.message, 'OK', {duration: 5000});
+        this.snackbar.open(result.message, '', {duration: 5000});
         if(result.status === 200){
           this.ref.close();
           this.dataStorage.fetchCalendars();

@@ -102,7 +102,7 @@ export class EventDetailComponent implements OnInit {
           recipients: result
         }
         this.dataStorage.shareEvent(obj).subscribe(result => {
-          this.snackbar.open(result.message, 'OK', {duration: 5000})
+          this.snackbar.open(result.message, '', {duration: 5000})
         });
         this.dataStorage.fetchCalendars();
       }
@@ -112,7 +112,7 @@ export class EventDetailComponent implements OnInit {
 
   confirmAttendance(){
     this.dataStorage.userConfirmEvent(this.event.id).subscribe(result => {
-      this.snackbar.open(result.message, 'OK',{duration: 5000})
+      this.snackbar.open(result.message, '',{duration: 5000})
     })
   }
 
@@ -126,7 +126,8 @@ export class EventDetailComponent implements OnInit {
 
 export class EventDeleteConfirm{
   constructor(
-    private ref: MatDialogRef<EventDeleteConfirm>
+    private ref: MatDialogRef<EventDeleteConfirm>,
+    private authService: AuthService
   ){}
 
   delete(){

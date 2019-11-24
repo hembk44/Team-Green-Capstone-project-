@@ -162,7 +162,7 @@ export class CreateEventComponent implements OnInit {
         if (result) {
           this.dataStorage.fetchCalendars();
           //confirmation snackbar
-          this.snackbar.open(result.message, "OK", {
+          this.snackbar.open(result.message, "", {
             duration: 3000
           });
         }
@@ -170,7 +170,7 @@ export class CreateEventComponent implements OnInit {
       this.router.navigate(["home/calendar"]);
     } else {
       //warning for start not being before end
-      this.snackbar.open("Start must come before end.", "OK", {
+      this.snackbar.open("Start must come before end.", "", {
         duration: 5000
       });
     }

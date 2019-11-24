@@ -10,7 +10,7 @@ import { DomSanitizer } from '@angular/platform-browser';
   templateUrl: './broadcast-management.component.html',
   styleUrls: ['./broadcast-management.component.css']
 })
-export class BroadcastManagementComponent implements OnInit{
+export class BroadcastManagementComponent implements OnInit,OnDestroy{
 
   imageForm: FormGroup;
   images: any;
@@ -158,6 +158,12 @@ export class BroadcastManagementComponent implements OnInit{
       })
       //location.reload();
     } 
+  }
+
+  ngOnDestroy(){
+    this.dataStorage.uploadImage(this.tempArr).subscribe(result => {
+      console.log(result);
+    })
   }
 
 }
