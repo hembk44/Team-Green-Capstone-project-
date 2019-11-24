@@ -260,6 +260,18 @@ export class DataStorageService {
       );
   }
 
+  uploadMajors(formdata: FormData) {
+    return this.http
+      .post<ApiResponse>(
+        "http://localhost:8181/api/admin/uploadCourses",
+        formdata
+      )
+      .pipe(
+        (map(data => data), catchError(error => throwError(error))),
+        finalize(() => this.isLoadingSubject.next(false))
+      );
+  }
+
   newCalendar(obj: Object) {
     this.isLoadingSubject.next(true);
     return this.http
@@ -305,7 +317,7 @@ export class DataStorageService {
       );
   }
 
-  uploadMajors(){
+  uploadMajors2(){
     this.isLoadingSubject.next(true);
     return this.http.post<ApiResponse>(this.baseUrlAdmin+'uploadMajor','').pipe(
       (map(data=>data),
