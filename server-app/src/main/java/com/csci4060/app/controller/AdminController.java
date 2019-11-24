@@ -289,7 +289,7 @@ public class AdminController extends ExceptionResolver {
 						fileInputStream.read(bytes);
 
 						encodedBase64 = Base64.getEncoder().encodeToString(bytes);
-						images.add("data:image/" + extension + ";base64" + encodedBase64);
+						images.add(encodedBase64);
 						fileInputStream.close();
 					} catch (Exception e) {
 						return new APIresponse(HttpStatus.EXPECTATION_FAILED.value(),
