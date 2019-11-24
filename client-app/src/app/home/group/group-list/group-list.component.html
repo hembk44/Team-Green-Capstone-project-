@@ -41,6 +41,8 @@
     *ngFor="let g of group | groupFilter: searchText; let i = index"
     [eachGroup]="g"
     [id]="g.id"
+    [semester]="g.semesterTerm"
+    [semesterYear]="g.semesterYear"
   >
   </app-group-item>
 </div>

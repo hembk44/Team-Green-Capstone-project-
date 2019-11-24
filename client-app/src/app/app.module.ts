@@ -92,8 +92,7 @@ import { GroupItemComponent } from "./home/group/group-item/group-item.component
 import { GroupStartComponent } from "./home/group/group-start/group-start.component";
 import {
   GroupDetailComponent,
-  DialogShareGroup,
-  SnackBarGroup
+  DialogShareGroup
 } from "./home/group/group-detail/group-detail.component";
 import { GroupComponent } from "./home/group/group/group.component";
 import { RegisterUsersComponent } from "./home/administration/register-users/register-users.component";
@@ -128,6 +127,7 @@ import { BrdcastComponent } from './home/vertical-navigation/user-manual/brdcast
 import { ManualNavComponent } from './home/vertical-navigation/user-manual/manual-nav/manual-nav.component';
 import { AppointmentSnackbarComponent } from "./home/appointment/shared-appointment/appointment-snackbar/appointment-snackbar.component";
 import { ManualStartComponent } from './home/vertical-navigation/user-manual/manual-start/manual-start.component';
+import { GroupSnackbarComponent } from "./home/group/shared-group/group-snackbar/group-snackbar.component";
 
 @NgModule({
   declarations: [
@@ -180,7 +180,6 @@ import { ManualStartComponent } from './home/vertical-navigation/user-manual/man
     AppointmentFilterPipe,
     ScheduledAppointmentSentPipe,
     DialogShareGroup,
-    SnackBarGroup,
     GroupEditComponent,
     MessageGroupComponent,
     RoleConfirm,
@@ -198,7 +197,8 @@ import { ManualStartComponent } from './home/vertical-navigation/user-manual/man
     BrdcastComponent,
     ManualNavComponent,
     AppointmentSnackbarComponent,
-    ManualStartComponent
+    ManualStartComponent,
+    GroupSnackbarComponent
   ],
   imports: [
     BrowserModule,
@@ -255,10 +255,10 @@ import { ManualStartComponent } from './home/vertical-navigation/user-manual/man
     DialogShareGroup,
     MessageGroupComponent,
     DeleteUsers,
-    SnackBarGroup,
     ShareEvent,
     RoleConfirm,
-    AppointmentSnackbarComponent
+    AppointmentSnackbarComponent,
+    GroupSnackbarComponent
   ],
   providers: [
     MatDatepickerModule,

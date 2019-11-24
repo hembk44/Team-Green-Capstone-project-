@@ -6,7 +6,8 @@ import { AuthService } from "src/app/auth/auth.service";
 import { AppointmentsNavigationAdminService } from "../shared-appointment/appointments-navigation-admin.service";
 import { Subscription } from "rxjs";
 import { DataStorageAppointmentService } from "../shared-appointment/data-storage-appointment.service";
-import { MatDialog, MatPaginatorModule } from "@angular/material";
+import { MatDialog, MatPaginatorModule, MatSnackBar } from "@angular/material";
+import { AppointmentSnackbarComponent } from "../shared-appointment/appointment-snackbar/appointment-snackbar.component";
 
 @Component({
   selector: "app-appointment-list",
@@ -31,7 +32,8 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
     private role: AuthService,
     private appointmentNavigationAdmin: AppointmentsNavigationAdminService,
     private dataStorageAppointment: DataStorageAppointmentService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private _snackBar: MatSnackBar
   ) {}
 
   ngOnInit() {
@@ -72,6 +74,11 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
               console.log(this.appointments);
               if (this.appointments.length <= 0) {
                 this.isAppointmentEmpty = true;
+                // this._snackBar.openFromComponent(AppointmentSnackbarComponent, {
+                //   duration: 4000,
+                //   panelClass: ["delete"],
+                //   data: "No appointments found. Please create appointments!"
+                // });
               }
             }
             console.log(this.isAppointmentEmpty);
