@@ -28,11 +28,9 @@ public class Appointment {
 	@OneToMany(targetEntity = AppointmentDate.class)
 	List<AppointmentDate> appdates;
 
-	@JsonIgnore
 	@ManyToMany(targetEntity = User.class)
 	List<User> recepients;
 	
-	@JsonIgnore
 	@OneToOne(targetEntity = User.class)
 	User createdBy;
 	

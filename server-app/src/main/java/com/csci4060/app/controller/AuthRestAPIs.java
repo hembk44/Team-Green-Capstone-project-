@@ -98,6 +98,10 @@ public class AuthRestAPIs extends ExceptionResolver {
 	public APIresponse authenticateUser(@Valid @RequestBody LoginForm loginRequest) {
 
 		User user = userService.findByUsername(loginRequest.getUsername());
+		
+		if(user == null) {
+			return new APIresponse(HttpStatus.FORBIDDEN.value(), "Please register before logging in. ", null);
+		}
 
 		if (user.isVerified()) {
 			Authentication authentication = authenticationManager.authenticate(
