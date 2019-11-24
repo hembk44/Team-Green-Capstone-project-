@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
 import {
   FormGroup,
   Validators,
@@ -11,8 +11,17 @@ import { COMMA, ENTER } from "@angular/cdk/keycodes";
 import { MatChipInputEvent } from "@angular/material/chips";
 import { GroupDataStorageService } from "../group-data-storage.service";
 import { GroupCreateNavigationService } from "../group/group-create-navigation.service";
-import { MatSelectChange, MatSelect, MatSnackBar } from "@angular/material";
+import {
+  MatSelectChange,
+  MatSelect,
+  MatSnackBar,
+  MatAutocomplete,
+  MatAutocompleteSelectedEvent
+} from "@angular/material";
 import { GroupSnackbarComponent } from "../shared-group/group-snackbar/group-snackbar.component";
+import { Observable } from "rxjs";
+import { DataStorageService } from "../../shared/data-storage.service";
+import { startWith, map } from "rxjs/operators";
 
 export interface courseGroup {
   id: number;
@@ -31,8 +40,14 @@ export class CreateGroupComponent implements OnInit {
   removable = true;
   addOnBlur = true;
   selectedOption = "";
+  filteredUserList: Observable<string[]>;
+  userList: string[] = [];
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   @ViewChild("chipList", { static: false }) chipList;
+  @ViewChild("userInput", { static: false }) userInput: ElementRef<
+    HTMLInputElement
+  >;
+  @ViewChild("auto", { static: false }) matAutocomplete: MatAutocomplete;
 
   groupForm: FormGroup;
   email = new FormControl("", [Validators.required, Validators.email]);
@@ -76,8 +91,29 @@ export class CreateGroupComponent implements OnInit {
     private groupDataStorageService: GroupDataStorageService,
     private groupTypeNavigation: GroupCreateNavigationService,
     private route: ActivatedRoute,
-    private _snackBar: MatSnackBar
-  ) {}
+    private _snackBar: MatSnackBar,
+    private dataStorage: DataStorageService
+  ) {
+    this.dataStorage.getEmails();
+    this.dataStorage.emails.subscribe((result: Emails[]) => {
+      if (result.length > 0) {
+        result.forEach(o => this.userList.push(o.email));
+      }
+    });
+
+    this.filteredUserList = this.email.valueChanges.pipe(
+      startWith(null),
+      map((user: string | null) =>
+        user ? this.filter(user) : this.userList.slice()
+      )
+    );
+  }
+  filter(value: string): string[] {
+    const filterValue = value.toLocaleLowerCase();
+    return this.userList.filter(user =>
+      user.toLocaleLowerCase().includes(filterValue)
+    );
+  }
 
   ngOnInit() {
     this.groupDataStorageService.getAllMajors();
@@ -172,6 +208,14 @@ export class CreateGroupComponent implements OnInit {
   }
   deleteEmail(index: number) {
     this.customGroupEmails.splice(index, 1);
+  }
+
+  selected(event: MatAutocompleteSelectedEvent): void {
+    if (!this.groupMembersEmails.includes(event.option.value)) {
+      this.groupMembersEmails.push(event.option.value);
+      this.userInput.nativeElement.value = "";
+      this.email.setValue(null);
+    }
   }
 
   add(event: MatChipInputEvent): void {

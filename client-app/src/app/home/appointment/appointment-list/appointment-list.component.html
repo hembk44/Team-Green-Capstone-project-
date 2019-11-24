@@ -23,8 +23,8 @@
       [dates]="appointment.date"
     >
     </app-appointment-item>
-    <div>
-      <div style="margin: 0 auto;">
+    <div fxLayout="row" fxLayoutAlign="center center" class="pagination-center">
+      <div>
         <pagination-controls
           autoHide="true"
           (pageChange)="p = $event"

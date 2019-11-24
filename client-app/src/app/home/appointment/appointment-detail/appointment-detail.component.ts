@@ -14,6 +14,8 @@ import { FormControl } from "@angular/forms";
 import { MatSelectionListChange, MatListOption } from "@angular/material/list";
 import { AppointmentSnackbarComponent } from "../shared-appointment/appointment-snackbar/appointment-snackbar.component";
 import { ApiResponse } from "src/app/auth/api.response";
+import { MatDialog } from "@angular/material";
+import { MessageGroupComponent } from "../../group/message-group/message-group.component";
 
 @Component({
   selector: "app-appointment-detail",
@@ -43,7 +45,8 @@ export class AppointmentDetailComponent implements OnInit {
     private authService: AuthService,
     private dataStorage: DataStorageService,
     private _snackBar: MatSnackBar,
-    private appointmentNavigationAdmin: AppointmentsNavigationAdminService
+    private appointmentNavigationAdmin: AppointmentsNavigationAdminService,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit() {
@@ -159,6 +162,27 @@ export class AppointmentDetailComponent implements OnInit {
   }
   messageSelectedRecipients() {
     console.log(this.selectedPendingRecipients);
+    const dialogRef = this.dialog.open(MessageGroupComponent, {
+      width: "400px",
+      data: {}
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(result);
+      result.recipients = this.selectedPendingRecipients;
+      console.log(result);
+      if (result) {
+        this.dataStorage.emailSelectedMembers(result).subscribe(result => {
+          console.log(result);
+          if (result.status === 200) {
+            this._snackBar.openFromComponent(AppointmentSnackbarComponent, {
+              duration: 5000,
+              panelClass: ["standard"],
+              data: "An email has been successfully to selected members!"
+            });
+          }
+        });
+      }
+    });
   }
   onDeleteAppointment(id: number) {
     this.dataServiceAppointment.deleteAppointment(id).subscribe(result => {

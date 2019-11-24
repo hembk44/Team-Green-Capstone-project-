@@ -15,7 +15,11 @@
   color: inherit;
 }
 
-.group-wrap {
+/* .group-wrap {
   height: 80%;
   overflow: auto;
+} */
+
+.pagination-center {
+  margin-right: 80px;
 }

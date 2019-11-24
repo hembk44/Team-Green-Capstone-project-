@@ -12,7 +12,7 @@
       enctype="multipart/form-data"
     >
       <mat-form-field style="cursor: pointer;" class="view-less-width">
-        <mat-label>Group Type</mat-label>
+        <mat-label>Select Majors</mat-label>
         <mat-select formControlName="major">
           <mat-option *ngFor="let major of allMajors" [value]="major.name">
             {{ major.name }}
