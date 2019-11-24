@@ -109,7 +109,17 @@
       >Please enter group description</mat-error
     >
   </mat-form-field>
+
+  <mat-form-field class="view-more-width" *ngIf="!editMode">
+    <mat-label>Group member emails</mat-label>
+    <mat-select [(value)]="selectedOption">
+      <mat-option>None</mat-option>
+      <mat-option value="email">Enter Emails</mat-option>
+      <mat-option value="file">Upload File</mat-option>
+    </mat-select>
+  </mat-form-field>
   <mat-form-field
+    *ngIf="selectedOption === 'email'"
     class="example-chip-list"
     class="view-more-width"
     style=" cursor: pointer;"
@@ -139,17 +149,10 @@
 
     <mat-hint>Use comma or hit ENTER to enter multiple emails!</mat-hint>
   </mat-form-field>
-  <div
-    style="text-align: center; color: black; margin-top: 10px;"
-    *ngIf="!editMode"
-  >
-    <span>OR</span>
-  </div>
-
   <mat-form-field
     style="cursor: pointer;"
     class="view-more-width"
-    *ngIf="!editMode"
+    *ngIf="!editMode && selectedOption === 'file'"
   >
     <ngx-mat-file-input
       #removableInput

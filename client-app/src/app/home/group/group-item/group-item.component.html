@@ -1,16 +1,3 @@
-<!-- <mat-card
-  class="example-card example-card-width"
-  (click)="showDetails(id)"
-  style="cursor: pointer;"
->
-  <mat-card-content>
-    <p>
-      {{ eachGroup.name }}
-    </p>
-    <p>{{ eachGroup.description }}</p>
-  </mat-card-content>
-</mat-card> -->
-
 <mat-list
   class="example-card example-card-width"
   (click)="showDetails(id)"
@@ -22,5 +9,6 @@
       <strong>{{ eachGroup.name }}</strong>
     </h5>
     <p mat-line>{{ eachGroup.description }}</p>
+    <p mat-line>{{ semester }}- {{ semesterYear }}</p>
   </mat-list-item>
 </mat-list>

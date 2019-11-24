@@ -18,8 +18,8 @@ import { Validators, FormControl } from "@angular/forms";
 import { GroupCreateNavigationService } from "../group/group-create-navigation.service";
 import { share } from "rxjs/operators";
 import { MessageGroupComponent } from "../message-group/message-group.component";
-import { GroupDetailDataShareService } from "./group-detail-data-share.service";
 import { MatListOption } from "@angular/material/list";
+import { GroupSnackbarComponent } from "../shared-group/group-snackbar/group-snackbar.component";
 
 @Component({
   selector: "app-group-detail",
@@ -46,7 +46,6 @@ export class GroupDetailComponent implements OnInit {
     private authService: AuthService,
     public dialog: MatDialog,
     private router: Router,
-    private groupDetailDataShare: GroupDetailDataShareService,
     private _snackBar: MatSnackBar
   ) {}
 
@@ -81,7 +80,7 @@ export class GroupDetailComponent implements OnInit {
   shareGroup(): void {
     console.log("shrae dialog");
     const dialogRef = this.dialog.open(DialogShareGroup, {
-      width: "300px"
+      width: "400px"
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -93,12 +92,13 @@ export class GroupDetailComponent implements OnInit {
       };
       console.log(shareObj);
       this.groupDataStorage.shareGroup(shareObj).subscribe(result => {
-        if (result) {
-          console.log(result);
-          this.groupDetailDataShare.passSharedMessage(result.message);
-          this._snackBar.openFromComponent(SnackBarGroup, {
-            duration: 5000,
-            panelClass: ["standard"]
+        console.log(result);
+        const sharedMsg = " This group has been successfully shared!";
+        if (result.status == 200) {
+          this._snackBar.openFromComponent(GroupSnackbarComponent, {
+            duration: 4000,
+            panelClass: ["standard"],
+            data: sharedMsg
           });
         }
       });
@@ -108,20 +108,18 @@ export class GroupDetailComponent implements OnInit {
   deleteGroup(id: number) {
     console.log("deleted");
     this.groupDataStorage.deleteGroup(id).subscribe(result => {
-      console.log(result.message);
+      console.log(result);
+      const deletedMsg =
+        result.result.name + "group has been successfully deleted!";
+      if (result.status == 200) {
+        this._snackBar.openFromComponent(GroupSnackbarComponent, {
+          duration: 4000,
+          panelClass: ["delete"],
+          data: deletedMsg
+        });
+      }
       this.groupDataStorage.fetchGroup();
-
-      this.groupDetailDataShare.passDeletedMessage(result.message);
-      // this._snackBar.open(result.message, "close", {
-      //   duration: 5000,
-      //   panelClass: ["delete"]
-      // });
     });
-    this._snackBar.openFromComponent(SnackBarGroup, {
-      duration: 5000,
-      panelClass: ["delete"]
-    });
-
     this.router.navigate(["/home/group"]);
   }
 
@@ -142,12 +140,10 @@ export class GroupDetailComponent implements OnInit {
       if (result) {
         this.groupDataStorage.sendEmail(result).subscribe(result => {
           if (result.status === 200) {
-            this.groupDetailDataShare.passMessageSentMessage(
-              "Message Successfully Sent to " + this.group.name
-            );
-            this._snackBar.openFromComponent(SnackBarGroup, {
+            this._snackBar.openFromComponent(GroupSnackbarComponent, {
               duration: 5000,
-              panelClass: ["standard"]
+              panelClass: ["standard"],
+              data: "An email has been successfully to " + this.group.name + "!"
             });
           }
         });
@@ -213,27 +209,5 @@ export class DialogShareGroup implements OnInit {
   saveDialogData() {
     console.log("Email Array: " + this.emails);
     this.dialogRef.close(this.emails);
-  }
-}
-
-@Component({
-  selector: "snack-bar-group",
-  templateUrl: "group-snack-bar.html",
-  styles: [
-    `
-      .group-detail-messages {
-        color: #800029;
-        background: white;
-      }
-    `
-  ]
-})
-export class SnackBarGroup implements OnInit {
-  message: string;
-  constructor(private groupDetailDataShare: GroupDetailDataShareService) {}
-  ngOnInit() {
-    this.groupDetailDataShare.groupDetailData.subscribe(
-      data => (this.message = data)
-    );
   }
 }

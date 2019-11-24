@@ -11,6 +11,8 @@ import { GroupDataStorageService } from "../group-data-storage.service";
 export class GroupItemComponent implements OnInit {
   @Input() eachGroup: Group;
   @Input() id: number;
+  @Input() semester: string;
+  @Input() semesterYear: number;
   constructor(
     private router: Router,
     private groupDataStorage: GroupDataStorageService

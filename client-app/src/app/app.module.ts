@@ -92,8 +92,7 @@ import { GroupItemComponent } from "./home/group/group-item/group-item.component
 import { GroupStartComponent } from "./home/group/group-start/group-start.component";
 import {
   GroupDetailComponent,
-  DialogShareGroup,
-  SnackBarGroup
+  DialogShareGroup
 } from "./home/group/group-detail/group-detail.component";
 import { GroupComponent } from "./home/group/group/group.component";
 import { RegisterUsersComponent } from "./home/administration/register-users/register-users.component";
@@ -116,6 +115,7 @@ import { ChangePasswordComponent } from "./change-password/change-password.compo
 import { ShareEvent } from "./home/calendar/event-detail/share-event";
 import { GroupFilterPipe } from "./home/group/group-list/group-filter.pipe";
 import { AppointmentSnackbarComponent } from "./home/appointment/shared-appointment/appointment-snackbar/appointment-snackbar.component";
+import { GroupSnackbarComponent } from "./home/group/shared-group/group-snackbar/group-snackbar.component";
 
 @NgModule({
   declarations: [
@@ -168,14 +168,14 @@ import { AppointmentSnackbarComponent } from "./home/appointment/shared-appointm
     AppointmentFilterPipe,
     ScheduledAppointmentSentPipe,
     DialogShareGroup,
-    SnackBarGroup,
     GroupEditComponent,
     MessageGroupComponent,
     RoleConfirm,
     ScheduledAppointmentReceivedPipe,
     ChangePasswordComponent,
     GroupFilterPipe,
-    AppointmentSnackbarComponent
+    AppointmentSnackbarComponent,
+    GroupSnackbarComponent
   ],
   imports: [
     BrowserModule,
@@ -231,10 +231,10 @@ import { AppointmentSnackbarComponent } from "./home/appointment/shared-appointm
     DialogShareGroup,
     MessageGroupComponent,
     DeleteUsers,
-    SnackBarGroup,
     ShareEvent,
     RoleConfirm,
-    AppointmentSnackbarComponent
+    AppointmentSnackbarComponent,
+    GroupSnackbarComponent
   ],
   providers: [
     MatDatepickerModule,

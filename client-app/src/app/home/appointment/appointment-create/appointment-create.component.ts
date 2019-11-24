@@ -270,12 +270,6 @@ export class AppointmentCreateComponent implements OnInit {
       if (result) {
         console.log(result);
         if (result.status == 201) {
-          // this._snackBar.openFromComponent(AppointmentSnackbarComponent, {
-          //   duration: 5000,
-          //   panelClass: ["standard"],
-          //   data: result.message
-          // });
-
           console.log(result.result.id);
           this.idOfAppointmentCreated = result.result.id;
           console.log(this.idOfAppointmentCreated);

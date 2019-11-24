@@ -16,9 +16,11 @@ import { Group } from "../models-group/group";
 import {
   MatOptionSelectionChange,
   MatSelectChange,
-  MatSelect
+  MatSelect,
+  MatSnackBar
 } from "@angular/material";
 import { callbackify } from "util";
+import { GroupSnackbarComponent } from "../shared-group/group-snackbar/group-snackbar.component";
 
 export interface courseGroup {
   title: string;
@@ -35,6 +37,7 @@ export class CreateGroupComponent implements OnInit {
   selectable = true;
   removable = true;
   addOnBlur = true;
+  selectedOption = "";
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   @ViewChild("chipList", { static: false }) chipList;
 
@@ -127,7 +130,8 @@ export class CreateGroupComponent implements OnInit {
     private router: Router,
     private groupDataStorageService: GroupDataStorageService,
     private groupTypeNavigation: GroupCreateNavigationService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private _snackBar: MatSnackBar
   ) {}
 
   ngOnInit() {
@@ -171,6 +175,8 @@ export class CreateGroupComponent implements OnInit {
           this.groupToEdit = result.result;
           console.log(this.groupToEdit);
           if (this.groupToEdit.type === "Custom") {
+            this.selectedOption = "email";
+
             this.isCourseGroup = false;
             this.groupForm.get("groupType").setValue(this.groupToEdit.type);
 
@@ -186,6 +192,7 @@ export class CreateGroupComponent implements OnInit {
               semesterYear: [this.groupToEdit.semesterYear]
             });
           } else {
+            this.selectedOption = "email";
             this.isCourseGroup = true;
             this.groupForm.get("groupType").setValue("Course");
             this.onMajorChanged(
@@ -284,7 +291,15 @@ export class CreateGroupComponent implements OnInit {
   }
 
   upload(event: any) {
+    console.log(this.groupForm.controls["description"].setValidators([]));
+    console.log(
+      this.groupForm.controls["description"].updateValueAndValidity()
+    );
+
+    this.email.setValidators([]);
+    this.email.updateValueAndValidity();
     this.selectedFiles = event.target.files;
+    console.log(this.selectedFiles.length);
     this.isInvalid = false;
     if (!this.validateFile(this.selectedFiles[0].name)) {
       this.isInvalid = true;
@@ -315,6 +330,7 @@ export class CreateGroupComponent implements OnInit {
         });
     } else {
       if (this.emails.length > 0) {
+        console.log("emails exists!");
         this.groupForm.get("uploadFile").clearValidators();
         this.groupForm.get("uploadFile").updateValueAndValidity();
 
@@ -330,14 +346,28 @@ export class CreateGroupComponent implements OnInit {
         this.groupDataStorageService.createGroup(obj).subscribe(result => {
           if (result) {
             console.log(result);
+            if (result.status == 201) {
+              this._snackBar.openFromComponent(GroupSnackbarComponent, {
+                duration: 5000,
+                panelClass: ["standard"],
+                data: result.message
+              });
+            } else if (result.status == 409) {
+              this._snackBar.openFromComponent(GroupSnackbarComponent, {
+                duration: 5000,
+                panelClass: ["delete"],
+                data: result.message
+              });
+            }
 
             this.groupDataStorageService.fetchGroup();
             this.router.navigate(["/home/group"]);
           }
         });
-      } else {
-        // this.groupForm.get("email").clearValidators();
-        // this.groupForm.get("email").updateValueAndValidity();
+      } else if (this.selectedFiles.length == 1) {
+        console.log("file exists!");
+        this.groupForm.get("email").clearValidators();
+        this.groupForm.get("email").updateValueAndValidity();
         const objUser = {
           name: groupFormValues.title,
           description: groupFormValues.description,
@@ -352,10 +382,28 @@ export class CreateGroupComponent implements OnInit {
         const formData = new FormData();
         formData.append("user", JSON.stringify(objUser));
         formData.append("file", this.currentFileUpload);
-        // console.log(formData);
         this.groupDataStorageService
           .createGroupWithFile(formData)
-          .subscribe(r => console.log(r));
+          .subscribe(result => {
+            if (result) {
+              console.log(result);
+              if (result.status == 201) {
+                this._snackBar.openFromComponent(GroupSnackbarComponent, {
+                  duration: 5000,
+                  panelClass: ["standard"],
+                  data: result.message
+                });
+                this.groupDataStorageService.fetchGroup();
+                this.router.navigate(["/home/group"]);
+              } else if (result.status == 409) {
+                this._snackBar.openFromComponent(GroupSnackbarComponent, {
+                  duration: 5000,
+                  panelClass: ["delete"],
+                  data: result.message
+                });
+              }
+            }
+          });
       }
     }
   }

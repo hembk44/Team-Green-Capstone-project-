@@ -77,7 +77,7 @@ const routes: Routes = [
         path: "appointment",
         component: AppointmentComponent,
         children: [
-          { path: "", redirectTo:"sent", pathMatch:"full" },
+          { path: "", redirectTo: "sent", pathMatch: "full" },
           {
             path: "create",
             component: AppointmentCreateComponent
@@ -118,7 +118,7 @@ const routes: Routes = [
         path: "group",
         component: GroupComponent,
         children: [
-          { path: "", component: GroupStartComponent },
+          { path: "", component: GroupStartComponent, pathMatch: "full" },
           { path: "create-group", component: CreateGroupComponent },
           { path: ":id", component: GroupDetailComponent },
           { path: ":id/edit", component: CreateGroupComponent }

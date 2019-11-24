@@ -33,7 +33,7 @@ export class GroupDataStorageService {
   createGroup(obj: Object) {
     this.isLoadingSubject.next(true);
     return this.http
-      .post<Object>(this.baseUrlGroup + "createFromList", obj)
+      .post<ApiResponse>(this.baseUrlGroup + "createFromList", obj)
       .pipe(
         (map(data => data), catchError(error => throwError(error))),
         finalize(() => this.isLoadingSubject.next(false))
