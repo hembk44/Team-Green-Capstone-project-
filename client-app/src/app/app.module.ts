@@ -17,7 +17,7 @@ import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatSidenavModule } from "@angular/material/sidenav";
 import { MatIconModule } from "@angular/material/icon";
 import { MatListModule } from "@angular/material/list";
-import { MatTabsModule } from "@angular/material/tabs";
+// import { MatTabsModule } from "@angular/material/tabs";
 import { MatGridListModule } from "@angular/material/grid-list";
 import { MatCardModule } from "@angular/material/card";
 import { MatFormFieldModule } from "@angular/material/form-field";
@@ -40,6 +40,7 @@ import { MatSelectModule } from "@angular/material/select";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { MatChipsModule } from "@angular/material/chips";
+import { MatTabsModule } from "@angular/material/tabs";
 
 import { VerticalNavigationComponent } from "./home/vertical-navigation/vertical-navigation.component";
 import { NgxMaterialTimepickerModule } from "ngx-material-timepicker";
@@ -128,6 +129,7 @@ import { ManualNavComponent } from './home/vertical-navigation/user-manual/manua
 import { AppointmentSnackbarComponent } from "./home/appointment/shared-appointment/appointment-snackbar/appointment-snackbar.component";
 import { ManualStartComponent } from './home/vertical-navigation/user-manual/manual-start/manual-start.component';
 import { GroupSnackbarComponent } from "./home/group/shared-group/group-snackbar/group-snackbar.component";
+import { UploadMajorComponent } from './home/administration/upload-major/upload-major.component';
 
 @NgModule({
   declarations: [
@@ -198,7 +200,8 @@ import { GroupSnackbarComponent } from "./home/group/shared-group/group-snackbar
     ManualNavComponent,
     AppointmentSnackbarComponent,
     ManualStartComponent,
-    GroupSnackbarComponent
+    GroupSnackbarComponent,
+    UploadMajorComponent
   ],
   imports: [
     BrowserModule,
@@ -219,7 +222,6 @@ import { GroupSnackbarComponent } from "./home/group/shared-group/group-snackbar
     MatIconModule,
     MatListModule,
     MatCheckboxModule,
-    MatTabsModule,
     MatGridListModule,
     MatCardModule,
     MatFormFieldModule,
@@ -235,6 +237,7 @@ import { GroupSnackbarComponent } from "./home/group/shared-group/group-snackbar
     MatSnackBarModule,
     MatChipsModule,
     MatCarouselModule.forRoot(),
+    MatTabsModule,
     MaterialFileInputModule,
     CalendarModule.forRoot({
       provide: DateAdapter,

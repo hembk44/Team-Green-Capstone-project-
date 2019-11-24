@@ -20,6 +20,7 @@ import { share } from "rxjs/operators";
 import { MessageGroupComponent } from "../message-group/message-group.component";
 import { MatListOption } from "@angular/material/list";
 import { GroupSnackbarComponent } from "../shared-group/group-snackbar/group-snackbar.component";
+import { DataStorageService } from "../../shared/data-storage.service";
 
 @Component({
   selector: "app-group-detail",
@@ -46,7 +47,8 @@ export class GroupDetailComponent implements OnInit {
     private authService: AuthService,
     public dialog: MatDialog,
     private router: Router,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private dataStorage: DataStorageService
   ) {}
 
   ngOnInit() {
@@ -109,13 +111,20 @@ export class GroupDetailComponent implements OnInit {
     console.log("deleted");
     this.groupDataStorage.deleteGroup(id).subscribe(result => {
       console.log(result);
-      const deletedMsg =
-        result.result.name + "group has been successfully deleted!";
+
       if (result.status == 200) {
+        const deletedMsg =
+          result.result.name + "group has been successfully deleted!";
         this._snackBar.openFromComponent(GroupSnackbarComponent, {
           duration: 4000,
           panelClass: ["delete"],
           data: deletedMsg
+        });
+      } else if (result.status == 403) {
+        this._snackBar.openFromComponent(GroupSnackbarComponent, {
+          duration: 4000,
+          panelClass: ["delete"],
+          data: result.message
         });
       }
       this.groupDataStorage.fetchGroup();
@@ -125,6 +134,30 @@ export class GroupDetailComponent implements OnInit {
 
   editGroup() {
     this.router.navigate(["edit"], { relativeTo: this.route });
+  }
+
+  emailSelectedMembers() {
+    const dialogRef = this.dialog.open(MessageGroupComponent, {
+      width: "400px",
+      data: {}
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(result);
+      result.recipients = this.selectedGroupMembers;
+      console.log(result);
+      if (result) {
+        this.dataStorage.emailSelectedMembers(result).subscribe(result => {
+          console.log(result);
+          if (result.status === 200) {
+            this._snackBar.openFromComponent(GroupSnackbarComponent, {
+              duration: 5000,
+              panelClass: ["standard"],
+              data: "An email has been successfully to selected members!"
+            });
+          }
+        });
+      }
+    });
   }
 
   messageGroup() {

@@ -1,8 +1,3 @@
-<!-- <div style=" margin: 10px;">
-  <button mat-stroked-button class="primary" (click)="create()">
-    Create Group
-  </button>
-</div> -->
 <div style=" margin: 10px;">
   <button
     mat-stroked-button
@@ -36,13 +31,25 @@
   <mat-icon matSuffix>search</mat-icon>
   <mat-hint>Search by group name or description</mat-hint>
 </mat-form-field>
-<div class="group-wrap">
-  <app-group-item
-    *ngFor="let g of group | groupFilter: searchText; let i = index"
-    [eachGroup]="g"
-    [id]="g.id"
-    [semester]="g.semesterTerm"
-    [semesterYear]="g.semesterYear"
-  >
-  </app-group-item>
+
+<app-group-item
+  *ngFor="
+    let g of group
+      | groupFilter: searchText
+      | paginate: { itemsPerPage: 5, currentPage: p };
+    let i = index
+  "
+  [eachGroup]="g"
+  [id]="g.id"
+  [semester]="g.semesterTerm"
+  [semesterYear]="g.semesterYear"
+>
+</app-group-item>
+<div fxLayout="row" fxLayoutAlign="center center" class="pagination-center">
+  <div>
+    <pagination-controls
+      autoHide="true"
+      (pageChange)="p = $event"
+    ></pagination-controls>
+  </div>
 </div>

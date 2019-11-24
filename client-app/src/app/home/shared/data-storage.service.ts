@@ -14,6 +14,7 @@ import { AuthService } from "src/app/auth/auth.service";
 import { Calendar } from "../calendar/calendar-list/calendar.model";
 import { CalendarService } from "../calendar/calendar-list/calendar.service";
 import { P } from '@angular/cdk/keycodes';
+import { Form } from "@angular/forms";
 
 @Injectable({
   providedIn: "root"
@@ -365,6 +366,20 @@ export class DataStorageService {
     this.isLoadingSubject.next(true);
     return this.http
       .delete<ApiResponse>(this.baseUrlCalendar + "delete/" + id)
+      .pipe(
+        (map(data => data), catchError(error => throwError(error))),
+        finalize(() => this.isLoadingSubject.next(false))
+      );
+  }
+
+
+  emailSelectedMembers(obj: Object) {
+    this.isLoadingSubject.next(true);
+    return this.http
+      .post<ApiResponse>(
+        "http://localhost:8181/api/group/" + "sendEmailToFew",
+        obj
+      )
       .pipe(
         (map(data => data), catchError(error => throwError(error))),
         finalize(() => this.isLoadingSubject.next(false))

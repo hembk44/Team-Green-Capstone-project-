@@ -18,7 +18,13 @@ export class MessageGroupComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.id = this.data.id;
+    if (this.isEmpty(this.data)) {
+      console.log("empty");
+    } else {
+      this.id = this.data.id;
+      console.log(this.id);
+    }
+
     console.log(this.data);
     this.messageForm = new FormGroup({
       title: new FormControl("", [Validators.required]),
@@ -26,14 +32,29 @@ export class MessageGroupComponent implements OnInit {
     });
   }
 
+  isEmpty(obj: Object) {
+    for (var key in obj) {
+      if (obj.hasOwnProperty(key)) return false;
+    }
+    return true;
+  }
   onSubmit() {
-    const obj = {
-      id: this.id,
-      title: this.messageForm.value["title"],
-      message: this.messageForm.value["message"]
-    };
-    console.log(obj);
-    this.ref.close(obj);
+    if (this.isEmpty(this.data)) {
+      const selectedMemberObj = {
+        title: this.messageForm.value["title"],
+        message: this.messageForm.value["message"]
+      };
+      console.log(selectedMemberObj);
+      this.ref.close(selectedMemberObj);
+    } else {
+      const groupEmailObj = {
+        id: this.id,
+        title: this.messageForm.value["title"],
+        message: this.messageForm.value["message"]
+      };
+      console.log(groupEmailObj);
+      this.ref.close(groupEmailObj);
+    }
   }
 
   cancel() {

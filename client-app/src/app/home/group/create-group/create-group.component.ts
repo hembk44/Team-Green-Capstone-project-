@@ -1,10 +1,9 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
 import {
   FormGroup,
   Validators,
   FormControl,
-  FormBuilder,
-  FormArray
+  FormBuilder
 } from "@angular/forms";
 import { Router, ActivatedRoute, Params } from "@angular/router";
 
@@ -12,17 +11,20 @@ import { COMMA, ENTER } from "@angular/cdk/keycodes";
 import { MatChipInputEvent } from "@angular/material/chips";
 import { GroupDataStorageService } from "../group-data-storage.service";
 import { GroupCreateNavigationService } from "../group/group-create-navigation.service";
-import { Group } from "../models-group/group";
 import {
-  MatOptionSelectionChange,
   MatSelectChange,
   MatSelect,
-  MatSnackBar
+  MatSnackBar,
+  MatAutocomplete,
+  MatAutocompleteSelectedEvent
 } from "@angular/material";
-import { callbackify } from "util";
 import { GroupSnackbarComponent } from "../shared-group/group-snackbar/group-snackbar.component";
+import { Observable } from "rxjs";
+import { DataStorageService } from "../../shared/data-storage.service";
+import { startWith, map } from "rxjs/operators";
 
 export interface courseGroup {
+  id: number;
   title: string;
   description: string;
 }
@@ -38,14 +40,21 @@ export class CreateGroupComponent implements OnInit {
   removable = true;
   addOnBlur = true;
   selectedOption = "";
+  filteredUserList: Observable<string[]>;
+  userList: string[] = [];
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   @ViewChild("chipList", { static: false }) chipList;
+  @ViewChild("userInput", { static: false }) userInput: ElementRef<
+    HTMLInputElement
+  >;
+  @ViewChild("auto", { static: false }) matAutocomplete: MatAutocomplete;
 
   groupForm: FormGroup;
   email = new FormControl("", [Validators.required, Validators.email]);
-  emails: string[] = [];
+  groupMembersEmails: string[] = [];
   groupTypes: string[] = ["Course", "Custom"];
   semesterTerm: string[] = ["Fall", "Spring"];
+
   currentYear: number = new Date().getFullYear();
   semesterYear: number[] = [
     this.currentYear - 2,
@@ -55,57 +64,7 @@ export class CreateGroupComponent implements OnInit {
     this.currentYear + 2
   ];
   isCourseGroup: boolean = false;
-
-  majors: string[] = [
-    "Accounting",
-    "Agribusiness",
-    "Art",
-    "Atmospheric Science",
-    "Biology",
-    "Business",
-    "Communication",
-    "Computer Information Systems",
-    "Computer Science",
-    "Construction Management",
-    "Counseling",
-    "Criminal Justice",
-    "Dental Hygiene",
-    "Education: Curriculum and Instruction",
-    "Educational Leadership",
-    "English",
-    "Finance",
-    "General Studies",
-    "Gerontology",
-    "Health Studies",
-    "History",
-    "Kinesiology",
-    "Management",
-    "Marketing",
-    "Marriage & Family Therapy",
-    "Mathematics",
-    "Medical Laboratory Science",
-    "Music",
-    "Nursing",
-    "Occupational Therapy",
-    "Pharmacy",
-    "Political Science",
-    "Psychology",
-    "Radiologic Technology",
-    "Risk Management & Insurance",
-    "Social Work",
-    "Speech-Language Pathology",
-    "Toxicology",
-    "Unmanned Aircraft Systems Management",
-    "World Langauges: French",
-    "World Langauges: Spanish"
-  ];
-
-  // majorType: MajorType;
-  courseGroupInfo: courseGroup[] = [];
-  selectedCourseGroupDetail: courseGroup;
   selectedTitle: string;
-  selectedDesc: string;
-  selected: string;
   groupType: string;
   id: number;
   editMode: boolean = false;
@@ -122,8 +81,9 @@ export class CreateGroupComponent implements OnInit {
   selectedFiles: FileList;
   currentFileUpload: File;
   source: MatSelect;
-
-  // use dynamic method to add values in date
+  allMajors: any[] = [];
+  courseDetails: courseGroup[] = [];
+  selectedCourseGroupDetail: courseGroup;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -131,10 +91,39 @@ export class CreateGroupComponent implements OnInit {
     private groupDataStorageService: GroupDataStorageService,
     private groupTypeNavigation: GroupCreateNavigationService,
     private route: ActivatedRoute,
-    private _snackBar: MatSnackBar
-  ) {}
+    private _snackBar: MatSnackBar,
+    private dataStorage: DataStorageService
+  ) {
+    this.dataStorage.getEmails();
+    this.dataStorage.emails.subscribe((result: Emails[]) => {
+      if (result.length > 0) {
+        result.forEach(o => this.userList.push(o.email));
+      }
+    });
+
+    this.filteredUserList = this.email.valueChanges.pipe(
+      startWith(null),
+      map((user: string | null) =>
+        user ? this.filter(user) : this.userList.slice()
+      )
+    );
+  }
+  filter(value: string): string[] {
+    const filterValue = value.toLocaleLowerCase();
+    return this.userList.filter(user =>
+      user.toLocaleLowerCase().includes(filterValue)
+    );
+  }
 
   ngOnInit() {
+    this.groupDataStorageService.getAllMajors();
+    this.groupDataStorageService.isLoading.subscribe(loading => {
+      if (!loading) {
+        this.allMajors = this.groupDataStorageService.majors;
+        console.log(this.allMajors);
+      }
+    });
+
     this.groupForm = this.formBuilder.group({
       title: ["", Validators.required],
       description: ["", Validators.required],
@@ -144,7 +133,7 @@ export class CreateGroupComponent implements OnInit {
       semesterYear: ["", Validators.required],
       majorControl: ["", Validators.required],
       editEmail: ["", Validators.required],
-      uploadFile: [undefined]
+      uploadFile: [undefined, [Validators.required]]
     });
 
     this.groupTypeNavigation.groupType.subscribe(type => {
@@ -174,6 +163,7 @@ export class CreateGroupComponent implements OnInit {
           console.log(result);
           this.groupToEdit = result.result;
           console.log(this.groupToEdit);
+
           if (this.groupToEdit.type === "Custom") {
             this.selectedOption = "email";
 
@@ -182,7 +172,7 @@ export class CreateGroupComponent implements OnInit {
 
             const customGroupMembers = this.groupToEdit.members;
             for (let member of customGroupMembers) {
-              this.emails.push(member.email);
+              this.groupMembersEmails.push(member.email);
             }
             this.groupForm = this.formBuilder.group({
               groupType: [this.groupToEdit.type],
@@ -195,14 +185,14 @@ export class CreateGroupComponent implements OnInit {
             this.selectedOption = "email";
             this.isCourseGroup = true;
             this.groupForm.get("groupType").setValue("Course");
-            this.onMajorChanged(
-              new MatSelectChange(this.source, "Computer Science")
-            );
+            console.log(this.groupToEdit.major.name);
+            const major = this.groupToEdit.major.name;
+            this.onMajorChanged(new MatSelectChange(this.source, major));
             const courseGroupMembers = this.groupToEdit.members;
 
             for (let member of courseGroupMembers) {
-              this.emails.push(member.email);
-              console.log(this.emails);
+              this.groupMembersEmails.push(member.email);
+              // console.log(this.emails);
             }
             this.groupForm = this.formBuilder.group({
               groupType: [this.groupToEdit.type],
@@ -210,17 +200,22 @@ export class CreateGroupComponent implements OnInit {
               description: [this.groupToEdit.description],
               semesterTerm: [this.groupToEdit.semesterTerm],
               semesterYear: [this.groupToEdit.semesterYear],
-              majorControl: ["Computer Science"]
+              majorControl: [this.groupToEdit.major.name]
             });
           }
         });
     }
   }
-  get major(): any {
-    return this.groupForm.get("majorControl");
-  }
   deleteEmail(index: number) {
     this.customGroupEmails.splice(index, 1);
+  }
+
+  selected(event: MatAutocompleteSelectedEvent): void {
+    if (!this.groupMembersEmails.includes(event.option.value)) {
+      this.groupMembersEmails.push(event.option.value);
+      this.userInput.nativeElement.value = "";
+      this.email.setValue(null);
+    }
   }
 
   add(event: MatChipInputEvent): void {
@@ -230,10 +225,13 @@ export class CreateGroupComponent implements OnInit {
     if (!this.email.hasError("email")) {
       if (this.email.value.trim()) {
         this.isEmailValid = true;
-        this.emails.push(this.email.value.trim());
+        this.groupMembersEmails.push(this.email.value.trim());
         this.customGroupEmails.push(this.email.value.trim());
-        console.log(this.emails);
-      } else if (this.email.value === "" && this.emails.length <= 0) {
+        console.log(this.groupMembersEmails);
+      } else if (
+        this.email.value === "" &&
+        this.groupMembersEmails.length <= 0
+      ) {
         this.chipList.errorState = true;
         this.isEmailValid = false;
         this.errorMessage = "please enter a valid email address";
@@ -253,9 +251,9 @@ export class CreateGroupComponent implements OnInit {
   }
 
   remove(email: string): void {
-    const index = this.emails.indexOf(email);
+    const index = this.groupMembersEmails.indexOf(email);
     if (index >= 0) {
-      this.emails.splice(index, 1);
+      this.groupMembersEmails.splice(index, 1);
     }
   }
 
@@ -264,25 +262,21 @@ export class CreateGroupComponent implements OnInit {
   }
 
   onMajorChanged(event: any) {
-    console.log(event.value);
-    if (event.value === "Computer Science") {
-      this.courseGroupInfo = [
-        { title: "CSCI 4060", description: "Software engineering" },
-        {
-          title: "CSCI 4055",
-          description: "Theory Of Data Base Management Systems"
-        },
-        { title: "CSCI 4063", description: "Theory of Programming Languages" }
-      ];
-    } else {
-      this.courseGroupInfo = [];
-    }
+    const majorSelected = event.value;
+    const currentMajorObj = this.allMajors.find(
+      obj => obj.name === majorSelected
+    );
+    const majorId = currentMajorObj.id;
+    this.groupDataStorageService.getCourseDetails(majorId).subscribe(result => {
+      if (result.status == 200) {
+        this.courseDetails = result.result.courses;
+      }
+    });
   }
 
   onTitleChanged(event: any) {
     this.selectedTitle = event.value;
-    console.log(this.selectedTitle);
-    this.selectedCourseGroupDetail = this.courseGroupInfo.find(
+    this.selectedCourseGroupDetail = this.courseDetails.find(
       i => i.title === this.selectedTitle
     );
     this.groupForm
@@ -291,19 +285,12 @@ export class CreateGroupComponent implements OnInit {
   }
 
   upload(event: any) {
-    console.log(this.groupForm.controls["description"].setValidators([]));
-    console.log(
-      this.groupForm.controls["description"].updateValueAndValidity()
-    );
-
-    this.email.setValidators([]);
-    this.email.updateValueAndValidity();
     this.selectedFiles = event.target.files;
     console.log(this.selectedFiles.length);
     this.isInvalid = false;
     if (!this.validateFile(this.selectedFiles[0].name)) {
       this.isInvalid = true;
-      console.log(this.invalidExtension);
+      this.invalidExtension = "file type not supported. upload .xlsx file!  ";
     }
   }
   onSubmit() {
@@ -312,7 +299,7 @@ export class CreateGroupComponent implements OnInit {
       const obj = {
         name: groupFormValues.title,
         description: groupFormValues.description,
-        recipients: this.emails,
+        recipients: this.groupMembersEmails,
         type: groupFormValues.groupType,
         semesterTerm: groupFormValues.semesterTerm,
         semesterYear: groupFormValues.semesterYear
@@ -329,18 +316,15 @@ export class CreateGroupComponent implements OnInit {
           }
         });
     } else {
-      if (this.emails.length > 0) {
-        console.log("emails exists!");
-        this.groupForm.get("uploadFile").clearValidators();
-        this.groupForm.get("uploadFile").updateValueAndValidity();
-
+      if (this.groupMembersEmails.length > 0) {
         const obj = {
           name: groupFormValues.title,
           description: groupFormValues.description,
-          recipients: this.emails,
+          recipients: this.groupMembersEmails,
           type: groupFormValues.groupType,
           semesterTerm: groupFormValues.semesterTerm,
-          semesterYear: groupFormValues.semesterYear
+          semesterYear: groupFormValues.semesterYear,
+          major: groupFormValues.majorControl
         };
 
         this.groupDataStorageService.createGroup(obj).subscribe(result => {
@@ -365,15 +349,13 @@ export class CreateGroupComponent implements OnInit {
           }
         });
       } else if (this.selectedFiles.length == 1) {
-        console.log("file exists!");
-        this.groupForm.get("email").clearValidators();
-        this.groupForm.get("email").updateValueAndValidity();
         const objUser = {
           name: groupFormValues.title,
           description: groupFormValues.description,
           type: groupFormValues.groupType,
           semesterTerm: groupFormValues.semesterTerm,
-          semesterYear: groupFormValues.semesterYear
+          semesterYear: groupFormValues.semesterYear,
+          major: groupFormValues.majorControl
         };
 
         console.log(objUser);
@@ -389,7 +371,7 @@ export class CreateGroupComponent implements OnInit {
               console.log(result);
               if (result.status == 201) {
                 this._snackBar.openFromComponent(GroupSnackbarComponent, {
-                  duration: 5000,
+                  duration: 4000,
                   panelClass: ["standard"],
                   data: result.message
                 });
@@ -397,7 +379,7 @@ export class CreateGroupComponent implements OnInit {
                 this.router.navigate(["/home/group"]);
               } else if (result.status == 409) {
                 this._snackBar.openFromComponent(GroupSnackbarComponent, {
-                  duration: 5000,
+                  duration: 4000,
                   panelClass: ["delete"],
                   data: result.message
                 });

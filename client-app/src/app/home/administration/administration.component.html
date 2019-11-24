@@ -1,4 +1,31 @@
-<div
+<mat-tab-group dynamicHeight>
+  <mat-tab label="Register Users">
+    <div style="max-width: 40%; margin: 10px">
+      <app-register-users></app-register-users>
+    </div>
+  </mat-tab>
+  <mat-tab label="Register individual users">
+    <div style="max-width: 60%; margin: 10px">
+      <app-register></app-register>
+    </div>
+  </mat-tab>
+  <mat-tab label="Delete Users">
+    <div style="max-width: 60%; margin: 10px">
+      <app-delete-users></app-delete-users>
+    </div>
+  </mat-tab>
+  <mat-tab label="Update roles">
+    <div style="max-width: 60%; margin: 10px">
+      <app-update-roles></app-update-roles>
+    </div>
+  </mat-tab>
+  <mat-tab label="Upload majors">
+    <div style="max-width: 60%; margin: 10px">
+      <app-upload-major></app-upload-major>
+    </div>
+  </mat-tab>
+</mat-tab-group>
+<!-- <div
   fxLayout
   fxLayout.xs="column"
   fxLayoutAlign="flex-start"
@@ -15,4 +42,4 @@
   </div>
   <app-register fxFlex="30%"></app-register>
   <app-update-roles fxFlex="35%" class="update-roles"></app-update-roles>
-</div>
+</div> -->
