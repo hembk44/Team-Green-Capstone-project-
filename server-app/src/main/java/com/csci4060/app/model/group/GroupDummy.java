@@ -17,6 +17,8 @@ public class GroupDummy {
 	@NotBlank
 	private String type;
 	
+	private String major;
+	
 	@NotBlank
 	private String semesterTerm;
 	

@@ -45,13 +45,18 @@ public class FileStorageServiceImpl implements FileStorageService {
 			if (fileName.contains("..")) {
 				throw new FileStorageException("Sorry! Filename contains invalid path sequence: " + fileName);
 			} 
-			//check if the file is a xlsx type
-			else if (!(fileName.endsWith(".xlsx"))) {
-				throw new FileStorageException("Invalid file format. Please upload csv file");
-			}
+//			//check if the file is a xlsx type
+//			else if (!(fileName.endsWith(".xlsx"))) {
+//				throw new FileStorageException("Invalid file format. Please upload csv file");
+//			}
+			
+//			else if(!(fileName.endsWith(".jpg") || fileName.endsWith(".JPG")) && !(fileName.endsWith(".png") || fileName.endsWith(".PNG"))) {
+//				throw new FileStorageException("Invalid file format. Please upload .jpg or .png file");
+//			}
 
 			// Copy file to the target location (Replacing existing file with same name)
 			Path targetLocation = this.fileStorageLocation.resolve(fileName);
+			
 			Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 			
 			return fileName;
