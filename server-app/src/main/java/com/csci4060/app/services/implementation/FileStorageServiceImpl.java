@@ -50,7 +50,7 @@ public class FileStorageServiceImpl implements FileStorageService {
 //				throw new FileStorageException("Invalid file format. Please upload csv file");
 //			}
 			
-			else if(!(fileName.endsWith(".jpg")) && !(fileName.endsWith(".PNG"))) {
+			else if(!(fileName.endsWith(".jpg") || fileName.endsWith(".JPG")) && !(fileName.endsWith(".PNG") || fileName.endsWith(".PNG"))) {
 				throw new FileStorageException("Invalid file format. Please upload .jpg or .png file");
 			}
 
