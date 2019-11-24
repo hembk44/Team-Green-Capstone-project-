@@ -1,23 +1,27 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DataStorageService } from '../../shared/data-storage.service';
 import { MatSnackBar } from '@angular/material';
+import { arrayToHash } from '@fullcalendar/core/util/object';
 
 @Component({
   selector: 'app-broadcast-management',
   templateUrl: './broadcast-management.component.html',
   styleUrls: ['./broadcast-management.component.css']
 })
-export class BroadcastManagementComponent implements OnInit {
+export class BroadcastManagementComponent implements OnInit,OnDestroy {
 
   imageForm: FormGroup;
+  images: any;
   validFileExtensions: string[] = ["png","jpg","webp","jpeg"];
   invalidExtension: string;
   isInvalid: boolean = false;
 
   selectedFiles: FileList;
-  currentFileUpload: File;
+  currentFileUpload: File[];
+  previewUrl: string | ArrayBuffer;
+  uploadString: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -27,23 +31,29 @@ export class BroadcastManagementComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.images = [];
+    this.dataStorage.getImages().subscribe(result => {
+      this.images = result.result;
+    });
+
     this.imageForm = this.formBuilder.group({
       image: [undefined, Validators.required]
     })
   }
 
   upload(event: any) {
-    this.selectedFiles = event.target.files;
-    this.isInvalid = false;
-    //check file is valid
-    if (!this.validateFile(this.selectedFiles[0].name)) {
-      this.isInvalid = true;
-      // console.log('Selected file format is not supported');
-      // this.invalidExtension = "not supported file type!!!";
-      console.log(this.invalidExtension);
-      // return this.invalidExtension;
-      // return this.isInvalid;
+    const reader = new FileReader();
+    const fileData = <File>event.target.files[0];
+
+    reader.readAsDataURL(fileData);
+    reader.onload = (_event) => { 
+      this.images.push(reader.result);
     }
+
+  }
+
+  delete(index: number){
+    this.images.splice(index, 1);
   }
 
   validateFile(name: String) {
@@ -58,37 +68,17 @@ export class BroadcastManagementComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.isInvalid) {
-      this.invalidExtension = "not supported file type!!!";
-    } else {
-      console.log("submitted");
-      this.currentFileUpload = this.selectedFiles.item(0);
-      console.log(this.currentFileUpload);
-
-      this.dataStorage
-        .uploadImage(this.currentFileUpload)
-        // .subscribe(result => {
-        //   console.log(result);
-        //   if (result.status === 201) {
-        //     let snackBarRef = this._snackBar.open(
-        //       "Image Successfully Uploaded.",
-        //       "close",
-        //       { duration: 5000, panelClass: ["standard"] }
-        //     );
-        //     snackBarRef
-        //       .onAction()
-        //       .subscribe(() => this.router.navigate(["/home/broadcast-management"]));
-        //   }
-        // });
-      this.imageForm.reset();
-      this.imageForm.clearAsyncValidators();
-      this.imageForm.clearValidators();
-      this.router.navigate(["/home/broadcast-management"]);
-    }
+    this.dataStorage.uploadImage(this.images).subscribe(result =>{
+      console.log(result);
+    });
   }
 
   deleteImg(){
     console.log('yeet');
+  }
+
+  ngOnDestroy() {
+    this.onSubmit();
   }
 
 }

@@ -90,21 +90,6 @@ export class AppointmentDetailComponent implements OnInit {
           this.dataServiceAppointment
             .displayUserAppointmentDetails(this.id)
             .subscribe(result => {
-<<<<<<< HEAD
-              this.appointments = result.result;
-              for (let i of this.appointments) {
-                this.timeslots.push(i.response);
-                this.appointmentLocation = i.location;
-              }
-              console.log(this.appointments);
-              console.log(this.timeslots);
-              for (let timeslot of this.timeslots) {
-                this.appointmentName = timeslot[0].appointmentName;
-                this.appointmentDesc = timeslot[0].appointmentDescription;
-              }
-
-              console.log(result);
-=======
               if (result.result == null) {
                 console.log(result.message);
                 this.isScheduledAppointmentEmpty = true;
@@ -122,7 +107,6 @@ export class AppointmentDetailComponent implements OnInit {
                   this.appointmentDesc = timeslot[0].appointmentDescription;
                 }
               }
->>>>>>> 67a69834816638210e90d545033c050789737bf1
             });
         }
       } else {

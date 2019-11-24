@@ -127,6 +127,7 @@ import { GrpsComponent } from './home/vertical-navigation/user-manual/grps/grps.
 import { BrdcastComponent } from './home/vertical-navigation/user-manual/brdcast/brdcast.component';
 import { ManualNavComponent } from './home/vertical-navigation/user-manual/manual-nav/manual-nav.component';
 import { AppointmentSnackbarComponent } from "./home/appointment/shared-appointment/appointment-snackbar/appointment-snackbar.component";
+import { ManualStartComponent } from './home/vertical-navigation/user-manual/manual-start/manual-start.component';
 
 @NgModule({
   declarations: [
@@ -196,7 +197,8 @@ import { AppointmentSnackbarComponent } from "./home/appointment/shared-appointm
     GrpsComponent,
     BrdcastComponent,
     ManualNavComponent,
-    AppointmentSnackbarComponent
+    AppointmentSnackbarComponent,
+    ManualStartComponent
   ],
   imports: [
     BrowserModule,

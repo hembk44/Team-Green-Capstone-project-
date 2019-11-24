@@ -45,6 +45,7 @@ import { ApptComponent } from './home/vertical-navigation/user-manual/appt/appt.
 import { BrdcastComponent } from './home/vertical-navigation/user-manual/brdcast/brdcast.component';
 import { CalComponent } from './home/vertical-navigation/user-manual/cal/cal.component';
 import { GrpsComponent } from './home/vertical-navigation/user-manual/grps/grps.component';
+import { ManualStartComponent } from './home/vertical-navigation/user-manual/manual-start/manual-start.component';
 
 const routes: Routes = [
   {
@@ -76,6 +77,7 @@ const routes: Routes = [
       { path: "", redirectTo: "dashboard", pathMatch: "full" },
       { path: "dashboard", component: DashboardComponent },
       { path: "user-manual", component: UserManualComponent, children: [
+        { path: "", component: ManualStartComponent },
         { path: "administration", component: AdminComponent },
         { path: "appointments", component: ApptComponent },
         { path: "broadcast", component: BrdcastComponent },

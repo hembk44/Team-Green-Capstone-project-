@@ -134,7 +134,7 @@
         readonly
       />
     </mat-form-field>
-    <mat-form-field class="example-chip-list" style="width:30%">
+    <mat-form-field class="example-chip-list" style="width:50%">
       <mat-chip-list #chipList aria-label="adding emails">
         <mat-chip
           *ngFor="let email of emails"
@@ -159,16 +159,15 @@
       <mat-error *ngIf="!isEmailValid">{{ errorMessage }}</mat-error>
       <mat-hint>Use commas or hit ENTER for multiple emails.</mat-hint>
     </mat-form-field>&nbsp;
-    <mat-checkbox formControlName="allDay" (click)="allday()" color="primary"
-      >All Day</mat-checkbox
-    >&nbsp;&nbsp;
-    <button mat-raised-button type="button" class="primary" (click)="groupSelect()" *ngIf="role !== 'ROLE_USER'">Select Groups</button>
+    
+    &nbsp;&nbsp;
 
     <mat-toolbar>
       <mat-toolbar-row>
-        <button type="submit" mat-raised-button class="primary" [disabled]="!eventForm.valid">
+        <button type="submit" mat-raised-button class="button-maroon" [disabled]="!eventForm.valid" style="margin-right:15px;">
           Confirm
         </button>
+        <button mat-raised-button type="button" class="button-maroon" (click)="groupSelect()" *ngIf="role !== 'ROLE_USER'" style="margin-right:15px;">Select Groups</button>
         <button
           mat-raised-button
           color="warn"
@@ -177,6 +176,8 @@
         >
           Cancel
         </button>
+        <mat-checkbox formControlName="allDay" (click)="allday()" color="primary" style="margin-left:15px;"
+        >All Day</mat-checkbox>
         <span class="example-spacer"></span>
       </mat-toolbar-row>
     </mat-toolbar>

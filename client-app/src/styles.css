@@ -23,6 +23,14 @@
   color: white;
 }
 
+.mat-accent .mat-pseudo-checkbox-checked, .mat-accent .mat-pseudo-checkbox-indeterminate, .mat-pseudo-checkbox-checked, .mat-pseudo-checkbox-indeterminate{
+  background: #800029;
+}
+
+::ng-deep mat-checkbox{
+  background:#800029;
+}
+
 #calendar {
   height: auto;
 }

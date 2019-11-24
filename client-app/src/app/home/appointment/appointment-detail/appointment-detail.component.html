@@ -5,42 +5,9 @@
       <mat-card-subtitle>{{ appointmentDesc }}</mat-card-subtitle>
     </mat-card-header>
 
-<<<<<<< HEAD
-  <div style="padding-left: 10px;">
-    <p>Location: &nbsp;{{ appointmentLocation }}</p>
-    <p
-      *ngIf="
-        currentRole == 'ROLE_USER' ||
-        ((currentRole === 'ROLE_ADMIN' || currentRole==='ROLE_PM') && appointmentType === 'received')
-      "
-    >
-      Please select any one of the time slots below:
-    </p>
-    <mat-card-content *ngFor="let time of appointments">
-      Date: {{ time.date }}
-
-      <div
-        *ngIf="(currentRole === 'ROLE_ADMIN' || currentRole === 'ROLE_PM') && appointmentType === 'sent'"
-        style="margin-top: 10px;"
-      >
-        <div *ngFor="let timeSlot of time.response">
-          <button
-            mat-raised-button
-            class="primary"
-            style="margin-bottom: 10px;"
-          >
-            {{ timeSlot.startTime }} - {{ timeSlot.endTime }}
-          </button>
-          - &nbsp;Selected by: &nbsp; {{ timeSlot.selectorName }}
-        </div>
-        <br />
-      </div>
-      <div
-=======
     <div style="padding-left: 10px;">
       <p>Location: &nbsp;{{ appointmentLocation }}</p>
       <p
->>>>>>> 67a69834816638210e90d545033c050789737bf1
         *ngIf="
           currentRole == 'ROLE_USER' ||
           ((currentRole === 'ROLE_ADMIN' || currentRole === 'ROLE_PM') && appointmentType === 'received')
@@ -67,31 +34,12 @@
           </div>
           <br />
         </div>
-<<<<<<< HEAD
-      </div>
-    </mat-card-content>
-
-    <mat-accordion
-      *ngIf="(currentRole === 'ROLE_ADMIN' || currentRole === 'ROLE_PM') && appointmentType === 'sent'"
-    >
-      <mat-expansion-panel>
-        <mat-expansion-panel-header>
-          <mat-panel-title> Pending recipients </mat-panel-title>
-          <mat-panel-description>
-            All recipients who didn't confirm appointment
-          </mat-panel-description>
-        </mat-expansion-panel-header>
-        <mat-selection-list
-          #users
-          (selectionChange)="onSelectChange(users.selectedOptions.selected)"
-=======
         <div
           *ngIf="
             currentRole == 'ROLE_USER' ||
             (currentRole === 'ROLE_ADMIN' && appointmentType === 'received')
           "
           style="margin-top: 10px;"
->>>>>>> 67a69834816638210e90d545033c050789737bf1
         >
           <div *ngFor="let timeSlot of time.response">
             <button
@@ -170,34 +118,10 @@
         >
           <mat-icon>delete</mat-icon>Delete
         </button>
-<<<<<<< HEAD
-      </mat-expansion-panel>
-    </mat-accordion>
-    <br />
-    <button
-      mat-raised-button
-      class="primary"
-      [matMenuTriggerFor]="manage"
-      *ngIf="(currentRole === 'ROLE_ADMIN' || currentRole === 'ROLE_PM') && appointmentType === 'sent'"
-      matTooltip="Please click to delete or update"
-    >
-      Manage<mat-icon>expand_more </mat-icon>
-    </button>
-    <mat-menu #manage="matMenu">
-      <button mat-menu-item>
-        <a style="cursor: pointer;" (click)="onDeleteAppointment(id)"
-          ><mat-icon>delete</mat-icon>Delete</a
-        >
-      </button>
-      <button mat-menu-item>
-        <a style="cursor: pointer;" (click)="onUpdateAppointment()">
-          <mat-icon>edit</mat-icon>Edit</a
-=======
         <button
           mat-menu-item
           style="cursor: pointer;"
           (click)="onUpdateAppointment()"
->>>>>>> 67a69834816638210e90d545033c050789737bf1
         >
           <mat-icon>edit</mat-icon>Edit
         </button>

@@ -37,12 +37,8 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.currentRole = this.role.user;
     console.log(this.role.user);
-<<<<<<< HEAD
-    if (this.currentRole === "ROLE_USER" || this.currentRole === 'ROLE_MODERATOR') {
-=======
 
     if (this.currentRole === "ROLE_USER" || this.currentRole === "ROLE_PM") {
->>>>>>> 67a69834816638210e90d545033c050789737bf1
       console.log("user data here!!!");
       this.dataStorageAppointment.fetchUserAppointment();
       this.dataStorageAppointment.isLoading.subscribe(loading => {
@@ -93,12 +89,6 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-<<<<<<< HEAD
-    if(this.appointmentTypeSubscription){
-      this.appointmentTypeSubscription.unsubscribe();
-    }  
-=======
     // this.appointmentTypeSubscription.unsubscribe();
->>>>>>> 67a69834816638210e90d545033c050789737bf1
   }
 }

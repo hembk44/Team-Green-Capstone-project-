@@ -31,8 +31,8 @@ export class DataStorageService {
   private eventSubject: BehaviorSubject<any> = new BehaviorSubject<any>({});
 
   private calSubject: BehaviorSubject<any> = new BehaviorSubject<any>({});
-
-  private userSubject: BehaviorSubject<any> = new BehaviorSubject<any>({});
+  private imageSubject: BehaviorSubject<any>=new BehaviorSubject<any>([]);
+  private userSubject: BehaviorSubject<any> = new BehaviorSubject<any>([]);
   private emailSubject: BehaviorSubject<any> = new BehaviorSubject<any>({});
   public emails: Observable<Emails[]> = this.emailSubject.asObservable();
   private adminAppointmentReceived: BehaviorSubject<any> = new BehaviorSubject<
@@ -57,6 +57,10 @@ export class DataStorageService {
     }
   }
 
+  get images(){
+    return this.imageSubject.value;
+  }
+
   get eventsList(): CalEvent[] {
     return this.eventSubject.value;
   }
@@ -66,7 +70,7 @@ export class DataStorageService {
   }
 
   get users(): any[] {
-    console.log(this.userSubject.value !== {});
+    console.log(this.userSubject.value === {});
     if(this.userSubject.value.length !== {}){
       return this.userSubject.value;
     }else{
@@ -75,8 +79,8 @@ export class DataStorageService {
   }
 
   get majors(): any[] {
+    console.log(this.majorSubject.value);
     if(this.majorSubject.value !== {}){
-      console.log(this.majorSubject.value);
       return this.majorSubject.value;
     } else{
       return [];
@@ -117,17 +121,33 @@ export class DataStorageService {
   }
 
   uploadImage(file: File){
-    console.log(file);
-    // this.isLoadingSubject.next(true);
-    // var formData: FormData = new FormData();
-    // formData.append("file", file);
-    // return this.http.post<ApiResponse>(
-    //   'upload url', formData
-    // )
-    // .pipe(
-    //   (map(data => data), catchError(error => throwError(error))),
+    //this.isLoadingSubject.next(true);
+    // return this.http.post<ApiResponse>(this.baseUrlAdmin+'uploadImage', image).pipe(
+    //   (map(data=>data)),
+    //   catchError(error => throwError(error)),
     //   finalize(()=>this.isLoadingSubject.next(false))
-    // )
+    // ).subscribe(result => {
+    //   this.imageSubject.next(result.result);
+    // });
+
+    this.isLoadingSubject.next(true);
+    var formdata: FormData = new FormData();
+    formdata.append("file", file);
+    console.log(formdata.get("file"));
+    return this.http
+      .post<ApiResponse>(
+        this.baseUrlAdmin+'uploadImages',
+        formdata
+      )
+      .pipe(
+        (map(data => data), catchError(error => throwError(error))),
+        finalize(() => this.isLoadingSubject.next(false))
+      );
+  }
+
+  getImages(){
+    this.isLoadingSubject.next(true);
+    return this.http.get<ApiResponse>(this.baseUrlAdmin+'getImages');
   }
 
   addCourses(formData: FormData) {
@@ -145,7 +165,7 @@ export class DataStorageService {
 
   getMajors(){
     this.isLoadingSubject.next(true);
-    this.http.get<ApiResponse>(this.baseUrlAdmin+'getAllMajors').pipe(
+    this.http.get<ApiResponse>('http://localhost:8181/api/group/getAllMajors').pipe(
       (map(data=>data), catchError(error => throwError(error))),
       finalize(()=>this.isLoadingSubject.next(false))
     ).subscribe(result => {

@@ -46,6 +46,7 @@ export class UploadCoursesComponent implements OnInit {
       uploadFile: [undefined, [Validators.required]],
       major: ['', Validators.required]
     });
+    console.log(this.majors);
   }
 
   onSubmit() {
