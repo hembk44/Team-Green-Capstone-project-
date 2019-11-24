@@ -13,6 +13,7 @@ import { CalEvent } from "../calendar/events.model";
 import { AuthService } from "src/app/auth/auth.service";
 import { Calendar } from "../calendar/calendar-list/calendar.model";
 import { CalendarService } from "../calendar/calendar-list/calendar.service";
+import { Form } from "@angular/forms";
 
 @Injectable({
   providedIn: "root"
@@ -275,6 +276,18 @@ export class DataStorageService {
     // .pipe(map(data=>data),
     // catchError(error=>throwError(error))),
     // finalize(()=>this.isLoadingSubject.next(false));
+  }
+
+  uploadMajors(formdata: FormData) {
+    return this.http
+      .post<ApiResponse>(
+        "http://localhost:8181/api/admin/uploadCourses",
+        formdata
+      )
+      .pipe(
+        (map(data => data), catchError(error => throwError(error))),
+        finalize(() => this.isLoadingSubject.next(false))
+      );
   }
 }
 

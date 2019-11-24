@@ -1,0 +1,67 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>
+      Major Upload
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <form
+      class="example-container"
+      [formGroup]="uploadForm"
+      (ngSubmit)="onSubmit()"
+      enctype="multipart/form-data"
+    >
+      <mat-form-field style="cursor: pointer;" class="view-less-width">
+        <mat-label>Group Type</mat-label>
+        <mat-select formControlName="major">
+          <mat-option *ngFor="let major of allMajors" [value]="major.name">
+            {{ major.name }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="uploadForm.controls['major'].hasError('required')"
+          >Please choose a major type</mat-error
+        >
+      </mat-form-field>
+      <br />
+      <mat-form-field style="cursor: pointer;width:60%;">
+        <ngx-mat-file-input
+          #removableInput
+          formControlName="uploadFile"
+          placeholder="upload an excel file"
+          accept=".xlsx,.csv"
+          (change)="upload($event)"
+        ></ngx-mat-file-input>
+        <button
+          mat-icon-button
+          matSuffix
+          *ngIf="removableInput.empty"
+          (click)="removableInput.clear($event)"
+        >
+          <mat-icon>folder</mat-icon>
+        </button>
+        <mat-error *ngIf="uploadForm.get('uploadFile').hasError('required')">
+          Please select a file
+        </mat-error>
+
+        <button
+          mat-icon-button
+          matSuffix
+          *ngIf="!removableInput.empty"
+          (click)="removableInput.clear($event)"
+        >
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-form-field>
+      <mat-error
+        *ngIf="isInvalid && !uploadForm.get('uploadFile').hasError('required')"
+      >
+        {{ invalidExtension }}
+      </mat-error>
+
+      &nbsp;
+      <button type="submit" mat-raised-button class="button-maroon">
+        Ok
+      </button>
+    </form>
+  </mat-card-content>
+</mat-card>

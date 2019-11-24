@@ -109,13 +109,20 @@ export class GroupDetailComponent implements OnInit {
     console.log("deleted");
     this.groupDataStorage.deleteGroup(id).subscribe(result => {
       console.log(result);
-      const deletedMsg =
-        result.result.name + "group has been successfully deleted!";
+
       if (result.status == 200) {
+        const deletedMsg =
+          result.result.name + "group has been successfully deleted!";
         this._snackBar.openFromComponent(GroupSnackbarComponent, {
           duration: 4000,
           panelClass: ["delete"],
           data: deletedMsg
+        });
+      } else if (result.status == 403) {
+        this._snackBar.openFromComponent(GroupSnackbarComponent, {
+          duration: 4000,
+          panelClass: ["delete"],
+          data: result.message
         });
       }
       this.groupDataStorage.fetchGroup();

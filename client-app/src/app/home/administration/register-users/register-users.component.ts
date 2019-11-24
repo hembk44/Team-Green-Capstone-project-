@@ -92,6 +92,7 @@ export class RegisterUsersComponent implements OnInit {
       // console.log('Selected file format is not supported');
       // this.invalidExtension = "not supported file type!!!";
       console.log(this.invalidExtension);
+      this.invalidExtension = "not supported file type!!!";
       // return this.invalidExtension;
       // return this.isInvalid;
     }

@@ -1,228 +1,239 @@
-<form
-  class="example-container example-container-width "
-  [formGroup]="groupForm"
-  (ngSubmit)="onSubmit()"
->
-  <mat-form-field
-    *ngIf="isCourseGroup"
-    style="cursor: pointer;"
-    class="view-less-width"
+<div style="margin-top: 150px">
+  <form
+    class="example-container example-container-width "
+    [formGroup]="groupForm"
+    (ngSubmit)="onSubmit()"
   >
-    <mat-label>Group Type</mat-label>
-    <mat-select formControlName="groupType">
-      <mat-option *ngFor="let grpType of groupTypes" [value]="grpType" disabled>
-        {{ grpType }}
-      </mat-option>
-    </mat-select>
-    <mat-error *ngIf="groupForm.controls['groupType'].hasError('required')"
-      >Please choose a group type</mat-error
+    <mat-form-field
+      *ngIf="isCourseGroup"
+      style="cursor: pointer;"
+      class="view-less-width"
     >
-  </mat-form-field>
-
-  <mat-form-field
-    *ngIf="isCourseGroup"
-    style="cursor: pointer;"
-    class="view-more-width"
-  >
-    <mat-label>Select Major</mat-label>
-    <mat-select
-      formControlName="majorControl"
-      (selectionChange)="onMajorChanged($event)"
-    >
-      <mat-option>--</mat-option>
-      <mat-option *ngFor="let major of majors" [value]="major">
-        {{ major }}
-      </mat-option>
-    </mat-select>
-    <mat-error *ngIf="groupForm.controls['majorControl'].hasError('required')"
-      >Please choose a Major</mat-error
-    >
-  </mat-form-field>
-  <mat-form-field
-    *ngIf="isCourseGroup"
-    style="cursor: pointer;"
-    class="view-more-width"
-  >
-    <mat-label>Title</mat-label>
-    <mat-select
-      formControlName="title"
-      (selectionChange)="onTitleChanged($event)"
-    >
-      <mat-option>--</mat-option>
-      <mat-option *ngFor="let v of courseGroupInfo" [value]="v.title">
-        {{ v.title }}
-      </mat-option>
-    </mat-select>
-    <mat-error *ngIf="groupForm.controls['title'].hasError('required')"
-      >Please choose a Major</mat-error
-    >
-  </mat-form-field>
-
-  <mat-form-field
-    *ngIf="isCourseGroup"
-    style="cursor: pointer;"
-    class="view-more-width"
-  >
-    <mat-label>Description</mat-label>
-    <mat-select formControlName="description">
-      <mat-option>--</mat-option>
-      <mat-option
-        *ngFor="let v of courseGroupInfo"
-        [value]="v.description"
-        disabled
+      <mat-label>Group Type</mat-label>
+      <mat-select formControlName="groupType">
+        <mat-option
+          *ngFor="let grpType of groupTypes"
+          [value]="grpType"
+          disabled
+        >
+          {{ grpType }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="groupForm.controls['groupType'].hasError('required')"
+        >Please choose a group type</mat-error
       >
-        {{ v.description }}
-      </mat-option>
-    </mat-select>
-    <mat-error *ngIf="groupForm.controls['description'].hasError('required')"
-      >Please choose a Major</mat-error
-    >
-  </mat-form-field>
+    </mat-form-field>
 
-  <mat-form-field *ngIf="!isCourseGroup" class="view-less-width">
-    <mat-label>Group Type</mat-label>
-    <mat-select formControlName="groupType">
-      <mat-option *ngFor="let grpType of groupTypes" [value]="grpType" disabled>
-        {{ grpType }}
-      </mat-option>
-    </mat-select>
-    <mat-error
-      *ngIf="groupForm.controls['groupType'].hasError('required') && !editMode"
-      >Please choose a group type</mat-error
+    <mat-form-field
+      *ngIf="isCourseGroup"
+      style="cursor: pointer;"
+      class="view-more-width"
     >
-  </mat-form-field>
-
-  <mat-form-field *ngIf="!isCourseGroup" class="view-more-width">
-    <input matInput placeholder="Group Title" formControlName="title" />
-    <mat-error *ngIf="groupForm.controls['title'].hasError('required')"
-      >Please enter group title</mat-error
-    >
-  </mat-form-field>
-
-  <mat-form-field *ngIf="!isCourseGroup" class="view-more-width">
-    <textarea
-      matInput
-      placeholder="Group Description"
-      formControlName="description"
-    ></textarea>
-    <mat-error *ngIf="groupForm.controls['description'].hasError('required')"
-      >Please enter group description</mat-error
-    >
-  </mat-form-field>
-
-  <mat-form-field class="view-more-width" *ngIf="!editMode">
-    <mat-label>Group member emails</mat-label>
-    <mat-select [(value)]="selectedOption">
-      <mat-option>None</mat-option>
-      <mat-option value="email">Enter Emails</mat-option>
-      <mat-option value="file">Upload File</mat-option>
-    </mat-select>
-  </mat-form-field>
-  <mat-form-field
-    *ngIf="selectedOption === 'email'"
-    class="example-chip-list"
-    class="view-more-width"
-    style=" cursor: pointer;"
-  >
-    <mat-chip-list #chipList aria-label="adding emails">
-      <mat-chip
-        *ngFor="let email of emails"
-        [selectable]="selectable"
-        [removable]="removable"
-        (removed)="remove(email)"
+      <mat-label>Select Major</mat-label>
+      <mat-select
+        formControlName="majorControl"
+        (selectionChange)="onMajorChanged($event)"
       >
-        <mat-icon mat-list-icon>person_outline</mat-icon> {{ email }}
-        <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
-      </mat-chip>
-      <input
-        placeholder="Enter Emails"
+        <mat-option>--</mat-option>
+        <mat-option *ngFor="let major of allMajors" [value]="major.name">
+          {{ major.name }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="groupForm.controls['majorControl'].hasError('required')"
+        >Please choose a Major</mat-error
+      >
+    </mat-form-field>
+    <mat-form-field
+      *ngIf="isCourseGroup"
+      style="cursor: pointer;"
+      class="view-more-width"
+    >
+      <mat-label>Title</mat-label>
+      <mat-select
+        formControlName="title"
+        (selectionChange)="onTitleChanged($event)"
+      >
+        <mat-option>--</mat-option>
+        <mat-option *ngFor="let course of courseDetails" [value]="course.title">
+          {{ course.title }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="groupForm.controls['title'].hasError('required')"
+        >Please choose a Major</mat-error
+      >
+    </mat-form-field>
+
+    <mat-form-field
+      *ngIf="isCourseGroup"
+      style="cursor: pointer;"
+      class="view-more-width"
+    >
+      <mat-label>Description</mat-label>
+      <mat-select formControlName="description">
+        <mat-option>--</mat-option>
+        <mat-option
+          *ngFor="let desc of courseDetails"
+          [value]="desc.description"
+          disabled
+        >
+          {{ desc.description }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="groupForm.controls['description'].hasError('required')"
+        >Please choose a Major</mat-error
+      >
+    </mat-form-field>
+
+    <mat-form-field *ngIf="!isCourseGroup" class="view-less-width">
+      <mat-label>Group Type</mat-label>
+      <mat-select formControlName="groupType">
+        <mat-option
+          *ngFor="let grpType of groupTypes"
+          [value]="grpType"
+          disabled
+        >
+          {{ grpType }}
+        </mat-option>
+      </mat-select>
+      <mat-error
+        *ngIf="
+          groupForm.controls['groupType'].hasError('required') && !editMode
+        "
+        >Please choose a group type</mat-error
+      >
+    </mat-form-field>
+
+    <mat-form-field *ngIf="!isCourseGroup" class="view-more-width">
+      <input matInput placeholder="Group Title" formControlName="title" />
+      <mat-error *ngIf="groupForm.controls['title'].hasError('required')"
+        >Please enter group title</mat-error
+      >
+    </mat-form-field>
+
+    <mat-form-field *ngIf="!isCourseGroup" class="view-more-width">
+      <textarea
         matInput
-        [formControl]="email"
-        [matChipInputFor]="chipList"
-        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-        [matChipInputAddOnBlur]="addOnBlur"
-        (matChipInputTokenEnd)="add($event)"
-      />
-    </mat-chip-list>
+        placeholder="Group Description"
+        formControlName="description"
+      ></textarea>
+      <mat-error *ngIf="groupForm.controls['description'].hasError('required')"
+        >Please enter group description</mat-error
+      >
+    </mat-form-field>
 
-    <mat-error *ngIf="!isEmailValid">{{ errorMessage }}</mat-error>
-
-    <mat-hint>Use comma or hit ENTER to enter multiple emails!</mat-hint>
-  </mat-form-field>
-  <mat-form-field
-    style="cursor: pointer;"
-    class="view-more-width"
-    *ngIf="!editMode && selectedOption === 'file'"
-  >
-    <ngx-mat-file-input
-      #removableInput
-      formControlName="uploadFile"
-      placeholder="upload an excel file"
-      accept=".xlsx,.csv"
-      (change)="upload($event)"
-    ></ngx-mat-file-input>
-    <button
-      mat-icon-button
-      matSuffix
-      *ngIf="removableInput.empty"
-      (click)="removableInput.clear($event)"
+    <mat-form-field class="view-more-width" *ngIf="!editMode">
+      <mat-label>Group member emails</mat-label>
+      <mat-select [(value)]="selectedOption">
+        <mat-option>None</mat-option>
+        <mat-option value="email">Enter Emails</mat-option>
+        <mat-option value="file">Upload File</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field
+      *ngIf="selectedOption === 'email'"
+      class="example-chip-list"
+      class="view-more-width"
+      style=" cursor: pointer;"
     >
-      <mat-icon>folder</mat-icon>
-    </button>
-    <mat-error *ngIf="groupForm.get('uploadFile').hasError('required')">
-      Please select a file
-    </mat-error>
+      <mat-chip-list #chipList aria-label="adding emails">
+        <mat-chip
+          *ngFor="let email of emails"
+          [selectable]="selectable"
+          [removable]="removable"
+          (removed)="remove(email)"
+        >
+          <mat-icon mat-list-icon>person_outline</mat-icon> {{ email }}
+          <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+        </mat-chip>
+        <input
+          placeholder="Enter Emails"
+          matInput
+          [formControl]="email"
+          [matChipInputFor]="chipList"
+          [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+          [matChipInputAddOnBlur]="addOnBlur"
+          (matChipInputTokenEnd)="add($event)"
+        />
+      </mat-chip-list>
 
-    <button
-      mat-icon-button
-      matSuffix
-      *ngIf="!removableInput.empty"
-      (click)="removableInput.clear($event)"
+      <mat-error *ngIf="!isEmailValid">{{ errorMessage }}</mat-error>
+
+      <mat-hint>Use comma or hit ENTER to enter multiple emails!</mat-hint>
+    </mat-form-field>
+    <mat-form-field
+      style="cursor: pointer;"
+      class="view-more-width"
+      *ngIf="!editMode && selectedOption === 'file'"
     >
-      <mat-icon>delete</mat-icon>
-    </button>
+      <ngx-mat-file-input
+        #removableInput
+        formControlName="uploadFile"
+        placeholder="upload an excel file"
+        accept=".xlsx,.csv"
+        (change)="upload($event)"
+      ></ngx-mat-file-input>
+      <button
+        mat-icon-button
+        matSuffix
+        *ngIf="removableInput.empty"
+        (click)="removableInput.clear($event)"
+      >
+        <mat-icon>folder</mat-icon>
+      </button>
+      <mat-error *ngIf="groupForm.get('uploadFile').hasError('required')">
+        Please select a file
+      </mat-error>
+
+      <button
+        mat-icon-button
+        matSuffix
+        *ngIf="!removableInput.empty"
+        (click)="removableInput.clear($event)"
+      >
+        <mat-icon>delete</mat-icon>
+      </button>
+    </mat-form-field>
     <mat-error
-      *ngIf="isInvalid && !uploadForm.get('uploadFile').hasError('required')"
+      *ngIf="isInvalid && !groupForm.get('uploadFile').hasError('required')"
     >
       {{ invalidExtension }}
     </mat-error>
-  </mat-form-field>
+    <mat-form-field style="cursor: pointer;" class="view-less-width">
+      <mat-label>Semester Term</mat-label>
+      <mat-select formControlName="semesterTerm">
+        <mat-option>--</mat-option>
+        <mat-option *ngFor="let term of semesterTerm" [value]="term">
+          {{ term }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="groupForm.controls['semesterTerm'].hasError('required')"
+        >Please choose a Semester Term</mat-error
+      >
+    </mat-form-field>
 
-  <mat-form-field style="cursor: pointer;" class="view-less-width">
-    <mat-label>Semester Term</mat-label>
-    <mat-select formControlName="semesterTerm">
-      <mat-option>--</mat-option>
-      <mat-option *ngFor="let term of semesterTerm" [value]="term">
-        {{ term }}
-      </mat-option>
-    </mat-select>
-    <mat-error *ngIf="groupForm.controls['semesterTerm'].hasError('required')"
-      >Please choose a Semester Term</mat-error
-    >
-  </mat-form-field>
-
-  <mat-form-field style="cursor: pointer;" class="view-less-width">
-    <mat-label>Semester Year</mat-label>
-    <mat-select formControlName="semesterYear">
-      <mat-option>--</mat-option>
-      <mat-option *ngFor="let year of semesterYear" [value]="year">
-        {{ year }}
-      </mat-option>
-    </mat-select>
-    <mat-error *ngIf="groupForm.controls['semesterYear'].hasError('required')"
-      >Please choose a Semester Year</mat-error
-    >
-  </mat-form-field>
-  <mat-toolbar>
-    <mat-toolbar-row>
-      <span class="example-spacer"></span>
-      <button mat-raised-button color="warn" (click)="cancel()">
-        Cancel
-      </button>
-      &nbsp; &nbsp;
-      <button type="submit" mat-raised-button class="button-maroon">
-        {{ editMode ? "Update" : "Create Group" }}
-      </button>
-    </mat-toolbar-row>
-  </mat-toolbar>
-</form>
+    <mat-form-field style="cursor: pointer;" class="view-less-width">
+      <mat-label>Semester Year</mat-label>
+      <mat-select formControlName="semesterYear">
+        <mat-option>--</mat-option>
+        <mat-option *ngFor="let year of semesterYear" [value]="year">
+          {{ year }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="groupForm.controls['semesterYear'].hasError('required')"
+        >Please choose a Semester Year</mat-error
+      >
+    </mat-form-field>
+    <mat-toolbar>
+      <mat-toolbar-row>
+        <span class="example-spacer"></span>
+        <button mat-raised-button color="warn" (click)="cancel()">
+          Cancel
+        </button>
+        &nbsp; &nbsp;
+        <button type="submit" mat-raised-button class="button-maroon">
+          {{ editMode ? "Update" : "Create Group" }}
+        </button>
+      </mat-toolbar-row>
+    </mat-toolbar>
+  </form>
+</div>
