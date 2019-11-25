@@ -64,7 +64,7 @@ export class AppointmentDetailComponent implements OnInit {
       //   this.appointmentDesc = data.description;
       //   this.appointmentLocation = data.location;
       // });
-      if (this.currentRole === "ROLE_ADMIN" || this.currentRole === 'ROLE_PM') {
+      if (this.currentRole === "ROLE_ADMIN" || this.currentRole === "ROLE_PM") {
         console.log("admin data here!");
         if (this.appointmentType === "sent") {
           this.dataServiceAppointment
@@ -119,6 +119,7 @@ export class AppointmentDetailComponent implements OnInit {
           .subscribe(result => {
             if (result.result == null) {
               console.log(result.message);
+              this.isScheduledAppointmentEmpty = true;
             } else {
               this.appointments = result.result;
               for (let i of this.appointments) {

@@ -201,7 +201,7 @@ export class DataStorageService {
   }
 
   getImages(): Observable<any> {
-    return this.http.get(this.baseUrlAdmin + "getImages");
+    return this.http.get("http://localhost:8181/api/auth/" + "getImages");
   }
 
   addCourses(formData: FormData) {

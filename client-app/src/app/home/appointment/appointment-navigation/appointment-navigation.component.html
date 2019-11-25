@@ -69,39 +69,38 @@
 </div>
 
 <div *ngIf="currentRole == 'ROLE_USER' || currentRole === 'ROLE_MODERATOR'">
-  <mat-toolbar>
-    <mat-toolbar-row>
-      <div
-        class="container"
-        fxLayout
-        fxLayout.xs="column"
-        fxLayoutAlign="flex-start"
-        fxLayoutGap="10px"
-        fxLayoutGap.xs="10px"
+  <div
+    class="container"
+    fxLayout="row"
+    fxLayout.xs="column"
+    fxLayoutAlign="flex-start"
+    fxLayoutGap="5px"
+    fxLayoutGap.xs="0"
+  >
+    <div fxFlex>
+      <button
+        mat-stroked-button
+        class="button-maroon"
+        aria-label="Example icon-button with a menu"
+        matTooltip="Click to check your appointments"
+        (click)="userAppointments()"
       >
-        <div fxFlex="50%">
-          <button
-            mat-stroked-button
-            class="primary"
-            aria-label="Example icon-button with a menu"
-            matTooltip="Click to check your appointments"
-            (click)="userAppointments()"
-          >
-            Your Appointments
-          </button>
-        </div>
-        <div fxFlex="50%">
-          <button
-            mat-stroked-button
-            class="primary"
-            aria-label="Example icon-button with a menu"
-            matTooltip="Click to see your scheduled appointments"
-            (click)="userScheduledAppointments()"
-          >
-            your Scheduled Appointments
-          </button>
-        </div>
-      </div>
-    </mat-toolbar-row>
-  </mat-toolbar>
+        All Appointments
+      </button>
+    </div>
+    &nbsp;
+
+    <div fxFlex>
+      <button
+        mat-stroked-button
+        class="primary"
+        aria-label="Example icon-button with a menu"
+        matTooltip="Click to see your scheduled appointments"
+        (click)="userScheduledAppointments()"
+      >
+        Scheduled Appointments
+      </button>
+    </div>
+    <span fxFlex="grow"></span>
+  </div>
 </div>

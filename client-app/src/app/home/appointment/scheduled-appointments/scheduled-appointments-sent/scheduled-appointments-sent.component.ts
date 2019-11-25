@@ -19,7 +19,7 @@ export class ScheduledAppointmentsSentComponent implements OnInit {
 
   ngOnInit() {
     this.currentRole = this.authService.user;
-    if (this.currentRole === "ROLE_ADMIN") {
+    if (this.currentRole === "ROLE_ADMIN" || this.currentRole === "ROLE_PM") {
       console.log("admin data here!");
 
       this.dataStorageAppointment

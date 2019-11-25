@@ -57,19 +57,16 @@ export class GroupDetailComponent implements OnInit {
 
       this.currentRole = this.authService.user;
 
-      if (this.currentRole === "ROLE_ADMIN") {
-        console.log("admin data here!");
-        this.groupDataStorage.displayGroupDetails(this.id).subscribe(result => {
-          this.group = result.result;
-          console.log(result);
-          this.groupName = this.group.name;
-          this.groupDesc = this.group.description;
-          this.numOfmembers = this.group.members.length;
-          this.groupemails = this.group.members;
-          this.groupType = this.group.type.toLowerCase();
-          console.log(this.groupType);
-        });
-      }
+      this.groupDataStorage.displayGroupDetails(this.id).subscribe(result => {
+        this.group = result.result;
+        console.log(result);
+        this.groupName = this.group.name;
+        this.groupDesc = this.group.description;
+        this.numOfmembers = this.group.members.length;
+        this.groupemails = this.group.members;
+        this.groupType = this.group.type.toLowerCase();
+        console.log(this.groupType);
+      });
     });
   }
 
