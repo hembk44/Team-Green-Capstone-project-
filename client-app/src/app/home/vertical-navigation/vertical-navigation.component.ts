@@ -38,7 +38,10 @@ export class VerticalNavigationComponent implements OnInit {
     this.router.navigate(["/login"]);
   }
 
-  userManual(){
-    this.router.navigate(["home/user-manual"])
+  userManual() {
+    this.router.navigate(["home/user-manual"]);
+  }
+  updatePassword() {
+    this.router.navigate(["home/update-password"]);
   }
 }

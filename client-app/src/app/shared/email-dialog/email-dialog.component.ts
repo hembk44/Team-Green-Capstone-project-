@@ -6,6 +6,8 @@ import { MatChipInputEvent } from "@angular/material/chips";
 import { Validators, FormControl, FormGroup } from "@angular/forms";
 import { Router } from "@angular/router";
 import { DataStorageService } from "src/app/home/shared/data-storage.service";
+import { MatSnackBar } from "@angular/material";
+import { AppointmentSnackbarComponent } from "src/app/home/appointment/shared-appointment/appointment-snackbar/appointment-snackbar.component";
 
 @Component({
   selector: "app-email-dialog",
@@ -20,7 +22,8 @@ export class EmailDialogComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private dataStorageService: DataStorageService
+    private dataStorageService: DataStorageService,
+    private _snackbar: MatSnackBar
   ) {}
 
   ngOnInit() {}
@@ -32,7 +35,18 @@ export class EmailDialogComponent implements OnInit {
     // console.log(this.emailFormControl.value);
     this.dataStorageService
       .resetPassword(this.emailFormControl.value)
-      .subscribe(r => console.log(r));
+      .subscribe(result => {
+        console.log(result);
+        if (result) {
+          if (result.status == 200) {
+            this._snackbar.openFromComponent(AppointmentSnackbarComponent, {
+              duration: 5000,
+              panelClass: ["standard"],
+              data: result.message
+            });
+          }
+        }
+      });
   }
 
   cancel() {

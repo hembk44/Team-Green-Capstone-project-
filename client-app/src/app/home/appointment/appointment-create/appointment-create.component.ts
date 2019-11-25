@@ -157,14 +157,14 @@ export class AppointmentCreateComponent implements OnInit {
       console.log(this.editMode);
       this.initForm();
     });
-    let dateRange = new FormArray([this.date]);
-    this.appointmentForm = this.formBuilder.group({
-      title: ["", Validators.required],
-      description: ["", Validators.required],
-      location: [""],
-      email: this.email,
-      dateRange: dateRange
-    });
+    // let dateRange = new FormArray([this.date]);
+    // this.appointmentForm = this.formBuilder.group({
+    //   title: ["", Validators.required],
+    //   description: ["", Validators.required],
+    //   location: [""],
+    //   email: this.email,
+    //   dateRange: dateRange
+    // });
 
     // let dateRange = new FormArray([this.date]);
     // this.appointmentForm = this.formBuilder.group({
@@ -203,47 +203,47 @@ export class AppointmentCreateComponent implements OnInit {
             this.appointmentName = timeslot[0].appointmentName;
             this.appointmentDesc = timeslot[0].appointmentDescription;
           }
+
+          // let title = this.appointmentName;
+          // let description = this.appointmentDesc;
+          // let location = this.appointmentLocation;
+          // let email = this.email;
+          let dateRange = new FormArray([this.date]);
+          this.appointmentForm = new FormGroup({
+            title: new FormControl(this.appointmentName),
+            description: new FormControl(this.appointmentDesc),
+            location: new FormControl(this.appointmentLocation),
+            email: this.email,
+            dateRange: dateRange
+          });
         });
-      this.emails = this.pendingUsers;
-      let title = this.appointmentName;
-      let description = this.appointmentDesc;
-      let location = this.appointmentLocation;
-      let email = this.email;
-      let dateRange = new FormArray([this.date]);
-      this.appointmentForm = new FormGroup({
-        title: new FormControl(title, [Validators.required]),
-        description: new FormControl(description),
-        location: new FormControl(location),
-        email: email,
-        dateRange: dateRange
-      });
-    } else {
-      let title = "";
-      let description = "";
-      let location = "";
-      let email = this.email;
-      let dateRange = new FormArray([this.date]);
-      this.appointmentForm = new FormGroup({
-        title: new FormControl(title, [Validators.required]),
-        description: new FormControl(description),
-        location: new FormControl(location),
-        email: email,
-        dateRange: dateRange
-      });
-
-          // this.emails = this.pendingUsers;
-
-          // let dateRange = new FormArray([this.date]);
-          // this.appointmentForm = this.formBuilder.group({
-          //   title: [this.appointmentName],
-          //   description: [this.appointmentDesc],
-          //   location: [this.appointmentLocation],
-          //   email: this.email,
-          //   dateRange: dateRange
-          // });
-
-      
     }
+    // else {
+    // let title = "";
+    // let description = "";
+    // let location = "";
+    // let email = this.email;
+    // let dateRange = new FormArray([this.date]);
+    // this.appointmentForm = new FormGroup({
+    //   title: new FormControl(title, [Validators.required]),
+    //   description: new FormControl(description),
+    //   location: new FormControl(location),
+    //   email: email,
+    //   dateRange: dateRange
+    // });
+
+    // this.emails = this.pendingUsers;
+
+    // let dateRange = new FormArray([this.date]);
+    // this.appointmentForm = this.formBuilder.group({
+    //   title: [this.appointmentName],
+    //   description: [this.appointmentDesc],
+    //   location: [this.appointmentLocation],
+    //   email: this.email,
+    //   dateRange: dateRange
+    // });
+
+    // }
   }
 
   selected(event: MatAutocompleteSelectedEvent): void {

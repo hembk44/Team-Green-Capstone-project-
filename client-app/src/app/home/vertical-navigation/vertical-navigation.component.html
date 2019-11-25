@@ -56,11 +56,14 @@
         Administration</a
       >
       <a
-      mat-list-item
-      routerLink="/home/broadcast-management"
-      (click)="drawer.close()"
-      *ngIf="userRole === 'ROLE_ADMIN'">
-      <mat-icon aria-hidden="false" aria-label="example broadcast icon">dvr</mat-icon>
+        mat-list-item
+        routerLink="/home/broadcast-management"
+        (click)="drawer.close()"
+        *ngIf="userRole === 'ROLE_ADMIN'"
+      >
+        <mat-icon aria-hidden="false" aria-label="example broadcast icon"
+          >dvr</mat-icon
+        >
         Broadcast
       </a>
     </mat-nav-list>
@@ -87,14 +90,11 @@
           {{ nameOfUser }} <mat-icon>expand_more </mat-icon>
         </button>
         <mat-menu #user="matMenu">
-          <button mat-menu-item>
-            <span>Your profile</span>
-          </button>
           <button mat-menu-item (click)="userManual()">
             <span>User Manual</span>
           </button>
-          <button mat-menu-item>
-            <span>FAQs</span>
+          <button mat-menu-item (click)="updatePassword()">
+            <span>Change password</span>
           </button>
           <button mat-menu-item (click)="logout()">
             <span>Sign Out</span>

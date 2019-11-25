@@ -1,5 +1,4 @@
 /* You can add global styles to this file, and also import other style files */
-@import "../node_modules/angular-calendar/css/angular-calendar.css";
 @import '~@fullcalendar/core/main.css';
 @import '~@fullcalendar/daygrid/main.css';
 @import '~@fullcalendar/timegrid/main.css';
@@ -23,16 +22,19 @@
   color: white;
 }
 
-::ng-deep .mat-accent{
+::ng-deep .mat-accent {
   color: #800029;
 }
 
-.mat-accent .mat-pseudo-checkbox-checked, .mat-accent .mat-pseudo-checkbox-indeterminate, .mat-pseudo-checkbox-checked, .mat-pseudo-checkbox-indeterminate{
+.mat-accent .mat-pseudo-checkbox-checked,
+.mat-accent .mat-pseudo-checkbox-indeterminate,
+.mat-pseudo-checkbox-checked,
+.mat-pseudo-checkbox-indeterminate {
   background: #800029;
 }
 
-::ng-deep mat-checkbox{
-  background:#800029;
+::ng-deep mat-checkbox {
+  background: #800029;
 }
 
 #calendar {
@@ -47,30 +49,31 @@
   text-transform: capitalize;
 }
 
-.fc-button-primary:not(:disabled).fc-button-active{
+.fc-button-primary:not(:disabled).fc-button-active {
   background-color: white;
   color: #800029;
 }
 
-.fc-button:hover{
+.fc-button:hover {
   background-color: #800029;
 }
 
-.fc-button:disabled{
+.fc-button:disabled {
   background-color: white;
   color: #800029;
 }
 
-.fc-left .fc-button{
+.fc-left .fc-button {
   border: none;
 }
 
-.fc-left .fc-button:hover{
+.fc-left .fc-button:hover {
   background-color: white;
   color: #800029;
 }
 
-.fc-button:focus,.fc-button-primary:focus{
+.fc-button:focus,
+.fc-button-primary:focus {
   box-shadow: none;
 }
 
@@ -79,7 +82,7 @@
   border-top: 0;
   border-bottom: 0;
   border-right: 0;
-  cursor:pointer;
+  cursor: pointer;
 }
 
 html,
