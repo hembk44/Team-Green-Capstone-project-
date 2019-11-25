@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.csci4060.app.model.Role;
 import com.csci4060.app.model.User;
 import com.csci4060.app.model.appointment.Appointment;
+import com.csci4060.app.model.appointment.TimeSlots;
 import com.csci4060.app.model.authentication.UserPrinciple;
 import com.csci4060.app.model.calendar.Calendar;
 import com.csci4060.app.model.event.Event;
@@ -23,6 +24,7 @@ import com.csci4060.app.services.AppointmentService;
 import com.csci4060.app.services.CalendarService;
 import com.csci4060.app.services.EventService;
 import com.csci4060.app.services.GroupService;
+import com.csci4060.app.services.TimeSlotsService;
 import com.csci4060.app.services.UserService;
 
 /*
@@ -51,6 +53,9 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
 	@Autowired
 	GroupService groupService;
 
+	@Autowired
+	TimeSlotsService timeSlotsService;
+	
 	@Override
 	@Transactional
 	// UserPrinciple implements UserDetails so returning UserPrinciple doesn't cause
@@ -181,6 +186,20 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
 		if (receivedAppointments != null) {
 			for (Appointment appointment : receivedAppointments) {
 				appointment.getRecepients().remove(user);
+				
+				List<TimeSlots> timeSlots = timeSlotsService.findAllByAppointment(appointment);
+				
+				for(TimeSlots slot: timeSlots) {
+					if(slot.getSelectedBy() == user) {
+						
+						Event event = eventService.findByTimeSlotId(slot.getId());
+						event.getConfirmedBy().remove(user);
+						eventService.save(event);
+						
+						slot.setSelectedBy(null);
+						timeSlotsService.save(slot);
+					}
+				}
 				appointmentService.save(appointment);
 			}
 		}
@@ -243,15 +262,22 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
 		
 		List<Group> memberGroups = groupService.findAllByMembers(user);
 		
+		for (Group group: memberGroups) {
+			System.out.println("Member group is: "+group.getId());
+		}
+		
 		if(memberGroups != null) {
 			for(Group group: memberGroups) {
-				group.getMembers().remove(user);
+				System.out.println("Groups id: "+ group.getId()+". Groups members before saving: "+group.getMembers());
+				group.removeMember(user);
 				groupService.save(group);
+				System.out.println("Groups members after saving: "+group.getMembers());
 			}
 		}
 		
 		user.getRoles().clear();
 		
+		System.out.println("User roles cleared:"+user.getRoles());
 		userRepo.delete(user);
 	}
 

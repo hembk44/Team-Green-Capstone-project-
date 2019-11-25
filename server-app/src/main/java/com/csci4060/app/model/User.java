@@ -39,7 +39,7 @@ public class User{
 	//What naturally identifies an entity. This improves performance during lookup
 	@NaturalId
 	@Size(min=6, max=100)
-	@NotEmpty(message= "Email is not valid!")
+	@NotEmpty(message= "Email must not be empty")
 	private String email;
 	
 	@NotEmpty(message="Password must not be empty")

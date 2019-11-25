@@ -13,8 +13,6 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import com.csci4060.app.model.User;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import lombok.Data;
 
 @Data
@@ -33,11 +31,9 @@ public class Appointment {
 	@OneToMany(targetEntity = AppointmentDate.class)
 	List<AppointmentDate> appdates;
 
-	@JsonIgnore
 	@ManyToMany(targetEntity = User.class)
 	List<User> recepients;
 	
-	@JsonIgnore
 	@OneToOne(targetEntity = User.class)
 	User createdBy;
 	

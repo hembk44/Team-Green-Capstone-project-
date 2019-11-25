@@ -1,6 +1,5 @@
 package com.csci4060.app.model.authentication;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 

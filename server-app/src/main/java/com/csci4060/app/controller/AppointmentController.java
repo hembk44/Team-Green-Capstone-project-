@@ -661,7 +661,7 @@ public class AppointmentController extends ExceptionResolver {
 				deletedUsers.add(oldRecipient);
 				for(TimeSlots slots: timeSlots) {
 					if(slots.getSelectedBy() == oldRecipient) {
-						return new APIresponse(HttpStatus.FORBIDDEN.value(), "This user has already selected a time slot from "+slots.getStartTime()+" to "+slots.getEndTime()+". You cannot remove this person from the appointment.",
+						return new APIresponse(HttpStatus.FORBIDDEN.value(), slots.getSelectedBy().getName()+" has already selected a time slot from "+slots.getStartTime()+" to "+slots.getEndTime()+". You cannot remove this person from the appointment.",
 								null);
 					}
 				}
