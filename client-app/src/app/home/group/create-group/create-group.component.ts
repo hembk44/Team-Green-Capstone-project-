@@ -20,7 +20,7 @@ import {
 } from "@angular/material";
 import { GroupSnackbarComponent } from "../shared-group/group-snackbar/group-snackbar.component";
 import { Observable } from "rxjs";
-import { DataStorageService } from "../../shared/data-storage.service";
+import { DataStorageService, Emails } from "../../shared/data-storage.service";
 import { startWith, map } from "rxjs/operators";
 
 export interface courseGroup {
@@ -258,7 +258,7 @@ export class CreateGroupComponent implements OnInit {
   }
 
   cancel() {
-    this.router.navigate(["/home/group"]);
+    this.router.navigate(["/home/group/your-group"]);
   }
 
   onMajorChanged(event: any) {
@@ -312,7 +312,7 @@ export class CreateGroupComponent implements OnInit {
             console.log(result);
 
             this.groupDataStorageService.fetchGroup();
-            this.router.navigate(["/home/group"]);
+            this.router.navigate(["/home/group/your-group"]);
           }
         });
     } else {
@@ -345,7 +345,7 @@ export class CreateGroupComponent implements OnInit {
             }
 
             this.groupDataStorageService.fetchGroup();
-            this.router.navigate(["/home/group"]);
+            this.router.navigate(["/home/group/your-group"]);
           }
         });
       } else if (this.selectedFiles.length == 1) {
@@ -376,7 +376,7 @@ export class CreateGroupComponent implements OnInit {
                   data: result.message
                 });
                 this.groupDataStorageService.fetchGroup();
-                this.router.navigate(["/home/group"]);
+                this.router.navigate(["/home/group/your-group"]);
               } else if (result.status == 409) {
                 this._snackBar.openFromComponent(GroupSnackbarComponent, {
                   duration: 4000,

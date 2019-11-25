@@ -51,11 +51,7 @@ import { AppointmentItemComponent } from "./home/appointment/appointment-item/ap
 import { AppointmentNavigationComponent } from "./home/appointment/appointment-navigation/appointment-navigation.component";
 import { AppointmentDetailComponent } from "./home/appointment/appointment-detail/appointment-detail.component";
 import { AppointmentListComponent } from "./home/appointment/appointment-list/appointment-list.component";
-import {
-  AppointmentCreateComponent,
-  DialogDateTimeIntervalDialog,
-  DialogTimeIntervalDialog
-} from "./home/appointment/appointment-create/appointment-create.component";
+import { AppointmentCreateComponent } from "./home/appointment/appointment-create/appointment-create.component";
 
 import { AppointmentStartComponent } from "./home/appointment/appointment-types/appointment-start/appointment-start.component";
 import { AppointmentSentComponent } from "./home/appointment/appointment-types/appointment-sent/appointment-sent.component";
@@ -117,7 +113,8 @@ import { ShareEvent } from "./home/calendar/event-detail/share-event";
 import { GroupFilterPipe } from "./home/group/group-list/group-filter.pipe";
 import { AppointmentSnackbarComponent } from "./home/appointment/shared-appointment/appointment-snackbar/appointment-snackbar.component";
 import { GroupSnackbarComponent } from "./home/group/shared-group/group-snackbar/group-snackbar.component";
-import { UploadMajorComponent } from './home/administration/upload-major/upload-major.component';
+import { UploadMajorComponent } from "./home/administration/upload-major/upload-major.component";
+import { YourGroupComponent } from "./home/group/your-group/your-group.component";
 
 @NgModule({
   declarations: [
@@ -128,15 +125,12 @@ import { UploadMajorComponent } from './home/administration/upload-major/upload-
     AppointmentDetailComponent,
     AppointmentListComponent,
     AppointmentCreateComponent,
-    DialogDateTimeIntervalDialog,
-    DialogTimeIntervalDialog,
+
     AppointmentStartComponent,
     AppointmentSentComponent,
     AppointmentReceivedComponent,
     ScheduledAppointmentsSentComponent,
     ScheduledAppointmentsReceivedComponent,
-    DialogDateTimeIntervalDialog,
-    DialogTimeIntervalDialog,
     LoginComponent,
     RegisterComponent,
     LoadingSpinnerComponent,
@@ -178,7 +172,8 @@ import { UploadMajorComponent } from './home/administration/upload-major/upload-
     GroupFilterPipe,
     AppointmentSnackbarComponent,
     GroupSnackbarComponent,
-    UploadMajorComponent
+    UploadMajorComponent,
+    YourGroupComponent
   ],
   imports: [
     BrowserModule,
@@ -222,8 +217,6 @@ import { UploadMajorComponent } from './home/administration/upload-major/upload-
     FullCalendarModule
   ],
   entryComponents: [
-    DialogDateTimeIntervalDialog,
-    DialogTimeIntervalDialog,
     EventDetailComponent,
     CalendarCreateComponent,
     CalRename,

@@ -27,40 +27,60 @@ export class AppointmentItemComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    // let i = 1;
-    // for (let date of this.testDates) {
-    //   let length = this.testDates.length;
-    //   if (length == 1) {
-    //     this.appointmentDate += date;
-    //   } else if (i <= length - 1) {
-    //     this.appointmentDate += date + " " + "|" + " ";
-    //     i++;
-    //   } else {
-    //     this.appointmentDate += date;
-    //   }
-    // }
     this.formatDate(this.dates);
+    console.log(this.dates);
 
     this.appointmentTypeSubscription = this.appointmentNavigationAdmin.appointmentStatusItem.subscribe(
       status => {
         this.status = status;
-        // console.log(this.status);
       }
     );
   }
 
-  formatDate(dates: string[]) {
-    for (let date of dates) {
-      let length = dates.length;
-      if (length == 1) {
-        this.appointmentDate += date;
-      } else if (this.counter <= length - 1) {
-        this.appointmentDate += date + " " + "|" + " ";
-        this.counter++;
-      } else {
-        this.appointmentDate += date;
+  // formatDate(dates: string[]) {
+  //   let length = dates.length;
+  //   for (let date of dates) {
+
+  //     if (length == 1) {
+  //       this.appointmentDate += date;
+  //       console.log(this.appointmentDate);
+  //     } else if (this.counter <= length - 1 && !dates.includes(date)) {
+  //       this.appointmentDate += date + " " + "|" + " ";
+  //       console.log(this.appointmentDate);
+
+  //       this.counter++;
+  //     } else if (this.counter <= length - 1 && dates.includes(date)) {
+  //       this.appointmentDate += this.appointmentDate + " ";
+  //       console.log(this.appointmentDate);
+
+  //       this.counter++;
+  //     }
+  //   }
+  // }
+
+  unique(date: string[]) {
+    var arr = [];
+
+    for (var i = 0; i < date.length; i++) {
+      if (!arr.includes(date[i])) {
+        arr.push(date[i]);
       }
     }
+
+    return arr;
+  }
+
+  formatDate(date: string[]) {
+    if (date.length > 0) {
+      var arr = this.unique(date);
+      for (let d of arr) {
+        this.appointmentDate += d + " " + "|" + " ";
+      }
+    }
+    this.appointmentDate = this.appointmentDate.slice(
+      0,
+      this.appointmentDate.length - 2
+    );
   }
   showDetails(index: number) {
     if (this.status === "sent") {

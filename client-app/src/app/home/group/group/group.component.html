@@ -1,15 +1,35 @@
-<div
-  class="container"
-  fxLayout
-  fxLayout.xs="column"
-  fxLayoutAlign="flex-start"
-  fxLayoutGap="10px"
-  fxLayoutGap.xs="0"
->
-  <div fxFlex="40%">
-    <app-group-list></app-group-list>
-  </div>
-  <div fxFlex="55%">
-    <router-outlet></router-outlet>
-  </div>
+<div style=" margin: 10px;">
+  <button
+    mat-stroked-button
+    class="primary"
+    [matMenuTriggerFor]="createGroup"
+    aria-label="Example icon-button with a menu"
+    matTooltip="create course or custom group"
+  >
+    Create group<mat-icon>expand_more </mat-icon>
+  </button>
+
+  <mat-menu #createGroup="matMenu">
+    <button mat-menu-item (click)="createCourseGroup()">
+      <mat-icon>school</mat-icon>
+
+      <span>Course Group</span>
+    </button>
+    <button mat-menu-item (click)="createCustomGroup()">
+      <mat-icon>build </mat-icon>
+      <span>Custom Group</span>
+    </button>
+  </mat-menu>
+  &nbsp;
+  <button
+    mat-stroked-button
+    class="button-maroon"
+    (click)="navigateToYourGroup()"
+    aria-label="Example icon-button with a menu"
+    matTooltip="check your group"
+  >
+    <mat-icon mat-list-icon>group</mat-icon> Your group
+  </button>
 </div>
+
+<router-outlet></router-outlet>

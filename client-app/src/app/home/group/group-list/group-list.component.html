@@ -1,4 +1,4 @@
-<div style=" margin: 10px;">
+<!-- <div style=" margin: 10px;">
   <button
     mat-stroked-button
     class="primary"
@@ -20,36 +20,44 @@
       <span>Custom Group</span>
     </button>
   </mat-menu>
-</div>
-<mat-form-field style=" margin-left: 10px; padding: 10px;">
-  <input
-    type="text"
-    matInput
-    [(ngModel)]="searchText"
-    placeholder="Search group"
-  />
-  <mat-icon matSuffix>search</mat-icon>
-  <mat-hint>Search by group name or description</mat-hint>
-</mat-form-field>
+</div> -->
 
-<app-group-item
-  *ngFor="
-    let g of group
-      | groupFilter: searchText
-      | paginate: { itemsPerPage: 5, currentPage: p };
-    let i = index
-  "
-  [eachGroup]="g"
-  [id]="g.id"
-  [semester]="g.semesterTerm"
-  [semesterYear]="g.semesterYear"
->
-</app-group-item>
-<div fxLayout="row" fxLayoutAlign="center center" class="pagination-center">
-  <div>
-    <pagination-controls
-      autoHide="true"
-      (pageChange)="p = $event"
-    ></pagination-controls>
+<div *ngIf="!isGroupEmpty; else elseBlock">
+  <mat-form-field style=" margin-left: 10px; padding: 10px;">
+    <input
+      type="text"
+      matInput
+      [(ngModel)]="searchText"
+      placeholder="Search group"
+    />
+    <mat-icon matSuffix>search</mat-icon>
+    <mat-hint>Search by group name or description</mat-hint>
+  </mat-form-field>
+
+  <app-group-item
+    *ngFor="
+      let g of group
+        | groupFilter: searchText
+        | paginate: { itemsPerPage: 5, currentPage: p };
+      let i = index
+    "
+    [eachGroup]="g"
+    [id]="g.id"
+    [semester]="g.semesterTerm"
+    [semesterYear]="g.semesterYear"
+  >
+  </app-group-item>
+  <div fxLayout="row" fxLayoutAlign="center center" class="pagination-center">
+    <div>
+      <pagination-controls
+        autoHide="true"
+        (pageChange)="p = $event"
+      ></pagination-controls>
+    </div>
   </div>
 </div>
+<ng-template #elseBlock>
+  <div style=" margin: 10px;">
+    <strong>You have not created any group yet. Please create group!!!</strong>
+  </div>
+</ng-template>

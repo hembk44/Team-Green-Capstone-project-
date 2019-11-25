@@ -20,6 +20,6 @@ export class GroupItemComponent implements OnInit {
 
   ngOnInit() {}
   showDetails(id: number) {
-    this.router.navigate(["home/group", id]);
+    this.router.navigate(["home/group/your-group", id]);
   }
 }

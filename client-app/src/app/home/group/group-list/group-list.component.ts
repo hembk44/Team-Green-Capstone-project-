@@ -13,6 +13,7 @@ import { GroupCreateNavigationService } from "../group/group-create-navigation.s
 export class GroupListComponent implements OnInit {
   group: Group[] = [];
   currentRole: string;
+  isGroupEmpty: boolean = false;
   searchText = "";
   constructor(
     private router: Router,
@@ -31,17 +32,20 @@ export class GroupListComponent implements OnInit {
         if (!loading) {
           this.group = this.groupDataStorage.groupLists;
           console.log(this.group);
+          if (this.group.length <= 0) {
+            this.isGroupEmpty = true;
+          }
         }
       });
     }
   }
-  createCourseGroup() {
-    this.router.navigate(["create-group"], { relativeTo: this.route });
-    this.groupTypeNavigation.changeGroupType("course");
-  }
+  // createCourseGroup() {
+  //   this.router.navigate(["create-group"], { relativeTo: this.route });
+  //   this.groupTypeNavigation.changeGroupType("course");
+  // }
 
-  createCustomGroup() {
-    this.router.navigate(["home/group/create-group"]);
-    this.groupTypeNavigation.changeGroupType("custom");
-  }
+  // createCustomGroup() {
+  //   this.router.navigate(["home/group/create-group"]);
+  //   this.groupTypeNavigation.changeGroupType("custom");
+  // }
 }
