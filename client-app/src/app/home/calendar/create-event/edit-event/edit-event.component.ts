@@ -46,6 +46,7 @@ export class EditEventComponent implements OnInit {
   @ViewChild("userInput", { static: false }) userInput: ElementRef<
     HTMLInputElement
   >;
+  @ViewChild("chipList", { static: false }) chipList;
   @ViewChild("auto", { static: false }) matAutocomplete: MatAutocomplete;
 
 
@@ -64,7 +65,6 @@ export class EditEventComponent implements OnInit {
     }
   }
   isEmailValid: boolean;
-  chipList: any;
   errorMessage: string;
 
   constructor(
@@ -296,11 +296,12 @@ export class EditEventComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log(result);
-      for(let email of result){
-        if(!this.emails.includes(email)){
-          this.emails.push(email);
-        }
-      }
+      this.emails = this.emails.concat(result);
+      // for(let email of result){
+      //   if(!this.emails.includes(email)){
+      //     this.emails.push(email);
+      //   }
+      // }
     })
   }
 

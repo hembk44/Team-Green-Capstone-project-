@@ -80,6 +80,7 @@ export class CalendarItemComponent implements OnInit {
 })
 export class CalRename implements OnInit{
   nameForm: FormGroup;
+  role: string;
   cal: Calendar;
   primaryColor: string;
   emails: string[];
@@ -104,6 +105,7 @@ export class CalRename implements OnInit{
     private dataStorage: DataStorageService,
     private dialog: MatDialog,
     private snackbar: MatSnackBar,
+    private authService: AuthService,
     @Inject(MAT_DIALOG_DATA)public data: Calendar
   ){
     this.dataStorage.getEmails();
@@ -136,6 +138,7 @@ export class CalRename implements OnInit{
   }
   
   ngOnInit(){
+    this.role = this.authService.user;
     this.cal = this.data;
     console.log(this.cal);
     this.emails=[];
@@ -214,11 +217,12 @@ export class CalRename implements OnInit{
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log(result);
-      for(let email of result){
-        if(!this.emails.includes(email)){
-          this.emails.push(email);
-        }
-      }
+      this.emails = this.emails.concat(result);
+      // for(let email of result){
+      //   if(!this.emails.includes(email)){
+      //     this.emails.push(email);
+      //   }
+      // }
     })
   }
 

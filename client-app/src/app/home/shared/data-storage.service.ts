@@ -109,7 +109,7 @@ export class DataStorageService {
     var formdata: FormData = new FormData();
     formdata.append("email", email);
     return this.http
-      .post<ApiResponse>("http://localhost:8181/api/auth/forgot", formdata)
+      .post<ApiResponse>("http://ec2-100-26-194-180.compute-1.amazonaws.com:8181/api/auth/forgot", formdata)
       .pipe(
         (map(data => data), catchError(error => throwError(error))),
         finalize(() => this.isLoadingSubject.next(false))
@@ -121,7 +121,7 @@ export class DataStorageService {
 
     return this.http
       .post<ApiResponse>(
-        "http://localhost:8181/api/auth/processResetPassword",
+        "http://ec2-100-26-194-180.compute-1.amazonaws.com:8181/api/auth/processResetPassword",
         obj
       )
       .pipe(
@@ -134,7 +134,7 @@ export class DataStorageService {
     this.isLoadingSubject.next(true);
 
     return this.http
-      .put<ApiResponse>("http://localhost:8181/api/admin/changePassword", obj)
+      .put<ApiResponse>("http://ec2-100-26-194-180.compute-1.amazonaws.com:8181/api/admin/changePassword", obj)
       .pipe(
         (map(data => data), catchError(error => throwError(error))),
         finalize(() => this.isLoadingSubject.next(false))

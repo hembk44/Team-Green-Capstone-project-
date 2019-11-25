@@ -38,7 +38,7 @@
         <mat-chip
           *ngFor="let email of emails"
           [selectable]="selectable"
-          [removable]="!pendingUsers.includes(email)"
+          [removable]="removable"
           (removed)="remove(email)"
         >
           <mat-icon mat-list-icon>person_outline</mat-icon> {{ email }}
