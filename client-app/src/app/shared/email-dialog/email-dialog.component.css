@@ -1,0 +1,11 @@
+.example-form {
+  box-shadow: 3px 3px 0px 1px #BD955A;
+  border: 2px solid #800029;
+  width: 400px;
+  margin: 30px auto;
+  padding: 20px;
+}
+
+.example-full-width {
+  width: 100%;
+}
