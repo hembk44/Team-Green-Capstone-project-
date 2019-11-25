@@ -105,8 +105,16 @@ public class AuthRestAPIs extends ExceptionResolver {
 		}
 
 		if (user.isVerified()) {
-			Authentication authentication = authenticationManager.authenticate(
-					new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+			
+			Authentication authentication = null;
+			
+			try {
+				authentication = authenticationManager.authenticate(
+						new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+			}catch (Exception e) {
+				return new APIresponse(HttpStatus.FORBIDDEN.value(), "Your password is incorrect. ", null);
+			}
+			
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 			String jwt = jwtProvider.generateJwtToken(authentication);
 
