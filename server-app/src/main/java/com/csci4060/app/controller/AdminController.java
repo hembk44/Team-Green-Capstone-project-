@@ -122,7 +122,7 @@ public class AdminController extends ExceptionResolver {
 	}
 
 	@GetMapping(path = "/getAllUsers")
-	@PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('PM') or hasRole('MODERATOR')")
 	public APIresponse getAllUsers() {
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -178,7 +178,7 @@ public class AdminController extends ExceptionResolver {
 //		return new APIresponse(HttpStatus.OK.value(), "User was successfully deleted.", emails);
 //	}
 
-	@DeleteMapping(path = "/deleteUser")
+	@PostMapping(path = "/deleteUser")
 	@PreAuthorize("hasRole('ADMIN')")
 	public APIresponse deleteUser(@RequestBody List<String> emails) {
 
@@ -296,41 +296,41 @@ public class AdminController extends ExceptionResolver {
 		return new APIresponse(HttpStatus.OK.value(), "Files were succesfully uploaded", uploadedFiles);
 	}
 
-	@GetMapping("/getImages")
-	@PreAuthorize("hasRole('ADMIN')")
-	public APIresponse getImages() {
-		List<String> images = new ArrayList<String>();
-
-		String filesPath = Paths.get(fileStorageProperties.getUploadDir()).toAbsolutePath().normalize().toString();
-		System.out.println("File path is " + filesPath);
-
-		File fileFolder = new File(filesPath);
-
-		if (fileFolder != null) {
-			for (final File file : fileFolder.listFiles()) {
-
-				System.out.println("For loop has been reached " + file);
-				if (!file.isDirectory()) {
-					String encodedBase64 = null;
-					try {
-						String extension = FilenameUtils.getExtension(file.getName());
-						FileInputStream fileInputStream = new FileInputStream(file);
-
-						byte[] bytes = new byte[(int) file.length()];
-						fileInputStream.read(bytes);
-
-						encodedBase64 = Base64.getEncoder().encodeToString(bytes);
-						images.add(encodedBase64);
-						fileInputStream.close();
-					} catch (Exception e) {
-						return new APIresponse(HttpStatus.EXPECTATION_FAILED.value(),
-								"Something went wrong. Please check the backend code.", null);
-					}
-				}
-			}
-		}
-		return new APIresponse(HttpStatus.OK.value(), "Images are successfully sent", images);
-	}
+//	@GetMapping("/getImages")
+//	@PreAuthorize("hasRole('ADMIN')")
+//	public APIresponse getImages() {
+//		List<String> images = new ArrayList<String>();
+//
+//		String filesPath = Paths.get(fileStorageProperties.getUploadDir()).toAbsolutePath().normalize().toString();
+//		System.out.println("File path is " + filesPath);
+//
+//		File fileFolder = new File(filesPath);
+//
+//		if (fileFolder != null) {
+//			for (final File file : fileFolder.listFiles()) {
+//
+//				System.out.println("For loop has been reached " + file);
+//				if (!file.isDirectory()) {
+//					String encodedBase64 = null;
+//					try {
+//						String extension = FilenameUtils.getExtension(file.getName());
+//						FileInputStream fileInputStream = new FileInputStream(file);
+//
+//						byte[] bytes = new byte[(int) file.length()];
+//						fileInputStream.read(bytes);
+//
+//						encodedBase64 = Base64.getEncoder().encodeToString(bytes);
+//						images.add(encodedBase64);
+//						fileInputStream.close();
+//					} catch (Exception e) {
+//						return new APIresponse(HttpStatus.EXPECTATION_FAILED.value(),
+//								"Something went wrong. Please check the backend code.", null);
+//					}
+//				}
+//			}
+//		}
+//		return new APIresponse(HttpStatus.OK.value(), "Images are successfully sent", images);
+//	}
 
 	@GetMapping("/getImagesDirectly")
 	@PreAuthorize("hasRole('ADMIN')")

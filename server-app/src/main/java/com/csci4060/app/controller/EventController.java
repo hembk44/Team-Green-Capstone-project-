@@ -94,7 +94,8 @@ public class EventController extends ExceptionResolver {
 		Calendar calendar = calendarService.findById(eventDummy.getCalendarId());
 
 		if (calendar == null) {
-			throw new FileNotFoundException("Calendar with given id is not present in the database");
+			return new APIresponse(HttpStatus.FORBIDDEN.value(),
+					"Calendar with the given id is not present in the database", null);
 		}
 
 		Event event = new Event(eventDummy.getTitle(), eventDummy.getDescription(), eventDummy.getLocation(),
@@ -107,7 +108,8 @@ public class EventController extends ExceptionResolver {
 			calendar.getEvents().add(event);
 			calendarService.save(calendar);
 		} else {
-			throw new AuthenticationException("You are not allowed to create an event for this calendar");
+			return new APIresponse(HttpStatus.FORBIDDEN.value(),
+					"You did not create the calendar. Authorization denied!", null);
 		}
 
 		if (!recipientList.isEmpty()) {
@@ -144,7 +146,7 @@ public class EventController extends ExceptionResolver {
 	}
 
 	@PostMapping(path = "/confirm/{id}", consumes = "application/json")
-	@PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
+	@PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN') or hasRole('MODERATOR')")
 	public APIresponse confirmEvent(@PathVariable("id") Long eventId) {
 
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -179,7 +181,7 @@ public class EventController extends ExceptionResolver {
 	}
 
 	@PostMapping(path = "/share")
-	@PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
+	@PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN') or hasRole('MODERATOR')")
 	public APIresponse shareGroup(@Valid @RequestBody EventShare eventShare) {
 
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -238,7 +240,7 @@ public class EventController extends ExceptionResolver {
 	}
 
 	@PutMapping(path = "/edit/{id}")
-	@PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
+	@PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN') or hasRole('MODERATOR')")
 	public APIresponse editEvent(@Valid @RequestBody EventEdit eventEdit, @PathVariable("id") Long eventId) {
 
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -367,7 +369,7 @@ public class EventController extends ExceptionResolver {
 	}
 
 	@DeleteMapping(path = "/delete/{id}")
-	@PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
+	@PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN') or hasRole('MODERATOR')")
 	public APIresponse deleteEvent(@PathVariable("id") Long eventId) {
 
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();

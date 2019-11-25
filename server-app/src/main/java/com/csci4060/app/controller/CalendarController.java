@@ -52,7 +52,7 @@ public class CalendarController extends ExceptionResolver {
 	EmailSenderService emailSenderService;
 
 	@PostMapping(path = "/create", produces = "application/json")
-	@PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
+	@PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN') or hasRole('MODERATOR')")
 
 	public APIresponse createCalendar(@Valid @RequestBody CalendarCreate calendarCreate) {
 
@@ -118,7 +118,7 @@ public class CalendarController extends ExceptionResolver {
 	}
 
 	@GetMapping(path = "/allCalendars")
-	@PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
+	@PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN') or hasRole('MODERATOR')")
 	public APIresponse getCalendars() {
 
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -148,7 +148,7 @@ public class CalendarController extends ExceptionResolver {
 	}
 
 	@PostMapping(path = "/share", produces = "application/json")
-	@PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
+	@PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN') or hasRole('MODERATOR')")
 
 	public APIresponse shareCalendar(@Valid @RequestBody CalendarShare calendarShare)
 
@@ -167,11 +167,13 @@ public class CalendarController extends ExceptionResolver {
 		Calendar calendar = calendarService.findById(calendarShare.getCalendarId());
 
 		if (calendar == null) {
-			throw new FileNotFoundException("Calendar with the given id is not present in the database");
+			return new APIresponse(HttpStatus.FORBIDDEN.value(),
+					"Calendar with the given id is not present in the database", null);
 		}
 
 		if (calendar.getCreatedBy() != user) {
-			throw new AuthenticationException("You are not allowed to share this calendar.");
+			return new APIresponse(HttpStatus.FORBIDDEN.value(),
+					"Calendar with the given id is not present in the database", null);
 		}
 
 		List<String> emailsFromJson = calendarShare.getRecipients();
@@ -211,7 +213,7 @@ public class CalendarController extends ExceptionResolver {
 	}
 
 	@PutMapping(path = "/edit/{id}")
-	@PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
+	@PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN') or hasRole('MODERATOR')")
 	public APIresponse editEvent(@Valid @RequestBody CalendarCreate calendarCreate,
 			@PathVariable("id") Long calendarId) {
 
@@ -238,21 +240,20 @@ public class CalendarController extends ExceptionResolver {
 		}
 
 		String calendarName = calendar.getName();
-		
+
 		if (!calendarName.equals(calendarCreate.getName())) {
 			if (calendarService.findByNameAndCreatedBy(calendarCreate.getName(), calendar.getCreatedBy()) != null) {
 
-				return new APIresponse(HttpStatus.CONFLICT.value(),
-						"Calendar with name " + calendarCreate.getName() + " already exists.Please choose a different name.",
-						null);
+				return new APIresponse(HttpStatus.CONFLICT.value(), "Calendar with name " + calendarCreate.getName()
+						+ " already exists.Please choose a different name.", null);
 			}
 		}
 
 		calendar.setName(calendarCreate.getName());
-		
+
 		String calendarColor = calendarCreate.getColor();
-		
-		if(calendarColor == null) {
+
+		if (calendarColor == null) {
 			calendarColor = "#800029";
 		}
 		calendar.setColor(calendarColor);
@@ -328,7 +329,7 @@ public class CalendarController extends ExceptionResolver {
 	}
 
 	@DeleteMapping(path = "/delete/{id}")
-	@PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
+	@PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN') or hasRole('MODERATOR')")
 	public APIresponse deleteCalendar(@PathVariable("id") Long calendarId) {
 
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();

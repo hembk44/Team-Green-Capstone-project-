@@ -23,9 +23,7 @@
 //				roleRepository.save(new Role(RoleName.ROLE_PM));
 //				roleRepository.save(new Role(RoleName.ROLE_ADMIN));
 //				roleRepository.save(new Role(RoleName.ROLE_MODERATOR));
-//		
-//				
-//				
+//			
 //			}
 //		};
 //	}
