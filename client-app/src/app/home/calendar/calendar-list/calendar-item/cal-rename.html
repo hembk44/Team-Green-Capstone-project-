@@ -92,7 +92,7 @@
         </mat-form-field>
         <mat-toolbar>
             <mat-toolbar-row>
-                <button mat-raised-button type="submit" class="button-maroon">Save</button>&nbsp;&nbsp;
+                <button mat-raised-button type="submit" class="button-maroon" [disabled]="!nameForm.valid">Save</button>&nbsp;&nbsp;
                 <button mat-raised-button type="button" class="button-maroon" (click)="groupSelect()">Select Groups</button>
             </mat-toolbar-row>
         </mat-toolbar>

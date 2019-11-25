@@ -71,7 +71,7 @@ export class DeleteUsersComponent implements OnInit {
           const obj = {
             "emails": this.updateEmails
           };
-          this.dataStorage.deleteUsers(obj).subscribe(result => {
+          this.dataStorage.deleteUsers(this.updateEmails).subscribe(result => {
             console.log(result);
             if(result){
               this.snackbar.open(result.message, '', {duration: 5000});
