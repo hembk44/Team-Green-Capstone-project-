@@ -13,16 +13,22 @@ import { CalEvent } from "../calendar/events.model";
 import { AuthService } from "src/app/auth/auth.service";
 import { Calendar } from "../calendar/calendar-list/calendar.model";
 import { CalendarService } from "../calendar/calendar-list/calendar.service";
-import { P } from '@angular/cdk/keycodes';
+import { P } from "@angular/cdk/keycodes";
 import { Form } from "@angular/forms";
 
 @Injectable({
   providedIn: "root"
 })
 export class DataStorageService {
+<<<<<<< HEAD
   private baseUrlEvent = "http://ec2-3-234-62-196.compute-1.amazonaws.com:8181/api/event/";
   private baseUrlCalendar = "http://ec2-3-234-62-196.compute-1.amazonaws.com:8181/api/calendar/";
   private baseUrlAdmin = "http://ec2-3-234-62-196.compute-1.amazonaws.com:8181/api/admin/"
+=======
+  private baseUrlEvent = "http://localhost:8181/api/event/";
+  private baseUrlCalendar = "http://localhost:8181/api/calendar/";
+  private baseUrlAdmin = "http://localhost:8181/api/admin/";
+>>>>>>> f11cbf32ad6ae199fd49365aa9af1429ab9158a3
 
   private isLoadingSubject: BehaviorSubject<boolean> = new BehaviorSubject<
     boolean
@@ -32,7 +38,7 @@ export class DataStorageService {
   private eventSubject: BehaviorSubject<any> = new BehaviorSubject<any>({});
 
   private calSubject: BehaviorSubject<any> = new BehaviorSubject<any>({});
-  private imageSubject: BehaviorSubject<any>=new BehaviorSubject<any>([]);
+  private imageSubject: BehaviorSubject<any> = new BehaviorSubject<any>([]);
   private userSubject: BehaviorSubject<any> = new BehaviorSubject<any>([]);
   private emailSubject: BehaviorSubject<any> = new BehaviorSubject<any>({});
   public emails: Observable<Emails[]> = this.emailSubject.asObservable();
@@ -58,7 +64,7 @@ export class DataStorageService {
     }
   }
 
-  get images(){
+  get images() {
     return this.imageSubject.value;
   }
 
@@ -72,18 +78,18 @@ export class DataStorageService {
 
   get users(): any[] {
     console.log(this.userSubject.value === {});
-    if(this.userSubject.value.length !== {}){
+    if (this.userSubject.value.length !== {}) {
       return this.userSubject.value;
-    }else{
+    } else {
       return [];
-    }  
+    }
   }
 
   get majors(): any[] {
     console.log(this.majorSubject.value);
-    if(this.majorSubject.value !== {}){
+    if (this.majorSubject.value !== {}) {
       return this.majorSubject.value;
-    } else{
+    } else {
       return [];
     }
   }
@@ -130,7 +136,18 @@ export class DataStorageService {
       );
   }
 
-  registerUsers(file: File) {
+  updatePassword(obj: Object) {
+    this.isLoadingSubject.next(true);
+
+    return this.http
+      .put<ApiResponse>("http://localhost:8181/api/admin/changePassword", obj)
+      .pipe(
+        (map(data => data), catchError(error => throwError(error))),
+        finalize(() => this.isLoadingSubject.next(false))
+      );
+  }
+
+  registerUsers(file: File, role: string) {
     this.isLoadingSubject.next(true);
     var formdata: FormData = new FormData();
     formdata.append("file", file);
@@ -138,74 +155,103 @@ export class DataStorageService {
     console.log("file upload!");
     return this.http
       .post<ApiResponse>(
+<<<<<<< HEAD
         "http://ec2-3-234-62-196.compute-1.amazonaws.com:8181/api/file/uploadUser/"+role,
+=======
+        "http://localhost:8181/api/file/uploadUser/" + role,
+>>>>>>> f11cbf32ad6ae199fd49365aa9af1429ab9158a3
         formdata
       )
       .pipe(
         (map(data => data), catchError(error => throwError(error))),
-        finalize(() => this.isLoadingSubject.next(false)))
+        finalize(() => this.isLoadingSubject.next(false))
+      );
   }
 
-  uploadImage(images): Observable<any>{
+  uploadImage(images): Observable<any> {
     console.log(images);
     var temp = [];
     const formData = new FormData();
     // for (let i = 0 ; i < images.length ; i++) {
     //   formData.append("file", images[i]);
     // }
-    for(let img of images){
-      formData.append('file', img);
+    for (let img of images) {
+      formData.append("file", img);
     }
+<<<<<<< HEAD
+=======
+    console.log(formData.get("file"));
+    //this.isLoadingSubject.next(true);
+    // return this.http.post<ApiResponse>(this.baseUrlAdmin+'uploadImage', image).pipe(
+    //   (map(data=>data)),
+    //   catchError(error => throwError(error)),
+    //   finalize(()=>this.isLoadingSubject.next(false))
+    // ).subscribe(result => {
+    //   this.imageSubject.next(result.result);
+    // });
+    console.log(formData.get("file"));
+>>>>>>> f11cbf32ad6ae199fd49365aa9af1429ab9158a3
     this.isLoadingSubject.next(true);
     return this.http
-      .post<ApiResponse>(
-        this.baseUrlAdmin+'uploadImages',
-        formData
-      )
+      .post<ApiResponse>(this.baseUrlAdmin + "uploadImages", formData)
       .pipe(
         (map(data => data), catchError(error => throwError(error))),
         finalize(() => this.isLoadingSubject.next(false))
       );
   }
 
-  getImgName(){
+  getImgName() {
     this.isLoadingSubject.next(true);
-    return this.http.get<ApiResponse>(this.baseUrlAdmin+'getallfiles').pipe(
-      (map(data=>data)),
+    return this.http.get<ApiResponse>(this.baseUrlAdmin + "getallfiles").pipe(
+      map(data => data),
       catchError(error => throwError(error)),
       finalize(() => this.isLoadingSubject.next(false))
     );
   }
 
-  getImageByName(name: string){
-    return this.http.get<ApiResponse>(this.baseUrlAdmin+'files/'+name);
+  getImageByName(name: string) {
+    return this.http.get<ApiResponse>(this.baseUrlAdmin + "files/" + name);
   }
 
+<<<<<<< HEAD
   getImages(): Observable<any>{
     return this.http.get('http://ec2-3-234-62-196.compute-1.amazonaws.com:8181/api/auth/getImages');
+=======
+  getImages(): Observable<any> {
+    return this.http.get("http://localhost:8181/api/auth/" + "getImages");
+>>>>>>> f11cbf32ad6ae199fd49365aa9af1429ab9158a3
   }
 
   addCourses(formData: FormData) {
     this.isLoadingSubject.next(true);
     return this.http
-      .post<ApiResponse>(
-        this.baseUrlAdmin + 'uploadCourses',
-        formData
-      )
+      .post<ApiResponse>(this.baseUrlAdmin + "uploadCourses", formData)
       .pipe(
         (map(data => data), catchError(error => throwError(error))),
         finalize(() => this.isLoadingSubject.next(false))
       );
   }
 
-  getMajors(){
+  getMajors() {
     this.isLoadingSubject.next(true);
+<<<<<<< HEAD
     this.http.get<ApiResponse>('http://ec2-3-234-62-196.compute-1.amazonaws.com:8181/api/group/getAllMajors').pipe(
       (map(data=>data), catchError(error => throwError(error))),
       finalize(()=>this.isLoadingSubject.next(false))
     ).subscribe(result => {
       this.majorSubject.next(result.result);
     });
+=======
+    this.http
+      .get<ApiResponse>("http://localhost:8181/api/group/getAllMajors")
+      .pipe(
+        (map(data => data), catchError(error => throwError(error))),
+        finalize(() => this.isLoadingSubject.next(false))
+      )
+      .subscribe(result => {
+        this.majorSubject.next(result.result);
+      });
+>>>>>>> f11cbf32ad6ae199fd49365aa9af1429ab9158a3
   }
 
   // private handleError(errorRes: HttpErrorResponse) {
@@ -321,19 +367,7 @@ export class DataStorageService {
   updateCalendar(obj: Object, id: number) {
     this.isLoadingSubject.next(true);
     return this.http
-    .put<ApiResponse>(this.baseUrlCalendar+'edit/'+id, obj)
-    .pipe(
-      (map(data => data),
-      catchError(error => throwError(error)),
-      finalize(()=>this.isLoadingSubject.next(false)))
-    );
-  }
-
-  updateRoles(obj: Object) {
-    console.log(obj);
-    this.isLoadingSubject.next(true);
-    return this.http
-      .put<ApiResponse>(this.baseUrlAdmin+"changeRole", obj)
+      .put<ApiResponse>(this.baseUrlCalendar + "edit/" + id, obj)
       .pipe(
         (map(data => data),
         catchError(error => throwError(error)),
@@ -341,29 +375,52 @@ export class DataStorageService {
       );
   }
 
-  uploadMajors2(){
+  updateRoles(obj: Object) {
+    console.log(obj);
     this.isLoadingSubject.next(true);
-    return this.http.post<ApiResponse>(this.baseUrlAdmin+'uploadMajor','').pipe(
-      (map(data=>data),
-      catchError(error => throwError(error))),
-      finalize(()=>this.isLoadingSubject.next(false))
-    );
+    return this.http
+      .put<ApiResponse>(this.baseUrlAdmin + "changeRole", obj)
+      .pipe(
+        (map(data => data),
+        catchError(error => throwError(error)),
+        finalize(() => this.isLoadingSubject.next(false)))
+      );
+  }
+
+  uploadMajors2() {
+    this.isLoadingSubject.next(true);
+    return this.http
+      .post<ApiResponse>(this.baseUrlAdmin + "uploadMajor", "")
+      .pipe(
+        (map(data => data), catchError(error => throwError(error))),
+        finalize(() => this.isLoadingSubject.next(false))
+      );
   }
 
   deleteUsers(obj: string[]) {
     console.log(obj);
     this.isLoadingSubject.next(true);
+<<<<<<< HEAD
     return this.http.post<ApiResponse>(this.baseUrlAdmin+'deleteUser', obj).pipe(
       (map(data => data),
       catchError(error => throwError(error)),
       finalize(() => this.isLoadingSubject.next(false)))
     );
+=======
+    return this.http
+      .delete<ApiResponse>(this.baseUrlAdmin + "deleteUser", obj)
+      .pipe(
+        (map(data => data),
+        catchError(error => throwError(error)),
+        finalize(() => this.isLoadingSubject.next(false)))
+      );
+>>>>>>> f11cbf32ad6ae199fd49365aa9af1429ab9158a3
   }
 
   fetchUsers() {
     this.isLoadingSubject.next(true);
     this.http
-      .get<ApiResponse>(this.baseUrlAdmin+"getAllUsers")
+      .get<ApiResponse>(this.baseUrlAdmin + "getAllUsers")
       .pipe(
         (map(data => data),
         catchError(error => throwError(error)),
@@ -407,7 +464,6 @@ export class DataStorageService {
         finalize(() => this.isLoadingSubject.next(false))
       );
   }
-
 
   emailSelectedMembers(obj: Object) {
     this.isLoadingSubject.next(true);

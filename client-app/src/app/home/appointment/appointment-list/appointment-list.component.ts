@@ -40,7 +40,10 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
     this.currentRole = this.role.user;
     console.log(this.role.user);
 
-    if (this.currentRole === "ROLE_USER" || this.currentRole === "ROLE_PM") {
+    if (
+      this.currentRole === "ROLE_USER" ||
+      this.currentRole === "ROLE_MODERATOR"
+    ) {
       console.log("user data here!!!");
       this.dataStorageAppointment.fetchUserAppointment();
       this.dataStorageAppointment.isLoading.subscribe(loading => {

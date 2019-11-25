@@ -26,26 +26,15 @@ export class GroupListComponent implements OnInit {
   ngOnInit() {
     this.currentRole = this.role.user;
     console.log(this.role.user);
-    if (this.currentRole === "ROLE_ADMIN") {
-      this.groupDataStorage.fetchGroup();
-      this.groupDataStorage.isLoading.subscribe(loading => {
-        if (!loading) {
-          this.group = this.groupDataStorage.groupLists;
-          console.log(this.group);
-          if (this.group.length <= 0) {
-            this.isGroupEmpty = true;
-          }
+    this.groupDataStorage.fetchGroup();
+    this.groupDataStorage.isLoading.subscribe(loading => {
+      if (!loading) {
+        this.group = this.groupDataStorage.groupLists;
+        console.log(this.group);
+        if (this.group.length <= 0) {
+          this.isGroupEmpty = true;
         }
-      });
-    }
+      }
+    });
   }
-  // createCourseGroup() {
-  //   this.router.navigate(["create-group"], { relativeTo: this.route });
-  //   this.groupTypeNavigation.changeGroupType("course");
-  // }
-
-  // createCustomGroup() {
-  //   this.router.navigate(["home/group/create-group"]);
-  //   this.groupTypeNavigation.changeGroupType("custom");
-  // }
 }

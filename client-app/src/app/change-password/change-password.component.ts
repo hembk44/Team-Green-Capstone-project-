@@ -4,6 +4,8 @@ import { TokenStorageService } from "../auth/token-storage.service";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Router, ActivatedRoute } from "@angular/router";
 import { DataStorageService } from "../home/shared/data-storage.service";
+import { AppointmentSnackbarComponent } from "../home/appointment/shared-appointment/appointment-snackbar/appointment-snackbar.component";
+import { MatSnackBar } from "@angular/material";
 
 @Component({
   selector: "app-change-password",
@@ -27,7 +29,8 @@ export class ChangePasswordComponent implements OnInit {
     private formBuilder: FormBuilder,
     private router: Router,
     private route: ActivatedRoute,
-    private dataStorageService: DataStorageService
+    private dataStorageService: DataStorageService,
+    private _snackbar: MatSnackBar
   ) {
     this.route.queryParams.subscribe(params => {
       this.resetToken = params["resetToken"];
@@ -54,6 +57,19 @@ export class ChangePasswordComponent implements OnInit {
     console.log(changePasswordObject);
     this.dataStorageService
       .submitPassword(changePasswordObject)
-      .subscribe(r => console.log(r));
+      .subscribe(result => {
+        console.log(result);
+        if (result) {
+          if (result.status == 200) {
+            this._snackbar.openFromComponent(AppointmentSnackbarComponent, {
+              duration: 5000,
+              panelClass: ["standard"],
+              data:
+                "Your password have been changed successfully. Please login!"
+            });
+            this.router.navigate(["login"]);
+          }
+        }
+      });
   }
 }
