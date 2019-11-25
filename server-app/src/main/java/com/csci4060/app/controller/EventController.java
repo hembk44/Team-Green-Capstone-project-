@@ -363,7 +363,7 @@ public class EventController extends ExceptionResolver {
 			emailSenderService.sendEmail(mailMessage);
 		}
 
-		return new APIresponse(HttpStatus.OK.value(), "Appointment has been successfully edited", event);
+		return new APIresponse(HttpStatus.OK.value(), "Event has been successfully edited", event);
 	}
 
 	@DeleteMapping(path = "/delete/{id}")
