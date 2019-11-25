@@ -37,7 +37,6 @@ import { GroupDetailComponent } from "./home/group/group-detail/group-detail.com
 import { AdministrationComponent } from "./home/administration/administration.component";
 import { GroupEditComponent } from "./home/group/group-edit/group-edit.component";
 import { ChangePasswordComponent } from "./change-password/change-password.component";
-<<<<<<< HEAD
 import { BroadcastComponent } from './broadcast/broadcast.component';
 import { BroadcastManagementComponent } from './home/administration/broadcast-management/broadcast-management.component';
 import { UserManualComponent } from './home/vertical-navigation/user-manual/user-manual.component';
@@ -47,9 +46,7 @@ import { BrdcastComponent } from './home/vertical-navigation/user-manual/brdcast
 import { CalComponent } from './home/vertical-navigation/user-manual/cal/cal.component';
 import { GrpsComponent } from './home/vertical-navigation/user-manual/grps/grps.component';
 import { ManualStartComponent } from './home/vertical-navigation/user-manual/manual-start/manual-start.component';
-=======
 import { YourGroupComponent } from "./home/group/your-group/your-group.component";
->>>>>>> 4eeeedaf11e1f690b1d7d495c3f24e3dca0f40a4
 
 const routes: Routes = [
   {
