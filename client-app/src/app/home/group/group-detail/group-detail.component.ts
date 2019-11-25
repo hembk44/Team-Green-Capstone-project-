@@ -92,7 +92,7 @@ export class GroupDetailComponent implements OnInit {
       console.log(shareObj);
       this.groupDataStorage.shareGroup(shareObj).subscribe(result => {
         console.log(result);
-        const sharedMsg = " This group has been successfully shared!";
+        const sharedMsg = "This group has been successfully shared!";
         if (result.status == 200) {
           this._snackBar.openFromComponent(GroupSnackbarComponent, {
             duration: 4000,
@@ -148,7 +148,7 @@ export class GroupDetailComponent implements OnInit {
             this._snackBar.openFromComponent(GroupSnackbarComponent, {
               duration: 5000,
               panelClass: ["standard"],
-              data: "An email has been successfully to selected members!"
+              data: "An email has been successfully sent to selected members!"
             });
           }
         });

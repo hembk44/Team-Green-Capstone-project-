@@ -21,8 +21,8 @@ const httpOptions = {
   providedIn: "root"
 })
 export class AuthService {
-  private loginUrl = "http://ec2-3-234-62-196.compute-1.amazonaws.com:8181/api/auth/signin";
-  private signupUrl = "http://ec2-3-234-62-196.compute-1.amazonaws.com:8181/api/auth/signup";
+  private loginUrl = "http://ec2-100-26-194-180.compute-1.amazonaws.com:8181/api/auth/signin";
+  private signupUrl = "http://ec2-100-26-194-180.compute-1.amazonaws.com:8181/api/auth/signup";
   private userRoleSubject: BehaviorSubject<any> = new BehaviorSubject<any>({});
   private usernameSubject: BehaviorSubject<any> = new BehaviorSubject<any>({});
   private nameSubject: BehaviorSubject<any> = new BehaviorSubject<any>({});
@@ -60,7 +60,7 @@ export class AuthService {
     return this.http
       .post<ApiResponse>(this.loginUrl, credentials, httpOptions)
       .subscribe((data: ApiResponse) => {
-        if (data) {
+        if (data.status === 200) {
           console.log(data);
           console.log(data.result);
           this.tokenStorage.saveToken(data.result.accessToken);

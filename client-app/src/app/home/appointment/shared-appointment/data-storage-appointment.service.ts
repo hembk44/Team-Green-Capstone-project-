@@ -10,7 +10,7 @@ import { delay } from "rxjs/operators";
   providedIn: "root"
 })
 export class DataStorageAppointmentService {
-  private baseUrlAppointment = "http://ec2-3-234-62-196.compute-1.amazonaws.com:8181/api/appointment/";
+  private baseUrlAppointment = "http://ec2-100-26-194-180.compute-1.amazonaws.com:8181/api/appointment/";
   private isLoadingSubject: BehaviorSubject<boolean> = new BehaviorSubject<
     boolean
   >(false);
