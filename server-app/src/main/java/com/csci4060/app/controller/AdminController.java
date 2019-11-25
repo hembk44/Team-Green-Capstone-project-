@@ -9,8 +9,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
-import java.util.stream.Collectors;
-
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -40,9 +38,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
 import com.csci4060.app.ExceptionResolver;
 import com.csci4060.app.configuration.fileStorage.FileStorageProperties;
 import com.csci4060.app.model.APIresponse;
@@ -59,7 +54,6 @@ import com.csci4060.app.services.FileStorageService;
 import com.csci4060.app.services.MajorService;
 import com.csci4060.app.services.RoleService;
 import com.csci4060.app.services.UserService;
-import com.sun.mail.iap.Response;
 
 @RestController
 @CrossOrigin(origins = "*")
