@@ -262,15 +262,22 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
 		
 		List<Group> memberGroups = groupService.findAllByMembers(user);
 		
+		for (Group group: memberGroups) {
+			System.out.println("Member group is: "+group.getId());
+		}
+		
 		if(memberGroups != null) {
 			for(Group group: memberGroups) {
-				group.getMembers().remove(user);
+				System.out.println("Groups id: "+ group.getId()+". Groups members before saving: "+group.getMembers());
+				group.removeMember(user);
 				groupService.save(group);
+				System.out.println("Groups members after saving: "+group.getMembers());
 			}
 		}
 		
 		user.getRoles().clear();
 		
+		System.out.println("User roles cleared:"+user.getRoles());
 		userRepo.delete(user);
 	}
 

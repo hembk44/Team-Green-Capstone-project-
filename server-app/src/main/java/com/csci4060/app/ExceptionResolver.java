@@ -1,7 +1,5 @@
 package com.csci4060.app;
 
-import java.util.List;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;

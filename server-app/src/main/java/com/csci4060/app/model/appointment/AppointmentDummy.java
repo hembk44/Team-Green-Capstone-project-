@@ -16,8 +16,9 @@ public class AppointmentDummy {
 	
 	String description;
 	
+	@NotNull
 	//validation for @NotNull is needed
-	List<@NotNull AppointmentDate> appdates;
+	List<AppointmentDate> appdates;
 	
 	
 	List<String> recepients;

@@ -75,4 +75,9 @@ public class Group {
 		super();
 	}
 	
+	public void removeMember(User user) {
+        members.remove(user);
+        //event.getCalendars().remove(this);
+    }
+	
 }
