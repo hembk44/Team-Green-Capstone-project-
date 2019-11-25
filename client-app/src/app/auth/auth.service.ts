@@ -81,7 +81,7 @@ export class AuthService {
               panelClass: ["standard"],
               data: "Login Successful!"
             });
-            this.router.navigate(["home"]);
+            // this.router.navigate(["home"]);
           }
           if (data.status == 403) {
             this._snackbar.openFromComponent(AppointmentSnackbarComponent, {
@@ -89,6 +89,7 @@ export class AuthService {
               panelClass: ["delete"],
               data: data.message
             });
+            this.isLoggedin.next(false);
           }
           console.log(data);
           console.log(data.result);
