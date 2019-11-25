@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 import com.csci4060.app.model.User;
 import com.csci4060.app.model.event.Event;
 import lombok.Data;
@@ -22,7 +24,7 @@ public class Calendar {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	long id;
 	
-	@NotEmpty(message= "Calendar name must not be empty!")
+	@NotNull(message= "Calendar name must not be empty!")
 	String name;
 	
 	String color;

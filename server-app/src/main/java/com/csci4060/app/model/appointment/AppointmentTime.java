@@ -6,6 +6,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -21,9 +22,13 @@ public class AppointmentTime {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
-	@NotEmpty(message="Start Time must be specified")
+	@NotNull(message="Start Time must be specified")
 	private String startTime;
+	
+	@NotNull(message="End Time must be specified")
 	private String endTime;
+	
+	@NotNull(message=" Span of appointments must be specified")
 	private int interv;
 
 }

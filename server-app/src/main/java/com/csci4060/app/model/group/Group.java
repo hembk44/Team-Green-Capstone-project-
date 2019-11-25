@@ -27,15 +27,15 @@ public class Group {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
-	@NotBlank
+	@NotBlank(message= "Name must not be empty and need to have at least one character!")
 	private String name;
 	
-	@NotBlank
+	@NotBlank(message= "Event type must not be empty and need to have at least one character!")
 	private String type;
 	
 	private String description;
 	
-	@NotBlank
+	@NotBlank(message= "Semester term not be empty and need to have at least one character!")
 	private String semesterTerm;
 	
 	@ManyToOne(targetEntity = Major.class)
