@@ -1,26 +1,4 @@
-<!-- <div>
-  <span class="example-spacer"></span>
-  <mat-icon (click)="close()" style="cursor:pointer">clear</mat-icon><br />
-</div> -->
-
-<!-- <div class="example-card">
-  <p *ngIf="groups.length === 0">You have no groups.</p>
-  <mat-checkbox
-    *ngFor="let group of groups"
-    color="primary"
-    (click)="addGroup(group.id)"
-    >{{group.name}} - {{group.semesterTerm}}
-    {{group.semesterYear}}</mat-checkbox
-  >
-</div> -->
-<mat-toolbar>
-  <mat-toolbar-row>
-    <span class="example-spacer"></span>
-    <mat-icon (click)="close()" style="cursor:pointer" aria-hidden="false"
-      >clear</mat-icon
-    >
-  </mat-toolbar-row>
-</mat-toolbar>
+<p><strong>Select group</strong></p>
 <mat-form-field style=" margin-left: 10px; padding: 10px;">
   <input
     type="text"
@@ -46,6 +24,17 @@
     </mat-selection-list>
   </div>
 </div>
+<mat-toolbar>
+  <mat-toolbar-row>
+    <span class="example-spacer"></span>
+    <button (click)="close()" mat-raised-button class="button-maroon">
+      ok
+    </button>
+    <!-- <mat-icon (click)="close()" style="cursor:pointer" aria-hidden="false"
+      >clear</mat-icon
+    > -->
+  </mat-toolbar-row>
+</mat-toolbar>
 <ng-template #elseBlock>
   <p>You have no group yet!</p>
 </ng-template>

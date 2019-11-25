@@ -28,7 +28,7 @@
         aria-label="Example icon-button with a menu"
         matTooltip="check sent and received appointments"
       >
-        Appointments <mat-icon>expand_more </mat-icon>
+        All Appointments <mat-icon>expand_more </mat-icon>
       </button>
       <mat-menu #type="matMenu">
         <button mat-menu-item (click)="navigateToReceive()">
@@ -68,7 +68,7 @@
   </div>
 </div>
 
-<div *ngIf="currentRole == 'ROLE_USER' || currentRole ==='ROLE_MODERATOR'">
+<div *ngIf="currentRole == 'ROLE_USER' || currentRole === 'ROLE_MODERATOR'">
   <mat-toolbar>
     <mat-toolbar-row>
       <div
