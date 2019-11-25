@@ -16,7 +16,7 @@ public class AppointmentDummy {
 	
 	String description;
 	
-	@NotNull
+	@NotEmpty(message = "Appointment date must not be null")
 	//validation for @NotNull is needed
 	List<AppointmentDate> appdates;
 	

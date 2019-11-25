@@ -28,22 +28,18 @@ public class User{
 	private Long id;
 	
 	@NotEmpty(message="Name must not be empty!")
-	@Size(min=3, max=50)
 	private String name;
 	
 	@JsonIgnore
 	@NotEmpty(message="Username must not be empty!")
-	@Size(max=50)
 	private String username;
 	
 	//What naturally identifies an entity. This improves performance during lookup
 	@NaturalId
-	@Size(min=6, max=100)
 	@NotEmpty(message= "Email must not be empty")
 	private String email;
 	
 	@NotEmpty(message="Password must not be empty")
-	@Size(min=6, max=100 , message = "Password must be minimum of 6 characters")
 	@JsonIgnore
 	private String password;
 	

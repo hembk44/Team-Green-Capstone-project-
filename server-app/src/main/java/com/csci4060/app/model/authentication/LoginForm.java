@@ -9,10 +9,8 @@ import lombok.Data;
 public class LoginForm {
 
 	@NotEmpty(message= "Username must not be empty")
-	@Size(min = 3, max = 60)
 	private String username;
 	
 	@NotEmpty(message= "Password must not be empty")
-	@Size(min = 6, max = 40)
 	private String password;
 }
