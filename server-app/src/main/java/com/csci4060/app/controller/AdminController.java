@@ -151,11 +151,36 @@ public class AdminController extends ExceptionResolver {
 		return new APIresponse(HttpStatus.OK.value(), "All users in the system are provided", response);
 	}
 
+//	@DeleteMapping(path = "/deleteUser")
+//	@PreAuthorize("hasRole('ADMIN')")
+//	public APIresponse deleteUser(@RequestBody EmailWrapper emailWrapper) {
+//
+//		List<String> emails = emailWrapper.getEmails();
+//
+//		for (String email : emails) {
+//			User user = userService.findByEmail(email);
+//
+//			if (user != null) {
+//				userService.delete(user);
+//
+//				SimpleMailMessage mailMessage = new SimpleMailMessage();
+//
+//				mailMessage.setTo(user.getEmail());
+//				mailMessage.setSubject("User Removed");
+//				mailMessage.setFrom("ulmautoemail@gmail.com");
+//				mailMessage.setText("You have been removed from the ulm communication app. " + "Thank you!");
+//
+//				emailSenderService.sendEmail(mailMessage);
+//			}
+//
+//		}
+//
+//		return new APIresponse(HttpStatus.OK.value(), "User was successfully deleted.", emails);
+//	}
+
 	@DeleteMapping(path = "/deleteUser")
 	@PreAuthorize("hasRole('ADMIN')")
-	public APIresponse deleteUser(@RequestBody EmailWrapper emailWrapper) {
-
-		List<String> emails = emailWrapper.getEmails();
+	public APIresponse deleteUser(@RequestBody List<String> emails) {
 
 		for (String email : emails) {
 			User user = userService.findByEmail(email);
@@ -177,7 +202,7 @@ public class AdminController extends ExceptionResolver {
 
 		return new APIresponse(HttpStatus.OK.value(), "User was successfully deleted.", emails);
 	}
-
+	
 	@PostMapping(path = "/uploadMajor")
 	@PreAuthorize("hasRole('ADMIN')")
 	public APIresponse uploadMajor() {
