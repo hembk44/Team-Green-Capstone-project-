@@ -99,6 +99,7 @@ public class AuthRestAPIs extends ExceptionResolver {
 
 		User user = userService.findByUsername(loginRequest.getUsername());
 		
+
 		if(user == null) {
 			return new APIresponse(HttpStatus.FORBIDDEN.value(), "Please register before logging in. ", null);
 		}
@@ -225,6 +226,11 @@ public class AuthRestAPIs extends ExceptionResolver {
 			return new APIresponse(HttpStatus.NOT_FOUND.value(),"Requested user for given email is not found. Please sign up!", null);
 		} else {
 			
+			if (confirmationTokenService.findByUser(user) != null)
+			{
+				confirmationTokenService.delete(confirmationTokenService.findByUser(user));
+			}
+			
 			ConfirmationToken token = new ConfirmationToken(user);
      		confirmationTokenService.save(token);
 
@@ -254,15 +260,16 @@ public class AuthRestAPIs extends ExceptionResolver {
         ModelAndView modelAndView = new ModelAndView();
        try {
             if (!(resettoken.getCreatedDate()).after(new Date())) {
-            	System.out.println("True");
+            	
                modelAndView.addObject("resetToken", token);
                modelAndView.setViewName("redirect:http://localhost:4200/reset-password");
             } else {
-            	System.out.println("false");
+            	
                 modelAndView.addObject("errorMessage", "Oops!  Your password reset link has expired.");
                modelAndView.setViewName("redirect:http://localhost:4200/forgot-password");
             }
-        } catch(RuntimeException e) {
+        } catch(RuntimeException e) 
+       {
            modelAndView.addObject("errorMessage", "Oops!  This is an invalid password reset link.");
            modelAndView.setViewName("redirect:http://localhost:4200/forgot-password");
         }
@@ -271,12 +278,12 @@ public class AuthRestAPIs extends ExceptionResolver {
 	
 	
 	@PostMapping(value = "/processResetPassword")
-	public ModelAndView setNewPassword(@Valid @RequestBody Map<String, String> requestParams, RedirectAttributes redir, HttpServletResponse response) {
+	public APIresponse setNewPassword(@Valid @RequestBody Map<String, String> requestParams, RedirectAttributes redir, HttpServletResponse response) {
 
         
         ConfirmationToken resetToken = confirmationTokenService.findByConfirmationToken(requestParams.get("resetToken"));
         User resetUser = resetToken.getUser();
-        ModelAndView modelAndView = new ModelAndView();
+        
       try {
            System.out.println("true");
            System.out.println(resetToken.getConfirmationToken());
@@ -285,15 +292,12 @@ public class AuthRestAPIs extends ExceptionResolver {
             
             confirmationTokenService.delete(resetToken);
           
-            //redir.addFlashAttribute("successMessage", "You have successfully reset your password. You may now login.");
-            //modelAndView.addObject("successMessage", "You have successfully reset your password. You may now login.");
-           modelAndView.setViewName("redirect:http://localhost:4200");
-            return modelAndView;
-        } catch (RuntimeException e){
-            modelAndView.addObject("errorMessage", "Oops!  This is an invalid password reset link.");
-            modelAndView.setViewName("redirect:http://localhost:4200/forgot-password");
+            return new APIresponse(HttpStatus.OK.value(), "Password has been changed!", null);
         }
-        return modelAndView;
+      	  catch (RuntimeException e)
+          {
+        	 return new APIresponse(HttpStatus.OK.value(), "Unable to change the password at the time", null);
+          }
     }
 
 }

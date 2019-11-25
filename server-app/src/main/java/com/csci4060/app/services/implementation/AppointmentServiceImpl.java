@@ -95,12 +95,16 @@ public class AppointmentServiceImpl implements AppointmentService {
 
 	@Override
 	public List<AppointmentDate> findAllAppdatesById(Appointment app) {
-		Optional<List<AppointmentDate>> appDates = appointmentRepo.findAllAppdatesById(app);
+		
+			Optional<List<AppointmentDate>> appDates = appointmentRepo.findAllAppdatesById(app);
 
-		if (appDates.isPresent()) {
-			return appDates.get();
-		}
-		return null;
+			if (appDates.isPresent()) {
+				return appDates.get();
+			}
+			return null;
+		
 	}
+
+	
 
 }

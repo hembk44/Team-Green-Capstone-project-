@@ -9,6 +9,9 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 import com.csci4060.app.model.User;
 import lombok.Data;
 
@@ -20,7 +23,9 @@ public class Appointment {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
+	
 	String name;
+	
 	String description;
 
 	@OneToMany(targetEntity = AppointmentDate.class)
