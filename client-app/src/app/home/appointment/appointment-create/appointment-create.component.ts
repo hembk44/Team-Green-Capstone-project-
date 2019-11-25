@@ -48,7 +48,7 @@ export class AppointmentCreateComponent implements OnInit {
   appointmentLocation: string = "";
   currentRole: string;
   appointmentType: string;
-  pendingUsers: string[] = [];
+  pendingUsers: any[] = [];
 
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
 
@@ -138,7 +138,6 @@ export class AppointmentCreateComponent implements OnInit {
       console.log(this.editMode);
       this.initForm();
     });
-
     let dateRange = new FormArray([this.date]);
     this.appointmentForm = this.formBuilder.group({
       title: ["", Validators.required],
@@ -147,7 +146,6 @@ export class AppointmentCreateComponent implements OnInit {
       email: this.email,
       dateRange: dateRange
     });
-    // this.initForm();
   }
 
   private initForm() {
@@ -155,28 +153,21 @@ export class AppointmentCreateComponent implements OnInit {
       this.dataStorageAppointment
         .displayAppointmentDetails(this.id)
         .subscribe(result => {
-          console.log(result);
           this.detailResponse = result.result;
           console.log(this.detailResponse);
           this.pendingUsers = this.detailResponse.pendingUsers;
-          console.log(this.pendingUsers);
           for (let user of this.pendingUsers) {
             this.emails.push(user.email);
           }
-          console.log(this.emails);
           this.appointments = this.detailResponse.response;
           for (let i of this.appointments) {
             this.timeslots.push(i.response);
             this.appointmentLocation = i.location;
           }
-          console.log(this.pendingUsers);
-          console.log(this.appointments);
-          console.log(this.timeslots);
           for (let timeslot of this.timeslots) {
             this.appointmentName = timeslot[0].appointmentName;
             this.appointmentDesc = timeslot[0].appointmentDescription;
           }
-          console.log(this.appointmentName);
         });
       this.emails = this.pendingUsers;
       let title = this.appointmentName;
@@ -191,13 +182,6 @@ export class AppointmentCreateComponent implements OnInit {
         email: email,
         dateRange: dateRange
       });
-      // this.appointmentForm = new FormGroup({
-      //   title: new FormControl(this.appointmentName, [Validators.required]),
-      //   description: new FormControl(this.appointmentDesc),
-      //   location: new FormControl(this.appointmentLocation),
-      //   email: this.email,
-      //   dateRange: new FormArray([this.date])
-      // });
     } else {
       let title = "";
       let description = "";

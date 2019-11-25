@@ -8,13 +8,14 @@ import { CalEvent } from "../events.model";
 import { Router } from "@angular/router";
 import { CalendarService } from "../calendar-list/calendar.service";
 import { Calendar } from "../calendar-list/calendar.model";
-import { MatDialog, MatSnackBar, MatChipInputEvent } from "@angular/material";
-import { DataStorageService } from "../../shared/data-storage.service";
+import { MatDialog, MatSnackBar, MatChipInputEvent, MatAutocompleteSelectedEvent } from "@angular/material";
+import { DataStorageService, Emails } from "../../shared/data-storage.service";
 import { EventDate } from "../event-date.model";
 import { AuthService } from "src/app/auth/auth.service";
 import { NgxMaterialTimepickerTheme } from 'ngx-material-timepicker';
 import { ENTER, COMMA } from '@angular/cdk/keycodes';
 import { GroupSelection } from '../../shared/group-selection';
+import { startWith, map } from 'rxjs/operators';
 
 @Component({
   selector: "app-create-event",
@@ -47,6 +48,9 @@ export class CreateEventComponent implements OnInit {
   errorMessage: string;
   @ViewChild("chipList", { static: false }) chipList;
   role: string;
+  userList: any = [];
+  filteredUserList: any;
+  userInput: any;
 
   constructor(
     private router: Router,
@@ -55,7 +59,21 @@ export class CreateEventComponent implements OnInit {
     private dataStorage: DataStorageService,
     private calService: CalendarService,
     private snackbar: MatSnackBar
-  ) {}
+  ) {
+    this.dataStorage.getEmails();
+    this.dataStorage.emails.subscribe((result: Emails[]) => {
+      if (result.length > 0) {
+        result.forEach(o => this.userList.push(o.email));
+      }
+    });
+
+    this.filteredUserList = this.email.valueChanges.pipe(
+      startWith(null),
+      map((user: string | null) =>
+        user ? this.filter(user) : this.userList.slice()
+      )
+    );
+  }
   
   //theme for time picker
   timeTheme: NgxMaterialTimepickerTheme={
@@ -94,6 +112,20 @@ export class CreateEventComponent implements OnInit {
       allDay: new FormControl(),
       calendar: new FormControl([Validators.required])
     });
+  }
+
+  filter(value: string): string[] {
+    const filterValue = value.toLocaleLowerCase();
+    return this.userList.filter(user =>
+      user.toLocaleLowerCase().includes(filterValue)
+    );
+  }
+  selected(event: MatAutocompleteSelectedEvent): void {
+    if (!this.emails.includes(event.option.value)) {
+      this.emails.push(event.option.value);
+      this.userInput.nativeElement.value = "";
+      this.email.setValue(null);
+    }
   }
 
   getErrorMessage() {

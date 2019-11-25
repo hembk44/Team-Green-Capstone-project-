@@ -1,14 +1,16 @@
-import { Component, OnInit, Input, Inject, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, Inject, ViewChild, ElementRef } from '@angular/core';
 import { Calendar } from '../calendar.model';
 import { CalendarService } from '../calendar.service';
 import { AuthService } from 'src/app/auth/auth.service';
-import { MatDialogRef, MatDialog, MAT_DIALOG_DATA, MatSnackBar, MatChipInputEvent } from '@angular/material';
+import { MatDialogRef, MatDialog, MAT_DIALOG_DATA, MatSnackBar, MatChipInputEvent, MatAutocomplete, MatAutocompleteSelectedEvent } from '@angular/material';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ShareCalendarComponent } from '../../share-calendar/share-calendar.component';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
-import { DataStorageService } from 'src/app/home/shared/data-storage.service';
+import { DataStorageService, Emails } from 'src/app/home/shared/data-storage.service';
 import { ENTER, COMMA } from '@angular/cdk/keycodes';
 import { GroupSelection } from 'src/app/home/shared/group-selection';
+import { Observable } from 'rxjs';
+import { startWith, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-calendar-item',
@@ -90,14 +92,49 @@ export class CalRename implements OnInit{
   @ViewChild("chipList", { static: false }) chipList;
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   errorMessage: string;
-  
+  filteredUserList: Observable<string[]>;
+  userList: string[] = [];
+  @ViewChild("userInput", { static: false }) userInput: ElementRef<
+    HTMLInputElement
+  >;
+  @ViewChild("auto", { static: false }) matAutocomplete: MatAutocomplete;
+
   constructor (
     private ref: MatDialogRef<CalRename>,
     private dataStorage: DataStorageService,
     private dialog: MatDialog,
     private snackbar: MatSnackBar,
     @Inject(MAT_DIALOG_DATA)public data: Calendar
-  ){}
+  ){
+    this.dataStorage.getEmails();
+    this.dataStorage.emails.subscribe((result: Emails[]) => {
+      if (result.length > 0) {
+        result.forEach(o => this.userList.push(o.email));
+      }
+    });
+
+    this.filteredUserList = this.email.valueChanges.pipe(
+      startWith(null),
+      map((user: string | null) =>
+        user ? this.filter(user) : this.userList.slice()
+      )
+    );
+  }
+
+  filter(value: string): string[] {
+    const filterValue = value.toLocaleLowerCase();
+    return this.userList.filter(user =>
+      user.toLocaleLowerCase().includes(filterValue)
+    );
+  }
+  selected(event: MatAutocompleteSelectedEvent): void {
+    if (!this.emails.includes(event.option.value)) {
+      this.emails.push(event.option.value);
+      this.userInput.nativeElement.value = "";
+      this.email.setValue(null);
+    }
+  }
+  
   ngOnInit(){
     this.cal = this.data;
     console.log(this.cal);

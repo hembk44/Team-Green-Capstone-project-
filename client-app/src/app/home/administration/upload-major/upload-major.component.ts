@@ -46,7 +46,7 @@ export class UploadMajorComponent implements OnInit {
   }
   onSubmit() {
     if (this.isInvalid) {
-      this.invalidExtension = "not supported file type!!!";
+      this.invalidExtension = "not supported file type";
     } else {
       console.log("submitted");
       this.currentFileUpload = this.selectedFiles.item(0);
@@ -56,10 +56,10 @@ export class UploadMajorComponent implements OnInit {
       formData.append("file", this.currentFileUpload);
       this.dataStorage.uploadMajors(formData).subscribe(result => {
         console.log(result);
-        if (result.status === 201) {
+        if (result.status === 200) {
           let snackBarRef = this._snackBar.open(
-            "All users are successfully registered!!!",
-            "close",
+            result.message,
+            "",
             { duration: 5000, panelClass: ["standard"] }
           );
           snackBarRef

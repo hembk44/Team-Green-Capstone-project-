@@ -147,16 +147,39 @@
           <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
         </mat-chip>
         <input
-          placeholder="Add Recipients"
-          matInput
-          [formControl]="email"
-          [matChipInputFor]="chipList"
-          [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-          [matChipInputAddOnBlur]="addOnBlur"
-          (matChipInputTokenEnd)="add($event)"
-        />
-      </mat-chip-list>
-      <mat-error *ngIf="!isEmailValid">{{ errorMessage }}</mat-error>
+        placeholder="Enter Emails"
+        matInput
+        [formControl]="email"
+        [matAutocomplete]="auto"
+        [matChipInputFor]="chipList"
+        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+        [matChipInputAddOnBlur]="addOnBlur"
+        (matChipInputTokenEnd)="add($event)"
+      />
+        </mat-chip-list>
+        <mat-autocomplete
+        #auto="matAutocomplete"
+        (optionSelected)="selected($event)"
+        >
+        <mat-option
+            *ngFor="let user of filteredUserList | async"
+            [value]="user"
+        >
+            {{ user }}
+        </mat-option>
+        </mat-autocomplete>
+        <mat-error *ngIf="!isEmailValid">{{ errorMessage }}</mat-error>
+        <mat-autocomplete
+            #auto="matAutocomplete"
+            (optionSelected)="selected($event)"
+        >
+            <mat-option
+            *ngFor="let user of filteredUserList | async"
+            [value]="user"
+            >
+            {{ user }}
+            </mat-option>
+        </mat-autocomplete>
       <mat-hint>Use commas or hit ENTER for multiple emails.</mat-hint>
     </mat-form-field>&nbsp;
     

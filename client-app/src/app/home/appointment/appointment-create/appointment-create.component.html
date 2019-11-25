@@ -8,7 +8,6 @@
       matInput
       placeholder="Appointment Title"
       formControlName="title"
-      [(value)]="appointmentName"
     />
   </mat-form-field>
 
@@ -17,7 +16,6 @@
       matInput
       placeholder="Appointment Description"
       formControlName="description"
-      [(value)]="appointmentDesc"
     ></textarea>
   </mat-form-field>
 
@@ -26,7 +24,6 @@
       matInput
       placeholder="Location"
       formControlName="location"
-      [(value)]="appointmentLocation"
     />
   </mat-form-field>
 
@@ -36,7 +33,7 @@
         <mat-chip
           *ngFor="let email of emails"
           [selectable]="selectable"
-          [removable]="removable"
+          [removable]="!pendingUsers.includes(email)"
           (removed)="remove(email)"
         >
           <mat-icon mat-list-icon>person_outline</mat-icon> {{ email }}

@@ -63,19 +63,6 @@ export class BroadcastManagementComponent implements OnInit,OnDestroy{
       console.log(this.newImgs);
     })
 
-    // this.dataStorage.isLoading.subscribe(loading => {
-    //   if(!loading){
-    //     for(let img of this.images){
-    //       this.dataStorage.getImageByName(img).subscribe(result => {
-    //         this.newImgs.push(result);
-    //       })
-    //     }
-    //   }
-    // })
-
-    
-    //console.log(this.newImgs);
-
     this.imageForm = this.formBuilder.group({
       image: [undefined, Validators.required]
     })
@@ -109,7 +96,7 @@ export class BroadcastManagementComponent implements OnInit,OnDestroy{
       }
       
     }
-    console.log(this.tempArr)
+    
 
   }
 
@@ -120,7 +107,6 @@ export class BroadcastManagementComponent implements OnInit,OnDestroy{
 
   validateFile(name: String) {
     var fileExt = name.substring(name.lastIndexOf(".") + 1);
-    console.log("Input files extension: " + fileExt);
     for (let ext of this.validFileExtensions) {
       if (fileExt.toLowerCase() == ext) {
         return true;
@@ -131,39 +117,21 @@ export class BroadcastManagementComponent implements OnInit,OnDestroy{
 
   onSubmit() {
     this.dataStorage.uploadImage(this.tempArr).subscribe(result =>{
-      console.log(result);
+      this._snackBar.open(result.message, '', {duration:5000})
     });
   }
 
-  // ngOnDestroy() {
-  //   this.onSubmit();
-  // }
 
   saveForm(submitForm: FormGroup){
     if(submitForm.valid){
-      // //this.tempArr.push(this.userFile);
-      // const formData: FormData = new FormData();
-      // for(let img of this.newImgs){
-      //   //this.tempArr.push(img);
-      // }
-      // console.log(this.tempArr);
-      // //formData.append('file', this.tempArr);
-      // console.log(formData.get('file'));
-      // console.log(formData)
-      // // this.dataStorage.uploadImage(formData).subscribe(result => {
-      // //   console.log(result);
-      // // });
       this.dataStorage.uploadImage(this.tempArr).subscribe(result => {
-        console.log(result);
+        this._snackBar.open(result.message, '',{duration:5000})
       })
-      //location.reload();
     } 
   }
 
   ngOnDestroy(){
-    this.dataStorage.uploadImage(this.tempArr).subscribe(result => {
-      console.log(result);
-    })
+    this.dataStorage.uploadImage(this.tempArr);
   }
 
 }

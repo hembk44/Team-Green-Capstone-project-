@@ -61,6 +61,9 @@ export class UploadCoursesComponent implements OnInit {
       formData.append('file', this.currentFileUpload);
       this.dataStorage.addCourses(formData).subscribe(result => {
         console.log(result);
+        if(result){
+          this._snackBar.open(result.message, '',{duration:5000})
+        }
       })
     }
   }

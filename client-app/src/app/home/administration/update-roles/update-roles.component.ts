@@ -81,7 +81,7 @@ export class UpdateRolesComponent implements OnInit {
         if (result === "confirmed") {
           this.dataStorage.updateRoles(this.updates).subscribe(result => {
             if(result){
-              this.snackbar.open(result.message, 'OK', {duration:3000});
+              this.snackbar.open(result.message, '', {duration:3000});
               this.dataStorage.fetchUsers();
             }      
           });
