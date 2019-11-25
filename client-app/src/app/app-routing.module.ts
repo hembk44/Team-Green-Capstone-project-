@@ -38,6 +38,7 @@ import { AdministrationComponent } from "./home/administration/administration.co
 import { GroupEditComponent } from "./home/group/group-edit/group-edit.component";
 import { ChangePasswordComponent } from "./change-password/change-password.component";
 import { YourGroupComponent } from "./home/group/your-group/your-group.component";
+import { EmailDialogComponent } from "./shared/email-dialog/email-dialog.component";
 
 const routes: Routes = [
   {
@@ -54,9 +55,13 @@ const routes: Routes = [
   {
     path: "forgot-password",
 
+    component: EmailDialogComponent
+  },
+  {
+    path: "reset-password",
+
     component: ChangePasswordComponent
   },
-
   {
     path: "signup",
     component: RegisterComponent

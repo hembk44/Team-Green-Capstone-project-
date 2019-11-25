@@ -115,6 +115,7 @@ import { AppointmentSnackbarComponent } from "./home/appointment/shared-appointm
 import { GroupSnackbarComponent } from "./home/group/shared-group/group-snackbar/group-snackbar.component";
 import { UploadMajorComponent } from "./home/administration/upload-major/upload-major.component";
 import { YourGroupComponent } from "./home/group/your-group/your-group.component";
+import { EmailDialogComponent } from './shared/email-dialog/email-dialog.component';
 
 @NgModule({
   declarations: [
@@ -173,7 +174,8 @@ import { YourGroupComponent } from "./home/group/your-group/your-group.component
     AppointmentSnackbarComponent,
     GroupSnackbarComponent,
     UploadMajorComponent,
-    YourGroupComponent
+    YourGroupComponent,
+    EmailDialogComponent
   ],
   imports: [
     BrowserModule,

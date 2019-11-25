@@ -5,6 +5,8 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 
 import { AuthService } from "../auth/auth.service";
 import { TokenStorageService } from "../auth/token-storage.service";
+import { MatDialog } from "@angular/material/dialog";
+import { EmailDialogComponent } from "../shared/email-dialog/email-dialog.component";
 
 @Component({
   selector: "app-login",
@@ -25,6 +27,7 @@ export class LoginComponent implements OnInit {
     private authService: AuthService,
     private tokenStorage: TokenStorageService,
     private formBuilder: FormBuilder,
+    public dialog: MatDialog,
     private router: Router
   ) {}
 
@@ -36,6 +39,11 @@ export class LoginComponent implements OnInit {
   }
 
   forgotPassword() {
+    // const dialogRef = this.dialog.open(EmailDialogComponent, {
+    //   width: "400px"
+    // });
+
+    // dialogRef.afterClosed().subscribe(r => console.log(r));
     this.router.navigate(["forgot-password"]);
   }
 

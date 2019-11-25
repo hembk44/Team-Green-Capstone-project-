@@ -1,15 +1,15 @@
+<ng-http-loader
+  [backgroundColor]="'#800029'"
+  [minDuration]="300"
+></ng-http-loader>
+
 <form
   class="example-container"
   [formGroup]="appointmentForm"
   (ngSubmit)="onSubmit()"
 >
   <mat-form-field style="width: 50%;">
-    <input
-      matInput
-      placeholder="Appointment Title"
-      formControlName="title"
-      [(value)]="appointmentName"
-    />
+    <input matInput placeholder="Appointment Title" formControlName="title" />
   </mat-form-field>
 
   <mat-form-field>
@@ -17,17 +17,11 @@
       matInput
       placeholder="Appointment Description"
       formControlName="description"
-      [(value)]="appointmentDesc"
     ></textarea>
   </mat-form-field>
 
   <mat-form-field>
-    <input
-      matInput
-      placeholder="Location"
-      formControlName="location"
-      [(value)]="appointmentLocation"
-    />
+    <input matInput placeholder="Location" formControlName="location" />
   </mat-form-field>
 
   <div>

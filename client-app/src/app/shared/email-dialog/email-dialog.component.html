@@ -1,0 +1,29 @@
+<div class="example-form">
+  <div style="margin-bottom: 10px;">
+    <strong>Enter email to reset your password</strong>
+  </div>
+  <form (ngSubmit)="onSubmit()">
+    <mat-form-field class="example-full-width">
+      <input matInput placeholder="Email" [formControl]="emailFormControl" />
+      <mat-error
+        *ngIf="
+          emailFormControl.hasError('email') &&
+          !emailFormControl.hasError('required')
+        "
+      >
+        Please enter a valid email address
+      </mat-error>
+      <mat-error *ngIf="emailFormControl.hasError('required')">
+        Email is <strong>required</strong>
+      </mat-error>
+    </mat-form-field>
+
+    <button mat-raised-button type="submit" class="button-maroon">
+      Submit
+    </button>
+    &nbsp;
+    <button mat-raised-button type="button" color="warn" (click)="cancel()">
+      Cancel
+    </button>
+  </form>
+</div>
