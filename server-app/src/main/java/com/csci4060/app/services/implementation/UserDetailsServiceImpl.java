@@ -262,9 +262,12 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
 		
 		List<Group> memberGroups = groupService.findAllByMembers(user);
 		
-		for (Group group: memberGroups) {
-			System.out.println("Member group is: "+group.getId());
+		if(memberGroups != null) {
+			for (Group group: memberGroups) {
+				System.out.println("Member group is: "+group.getId());
+			}
 		}
+		
 		
 		if(memberGroups != null) {
 			for(Group group: memberGroups) {
