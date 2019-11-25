@@ -4,7 +4,12 @@
   (ngSubmit)="onSubmit()"
 >
   <mat-form-field style="width: 50%;">
-    <input matInput placeholder="Appointment Title" formControlName="title" />
+    <input
+      matInput
+      placeholder="Appointment Title"
+      formControlName="title"
+      [(value)]="appointmentName"
+    />
   </mat-form-field>
 
   <mat-form-field>
@@ -12,11 +17,17 @@
       matInput
       placeholder="Appointment Description"
       formControlName="description"
+      [(value)]="appointmentDesc"
     ></textarea>
   </mat-form-field>
 
   <mat-form-field>
-    <input matInput placeholder="Location" formControlName="location" />
+    <input
+      matInput
+      placeholder="Location"
+      formControlName="location"
+      [(value)]="appointmentLocation"
+    />
   </mat-form-field>
 
   <div>
@@ -69,211 +80,139 @@
     </button>
   </div>
   <br />
+  <div *ngIf="editMode">
+    <mat-card-content *ngFor="let time of appointments">
+      Date: {{ time.date }}
 
-  <!-- <mat-toolbar color="primary">
-    <mat-toolbar-row>
-      <mat-form-field>
-        <input
-          matInput
-          placeholder="Enter Recepient's email"
-          formControlName="email"
-          required
-        />
-        <mat-error *ngIf="email.invalid">{{ getErrorMessage() }}</mat-error>
-      </mat-form-field>
-      <span class="example-spacer"></span>
-      <button
-        mat-button
-        type="button"
-        class="primary"
-        matTooltip="click to add emails"
-        (click)="addEmails()"
-      >
-        Add emails
-      </button>
-    </mat-toolbar-row>
-  </mat-toolbar> -->
-
-  <!-- <mat-toolbar>
-    <mat-toolbar-row>
-      <p>Please select date and time interval:</p>
-      <span class="example-spacer"></span>
-      <button
-        type="button"
-        class="primary"
-        mat-raised-button
-        matTooltip="click to select date and time intervals"
-        (click)="openDateRangeDialog()"
-      >
-        select date and time
-      </button>
-      <button
-        type="button"
-        class="button-maroon"
-        mat-raised-button
-        (click)="addDate()"
-      >
-        Add Date
-      </button>
-      <span class="example-spacer"></span>
-    </mat-toolbar-row>
-  </mat-toolbar> -->
-
-  <div
-    formArrayName="dateRange"
-    *ngFor="
-      let date of appointmentForm.get('dateRange').controls;
-      let i = index
-    "
-  >
-    <div class="date" [formGroupName]="i">
-      <mat-form-field style="width:25%;margin-left:15px;margin-top:10px">
-        <mat-label>Date</mat-label>
-        <input matInput [matDatepicker]="picker" formControlName="date" />
-
-        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-datepicker touchUi #picker></mat-datepicker> </mat-form-field
-      >&nbsp;
-      <!-- <button
-        mat-raised-button
-        type="button"
-        class="button-maroon"
-        (click)="addTime(date)"
-      >
-        Add Time
-      </button> -->
-      <span class="example-spacer"></span>
-      <button
-        mat-icon-button
-        (click)="deleteDate(i)"
-        *ngIf="appointmentForm.get('dateRange').controls.length > 1"
-      >
-        <mat-icon>delete</mat-icon>
-      </button>
-      <div formArrayName="time">
-        <div
-          class="time"
-          *ngFor="let time of date.get('time').controls; let x = index"
-          style="padding-bottom: 10px ;"
-          [formGroupName]="x"
-        >
-          <button
-            mat-icon-button
-            type="button"
-            (click)="deleteTime(date, x)"
-            *ngIf="date.get('time').controls.length > 1"
-          >
-            <mat-icon>clear</mat-icon>
-          </button>
-          <mat-form-field style="width:15%">
-            <mat-label>Start Time</mat-label>
-            <input
-              matInput
-              formControlName="start"
-              aria-label="default time"
-              [ngxTimepicker]="starttime"
-              readonly
-            />
-            <ngx-material-timepicker
-              #starttime
-              [minutesGap]="5"
-              [theme]="timeTheme"
-              [appendToInput]="true"
-            ></ngx-material-timepicker>
-            <mat-icon matSuffix>access_time</mat-icon> </mat-form-field
-          >&nbsp;
-          <mat-form-field style="width:15%">
-            <mat-label>End Time</mat-label>
-            <input
-              matInput
-              formControlName="end"
-              aria-label="default time"
-              [ngxTimepicker]="endtime"
-              readonly
-            />
-            <ngx-material-timepicker
-              #endtime
-              [minutesGap]="5"
-              [theme]="timeTheme"
-              [appendToInput]="true"
-            ></ngx-material-timepicker>
-            <mat-icon matSuffix>access_time</mat-icon> </mat-form-field
-          >&nbsp;
-          <mat-form-field style="width:23%">
-            <mat-label>Length</mat-label>
-            <input matInput formControlName="interval" type="number" />
-            <mat-hint>Length of each time slots in MINUTES.</mat-hint>
-          </mat-form-field>
-          <!-- &nbsp;
+      <div style="margin-top: 10px;">
+        <div *ngFor="let timeSlot of time.response">
           <button
             mat-raised-button
-            type="button"
-            class="button-maroon"
-            (click)="addTime(date)"
+            class="primary"
+            style="margin-bottom: 10px;"
           >
-            Add Time
-          </button> -->
+            {{ timeSlot.startTime }} - {{ timeSlot.endTime }}
+          </button>
+          - &nbsp;Selected by: &nbsp; {{ timeSlot.selectorName }}
         </div>
-        <mat-toolbar>
-          <mat-toolbar-row>
-            <button
-              mat-raised-button
-              type="button"
-              class="button-maroon"
-              (click)="addTime(date)"
-              style="margin: 10px"
-            >
-              Add Time
-            </button>
-            <span class="example-spacer"></span>
-          </mat-toolbar-row>
-        </mat-toolbar>
-        <!-- <button
-          mat-raised-button
-          type="button"
-          class="button-maroon"
-          (click)="addTime(date)"
+        <br />
+      </div>
+    </mat-card-content>
+  </div>
+  <div *ngIf="!editMode">
+    <div
+      formArrayName="dateRange"
+      *ngFor="
+        let date of appointmentForm.get('dateRange').controls;
+        let i = index
+      "
+    >
+      <div class="date" [formGroupName]="i">
+        <mat-form-field style="width:25%;margin-left:15px;margin-top:10px">
+          <mat-label>Date</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="date" />
+
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="picker"
+          ></mat-datepicker-toggle>
+          <mat-datepicker touchUi #picker></mat-datepicker> </mat-form-field
+        >&nbsp;
+
+        <span class="example-spacer"></span>
+        <button
+          mat-icon-button
+          (click)="deleteDate(i)"
+          *ngIf="appointmentForm.get('dateRange').controls.length > 1"
         >
-          Add Time
-        </button> -->
+          <mat-icon>delete</mat-icon>
+        </button>
+        <div formArrayName="time">
+          <div
+            class="time"
+            *ngFor="let time of date.get('time').controls; let x = index"
+            style="padding-bottom: 10px ;"
+            [formGroupName]="x"
+          >
+            <button
+              mat-icon-button
+              type="button"
+              (click)="deleteTime(date, x)"
+              *ngIf="date.get('time').controls.length > 1"
+            >
+              <mat-icon>clear</mat-icon>
+            </button>
+            <mat-form-field style="width:15%">
+              <mat-label>Start Time</mat-label>
+              <input
+                matInput
+                formControlName="start"
+                aria-label="default time"
+                [ngxTimepicker]="starttime"
+                readonly
+              />
+              <ngx-material-timepicker
+                #starttime
+                [minutesGap]="5"
+                [theme]="timeTheme"
+                [appendToInput]="true"
+              ></ngx-material-timepicker>
+              <mat-icon matSuffix>access_time</mat-icon> </mat-form-field
+            >&nbsp;
+            <mat-form-field style="width:15%">
+              <mat-label>End Time</mat-label>
+              <input
+                matInput
+                formControlName="end"
+                aria-label="default time"
+                [ngxTimepicker]="endtime"
+                readonly
+              />
+              <ngx-material-timepicker
+                #endtime
+                [minutesGap]="5"
+                [theme]="timeTheme"
+                [appendToInput]="true"
+              ></ngx-material-timepicker>
+              <mat-icon matSuffix>access_time</mat-icon> </mat-form-field
+            >&nbsp;
+            <mat-form-field style="width:23%">
+              <mat-label>Length</mat-label>
+              <input matInput formControlName="interval" type="number" />
+              <mat-hint>Length of each time slots in MINUTES.</mat-hint>
+            </mat-form-field>
+          </div>
+          <mat-toolbar>
+            <mat-toolbar-row>
+              <button
+                mat-raised-button
+                type="button"
+                class="button-maroon"
+                (click)="addTime(date)"
+                style="margin: 10px"
+              >
+                Add Time
+              </button>
+              <span class="example-spacer"></span>
+            </mat-toolbar-row>
+          </mat-toolbar>
+        </div>
       </div>
     </div>
+    <mat-toolbar>
+      <mat-toolbar-row>
+        <button
+          type="button"
+          class="button-maroon"
+          mat-raised-button
+          (click)="addDate()"
+        >
+          Add Date
+        </button>
+        <span class="example-spacer"></span>
+      </mat-toolbar-row>
+    </mat-toolbar>
   </div>
-  <mat-toolbar>
-    <mat-toolbar-row>
-      <!--<p>Please select date and time interval:</p>
-      <span class="example-spacer"></span>
-      <button
-        type="button"
-        class="primary"
-        mat-raised-button
-        matTooltip="click to select date and time intervals"
-        (click)="openDateRangeDialog()"
-      >
-        select date and time
-      </button>-->
-      <button
-        type="button"
-        class="button-maroon"
-        mat-raised-button
-        (click)="addDate()"
-      >
-        Add Date
-      </button>
-      <span class="example-spacer"></span>
-    </mat-toolbar-row>
-  </mat-toolbar>
-
-  <!-- <mat-toolbar-row>
-      <button
-        type="button"
-        class="primary"
-        mat-raised-button
-        (click)="openDialog()"
-      >
-        Add date
-      </button>
-    </mat-toolbar-row> -->
   <mat-divider></mat-divider>
 
   <mat-toolbar>
@@ -284,7 +223,7 @@
       </button>
       &nbsp; &nbsp;
       <button type="submit" mat-raised-button class="button-maroon">
-        Create Appointment
+        {{ editMode ? "Update Appointment" : "Create Appointment" }}
       </button>
     </mat-toolbar-row>
   </mat-toolbar>

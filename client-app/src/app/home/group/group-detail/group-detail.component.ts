@@ -129,11 +129,11 @@ export class GroupDetailComponent implements OnInit {
       }
       this.groupDataStorage.fetchGroup();
     });
-    this.router.navigate(["/home/group"]);
+    this.router.navigate(["/home/group/your-group"]);
   }
 
   editGroup() {
-    this.router.navigate(["edit"], { relativeTo: this.route });
+    this.router.navigate(["home/group/edit-group/", this.id]);
   }
 
   emailSelectedMembers() {

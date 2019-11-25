@@ -177,4 +177,16 @@ export class DataStorageAppointmentService {
         finalize(() => this.isLoadingSubject.next(false))
       );
   }
+
+  updateAppointment(obj: Object, id: number) {
+    {
+      this.isLoadingSubject.next(true);
+      return this.http
+        .put<ApiResponse>(this.baseUrlAppointment + "edit/" + id, obj)
+        .pipe(
+          (map(data => data), catchError(error => throwError(error))),
+          finalize(() => this.isLoadingSubject.next(false))
+        );
+    }
+  }
 }

@@ -198,7 +198,7 @@ export class AppointmentDetailComponent implements OnInit {
     });
     this.router.navigate(["./home/appointment/sent"]);
   }
-  onUpdateAppointment() {
-    console.log("updated");
+  onEditAppointment() {
+    this.router.navigate(["home/appointment/edit-appointment/", this.id]);
   }
 }
