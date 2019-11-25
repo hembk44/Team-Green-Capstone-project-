@@ -71,7 +71,7 @@ public class GroupController extends ExceptionResolver {
 	MajorService majorService;
 
 	@PostMapping(path = "/createFromList", consumes = "application/json")
-	@PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
+	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('MODERATOR')")
 	public APIresponse createGroupFromList(@Valid @RequestBody GroupDummy groupDummy) {
 
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -155,7 +155,7 @@ public class GroupController extends ExceptionResolver {
 	}
 
 	@PostMapping(path = "/createFromFile")
-	@PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
+	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('MODERATOR')")
 	public APIresponse createGroupFromFile(@RequestParam("file") MultipartFile file,
 			@RequestParam("user") String groupDetails) throws IOException {
 		
@@ -234,7 +234,7 @@ public class GroupController extends ExceptionResolver {
 	}
 
 	@GetMapping(path = "/fetch")
-	@PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
+	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('MODERATOR')")
 	public APIresponse getAllGroups() {
 
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -266,7 +266,7 @@ public class GroupController extends ExceptionResolver {
 	}
 
 	@GetMapping(path = "/getDetails/{id}")
-	@PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
+	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('MODERATOR')")
 	public APIresponse getGroupDetails(@PathVariable("id") Long groupId) {
 
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -296,7 +296,7 @@ public class GroupController extends ExceptionResolver {
 	}
 
 	@PutMapping(path = "/edit/{id}")
-	@PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
+	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('MODERATOR')")
 	public APIresponse editGroup(@Valid @RequestBody GroupDummy groupDummy, @PathVariable("id") Long groupId) {
 
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -343,7 +343,7 @@ public class GroupController extends ExceptionResolver {
 	}
 
 	@PostMapping(path = "/share")
-	@PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
+	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('MODERATOR')")
 	public APIresponse shareGroup(@Valid @RequestBody GroupShare groupShare) {
 
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -401,7 +401,7 @@ public class GroupController extends ExceptionResolver {
 	}
 
 	@DeleteMapping(path = "/delete/{id}")
-	@PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
+	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('MODERATOR')")
 	public APIresponse deleteGroup(@PathVariable("id") Long groupId) {
 
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -433,7 +433,7 @@ public class GroupController extends ExceptionResolver {
 	}
 
 	@PostMapping(path = "/sendEmail")
-	@PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
+	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('MODERATOR')")
 	public APIresponse sendEmail(@Valid @RequestBody GroupEmail groupEmail) {
 
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -482,7 +482,7 @@ public class GroupController extends ExceptionResolver {
 	}
 	
 	@PostMapping(path = "/sendEmailToFew")
-	@PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
+	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('MODERATOR')")
 	public APIresponse sendEmailToFew(@Valid @RequestBody IndividualEmail individualEmail) {
 
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -520,7 +520,7 @@ public class GroupController extends ExceptionResolver {
 	}
 	
 	@GetMapping(path = "/getAllMajors")
-	@PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
+	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('MODERATOR')")
 	public APIresponse getAllMajors() {
 
 		List<Major> majors = majorService.findAll();
@@ -533,7 +533,7 @@ public class GroupController extends ExceptionResolver {
 	}
 	
 	@GetMapping(path = "/getAllCourses/{id}")
-	@PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
+	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('MODERATOR')")
 	public APIresponse getAllCourses(@PathVariable ("id") Long majorId) {
 
 		Major major = majorService.findById(majorId);

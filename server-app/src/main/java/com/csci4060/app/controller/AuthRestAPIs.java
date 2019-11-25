@@ -1,6 +1,5 @@
 package com.csci4060.app.controller;
 
-
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -68,8 +67,6 @@ import com.csci4060.app.services.UserService;
 
 public class AuthRestAPIs extends ExceptionResolver {
 
-
-
 	@Autowired
 	AuthenticationManager authenticationManager;
 
@@ -90,7 +87,7 @@ public class AuthRestAPIs extends ExceptionResolver {
 
 	@Autowired
 	JwtProvider jwtProvider;
-	
+
 	@Autowired
 	CalendarService calendarService;
 
@@ -98,30 +95,29 @@ public class AuthRestAPIs extends ExceptionResolver {
 	public APIresponse authenticateUser(@Valid @RequestBody LoginForm loginRequest) {
 
 		User user = userService.findByUsername(loginRequest.getUsername());
-		
 
-		if(user == null) {
+		if (user == null) {
 			return new APIresponse(HttpStatus.FORBIDDEN.value(), "Please register before logging in. ", null);
 		}
 
 		if (user.isVerified()) {
-			
+
 			Authentication authentication = null;
-			
+
 			try {
-				authentication = authenticationManager.authenticate(
-						new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
-			}catch (Exception e) {
+				authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+						loginRequest.getUsername(), loginRequest.getPassword()));
+			} catch (Exception e) {
 				return new APIresponse(HttpStatus.FORBIDDEN.value(), "Your password is incorrect. ", null);
 			}
-			
+
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 			String jwt = jwtProvider.generateJwtToken(authentication);
 
 			String role = "";
 
 			String name = user.getName();
-			
+
 			@SuppressWarnings("unchecked")
 			List<GrantedAuthority> authorities = (List<GrantedAuthority>) authentication.getAuthorities();
 
@@ -129,10 +125,9 @@ public class AuthRestAPIs extends ExceptionResolver {
 				role = authority.toString();
 			}
 
-			
-			return new APIresponse(HttpStatus.OK.value(), "Successful", new JwtResponse(jwt, name, loginRequest.getUsername(),role));
-		    }
-		
+			return new APIresponse(HttpStatus.OK.value(), "Successful",
+					new JwtResponse(jwt, name, loginRequest.getUsername(), role));
+		}
 
 		return new APIresponse(HttpStatus.FORBIDDEN.value(), "Please click on the verification link to login", null);
 	}
@@ -147,7 +142,6 @@ public class AuthRestAPIs extends ExceptionResolver {
 			return new APIresponse(HttpStatus.BAD_REQUEST.value(), "Fail -> Email is already in use!", null);
 		}
 
-		
 		// Creating user's account
 		User user = new User(signUpRequest.getName(), signUpRequest.getUsername(), signUpRequest.getEmail(),
 				encoder.encode(signUpRequest.getPassword()), signUpRequest.isVerified());
@@ -163,6 +157,9 @@ public class AuthRestAPIs extends ExceptionResolver {
 			} else if (each.equals("pm")) {
 				Role pmRole = roleService.findByName(RoleName.ROLE_PM);
 				roles.add(pmRole);
+			} else if (each.equals("moderator")) {
+				Role modeRole = roleService.findByName(RoleName.ROLE_MODERATOR);
+				roles.add(modeRole);
 			} else {
 				Role userRole = roleService.findByName(RoleName.ROLE_USER);
 				roles.add(userRole);
@@ -170,14 +167,12 @@ public class AuthRestAPIs extends ExceptionResolver {
 		}
 
 		user.setRoles(roles);
-		
+
 		userService.save(user);
-		
-		calendarService.save(new Calendar("Main","#800029", null, null, user, true, true));
-		calendarService.save(new Calendar("Appointment","#800029", null, null, user, true, true));
-		calendarService.save(new Calendar("Shared Event","#800029", null, null, user, true, true));
-		
-		
+
+		calendarService.save(new Calendar("Main", "#800029", null, null, user, true, true));
+		calendarService.save(new Calendar("Appointment", "#800029", null, null, user, true, true));
+		calendarService.save(new Calendar("Shared Event", "#800029", null, null, user, true, true));
 
 //		ConfirmationToken confirmationToken = new ConfirmationToken(user);
 //
@@ -210,94 +205,89 @@ public class AuthRestAPIs extends ExceptionResolver {
 
 	@PostMapping("/delete/{email}")
 	public void deleteUser(@PathVariable("email") String email) {
-		
+
 		userService.delete(email);
-		
-		
+
 	}
 
 	@PostMapping(value = "/forgot")
-	public APIresponse processForgotPasswordForm( @RequestParam("email") String userEmail, HttpServletRequest request) {
+	public APIresponse processForgotPasswordForm(@RequestParam("email") String userEmail, HttpServletRequest request) {
 
 		// Lookup user in database by e-mail
 		User user = userService.findByEmail(userEmail);
 
 		if (user == null) {
-			return new APIresponse(HttpStatus.NOT_FOUND.value(),"Requested user for given email is not found. Please sign up!", null);
+			return new APIresponse(HttpStatus.NOT_FOUND.value(),
+					"Requested user for given email is not found. Please sign up!", null);
 		} else {
-			
-			if (confirmationTokenService.findByUser(user) != null)
-			{
+
+			if (confirmationTokenService.findByUser(user) != null) {
 				confirmationTokenService.delete(confirmationTokenService.findByUser(user));
 			}
-			
+
 			ConfirmationToken token = new ConfirmationToken(user);
-     		confirmationTokenService.save(token);
+			confirmationTokenService.save(token);
 
 			String appUrl = request.getScheme() + "://" + request.getServerName();
-			
+
 			SimpleMailMessage mailMessage = new SimpleMailMessage();
 			mailMessage.setTo(user.getEmail());
 			mailMessage.setSubject("Verify Email");
 			mailMessage.setFrom("ulmautoemail@gmail.com");
-			mailMessage.setText("Here is the link to reset your password:\n"
-					+ appUrl + ":8181/api/auth/"+ confirmationTokenService.findByUser(user).getConfirmationToken());
+			mailMessage.setText("Here is the link to reset your password:\n" + appUrl + ":8181/api/auth/"
+					+ confirmationTokenService.findByUser(user).getConfirmationToken());
 
 			emailSenderService.sendEmail(mailMessage);
 
 			// Add success message to view
-			return new APIresponse(HttpStatus.OK.value(),"A link has been sent to your email, please follow the link to reset your password!", null);		
+			return new APIresponse(HttpStatus.OK.value(),
+					"A link has been sent to your email, please follow the link to reset your password!", null);
 		}
 
-
 	}
-	
-	
-	@GetMapping(value = "/{resetToken}")
-    public ModelAndView displayResetPasswordPage(@PathVariable("resetToken") String token)  {
-        
-        ConfirmationToken resettoken = confirmationTokenService.findByConfirmationToken(token);
-        ModelAndView modelAndView = new ModelAndView();
-       try {
-            if (!(resettoken.getCreatedDate()).after(new Date())) {
-            	
-               modelAndView.addObject("resetToken", token);
-               modelAndView.setViewName("redirect:http://localhost:4200/reset-password");
-            } else {
-            	
-                modelAndView.addObject("errorMessage", "Oops!  Your password reset link has expired.");
-               modelAndView.setViewName("redirect:http://localhost:4200/forgot-password");
-            }
-        } catch(RuntimeException e) 
-       {
-           modelAndView.addObject("errorMessage", "Oops!  This is an invalid password reset link.");
-           modelAndView.setViewName("redirect:http://localhost:4200/forgot-password");
-        }
-        return modelAndView;
-    }
-	
-	
-	@PostMapping(value = "/processResetPassword")
-	public APIresponse setNewPassword(@Valid @RequestBody Map<String, String> requestParams, RedirectAttributes redir, HttpServletResponse response) {
 
-        
-        ConfirmationToken resetToken = confirmationTokenService.findByConfirmationToken(requestParams.get("resetToken"));
-        User resetUser = resetToken.getUser();
-        
-      try {
-           System.out.println("true");
-           System.out.println(resetToken.getConfirmationToken());
-            resetUser.setPassword(encoder.encode(requestParams.get("password")));
-            userService.save(resetUser);
-            
-            confirmationTokenService.delete(resetToken);
-          
-            return new APIresponse(HttpStatus.OK.value(), "Password has been changed!", null);
-        }
-      	  catch (RuntimeException e)
-          {
-        	 return new APIresponse(HttpStatus.OK.value(), "Unable to change the password at the time", null);
-          }
-    }
+	@GetMapping(value = "/{resetToken}")
+	public ModelAndView displayResetPasswordPage(@PathVariable("resetToken") String token) {
+
+		ConfirmationToken resettoken = confirmationTokenService.findByConfirmationToken(token);
+		ModelAndView modelAndView = new ModelAndView();
+		try {
+			if (!(resettoken.getCreatedDate()).after(new Date())) {
+
+				modelAndView.addObject("resetToken", token);
+				modelAndView.setViewName("redirect:http://localhost:4200/reset-password");
+			} else {
+
+				modelAndView.addObject("errorMessage", "Oops!  Your password reset link has expired.");
+				modelAndView.setViewName("redirect:http://localhost:4200/forgot-password");
+			}
+		} catch (RuntimeException e) {
+			modelAndView.addObject("errorMessage", "Oops!  This is an invalid password reset link.");
+			modelAndView.setViewName("redirect:http://localhost:4200/forgot-password");
+		}
+		return modelAndView;
+	}
+
+	@PostMapping(value = "/processResetPassword")
+	public APIresponse setNewPassword(@Valid @RequestBody Map<String, String> requestParams, RedirectAttributes redir,
+			HttpServletResponse response) {
+
+		ConfirmationToken resetToken = confirmationTokenService
+				.findByConfirmationToken(requestParams.get("resetToken"));
+		User resetUser = resetToken.getUser();
+
+		try {
+			System.out.println("true");
+			System.out.println(resetToken.getConfirmationToken());
+			resetUser.setPassword(encoder.encode(requestParams.get("password")));
+			userService.save(resetUser);
+
+			confirmationTokenService.delete(resetToken);
+
+			return new APIresponse(HttpStatus.OK.value(), "Password has been changed!", null);
+		} catch (RuntimeException e) {
+			return new APIresponse(HttpStatus.OK.value(), "Unable to change the password at the time", null);
+		}
+	}
 
 }

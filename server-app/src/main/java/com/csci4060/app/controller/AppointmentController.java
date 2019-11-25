@@ -264,7 +264,7 @@ public class AppointmentController extends ExceptionResolver {
 	}
 
 	@GetMapping(path = "received/allAppointments")
-	@PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
+	@PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN') or hasRole('MODERATOR')")
 	public APIresponse getAppointments() {
 
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -303,7 +303,7 @@ public class AppointmentController extends ExceptionResolver {
 	}
 
 	@GetMapping(path = "/timeslots/user/{id}")
-	@PreAuthorize("hasRole('ADMIN') or hasRole('USER') or hasRole('PM')")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('USER') or hasRole('PM') or hasRole('MODERATOR')")
 	public APIresponse getSlots(@PathVariable("id") Long appointmentId) {
 
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -404,7 +404,7 @@ public class AppointmentController extends ExceptionResolver {
 	}
 
 	@PostMapping(path = "timeslots/postSlot/{timeSlotId}", produces = "application/json")
-	@PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
+	@PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN') or hasRole('MODERATOR')")
 	public APIresponse postSlots(@PathVariable("timeSlotId") long id) {
 
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -564,7 +564,7 @@ public class AppointmentController extends ExceptionResolver {
 	}
 
 	@GetMapping(path = "/getScheduledAppointmentsForUsers", produces = "application/json")
-	@PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('MODERATOR') or hasRole('ADMIN')")
+	@PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('MODERATOR')")
 	public APIresponse scheduledAppointments() {
 
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -610,12 +610,12 @@ public class AppointmentController extends ExceptionResolver {
 		Appointment appointment = appointmentService.findById(groupId);
 
 		if (appointment == null) {
-			return new APIresponse(HttpStatus.BAD_REQUEST.value(), "Group with id " + groupId + " does not exist",
+			return new APIresponse(HttpStatus.BAD_REQUEST.value(), "Appointment with id " + groupId + " does not exist",
 					null);
 		}
 
 		if (appointment.getCreatedBy() != user) {
-			return new APIresponse(HttpStatus.FORBIDDEN.value(), "You did not create the group. Authorization denied!",
+			return new APIresponse(HttpStatus.FORBIDDEN.value(), "You did not create the appointment. Authorization denied!",
 					null);
 		}
 
