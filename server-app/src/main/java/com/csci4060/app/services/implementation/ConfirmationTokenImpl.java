@@ -32,8 +32,13 @@ public class ConfirmationTokenImpl implements ConfirmationTokenService{
 	@Override
 	public ConfirmationToken findByUser(User user)
 	{
-		return confirmationTokenRepo.findByUser(user)
-		.orElseThrow(() -> new RuntimeException("Fail! -> The confirmation token doesn not exists. Please try again."));
+		Optional<ConfirmationToken> optToken = confirmationTokenRepo.findByUser(user);
+		
+		if(optToken.isPresent()) {
+			return optToken.get();
+		}
+		
+		return null;
 	}
 	
 	@Override

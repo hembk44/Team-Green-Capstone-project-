@@ -9,12 +9,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
-<<<<<<< HEAD
 import java.util.Map;
 import java.util.stream.Collectors;
 
-=======
->>>>>>> b5d03a90c44fe39d2750a3112784169ce04b2785
+
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
