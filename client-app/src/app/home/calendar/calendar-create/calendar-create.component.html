@@ -7,24 +7,52 @@
             <input matInput formControlName="name" placeholder="Calendar Name">
         </mat-form-field><br>
         <mat-form-field class="example-chip-list" style="width:100%">
-            <mat-chip-list #chipList aria-label="adding emails">
-                <mat-chip
-                *ngFor="let email of emails"
-                [selectable]="selectable"
-                [removable]="removable"
-                (removed)="remove(email)"
-                >
-                {{ email }}
-                <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
-                </mat-chip>
-                <input
-                placeholder="Enter Emails"
-                [matChipInputFor]="chipList"
-                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                [matChipInputAddOnBlur]="addOnBlur"
-                (matChipInputTokenEnd)="add($event)"
-                />
-            </mat-chip-list>
+                <mat-chip-list #chipList aria-label="adding emails">
+                    <mat-chip
+                        *ngFor="let email of emails"
+                        [selectable]="selectable"
+                        [removable]="removable"
+                        (removed)="remove(email)"
+                    >
+                        <mat-icon mat-list-icon>person_outline</mat-icon>
+                        {{ email }}
+                        <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                    </mat-chip>
+                    <input
+                    placeholder="Enter Emails"
+                    matInput
+                    [formControl]="email"
+                    [matAutocomplete]="auto"
+                    [matChipInputFor]="chipList"
+                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                    [matChipInputAddOnBlur]="addOnBlur"
+                    (matChipInputTokenEnd)="add($event)"
+                  />
+                    </mat-chip-list>
+                    <mat-autocomplete
+                    #auto="matAutocomplete"
+                    (optionSelected)="selected($event)"
+                    >
+                    <mat-option
+                        *ngFor="let user of filteredUserList | async"
+                        [value]="user"
+                    >
+                        {{ user }}
+                    </mat-option>
+                    </mat-autocomplete>
+                    <mat-error *ngIf="!isEmailValid">{{ errorMessage }}</mat-error>
+                    <mat-autocomplete
+                        #auto="matAutocomplete"
+                        (optionSelected)="selected($event)"
+                    >
+                        <mat-option
+                        *ngFor="let user of filteredUserList | async"
+                        [value]="user"
+                        >
+                        {{ user }}
+                        </mat-option>
+                    </mat-autocomplete>
+                    <mat-hint>Use commas or hit ENTER for multiple emails.</mat-hint>
         </mat-form-field><br>
         <mat-form-field>
             <input
@@ -59,8 +87,8 @@
             />
         </mat-form-field>
         <mat-toolbar>
-            <button mat-raised-button type="submit" class="submit">Save</button>&nbsp;&nbsp;
-            <button mat-raised-button type="button" (click)="groupSelect()">Select Groups</button>
+            <button mat-raised-button type="submit" class="button-maroon" [disabled]="!calForm.valid">Save</button>&nbsp;&nbsp;
+            <button mat-raised-button type="button" (click)="groupSelect()" class="button-maroon" *ngIf="role !== 'ROLE_USER'">Select Groups</button>
         </mat-toolbar>  
     </form>
 </div>

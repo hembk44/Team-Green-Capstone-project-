@@ -6,19 +6,23 @@
     </mat-toolbar-row>
 </mat-toolbar>
 <div class="user-wrap">
-    <div *ngFor="let user of data">
-        <p class="user"><mat-icon>person_outline</mat-icon>{{user.name}} - 
-            <span *ngIf="user.roles==='ROLE_ADMIN'">Admin</span>
-            <span *ngIf="user.roles==='ROLE_PM'">Faculty</span>
-            <span *ngIf="user.roles==='ROLE_MO'">Moderator</span>
-            <span *ngIf="user.roles==='ROLE_USER'">Student</span>
-        </p>
-    </div>
+    <mat-list>
+        <mat-list-item *ngFor="let user of data">
+            <mat-icon mat-list-icon>person_outline</mat-icon>
+            <h4 mat-line>
+                {{user.name}} 
+            </h4>
+            <p *ngIf="user.roles==='ROLE_ADMIN'" mat-line>Admin</p>
+            <p *ngIf="user.roles==='ROLE_PM'" mat-line>Faculty</p>
+            <p *ngIf="user.roles==='ROLE_MODERATOR'" mat-line>Moderator</p>
+            <p *ngIf="user.roles==='ROLE_USER'" mat-line>Student</p>
+        </mat-list-item>
+    </mat-list>
 </div>
 <mat-toolbar>
     <mat-toolbar-row>
         <mat-hint>Close this dialog if you need to make any changes.</mat-hint>
         <span class="spacer"></span>
-        <button mat-raised-button class="primary submit-button" (click)="confirm()">Confirm</button>
+        <button mat-raised-button class="button-maroon" (click)="confirm()">Confirm</button>
     </mat-toolbar-row>
 </mat-toolbar>

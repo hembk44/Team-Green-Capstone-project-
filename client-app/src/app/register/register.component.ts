@@ -10,6 +10,7 @@ import { Router } from "@angular/router";
 import { AuthService } from "../auth/auth.service";
 import { SignUpInfo } from "../auth/signup-info";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { DataStorageService } from '../home/shared/data-storage.service';
 
 @Component({
   selector: "app-register",
@@ -32,7 +33,8 @@ export class RegisterComponent implements OnInit {
     private authService: AuthService,
     private formBuilder: FormBuilder,
     private _snackBar: MatSnackBar,
-    private router: Router
+    private router: Router,
+    private dataStorage: DataStorageService
   ) {}
 
   ngOnInit() {
@@ -70,7 +72,7 @@ export class RegisterComponent implements OnInit {
     this.authService.signUp(this.signupPayload).subscribe(
       data => {
         console.log(data);
-        this._snackBar.open("Successfully registered!!!", "close", {
+        this._snackBar.open("Successfully registered!", "close", {
           duration: 3500,
           panelClass: ["standard"]
         });
@@ -86,9 +88,9 @@ export class RegisterComponent implements OnInit {
         this.isSignUpFailed = true;
       }
     );
-    this.router.navigate(["/login"]);
-    // this.signupForm.reset();
-    // this.signupForm.clearValidators();
+    this.signupForm.reset();
+    this.signupForm.clearValidators();
+    this.dataStorage.fetchUsers()
   }
 
   clearForm() {

@@ -110,8 +110,20 @@ import { MessageGroupComponent } from "./home/group/message-group/message-group.
 import { ScheduledAppointmentReceivedPipe } from "./home/appointment/scheduled-appointments/scheduled-appointment-received.pipe";
 import { ChangePasswordComponent } from "./change-password/change-password.component";
 import { ShareEvent } from "./home/calendar/event-detail/share-event";
-import { GroupFilterPipe } from "./home/group/group-list/group-filter.pipe";
+import { GroupFilterPipe } from './home/group/group-list/group-filter.pipe';
+import { UploadCoursesComponent } from './home/administration/upload-courses/upload-courses.component';
+import { BroadcastManagementComponent } from './home/administration/broadcast-management/broadcast-management.component';
+import { BroadcastComponent } from './broadcast/broadcast.component';
+import { MatCarouselModule } from '@ngmodule/material-carousel';
+import { UserManualComponent } from './home/vertical-navigation/user-manual/user-manual.component';
+import { AdminComponent } from './home/vertical-navigation/user-manual/admin/admin.component';
+import { CalComponent } from './home/vertical-navigation/user-manual/cal/cal.component';
+import { ApptComponent } from './home/vertical-navigation/user-manual/appt/appt.component';
+import { GrpsComponent } from './home/vertical-navigation/user-manual/grps/grps.component';
+import { BrdcastComponent } from './home/vertical-navigation/user-manual/brdcast/brdcast.component';
+import { ManualNavComponent } from './home/vertical-navigation/user-manual/manual-nav/manual-nav.component';
 import { AppointmentSnackbarComponent } from "./home/appointment/shared-appointment/appointment-snackbar/appointment-snackbar.component";
+import { ManualStartComponent } from './home/vertical-navigation/user-manual/manual-start/manual-start.component';
 import { GroupSnackbarComponent } from "./home/group/shared-group/group-snackbar/group-snackbar.component";
 import { UploadMajorComponent } from "./home/administration/upload-major/upload-major.component";
 import { YourGroupComponent } from "./home/group/your-group/your-group.component";
@@ -170,8 +182,19 @@ import { EmailDialogComponent } from './shared/email-dialog/email-dialog.compone
     RoleConfirm,
     ScheduledAppointmentReceivedPipe,
     ChangePasswordComponent,
+    UploadCoursesComponent,
     GroupFilterPipe,
+    BroadcastManagementComponent,
+    BroadcastComponent,
+    UserManualComponent,
+    AdminComponent,
+    CalComponent,
+    ApptComponent,
+    GrpsComponent,
+    BrdcastComponent,
+    ManualNavComponent,
     AppointmentSnackbarComponent,
+    ManualStartComponent,
     GroupSnackbarComponent,
     UploadMajorComponent,
     YourGroupComponent,
@@ -210,13 +233,14 @@ import { EmailDialogComponent } from './shared/email-dialog/email-dialog.compone
     MatTooltipModule,
     MatSnackBarModule,
     MatChipsModule,
+    MatCarouselModule.forRoot(),
     MatTabsModule,
     MaterialFileInputModule,
     CalendarModule.forRoot({
       provide: DateAdapter,
       useFactory: adapterFactory
     }),
-    FullCalendarModule
+    FullCalendarModule,
   ],
   entryComponents: [
     EventDetailComponent,

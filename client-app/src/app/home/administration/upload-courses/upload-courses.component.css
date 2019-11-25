@@ -1,0 +1,24 @@
+.primary {
+    color: #800029;
+    border: #800029 solid 1px;
+    /* background-color: blanchedalmond; */
+    /* width: 10%; */
+  }
+  
+  .primary.submit-button{
+    margin:10px;
+  }
+  
+  mat-card-actions{
+    padding-left:10px;
+  }
+  
+  mat-card{
+    padding: 10px;
+    color: #800029;
+    border: solid 1pt rgba(169, 169, 169, 0.486);
+  }
+  
+  mat-toolbar-row{
+    background-color:white;
+  }

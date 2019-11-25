@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject } from "@angular/core";
-import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from "@angular/material";
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog, MatSnackBar } from "@angular/material";
 import { DataStorageService } from "../../shared/data-storage.service";
 
 @Component({
@@ -19,7 +19,8 @@ export class DeleteUsersComponent implements OnInit {
 
   constructor(
     private dialog: MatDialog,
-    private dataStorage: DataStorageService
+    private dataStorage: DataStorageService,
+    private snackbar: MatSnackBar
   ) {}
 
   ngOnInit() {
@@ -67,7 +68,17 @@ export class DeleteUsersComponent implements OnInit {
       });
       dialogRef.afterClosed().subscribe(result => {
         if (result === "confirmed") {
-          this.dataStorage.deleteUsers(this.updateEmails);
+          const obj = {
+            "emails": this.updateEmails
+          };
+          this.dataStorage.deleteUsers(obj).subscribe(result => {
+            console.log(result);
+            if(result){
+              this.snackbar.open(result.message, '', {duration: 5000});
+              this.dataStorage.fetchUsers();
+            }
+          });
+          
           this.updates = [];
           this.updateEmails = [];
         }

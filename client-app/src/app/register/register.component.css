@@ -11,6 +11,22 @@
 
 
 
+.wrap>*{
+  width:80%;
+  margin-left:10%;
+  margin-right: 10%;
+}
+
+mat-form-field{
+  width: 100%;
+}
+
+.bottom-row{
+  position:absolute;
+  bottom:0;
+  margin-bottom:7%;
+}
+
 /* .example-card {
   box-shadow: 3px 3px 0px 1px #BD955A;
   border: 2px solid #800029;

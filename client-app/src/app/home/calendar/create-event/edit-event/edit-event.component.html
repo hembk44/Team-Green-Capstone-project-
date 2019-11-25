@@ -46,7 +46,8 @@
         matInput
         placeholder="Start Date"
         formControlName="startDate"
-        [matDatepicker]="startpicker">
+        [matDatepicker]="startpicker"
+        readonly>
         <mat-datepicker-toggle matSuffix [for]="startpicker"></mat-datepicker-toggle>
         <mat-datepicker touchUi #startpicker></mat-datepicker>
       </mat-form-field>
@@ -66,7 +67,8 @@
         matInput
         placeholder="End Date"
         formControlName="endDate"
-        [matDatepicker]="endpicker">
+        [matDatepicker]="endpicker"
+        readonly>
         <mat-datepicker-toggle matSuffix [for]="endpicker"></mat-datepicker-toggle>
         <mat-datepicker touchUi #endpicker></mat-datepicker>
       </mat-form-field>
@@ -112,13 +114,39 @@
             <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
           </mat-chip>
           <input
-            placeholder="Enter Emails"
-            [matChipInputFor]="chipList"
-            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-            [matChipInputAddOnBlur]="addOnBlur"
-            (matChipInputTokenEnd)="add($event)"
-          />
-        </mat-chip-list>
+          placeholder="Enter Emails"
+          matInput
+          [formControl]="email"
+          [matAutocomplete]="auto"
+          [matChipInputFor]="chipList"
+          [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+          [matChipInputAddOnBlur]="addOnBlur"
+          (matChipInputTokenEnd)="add($event)"
+        />
+          </mat-chip-list>
+          <mat-autocomplete
+          #auto="matAutocomplete"
+          (optionSelected)="selected($event)"
+          >
+          <mat-option
+              *ngFor="let user of filteredUserList | async"
+              [value]="user"
+          >
+              {{ user }}
+          </mat-option>
+          </mat-autocomplete>
+          <mat-error *ngIf="!isEmailValid">{{ errorMessage }}</mat-error>
+          <mat-autocomplete
+              #auto="matAutocomplete"
+              (optionSelected)="selected($event)"
+          >
+              <mat-option
+              *ngFor="let user of filteredUserList | async"
+              [value]="user"
+              >
+              {{ user }}
+              </mat-option>
+          </mat-autocomplete>
         <mat-hint>Use commas or hit ENTER for multiple emails.</mat-hint>
       </mat-form-field>
       <mat-checkbox formControlName="allDay" (click)="allday()" color="primary">All Day</mat-checkbox>
@@ -143,8 +171,8 @@
           <!-- <button type="button" mat-raised-button color="primary">
             Add Recipients
           </button> -->
-          <button type="button" mat-raised-button class="primary select-group" (click)="groupSelect()">Select Groups</button>&nbsp;&nbsp;
-          <button type="submit" mat-raised-button class="primary" [disabled]="!eventForm.valid">
+          <button type="button" mat-raised-button class="button-maroon" (click)="groupSelect()" *ngIf="role !== 'ROLE_USER'">Select Groups</button>&nbsp;&nbsp;
+          <button type="submit" mat-raised-button class="button-maroon" [disabled]="!eventForm.valid">
             Confirm
           </button>
           <button mat-raised-button color="warn" (click)="onNoClick()" class="cancel-button">Cancel</button>

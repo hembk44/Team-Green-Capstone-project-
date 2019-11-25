@@ -1,7 +1,7 @@
 <div class="wrapper" fxLayoutAlign="center">
   <!-- Left Side of Calendar -->
   <mat-sidenav-container>
-    <mat-sidenav #calDrawer mode="side" opened="true">
+    <mat-sidenav #calDrawer mode="side" opened="true" autosize="true">
       <mat-toolbar class="menutoggle">
         <!-- Button for event creation -->
         <button
@@ -49,6 +49,7 @@
       </button>
     </mat-sidenav-content>
   </mat-sidenav-container>
+  
 
   <!-- Calendar -->
   <full-calendar

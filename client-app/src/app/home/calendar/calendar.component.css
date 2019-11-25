@@ -84,6 +84,12 @@
   background-color: white;
   padding: 2px;
 }
+.create-button{
+    background-color: white;
+    margin-left:5px;
+    color: #800029;
+    border: solid 1px #800029;
+}
 
 /* .create-button{
     background-color: rgb(25, 204, 25);

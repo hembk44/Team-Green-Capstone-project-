@@ -1,0 +1,47 @@
+<div class="container">
+    <h2 class="heading">Appointments</h2>
+    <p>Creating appointments is a useful way for users to sign up for things such as advising. You can create time slots for users to sign up
+        for, which will be displayed in both your calendar and theirs. When you first visit the appointment page, you will see a list of appointments
+        <span *ngIf="role==='ROLE_ADMIN'||role==='ROLE_PM'; else elseBlock">that you have created. To view 
+            appointments that have been created for you, click Your Appointments, then Created For You in the menu. To view Your scheduled appointments,
+            click Scheduled Appointments, then either Created By You or Created For you in the menu.
+        </span> <ng-template #elseBlock>that have been created for you. To view your scheduled appointments, click Scheduled Appointments at the top.</ng-template>
+        Click one of these appointments to view its details. 
+    </p>
+    <div *ngIf="role==='ROLE_ADMIN' || role==='ROLE_PM'">
+        <h3 class="heading">Creating an Appointment</h3>
+        <p>To create an appointment select the create appointment button at the top. A form will be shown
+            prompting you to enter a title, description, location, and emails. A button to select groups is also shown. Clicking the select 
+            groups button will open a popup of any group available to you. Select any of the groups and the email field will be populated with the email
+            addresses of the members of that group. 
+        </p>
+        <img src="..\..\..\..\..\assets\images\Appt Create.PNG" alt="" class="image" style="height:36em;">
+        <small>Figure 1: Appointment Creation Form</small>
+        <h4 class="subheading">Selecting the date and times</h4>
+        <p>Under the appointment information described above, a sub-form for dates and times will be shown. You click the add date button to add more dates
+            for your appointment. Clicking the add time button on each date will add more times to that date (see Figure 2). This is not representative of the individual time
+            slots that users will confirm. If you set 1:00 PM to 2:00 PM and enter 15 into the length field, 4 slots will be created for that date and time. 
+        </p>
+        <img src="..\..\..\..\..\assets\images\appt-form.PNG" alt="Image Not Found" class="image" style="height:24em">
+        <small>Figure 2: Date and time form</small>
+        <p>Once all appointment information is filled in the way you want, click the create button and the appointment time slots will be automatically
+            created and sent to your calendar. Invitees will receive an email and will be able to confirm time slots. 
+        </p>
+        <h3 class="heading">Editing an Appointment</h3>
+        <p>To edit an appointment, view its details and click the manage button. A menu will appear. Click Edit on the menu and you will be
+            directed to a form with the Appointment information filled in. From here you can add recipients and remove ones who have not selected a 
+            time slot. You can also update the title, description and location. To confirm your changes, click the update button. 
+        </p>
+        <h3 class="heading">Deleting an Appointment</h3>
+        <p>To delete an appointment, click delete in the manage menu. This can not be undone and will remove the appointment from your calendar, 
+            and the calendars of anyone who has selected a time slot. Make sure you are deleting the correct appointment.
+        </p>
+    </div>
+    <h3 class="heading">Selecting a Time Slot</h3>
+    <p>When viewing the details of an appointment that has been created for you, available time slots will be shown if you have not already selected one.
+        When you click a time slot, a menu for cancel and confirm will appear. Clicking cancel will simply close the menu. Clicking confirm will select that
+        time slot for you and automatically send it to your calendar for display.
+    </p>
+
+    
+</div>

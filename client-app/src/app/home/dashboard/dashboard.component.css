@@ -1,5 +1,24 @@
 .wrapper{
     margin-left:15%;
     margin-right:15%;
-    height:50%;
+    margin-top:75px;
+    margin-bottom:40px;
+    height:65%;
+}
+
+.broadcast-wrap{
+    height:70%;
+}
+
+.carousel-slide{
+    height:100%;
+    width:80%;
+}
+
+.space{
+    height:25px;
+}
+
+#calendar{
+    margin-bottom:25px;
 }

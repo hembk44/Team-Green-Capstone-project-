@@ -62,7 +62,7 @@ export class CalendarComponent implements OnInit {
   eventClicked(event: CalEvent) {
     this.dialog.open(EventDetailComponent, {
       width: "600px",
-      height: "450px",
+      height: "350px",
       data: event
     });
   }

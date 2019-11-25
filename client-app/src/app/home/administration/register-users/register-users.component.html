@@ -11,6 +11,14 @@
       (ngSubmit)="onSubmit()"
       enctype="multipart/form-data"
     >
+      <mat-form-field>
+        <mat-label>Role</mat-label>
+        <mat-select value="students" formControlName="role">
+          <mat-option value="students">Student</mat-option>
+          <mat-option value="faculty">Faculty</mat-option>
+          <mat-option value="admin">Admin</mat-option>
+        </mat-select>
+      </mat-form-field>
       <mat-form-field style="cursor: pointer;width:60%;">
         <ngx-mat-file-input
           #removableInput

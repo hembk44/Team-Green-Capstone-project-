@@ -13,6 +13,7 @@ import { CalEvent } from "../calendar/events.model";
 import { AuthService } from "src/app/auth/auth.service";
 import { Calendar } from "../calendar/calendar-list/calendar.model";
 import { CalendarService } from "../calendar/calendar-list/calendar.service";
+import { P } from '@angular/cdk/keycodes';
 import { Form } from "@angular/forms";
 
 @Injectable({
@@ -21,6 +22,7 @@ import { Form } from "@angular/forms";
 export class DataStorageService {
   private baseUrlEvent = "http://localhost:8181/api/event/";
   private baseUrlCalendar = "http://localhost:8181/api/calendar/";
+  private baseUrlAdmin = "http://localhost:8181/api/admin/"
 
   private isLoadingSubject: BehaviorSubject<boolean> = new BehaviorSubject<
     boolean
@@ -30,13 +32,15 @@ export class DataStorageService {
   private eventSubject: BehaviorSubject<any> = new BehaviorSubject<any>({});
 
   private calSubject: BehaviorSubject<any> = new BehaviorSubject<any>({});
-
-  private userSubject: BehaviorSubject<any> = new BehaviorSubject<any>({});
+  private imageSubject: BehaviorSubject<any>=new BehaviorSubject<any>([]);
+  private userSubject: BehaviorSubject<any> = new BehaviorSubject<any>([]);
   private emailSubject: BehaviorSubject<any> = new BehaviorSubject<any>({});
   public emails: Observable<Emails[]> = this.emailSubject.asObservable();
   private adminAppointmentReceived: BehaviorSubject<any> = new BehaviorSubject<
     any
   >({});
+
+  private majorSubject: BehaviorSubject<any> = new BehaviorSubject<any>({});
 
   public eventList: Observable<CalEvent[]> = this.eventSubject.asObservable();
   allEmails: string[];
@@ -54,6 +58,10 @@ export class DataStorageService {
     }
   }
 
+  get images(){
+    return this.imageSubject.value;
+  }
+
   get eventsList(): CalEvent[] {
     return this.eventSubject.value;
   }
@@ -63,7 +71,21 @@ export class DataStorageService {
   }
 
   get users(): any[] {
-    return this.userSubject.value;
+    console.log(this.userSubject.value === {});
+    if(this.userSubject.value.length !== {}){
+      return this.userSubject.value;
+    }else{
+      return [];
+    }  
+  }
+
+  get majors(): any[] {
+    console.log(this.majorSubject.value);
+    if(this.majorSubject.value !== {}){
+      return this.majorSubject.value;
+    } else{
+      return [];
+    }
   }
 
   getEmails() {
@@ -116,13 +138,84 @@ export class DataStorageService {
     console.log("file upload!");
     return this.http
       .post<ApiResponse>(
-        "http://localhost:8181/api/file/uploadUser/faculty",
+        "http://localhost:8181/api/file/uploadUser/"+role,
         formdata
+      )
+      .pipe(
+        (map(data => data), catchError(error => throwError(error))),
+        finalize(() => this.isLoadingSubject.next(false)))
+  }
+
+  uploadImage(images): Observable<any>{
+    console.log(images);
+    var temp = [];
+    const formData = new FormData();
+    // for (let i = 0 ; i < images.length ; i++) {
+    //   formData.append("file", images[i]);
+    // }
+    for(let img of images){
+      formData.append('file', img);
+    }
+   console.log(formData.get('file'));
+    //this.isLoadingSubject.next(true);
+    // return this.http.post<ApiResponse>(this.baseUrlAdmin+'uploadImage', image).pipe(
+    //   (map(data=>data)),
+    //   catchError(error => throwError(error)),
+    //   finalize(()=>this.isLoadingSubject.next(false))
+    // ).subscribe(result => {
+    //   this.imageSubject.next(result.result);
+    // });
+    console.log(formData.get('file'));
+    this.isLoadingSubject.next(true);
+    return this.http
+      .post<ApiResponse>(
+        this.baseUrlAdmin+'uploadImages',
+        formData
       )
       .pipe(
         (map(data => data), catchError(error => throwError(error))),
         finalize(() => this.isLoadingSubject.next(false))
       );
+  }
+
+  getImgName(){
+    this.isLoadingSubject.next(true);
+    return this.http.get<ApiResponse>(this.baseUrlAdmin+'getallfiles').pipe(
+      (map(data=>data)),
+      catchError(error => throwError(error)),
+      finalize(() => this.isLoadingSubject.next(false))
+    );
+  }
+
+  getImageByName(name: string){
+    return this.http.get<ApiResponse>(this.baseUrlAdmin+'files/'+name);
+  }
+
+  getImages(): Observable<any>{
+    return this.http.get(this.baseUrlAdmin+'getImages');
+  }
+
+  addCourses(formData: FormData) {
+    this.isLoadingSubject.next(true);
+    return this.http
+      .post<ApiResponse>(
+        this.baseUrlAdmin + 'uploadCourses',
+        formData
+      )
+      .pipe(
+        (map(data => data), catchError(error => throwError(error))),
+        finalize(() => this.isLoadingSubject.next(false))
+      );
+  }
+
+  getMajors(){
+    this.isLoadingSubject.next(true);
+    this.http.get<ApiResponse>('http://localhost:8181/api/group/getAllMajors').pipe(
+      (map(data=>data), catchError(error => throwError(error))),
+      finalize(()=>this.isLoadingSubject.next(false))
+    ).subscribe(result => {
+      this.majorSubject.next(result.result);
+    });
   }
 
   // private handleError(errorRes: HttpErrorResponse) {
@@ -201,10 +294,22 @@ export class DataStorageService {
       );
   }
 
+  uploadMajors(formdata: FormData) {
+    return this.http
+      .post<ApiResponse>(
+        "http://localhost:8181/api/admin/uploadCourses",
+        formdata
+      )
+      .pipe(
+        (map(data => data), catchError(error => throwError(error))),
+        finalize(() => this.isLoadingSubject.next(false))
+      );
+  }
+
   newCalendar(obj: Object) {
     this.isLoadingSubject.next(true);
     return this.http
-      .post<Object>(this.baseUrlCalendar + "create", obj)
+      .post<ApiResponse>(this.baseUrlCalendar + "create", obj)
       .pipe(
         (map(data => data),
         catchError(error => throwError(error)),
@@ -215,7 +320,7 @@ export class DataStorageService {
   shareCalenar(obj: Object) {
     this.isLoadingSubject.next(true);
     return this.http
-      .post<Object>(this.baseUrlCalendar + "share", obj)
+      .post<ApiResponse>(this.baseUrlCalendar + "share", obj)
       .pipe(
         (map(data => data),
         catchError(error => throwError(error)),
@@ -223,23 +328,22 @@ export class DataStorageService {
       );
   }
 
-  updateCalendar(obj: Object) {
-    // this.isLoadingSubject.next(true);
-    // return this.http
-    // .post<Object>(this.baseUrlCalendar+'edit or whatever', obj)
-    // .pipe(
-    //   (map(data => data),
-    //   catchError(error => throwError(error)),
-    //   finalize(()=>this.isLoadingSubject.next(false)))
-    // );
-    console.log(obj);
+  updateCalendar(obj: Object, id: number) {
+    this.isLoadingSubject.next(true);
+    return this.http
+    .put<ApiResponse>(this.baseUrlCalendar+'edit/'+id, obj)
+    .pipe(
+      (map(data => data),
+      catchError(error => throwError(error)),
+      finalize(()=>this.isLoadingSubject.next(false)))
+    );
   }
 
   updateRoles(obj: Object) {
     console.log(obj);
     this.isLoadingSubject.next(true);
     return this.http
-      .put<ApiResponse>("http://localhost:8181/api/admin/changeRole", obj)
+      .put<ApiResponse>(this.baseUrlAdmin+"changeRole", obj)
       .pipe(
         (map(data => data),
         catchError(error => throwError(error)),
@@ -247,20 +351,29 @@ export class DataStorageService {
       );
   }
 
+  uploadMajors2(){
+    this.isLoadingSubject.next(true);
+    return this.http.post<ApiResponse>(this.baseUrlAdmin+'uploadMajor','').pipe(
+      (map(data=>data),
+      catchError(error => throwError(error))),
+      finalize(()=>this.isLoadingSubject.next(false))
+    );
+  }
+
   deleteUsers(obj: Object) {
     console.log(obj);
-    // this.isLoadingSubject.next(true);
-    // return this.http.post<Object>('delete api', obj).pipe(
-    //   (map(data => data),
-    //   catchError(error => throwError(error)),
-    //   finalize(() => this.isLoadingSubject.next(false)))
-    // );
+    this.isLoadingSubject.next(true);
+    return this.http.delete<ApiResponse>(this.baseUrlAdmin+'deleteUser', obj).pipe(
+      (map(data => data),
+      catchError(error => throwError(error)),
+      finalize(() => this.isLoadingSubject.next(false)))
+    );
   }
 
   fetchUsers() {
     this.isLoadingSubject.next(true);
     this.http
-      .get<ApiResponse>("http://localhost:8181/api/admin/getAllUsers")
+      .get<ApiResponse>(this.baseUrlAdmin+"getAllUsers")
       .pipe(
         (map(data => data),
         catchError(error => throwError(error)),
@@ -296,25 +409,15 @@ export class DataStorageService {
   }
 
   deleteCalendar(id: number) {
-    console.log(id);
-    // this.isLoadingSubject.next(false);
-    // this.http.delete<ApiResponse>('delete url' + id)
-    // .pipe(map(data=>data),
-    // catchError(error=>throwError(error))),
-    // finalize(()=>this.isLoadingSubject.next(false));
-  }
-
-  uploadMajors(formdata: FormData) {
+    this.isLoadingSubject.next(true);
     return this.http
-      .post<ApiResponse>(
-        "http://localhost:8181/api/admin/uploadCourses",
-        formdata
-      )
+      .delete<ApiResponse>(this.baseUrlCalendar + "delete/" + id)
       .pipe(
         (map(data => data), catchError(error => throwError(error))),
         finalize(() => this.isLoadingSubject.next(false))
       );
   }
+
 
   emailSelectedMembers(obj: Object) {
     this.isLoadingSubject.next(true);

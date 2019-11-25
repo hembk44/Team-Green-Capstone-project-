@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import {
   FormGroup,
   FormControl,
@@ -8,13 +8,14 @@ import { CalEvent } from "../events.model";
 import { Router } from "@angular/router";
 import { CalendarService } from "../calendar-list/calendar.service";
 import { Calendar } from "../calendar-list/calendar.model";
-import { MatDialog, MatSnackBar, MatChipInputEvent } from "@angular/material";
-import { DataStorageService } from "../../shared/data-storage.service";
+import { MatDialog, MatSnackBar, MatChipInputEvent, MatAutocompleteSelectedEvent } from "@angular/material";
+import { DataStorageService, Emails } from "../../shared/data-storage.service";
 import { EventDate } from "../event-date.model";
 import { AuthService } from "src/app/auth/auth.service";
 import { NgxMaterialTimepickerTheme } from 'ngx-material-timepicker';
 import { ENTER, COMMA } from '@angular/cdk/keycodes';
 import { GroupSelection } from '../../shared/group-selection';
+import { startWith, map } from 'rxjs/operators';
 
 @Component({
   selector: "app-create-event",
@@ -24,7 +25,7 @@ import { GroupSelection } from '../../shared/group-selection';
 export class CreateEventComponent implements OnInit {
   eventForm: FormGroup;
   eventData: CalEvent;
-  email = new FormControl();
+  email = new FormControl("",[Validators.email]);
   dateRangeArray: EventDate[] = [];
   primaryColor: string = "#5484ed";
   secondaryColor: string = "";
@@ -43,6 +44,13 @@ export class CreateEventComponent implements OnInit {
   removable = true;
   addOnBlur = true;
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
+  isEmailValid = true;
+  errorMessage: string;
+  @ViewChild("chipList", { static: false }) chipList;
+  role: string;
+  userList: any = [];
+  filteredUserList: any;
+  userInput: any;
 
   constructor(
     private router: Router,
@@ -51,7 +59,21 @@ export class CreateEventComponent implements OnInit {
     private dataStorage: DataStorageService,
     private calService: CalendarService,
     private snackbar: MatSnackBar
-  ) {}
+  ) {
+    this.dataStorage.getEmails();
+    this.dataStorage.emails.subscribe((result: Emails[]) => {
+      if (result.length > 0) {
+        result.forEach(o => this.userList.push(o.email));
+      }
+    });
+
+    this.filteredUserList = this.email.valueChanges.pipe(
+      startWith(null),
+      map((user: string | null) =>
+        user ? this.filter(user) : this.userList.slice()
+      )
+    );
+  }
   
   //theme for time picker
   timeTheme: NgxMaterialTimepickerTheme={
@@ -71,6 +93,7 @@ export class CreateEventComponent implements OnInit {
   ngOnInit() {
     this.emails = [];
     this.username = this.authService.name;
+    this.role = this.authService.user;
     console.log(this.username);
     this.calendars = this.calService
       .getCalendars()
@@ -78,17 +101,31 @@ export class CreateEventComponent implements OnInit {
     console.log(this.calendars);
     this.eventForm = new FormGroup({
       title: new FormControl("", [Validators.required]),
-      description: new FormControl(""),
-      location: new FormControl(""),
+      description: new FormControl("",[Validators.required]),
+      location: new FormControl("",[Validators.required]),
       email: this.email,
-      startDate: new FormControl(new Date()),
+      startDate: new FormControl(new Date(),[Validators.required]),
       startTime: new FormControl(),
-      endDate: new FormControl(new Date()),
+      endDate: new FormControl(new Date(),[Validators.required]),
       endTime: new FormControl(),
       primary: new FormControl([Validators.required]),
       allDay: new FormControl(),
       calendar: new FormControl([Validators.required])
     });
+  }
+
+  filter(value: string): string[] {
+    const filterValue = value.toLocaleLowerCase();
+    return this.userList.filter(user =>
+      user.toLocaleLowerCase().includes(filterValue)
+    );
+  }
+  selected(event: MatAutocompleteSelectedEvent): void {
+    if (!this.emails.includes(event.option.value)) {
+      this.emails.push(event.option.value);
+      this.userInput.nativeElement.value = "";
+      this.email.setValue(null);
+    }
   }
 
   getErrorMessage() {
@@ -110,18 +147,17 @@ export class CreateEventComponent implements OnInit {
         .toDateString()
         .concat(" ")
         .concat(eventFormValues.startTime));
-        console.log(this.startDate);
       this.endDate = new Date(eventFormValues.endDate
         .toDateString()
         .concat(" ")
         .concat(eventFormValues.endTime));
     } else{
-      this.startDate = new Date(eventFormValues.startDate);
-      this.endDate = new Date(eventFormValues.endDate);
+      this.startDate = new Date(eventFormValues.startDate.toLocaleDateString());
+      this.endDate = new Date(eventFormValues.endDate.toLocaleDateString());
     }
-    
+    console.log(this.startDate,this.endDate);
     //checking if start comes before end
-    if (this.startDate < this.endDate) {
+    if ((this.startDate <= this.endDate && this.allDay) || (this.startDate<this.endDate && !this.allDay)) {
       //creating event object based on allDay
       if (!this.allDay) {
         this.obj = {
@@ -158,7 +194,7 @@ export class CreateEventComponent implements OnInit {
         if (result) {
           this.dataStorage.fetchCalendars();
           //confirmation snackbar
-          this.snackbar.open(result.message, "OK", {
+          this.snackbar.open(result.message, "", {
             duration: 3000
           });
         }
@@ -166,7 +202,7 @@ export class CreateEventComponent implements OnInit {
       this.router.navigate(["home/calendar"]);
     } else {
       //warning for start not being before end
-      this.snackbar.open("Start must come before end.", "OK", {
+      this.snackbar.open("Start must come before end.", "", {
         duration: 5000
       });
     }
@@ -188,14 +224,28 @@ export class CreateEventComponent implements OnInit {
     console.log(this.selectedCal);
   }
   
-  //adding email to list
   add(event: MatChipInputEvent): void {
     const input = event.input;
-    const value = event.value;
-
-    // Add emails
-    if (value.trim()) {
-      this.emails.push(value.trim());
+    // const value = event.value;
+    this.email.setValue(event.value);
+    console.log(this.email.hasError("email"));
+    if (!this.email.hasError("email")) {
+      // if (!this.email.hasError("email")) {
+      if (this.email.value.trim()) {
+        this.isEmailValid = true;
+        this.emails.push(this.email.value.trim());
+        console.log(this.emails);
+      } else if (this.email.value === "" && this.emails.length < 0) {
+        this.chipList.errorState = true;
+        this.isEmailValid = false;
+        this.errorMessage = "please enter a valid email address";
+      } else {
+        this.chipList.errorState = false;
+      }
+    } else {
+      this.chipList.errorState = true;
+      this.isEmailValid = false;
+      this.errorMessage = "please enter a valid email address";
     }
 
     // Reset the input value

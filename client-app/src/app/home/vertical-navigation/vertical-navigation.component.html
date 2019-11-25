@@ -55,6 +55,14 @@
 
         Administration</a
       >
+      <a
+      mat-list-item
+      routerLink="/home/broadcast-management"
+      (click)="drawer.close()"
+      *ngIf="userRole === 'ROLE_ADMIN'">
+      <mat-icon aria-hidden="false" aria-label="example broadcast icon">dvr</mat-icon>
+        Broadcast
+      </a>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
@@ -71,7 +79,6 @@
         <span>Skylight@ULM</span>
 
         <span class="example-spacer"></span>
-        <mat-icon>notifications</mat-icon> &nbsp; &nbsp;
         <button
           mat-raised-button
           [matMenuTriggerFor]="user"
@@ -83,7 +90,7 @@
           <button mat-menu-item>
             <span>Your profile</span>
           </button>
-          <button mat-menu-item>
+          <button mat-menu-item (click)="userManual()">
             <span>User Manual</span>
           </button>
           <button mat-menu-item>

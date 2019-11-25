@@ -85,6 +85,7 @@
 
     <mat-card-content>
       <h3>Please login</h3>
+      <mat-error *ngIf="isLoginFailed">Incorrect email or password.</mat-error>
       <form
         class="example-form"
         [formGroup]="loginForm"

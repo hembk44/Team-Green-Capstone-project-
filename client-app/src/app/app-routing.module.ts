@@ -37,6 +37,15 @@ import { GroupDetailComponent } from "./home/group/group-detail/group-detail.com
 import { AdministrationComponent } from "./home/administration/administration.component";
 import { GroupEditComponent } from "./home/group/group-edit/group-edit.component";
 import { ChangePasswordComponent } from "./change-password/change-password.component";
+import { BroadcastComponent } from './broadcast/broadcast.component';
+import { BroadcastManagementComponent } from './home/administration/broadcast-management/broadcast-management.component';
+import { UserManualComponent } from './home/vertical-navigation/user-manual/user-manual.component';
+import { AdminComponent } from './home/vertical-navigation/user-manual/admin/admin.component';
+import { ApptComponent } from './home/vertical-navigation/user-manual/appt/appt.component';
+import { BrdcastComponent } from './home/vertical-navigation/user-manual/brdcast/brdcast.component';
+import { CalComponent } from './home/vertical-navigation/user-manual/cal/cal.component';
+import { GrpsComponent } from './home/vertical-navigation/user-manual/grps/grps.component';
+import { ManualStartComponent } from './home/vertical-navigation/user-manual/manual-start/manual-start.component';
 import { YourGroupComponent } from "./home/group/your-group/your-group.component";
 import { EmailDialogComponent } from "./shared/email-dialog/email-dialog.component";
 
@@ -63,18 +72,22 @@ const routes: Routes = [
     component: ChangePasswordComponent
   },
   {
-    path: "signup",
-    component: RegisterComponent
-  },
-  {
     path: "home",
     component: VerticalNavigationComponent,
     canActivate: [AuthGuard],
     children: [
       { path: "", redirectTo: "dashboard", pathMatch: "full" },
       { path: "dashboard", component: DashboardComponent },
-
+      { path: "user-manual", component: UserManualComponent, children: [
+        { path: "", component: ManualStartComponent },
+        { path: "administration", component: AdminComponent },
+        { path: "appointments", component: ApptComponent },
+        { path: "broadcast", component: BrdcastComponent },
+        { path: "calendar", component: CalComponent },
+        { path: "groups", component: GrpsComponent }
+      ] },
       { path: "admin", component: AdministrationComponent },
+      { path: "broadcast-management", component: BroadcastManagementComponent },
       { path: "calendar", component: CalendarComponent },
       { path: "event/:id", component: EventDetailComponent },
       { path: "create-event", component: CreateEventComponent },
@@ -146,7 +159,8 @@ const routes: Routes = [
         ]
       }
     ]
-  }
+  },
+  { path: 'broadcast', component: BroadcastComponent}
 ];
 
 @NgModule({

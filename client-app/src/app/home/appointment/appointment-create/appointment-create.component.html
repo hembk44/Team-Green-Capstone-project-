@@ -9,7 +9,11 @@
   (ngSubmit)="onSubmit()"
 >
   <mat-form-field style="width: 50%;">
-    <input matInput placeholder="Appointment Title" formControlName="title" />
+    <input
+      matInput
+      placeholder="Appointment Title"
+      formControlName="title"
+    />
   </mat-form-field>
 
   <mat-form-field>
@@ -21,7 +25,11 @@
   </mat-form-field>
 
   <mat-form-field>
-    <input matInput placeholder="Location" formControlName="location" />
+    <input
+      matInput
+      placeholder="Location"
+      formControlName="location"
+    />
   </mat-form-field>
 
   <div>
@@ -30,7 +38,7 @@
         <mat-chip
           *ngFor="let email of emails"
           [selectable]="selectable"
-          [removable]="removable"
+          [removable]="!pendingUsers.includes(email)"
           (removed)="remove(email)"
         >
           <mat-icon mat-list-icon>person_outline</mat-icon> {{ email }}

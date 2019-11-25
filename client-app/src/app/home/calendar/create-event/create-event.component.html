@@ -10,13 +10,16 @@
           >{{ cal.name }}</mat-option
         >
       </mat-select>
+      <mat-error *ngIf="eventForm.controls['calendar'].hasError('required')">Please choose a calendar</mat-error>
     </mat-form-field>
     <mat-form-field>
       <input
         matInput
         placeholder="Event Title"
         formControlName="title"
-      /> </mat-form-field
+      /> 
+        <mat-error *ngIf="eventForm.controls['title'].hasError('required')">Title is required</mat-error>
+      </mat-form-field
     ><br />
 
 
@@ -45,6 +48,7 @@
         placeholder="Start Date"
         formControlName="startDate"
         [matDatepicker]="startpicker"
+        readonly
       />
       <mat-datepicker-toggle
         matSuffix
@@ -74,6 +78,7 @@
         placeholder="End Date"
         formControlName="endDate"
         [matDatepicker]="endpicker"
+        readonly
       />
       <mat-datepicker-toggle
         matSuffix
@@ -129,7 +134,7 @@
         readonly
       />
     </mat-form-field>
-    <mat-form-field class="example-chip-list" style="width:30%">
+    <mat-form-field class="example-chip-list" style="width:50%">
       <mat-chip-list #chipList aria-label="adding emails">
         <mat-chip
           *ngFor="let email of emails"
@@ -137,29 +142,55 @@
           [removable]="removable"
           (removed)="remove(email)"
         >
+          <mat-icon mat-list-icon>person_outline</mat-icon>
           {{ email }}
           <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
         </mat-chip>
         <input
-          placeholder="Enter Emails"
-          [matChipInputFor]="chipList"
-          [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-          [matChipInputAddOnBlur]="addOnBlur"
-          (matChipInputTokenEnd)="add($event)"
-        />
-      </mat-chip-list>
+        placeholder="Enter Emails"
+        matInput
+        [formControl]="email"
+        [matAutocomplete]="auto"
+        [matChipInputFor]="chipList"
+        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+        [matChipInputAddOnBlur]="addOnBlur"
+        (matChipInputTokenEnd)="add($event)"
+      />
+        </mat-chip-list>
+        <mat-autocomplete
+        #auto="matAutocomplete"
+        (optionSelected)="selected($event)"
+        >
+        <mat-option
+            *ngFor="let user of filteredUserList | async"
+            [value]="user"
+        >
+            {{ user }}
+        </mat-option>
+        </mat-autocomplete>
+        <mat-error *ngIf="!isEmailValid">{{ errorMessage }}</mat-error>
+        <mat-autocomplete
+            #auto="matAutocomplete"
+            (optionSelected)="selected($event)"
+        >
+            <mat-option
+            *ngFor="let user of filteredUserList | async"
+            [value]="user"
+            >
+            {{ user }}
+            </mat-option>
+        </mat-autocomplete>
       <mat-hint>Use commas or hit ENTER for multiple emails.</mat-hint>
     </mat-form-field>&nbsp;
-    <mat-checkbox formControlName="allDay" (click)="allday()" class="primary"
-      >All Day</mat-checkbox
-    >&nbsp;&nbsp;
-    <button mat-raised-button type="button" class="primary" (click)="groupSelect()">Select Groups</button>
+    
+    &nbsp;&nbsp;
 
     <mat-toolbar>
       <mat-toolbar-row>
-        <button type="submit" mat-raised-button class="primary" [disabled]="!eventForm.valid">
+        <button type="submit" mat-raised-button class="button-maroon" [disabled]="!eventForm.valid" style="margin-right:15px;">
           Confirm
         </button>
+        <button mat-raised-button type="button" class="button-maroon" (click)="groupSelect()" *ngIf="role !== 'ROLE_USER'" style="margin-right:15px;">Select Groups</button>
         <button
           mat-raised-button
           color="warn"
@@ -168,6 +199,8 @@
         >
           Cancel
         </button>
+        <mat-checkbox formControlName="allDay" (click)="allday()" color="primary" style="margin-left:15px;"
+        >All Day</mat-checkbox>
         <span class="example-spacer"></span>
       </mat-toolbar-row>
     </mat-toolbar>

@@ -1,0 +1,82 @@
+<div class="wrapper">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
+        Broadcast Management
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form
+        class="example-container"
+        [formGroup]="imageForm"
+        (ngSubmit)="onSubmit()"
+        enctype="multipart/form-data"
+      >
+        <mat-form-field style="cursor: pointer;width:60%;">
+          <ngx-mat-file-input
+            #removableInput
+            formControlName="image"
+            placeholder="upload an image"
+            accept="image/*"
+            (change)="upload($event)"
+            multiple
+          ></ngx-mat-file-input>
+          <button
+            mat-icon-button
+            matSuffix
+            *ngIf="removableInput.empty"
+            (click)="removableInput.clear($event)"
+          >
+            <mat-icon>folder</mat-icon>
+          </button>
+          <mat-error *ngIf="imageForm.get('image').hasError('required')">
+            Please select a file
+          </mat-error>
+  
+          <button
+            mat-icon-button
+            matSuffix
+            *ngIf="!removableInput.empty"
+            (click)="removableInput.clear($event)"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </mat-form-field>
+        <mat-error
+          *ngIf="isInvalid && !imageForm.get('image').hasError('required')"
+        >
+          {{ invalidExtension }}
+        </mat-error>
+        &nbsp;
+        <button type="button" (click)="saveForm(imageForm)" mat-raised-button class="button-maroon">
+          Confirm
+        </button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+  <div class="img-wrap"
+  fxLayout="row wrap"
+  fxLayout.xs="column"
+  fxLayoutAlign="center"
+  fxLayoutGap="10px"
+  fxLayoutGap.xs="10px"
+  style="margin: 10px;">
+    
+    <div class="card" *ngFor="let image of newImgs; let i = index" fxFlex="20%">
+      <mat-card fxFlex="100%" style="margin-bottom:10px">
+        <img mat-card-image [src]="image" alt="Image Not Found" style="height:250px;">
+        <mat-card-footer>
+          <button mat-raised-button type="button" (click)="delete(i)" color="warn" style="margin:10px">Delete</button>
+        </mat-card-footer>
+      </mat-card>
+    </div>
+      
+  </div>    
+
+  
+</div>
+
+
+
+
+  

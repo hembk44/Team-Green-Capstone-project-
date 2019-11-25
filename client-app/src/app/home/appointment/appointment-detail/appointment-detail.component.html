@@ -10,7 +10,7 @@
       <p
         *ngIf="
           currentRole == 'ROLE_USER' ||
-          (currentRole === 'ROLE_ADMIN' && appointmentType === 'received')
+          ((currentRole === 'ROLE_ADMIN' || currentRole === 'ROLE_PM') && appointmentType === 'received')
         "
       >
         Please select any one of the time slots below:

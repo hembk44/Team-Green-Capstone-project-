@@ -12,7 +12,7 @@
                 <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
                 </mat-chip>
                 <input
-                placeholder="Enter Emails"
+                placeholder="Add Recipients"
                 [matChipInputFor]="chipList"
                 [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                 [matChipInputAddOnBlur]="addOnBlur"
@@ -24,7 +24,7 @@
         <button
         mat-raised-button
         type="submit"
-        class="submit primary">Share</button>&nbsp;&nbsp;
-        <button mat-raised-button type="button" (click)="groupSelect()" class="primary">Select Groups</button>
+        class="button-maroon">Share</button>&nbsp;&nbsp;
+        <button mat-raised-button type="button" (click)="groupSelect()" class="button-maroon" *ngIf="role !== 'ROLE_USER'">Select Groups</button>
     </mat-toolbar>
 </form>

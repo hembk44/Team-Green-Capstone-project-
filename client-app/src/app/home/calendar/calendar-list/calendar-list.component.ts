@@ -14,6 +14,7 @@ export class CalendarListComponent implements OnInit {
 
   calendars: any[];//list of calendars
   sharedCals: any[];
+  customCals: any[];
   username: string;
 
   constructor(private calendarService: CalendarService,
@@ -26,8 +27,10 @@ export class CalendarListComponent implements OnInit {
     this.username = this.authService.name;
     this.dataStorage.isLoading.subscribe(loading =>  {
       if(!loading){
-        this.calendars = this.calendarService.getCalendars().filter(cal => cal.createdBy.email === this.username);
+        this.calendars = this.calendarService.getCalendars().filter(cal => cal.defaultCalendar && cal.createdBy.email === this.username);
+        this.customCals = this.calendarService.getCalendars().filter(cal => cal.createdBy.email === this.username && !cal.defaultCalendar);
         this.sharedCals = this.calendarService.getCalendars().filter(cal => cal.createdBy.email !== this.username);
+        console.log(this.sharedCals);
       }
     })//gets calendars from service
   }

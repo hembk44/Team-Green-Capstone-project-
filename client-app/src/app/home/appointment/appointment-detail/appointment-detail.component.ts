@@ -64,7 +64,7 @@ export class AppointmentDetailComponent implements OnInit {
       //   this.appointmentDesc = data.description;
       //   this.appointmentLocation = data.location;
       // });
-      if (this.currentRole === "ROLE_ADMIN") {
+      if (this.currentRole === "ROLE_ADMIN" || this.currentRole === 'ROLE_PM') {
         console.log("admin data here!");
         if (this.appointmentType === "sent") {
           this.dataServiceAppointment

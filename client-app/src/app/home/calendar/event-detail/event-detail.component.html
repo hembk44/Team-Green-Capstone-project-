@@ -45,7 +45,8 @@
 
 <mat-toolbar class="bottom-row">
     <mat-toolbar-row>
-        <button mat-raised-button [matMenuTriggerFor]="menu" class="options-button" *ngIf="!isAppt">Options</button> 
+        <button mat-raised-button [matMenuTriggerFor]="menu" class="button-maroon"
+        *ngIf="!isAppt && (event.extendedProps.createdBy.email===username || invitees.includes(username))">Options</button> 
         <mat-menu #menu class="options-button primary">
             <button mat-menu-item (click)="editEvent()" *ngIf="event.extendedProps.createdBy.email === username" class="option">Edit Event</button>
             <button mat-menu-item (click)="deleteEvent()" *ngIf="event.extendedProps.createdBy.email === username" class="option">Delete</button>

@@ -27,6 +27,12 @@ export class AuthService {
   private usernameSubject: BehaviorSubject<any> = new BehaviorSubject<any>({});
   private nameSubject: BehaviorSubject<any> = new BehaviorSubject<any>({});
   public userRole: Observable<string> = this.userRoleSubject.asObservable();
+  private isLoggedin: BehaviorSubject<boolean> = new BehaviorSubject<
+    boolean
+  >(false);
+  public isLoggedIn: Observable<boolean> = this.isLoggedin.asObservable();
+  private isLoadingSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  public isLoading: Observable<boolean> = this.isLoadingSubject.asObservable();
 
   get user(): string {
     this.userRoleSubject.next(this.tokenStorage.getAuthority());
@@ -51,7 +57,7 @@ export class AuthService {
   ) {}
 
   attemptAuth(credentials: AuthLoginInfo) {
-    this.http
+    return this.http
       .post<ApiResponse>(this.loginUrl, credentials, httpOptions)
       .subscribe((data: ApiResponse) => {
         if (data) {
@@ -64,7 +70,11 @@ export class AuthService {
           this.userRoleSubject.next(this.tokenStorage.getAuthority());
           this.usernameSubject.next(this.tokenStorage.getUsername());
           console.log(data.result.role);
+          this.isLoggedin.next(true);
           this.router.navigate(["home"]);
+        }
+        else{
+          this.isLoggedin.next(false);
         }
       });
   }

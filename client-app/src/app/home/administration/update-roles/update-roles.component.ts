@@ -80,12 +80,14 @@ export class UpdateRolesComponent implements OnInit {
       dialogRef.afterClosed().subscribe(result => {
         if (result === "confirmed") {
           this.dataStorage.updateRoles(this.updates).subscribe(result => {
-            console.log(result);
-            this.snackbar.open(result.message, "OK", { duration: 3000 });
+            if(result){
+              this.snackbar.open(result.message, '', {duration:3000});
+              this.dataStorage.fetchUsers();
+            }      
           });
           this.updateEmails = [];
           this.updates = [];
-          this.dataStorage.fetchUsers();
+          console.log('fetched');
         }
       });
     } else {
