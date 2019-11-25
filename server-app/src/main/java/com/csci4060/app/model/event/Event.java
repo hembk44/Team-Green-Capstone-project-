@@ -8,6 +8,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
+import javax.validation.constraints.NotNull;
+
 import com.csci4060.app.model.User;
 import lombok.Data;
 
@@ -18,8 +20,12 @@ public class Event{
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
+	
+	@NotNull(message="Event must have a title!!")
 	String title;
+	
 	String description;
+	
 	String location;
 
 	@ManyToMany(targetEntity = User.class)
@@ -29,9 +35,10 @@ public class Event{
 	List<User> confirmedBy; 
 	
 	
+	@NotNull(message="Start time must be specified while creating an event!")
 	String start;
 	
-	
+	@NotNull(message="End time must be specified while creating an event!")
 	String end;
 	
 	@OneToOne(targetEntity = User.class)

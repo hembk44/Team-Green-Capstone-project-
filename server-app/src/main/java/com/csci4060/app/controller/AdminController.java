@@ -9,6 +9,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -25,6 +29,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -89,6 +94,9 @@ public class AdminController extends ExceptionResolver {
 
 	@Autowired
 	ServletContext context;
+	
+	@Autowired
+	PasswordEncoder encoder;
 
 	@PutMapping(path = "/changeRole")
 	@PreAuthorize("hasRole('ADMIN')")
@@ -127,6 +135,7 @@ public class AdminController extends ExceptionResolver {
 		User loggedIn = userService.findByUsername(username);
 		List<User> allUsers = userService.findAllUserExcept(loggedIn.getEmail());
 		
+
 		if(allUsers == null) {
 			return new APIresponse(HttpStatus.OK.value(), "There are no users in the database.", null);
 		}
@@ -391,6 +400,28 @@ public class AdminController extends ExceptionResolver {
 		return ResponseEntity.ok().contentType(MediaType.parseMediaType(contentType))
 				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
 				.body(resource);
+	}
+	
+	
+	@PutMapping("/changePassword")
+	@PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN') or hasRole('MODERATOR')")
+	public APIresponse changePassword(@RequestBody Map<String, String> password)
+	{
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		String username = "";
+
+		if (principal instanceof UserDetails) {
+			username = ((UserDetails) principal).getUsername();
+		}
+
+		User loggedIn = userService.findByUsername(username);
+		
+		loggedIn.setPassword(encoder.encode(password.get("password")));
+		 userService.save(loggedIn);
+		 
+		 return new APIresponse(HttpStatus.OK.value(), "Password has been successfully chnaged!", null);
+		
 	}
 
 }

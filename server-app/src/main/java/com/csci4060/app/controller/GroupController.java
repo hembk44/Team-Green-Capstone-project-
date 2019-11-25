@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.csci4060.app.ExceptionResolver;
 import com.csci4060.app.model.APIresponse;
 import com.csci4060.app.model.Role;
 import com.csci4060.app.model.RoleName;
@@ -49,7 +50,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @RestController
 @CrossOrigin(origins = "*")
 @RequestMapping(path = "/api/group", produces = "application/json")
-public class GroupController {
+public class GroupController extends ExceptionResolver {
 
 	@Autowired
 	UserService userService;
