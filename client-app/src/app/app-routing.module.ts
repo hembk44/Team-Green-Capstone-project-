@@ -47,6 +47,7 @@ import { CalComponent } from './home/vertical-navigation/user-manual/cal/cal.com
 import { GrpsComponent } from './home/vertical-navigation/user-manual/grps/grps.component';
 import { ManualStartComponent } from './home/vertical-navigation/user-manual/manual-start/manual-start.component';
 import { YourGroupComponent } from "./home/group/your-group/your-group.component";
+import { EmailDialogComponent } from "./shared/email-dialog/email-dialog.component";
 
 const routes: Routes = [
   {
@@ -62,6 +63,11 @@ const routes: Routes = [
   },
   {
     path: "forgot-password",
+
+    component: EmailDialogComponent
+  },
+  {
+    path: "reset-password",
 
     component: ChangePasswordComponent
   },

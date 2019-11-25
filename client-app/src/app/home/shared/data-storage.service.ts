@@ -104,8 +104,33 @@ export class DataStorageService {
       });
   }
 
-  registerUsers(file: File, role:string) {
-    console.log(role);
+  resetPassword(email: string) {
+    this.isLoadingSubject.next(true);
+    var formdata: FormData = new FormData();
+    formdata.append("email", email);
+    return this.http
+      .post<ApiResponse>("http://localhost:8181/api/auth/forgot", formdata)
+      .pipe(
+        (map(data => data), catchError(error => throwError(error))),
+        finalize(() => this.isLoadingSubject.next(false))
+      );
+  }
+
+  submitPassword(obj: Object) {
+    this.isLoadingSubject.next(true);
+
+    return this.http
+      .post<ApiResponse>(
+        "http://localhost:8181/api/auth/processResetPassword",
+        obj
+      )
+      .pipe(
+        (map(data => data), catchError(error => throwError(error))),
+        finalize(() => this.isLoadingSubject.next(false))
+      );
+  }
+
+  registerUsers(file: File) {
     this.isLoadingSubject.next(true);
     var formdata: FormData = new FormData();
     formdata.append("file", file);

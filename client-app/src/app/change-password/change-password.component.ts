@@ -2,7 +2,8 @@ import { Component, OnInit } from "@angular/core";
 import { AuthService } from "../auth/auth.service";
 import { TokenStorageService } from "../auth/token-storage.service";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { Router } from "@angular/router";
+import { Router, ActivatedRoute } from "@angular/router";
+import { DataStorageService } from "../home/shared/data-storage.service";
 
 @Component({
   selector: "app-change-password",
@@ -11,13 +12,28 @@ import { Router } from "@angular/router";
 })
 export class ChangePasswordComponent implements OnInit {
   forgotPasswordForm: FormGroup;
+  resetToken: string;
 
+  // constructor(private route: ActivatedRoute) {
+  //   console.log('Called Constructor');
+  //   this.route.queryParams.subscribe(params => {
+  //       this.param1 = params['param1'];
+  //       this.param2 = params['param2'];
+  //   });
+  // }
   constructor(
     private authService: AuthService,
     private tokenStorage: TokenStorageService,
     private formBuilder: FormBuilder,
-    private router: Router
-  ) {}
+    private router: Router,
+    private route: ActivatedRoute,
+    private dataStorageService: DataStorageService
+  ) {
+    this.route.queryParams.subscribe(params => {
+      this.resetToken = params["resetToken"];
+      console.log(this.resetToken);
+    });
+  }
 
   ngOnInit() {
     this.forgotPasswordForm = this.formBuilder.group({
@@ -31,10 +47,13 @@ export class ChangePasswordComponent implements OnInit {
     if (this.forgotPasswordForm.invalid) {
       return;
     }
-    const passwordConfirm = {
-      newPassword: formValues.newPassword,
-      confirmNewPassword: formValues.confirmNewPassword
+    const changePasswordObject = {
+      password: formValues.newPassword,
+      resetToken: this.resetToken
     };
-    console.log(passwordConfirm);
+    console.log(changePasswordObject);
+    this.dataStorageService
+      .submitPassword(changePasswordObject)
+      .subscribe(r => console.log(r));
   }
 }

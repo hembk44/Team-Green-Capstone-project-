@@ -143,9 +143,8 @@ export class GroupDetailComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log(result);
-      result.recipients = this.selectedGroupMembers;
-      console.log(result);
       if (result) {
+        result.recipients = this.selectedGroupMembers;
         this.dataStorage.emailSelectedMembers(result).subscribe(result => {
           console.log(result);
           if (result.status === 200) {
