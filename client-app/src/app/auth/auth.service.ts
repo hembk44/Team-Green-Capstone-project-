@@ -66,7 +66,7 @@ export class AuthService {
       .post<ApiResponse>(this.loginUrl, credentials, httpOptions)
       .subscribe((data: ApiResponse) => {
         if (data) {
-          if (data.status == 200) {
+          if (data.result) {
             this.tokenStorage.saveToken(data.result.accessToken);
             this.tokenStorage.saveUsername(data.result.name);
             this.tokenStorage.saveName(data.result.username);
@@ -76,21 +76,25 @@ export class AuthService {
             console.log(data.result.role);
             this.isLoggedin.next(true);
 
-            this._snackbar.openFromComponent(AppointmentSnackbarComponent, {
+            this._snackbar.open("Login Successful!", "close", {
               duration: 4000,
-              panelClass: ["standard"],
-              data: "Login Successful!"
+              panelClass: ["standard"]
             });
             // this.router.navigate(["home"]);
-          }
-          if (data.status == 403) {
-            this._snackbar.openFromComponent(AppointmentSnackbarComponent, {
+          } else {
+            this._snackbar.open(data.message, "close", {
               duration: 4000,
-              panelClass: ["delete"],
-              data: data.message
+              panelClass: ["delete"]
             });
-            this.isLoggedin.next(false);
           }
+          // if (data.status == 403) {
+          //   this._snackbar.openFromComponent(AppointmentSnackbarComponent, {
+          //     duration: 4000,
+          //     panelClass: ["delete"],
+          //     data: data.message
+          //   });
+          //   this.isLoggedin.next(false);
+          // }
           console.log(data);
           console.log(data.result);
         } else {

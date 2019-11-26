@@ -60,15 +60,22 @@ export class ChangePasswordComponent implements OnInit {
       .subscribe(result => {
         console.log(result);
         if (result) {
-          if (result.status == 200) {
-            this._snackbar.openFromComponent(AppointmentSnackbarComponent, {
-              duration: 5000,
-              panelClass: ["standard"],
-              data:
-                "Your password have been changed successfully. Please login!"
-            });
+          if (result.result) {
+            this._snackbar.open(
+              "Your password have been changed successfully. Please login!",
+              "close",
+              {
+                duration: 5000,
+                panelClass: ["standard"]
+              }
+            );
             this.router.navigate(["login"]);
           }
+        } else {
+          this._snackbar.open(result.message, "close", {
+            duration: 5000,
+            panelClass: ["delete"]
+          });
         }
       });
   }
