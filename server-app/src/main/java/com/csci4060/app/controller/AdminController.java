@@ -1,23 +1,17 @@
 package com.csci4060.app.controller;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Base64;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-
-
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -33,7 +27,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -46,7 +39,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.csci4060.app.ExceptionResolver;
 import com.csci4060.app.configuration.fileStorage.FileStorageProperties;
 import com.csci4060.app.model.APIresponse;
-import com.csci4060.app.model.EmailWrapper;
 import com.csci4060.app.model.Role;
 import com.csci4060.app.model.User;
 import com.csci4060.app.model.UserDetailDummy;
@@ -94,7 +86,7 @@ public class AdminController extends ExceptionResolver {
 
 	@Autowired
 	ServletContext context;
-	
+
 	@Autowired
 	PasswordEncoder encoder;
 
@@ -102,6 +94,7 @@ public class AdminController extends ExceptionResolver {
 	@PreAuthorize("hasRole('ADMIN')")
 	public APIresponse changeRoles(@Valid @RequestBody List<UserDetailDummy> userDetail) {
 		List<UserDetailDummy> userWithChangedRoles = new ArrayList<UserDetailDummy>();
+		
 		for (UserDetailDummy details : userDetail) {
 			User user = userService.findByEmail(details.getEmail());
 
@@ -134,10 +127,9 @@ public class AdminController extends ExceptionResolver {
 
 		User loggedIn = userService.findByUsername(username);
 		List<User> allUsers = userService.findAllUserExcept(loggedIn.getEmail());
-		
 
-		if(allUsers == null) {
-			return new APIresponse(HttpStatus.OK.value(), "There are no users in the database.", null);
+		if (allUsers == null) {
+			return new APIresponse(HttpStatus.NOT_FOUND.value(), "There are no users in the database.", null);
 		}
 
 		List<UserDetailDummy> response = new ArrayList<UserDetailDummy>();
@@ -202,7 +194,7 @@ public class AdminController extends ExceptionResolver {
 
 		return new APIresponse(HttpStatus.OK.value(), "User was successfully deleted.", emails);
 	}
-	
+
 	@PostMapping(path = "/uploadMajor")
 	@PreAuthorize("hasRole('ADMIN')")
 	public APIresponse uploadMajor() {
@@ -245,7 +237,7 @@ public class AdminController extends ExceptionResolver {
 			List<Course> courses = fileReadService.readFileForCourse(file);
 
 			if (courses == null) {
-				return new APIresponse(HttpStatus.BAD_REQUEST.value(), "Please check that the excel file is not empty.",
+				return new APIresponse(HttpStatus.BAD_REQUEST.value(), "Please check that the excel file is not empty or the file is in appropriate format. Please check user manual for more information.",
 						null);
 			} else {
 
@@ -290,6 +282,10 @@ public class AdminController extends ExceptionResolver {
 
 		for (int i = 0; i < files.length; i++) {
 			String fileName = fileStorageService.storeFile(files[i]);
+
+			if (fileName == null) {
+				return new APIresponse(HttpStatus.BAD_REQUEST.value(),"Something went wrong while uploading your files. Please try again later or try again with different files.", null);
+			}
 			uploadedFiles.add(fileName);
 		}
 
@@ -384,22 +380,22 @@ public class AdminController extends ExceptionResolver {
 	}
 
 	@GetMapping("/getallfiles")
-	  public ResponseEntity<List<String>> getListFiles(Model model) {
+	public ResponseEntity<List<String>> getListFiles(Model model) {
 		List<String> files = new ArrayList<String>();
-		
+
 		String filesPath = Paths.get(fileStorageProperties.getUploadDir()).toAbsolutePath().normalize().toString();
-		
+
 		File fileFolder = new File(filesPath);
-		
-		if(fileFolder != null) {
-			for(final File file : fileFolder.listFiles()) {
-				
+
+		if (fileFolder != null) {
+			for (final File file : fileFolder.listFiles()) {
+
 				files.add(file.getName());
 			}
 		}
-	 
-	    return ResponseEntity.ok().body(files);
-	  }
+
+		return ResponseEntity.ok().body(files);
+	}
 
 	@GetMapping("/files/{fileName:.+}")
 	@PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
@@ -426,12 +422,10 @@ public class AdminController extends ExceptionResolver {
 				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
 				.body(resource);
 	}
-	
-	
+
 	@PutMapping("/changePassword")
 	@PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN') or hasRole('MODERATOR')")
-	public APIresponse changePassword(@RequestBody Map<String, String> password)
-	{
+	public APIresponse changePassword(@RequestBody Map<String, String> password) {
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
 		String username = "";
@@ -441,12 +435,12 @@ public class AdminController extends ExceptionResolver {
 		}
 
 		User loggedIn = userService.findByUsername(username);
-		
+
 		loggedIn.setPassword(encoder.encode(password.get("password")));
-		 userService.save(loggedIn);
-		 
-		 return new APIresponse(HttpStatus.OK.value(), "Password has been successfully chnaged!", null);
-		
+		userService.save(loggedIn);
+
+		return new APIresponse(HttpStatus.OK.value(), "Password has been successfully chnaged!", null);
+
 	}
 
 }

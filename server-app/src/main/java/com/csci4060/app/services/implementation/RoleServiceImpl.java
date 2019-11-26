@@ -1,5 +1,7 @@
 package com.csci4060.app.services.implementation;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,8 +18,14 @@ public class RoleServiceImpl implements RoleService{
 	
 	@Override
 	public Role findByName(RoleName roleName) {
-		return roleRepo.findByName(roleName)
-				.orElseThrow(() -> new RuntimeException("Fail! -> Cause: User Role not find."));
+		
+		Optional<Role> optRole = roleRepo.findByName(roleName);
+		
+		if(optRole.isPresent()) {
+			return optRole.get();
+		}
+		
+		return null;
 	}
 
 	
