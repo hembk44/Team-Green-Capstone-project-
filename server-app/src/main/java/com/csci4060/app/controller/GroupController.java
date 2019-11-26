@@ -87,6 +87,7 @@ public class GroupController extends ExceptionResolver {
 		String groupType = groupDummy.getType();
 		String groupName = groupDummy.getName();
 		String groupMajor = groupDummy.getMajor();
+
 		Major major = majorService.findByName(groupMajor);
 
 		String groupSemesterTerm = groupDummy.getSemesterTerm();
@@ -96,9 +97,14 @@ public class GroupController extends ExceptionResolver {
 
 		if (groupType.equals("Course")) {
 
+			if (major == null) {
+				return new APIresponse(HttpStatus.NOT_FOUND.value(),
+						"The major with name " + groupMajor + " does not exist.", null);
+			}
+
 			if (groupService.findByNameAndSemesterTermAndSemesterYearAndType(groupName, groupSemesterTerm,
 					groupSemesterYear, groupType) != null) {
-				return new APIresponse(HttpStatus.CONFLICT.value(),
+				return new APIresponse(HttpStatus.BAD_REQUEST.value(),
 						"Course with name: " + groupName + " on semester: " + groupSemesterTerm + " "
 								+ groupSemesterYear
 								+ " is already in the database. Please try a different name or semester.",
@@ -128,7 +134,7 @@ public class GroupController extends ExceptionResolver {
 		} else {
 			if (groupService.findByNameAndSemesterTermAndSemesterYearAndTypeAndCreatedBy(groupName, groupSemesterTerm,
 					groupSemesterYear, groupType, createdBy) != null) {
-				return new APIresponse(HttpStatus.CONFLICT.value(),
+				return new APIresponse(HttpStatus.BAD_REQUEST.value(),
 						"Group with name: " + groupName + " on semester: " + groupSemesterTerm + " " + groupSemesterYear
 								+ " has already been created by you. Please try a different name.",
 						null);
@@ -183,9 +189,14 @@ public class GroupController extends ExceptionResolver {
 
 		if (groupType.equals("Course")) {
 
+			if (major == null) {
+				return new APIresponse(HttpStatus.NOT_FOUND.value(),
+						"The major with name " + groupMajor + " does not exist.", null);
+			}
+
 			if (groupService.findByNameAndSemesterTermAndSemesterYearAndType(groupName, groupSemesterTerm,
 					groupSemesterYear, groupType) != null) {
-				return new APIresponse(HttpStatus.CONFLICT.value(),
+				return new APIresponse(HttpStatus.BAD_REQUEST.value(),
 						"Course with name: " + groupName + " on semester: " + groupSemesterTerm + " "
 								+ groupSemesterYear
 								+ " is already in the database. Please try a different name or semester.",
@@ -215,7 +226,7 @@ public class GroupController extends ExceptionResolver {
 		} else {
 			if (groupService.findByNameAndSemesterTermAndSemesterYearAndTypeAndCreatedBy(groupName, groupSemesterTerm,
 					groupSemesterYear, groupType, createdBy) != null) {
-				return new APIresponse(HttpStatus.CONFLICT.value(),
+				return new APIresponse(HttpStatus.BAD_REQUEST.value(),
 						"Group with name: " + groupName + " on semester: " + groupSemesterTerm + " " + groupSemesterYear
 								+ " has already been created by you. Please try a different name.",
 						null);
@@ -225,8 +236,8 @@ public class GroupController extends ExceptionResolver {
 		List<User> membersList = fileReadService.readFileForGroup(file);
 
 		if (membersList == null) {
-			return new APIresponse(HttpStatus.EXPECTATION_FAILED.value(),
-					"Please upload file in an appropriate format. You can refer to user manual for more information.",
+			return new APIresponse(HttpStatus.BAD_REQUEST.value(),
+					"Please check if the file is empty and upload it in an appropriate format. You can refer to user manual for more information.",
 					null);
 		}
 
@@ -288,14 +299,13 @@ public class GroupController extends ExceptionResolver {
 		Group group = groupService.findById(groupId);
 
 		if (group == null) {
-			return new APIresponse(HttpStatus.BAD_REQUEST.value(), "Group with id " + groupId + " does not exist",
-					null);
+			return new APIresponse(HttpStatus.NOT_FOUND.value(), "Group with id " + groupId + " does not exist", null);
 		}
 
 		if (group.getType().equals("Custom") && group.getCreatedBy() != user
 				&& !group.getOtherOwners().contains(user)) {
-			return new APIresponse(HttpStatus.FORBIDDEN.value(), "You did not create the group. Authorization denied!",
-					null);
+			return new APIresponse(HttpStatus.BAD_REQUEST.value(),
+					"You did not create the group. Authorization denied!", null);
 		}
 
 		return new APIresponse(HttpStatus.OK.value(), "Group details successfully sent", group);
@@ -318,19 +328,32 @@ public class GroupController extends ExceptionResolver {
 		Group group = groupService.findById(groupId);
 
 		if (group == null) {
-			return new APIresponse(HttpStatus.BAD_REQUEST.value(), "Group with id " + groupId + " does not exist",
-					null);
+			return new APIresponse(HttpStatus.NOT_FOUND.value(), "Group with id " + groupId + " does not exist", null);
 		}
 
 		if (group.getCreatedBy() != user) {
-			return new APIresponse(HttpStatus.FORBIDDEN.value(), "You did not create the group. Authorization denied!",
-					null);
+			return new APIresponse(HttpStatus.BAD_REQUEST.value(),
+					"You did not create the group. Authorization denied!", null);
+		}
+
+		String groupType = groupDummy.getType();
+		String groupMajor = groupDummy.getMajor();
+		Major major = majorService.findByName(groupMajor);
+
+		if (groupType.equals("Course")) {
+			if (major == null) {
+				return new APIresponse(HttpStatus.NOT_FOUND.value(),
+						"The major with name " + groupMajor + " does not exist.", null);
+			}
+
 		}
 
 		group.setName(groupDummy.getName());
 		group.setDescription(groupDummy.getDescription());
 		group.setSemesterTerm(groupDummy.getSemesterTerm());
 		group.setSemesterYear(groupDummy.getSemesterYear());
+		group.setType(groupDummy.getType());
+		group.setMajor(major);
 
 		List<String> emailsFromDummy = groupDummy.getRecipients();
 
@@ -367,17 +390,16 @@ public class GroupController extends ExceptionResolver {
 		Group group = groupService.findById(groupId);
 
 		if (group == null) {
-			return new APIresponse(HttpStatus.BAD_REQUEST.value(), "Group with id " + groupId + " does not exist",
-					null);
+			return new APIresponse(HttpStatus.NOT_FOUND.value(), "Group with id " + groupId + " does not exist", null);
 		}
 
 		if (group.getCreatedBy() != user) {
-			return new APIresponse(HttpStatus.FORBIDDEN.value(), "You did not create the group. Authorization denied!",
-					null);
+			return new APIresponse(HttpStatus.BAD_REQUEST.value(),
+					"You did not create the group. Authorization denied!", null);
 		}
 
 		if (group.getType().equals("Course")) {
-			return new APIresponse(HttpStatus.CONFLICT.value(),
+			return new APIresponse(HttpStatus.BAD_REQUEST.value(),
 					"Group with id " + groupId
 							+ " is a Course group. This group is already shared to other faculties during its creation",
 					null);
@@ -423,12 +445,12 @@ public class GroupController extends ExceptionResolver {
 		Group group = groupService.findById(groupId);
 
 		if (group == null) {
-			return new APIresponse(HttpStatus.NOT_FOUND.value(), "Group with id " + groupId + " does not exists.",
+			return new APIresponse(HttpStatus.NOT_FOUND.value(), "Group with id " + groupId + " does not exist.",
 					null);
 		}
 
 		if (group.getCreatedBy() != user) {
-			return new APIresponse(HttpStatus.FORBIDDEN.value(), "You did not create the group. Authorization denied!",
+			return new APIresponse(HttpStatus.BAD_REQUEST.value(), "You did not create the group. Authorization denied!",
 					null);
 		}
 
@@ -461,7 +483,7 @@ public class GroupController extends ExceptionResolver {
 		}
 
 		if (group.getType().equals("Custom") && group.getCreatedBy() != user) {
-			return new APIresponse(HttpStatus.FORBIDDEN.value(), "You did not create the group. Authorization denied!",
+			return new APIresponse(HttpStatus.BAD_REQUEST.value(), "You did not create the group. Authorization denied!",
 					null);
 		}
 

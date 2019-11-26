@@ -13,6 +13,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -133,6 +134,7 @@ public class AuthRestAPIs extends ExceptionResolver {
 	}
 
 	@PostMapping("/signup")
+	@PreAuthorize("hasRole('ADMIN')")
 	public APIresponse registerUser(@Valid @RequestBody SignUpForm signUpRequest) {
 		if (userService.existsByUsername(signUpRequest.getUsername())) {
 			return new APIresponse(HttpStatus.BAD_REQUEST.value(), "Fail -> Username is already taken!", null);
@@ -178,14 +180,16 @@ public class AuthRestAPIs extends ExceptionResolver {
 //
 //		confirmationTokenService.save(confirmationToken);
 //
-//		SimpleMailMessage mailMessage = new SimpleMailMessage();
-//		mailMessage.setTo(user.getEmail());
-//		mailMessage.setSubject("Complete Registration!");
-//		mailMessage.setFrom("ulmautoemail@gmail.com");
-//		mailMessage.setText("To confirm your account, please click here : "
-//				+ "http://localhost:8181/api/auth/confirm-account/" + confirmationToken.getConfirmationToken());
-//
-//		emailSenderService.sendEmail(mailMessage);
+		SimpleMailMessage mailMessage = new SimpleMailMessage();
+		mailMessage.setTo(user.getEmail());
+		mailMessage.setSubject("Complete Registration!");
+		mailMessage.setFrom("ulmautoemail@gmail.com");
+		mailMessage.setText("Congratulations! You have been successfully registered to ULM Communication App. Your "
+				+ "username is your warhawks email address and your password is your cwid. Please change your "
+				+ "password as soon as possible to secure your account. Click on the following link to login "
+				+ "to your account.");
+
+		emailSenderService.sendEmail(mailMessage);
 
 		return new APIresponse(HttpStatus.OK.value(), "User has been registered successfully.", user.getEmail());
 	}
@@ -242,32 +246,32 @@ public class AuthRestAPIs extends ExceptionResolver {
 					"A link has been sent to your email, please follow the link to reset your password!",
 					user.getEmail());
 		}
-
 	}
 
 	@GetMapping(value = "/{resetToken}")
 	public ModelAndView displayResetPasswordPage(@PathVariable("resetToken") String token) {
 		ModelAndView modelAndView = new ModelAndView();
 		ConfirmationToken resettoken = confirmationTokenService.findByConfirmationToken(token);
-		
-		if(resettoken == null) {
+
+		if (resettoken == null) {
 			modelAndView.addObject("errorMessage", "Oops!  Your password reset link has expired.");
+			modelAndView.setViewName("redirect:http://skylight-production.s3-website-us-east-1.amazonaws.com/forgot-password");
 			return modelAndView;
 		}
-				
+
 		try {
 			if (!(resettoken.getCreatedDate()).after(new Date())) {
 
 				modelAndView.addObject("resetToken", token);
-				modelAndView.setViewName("redirect:http://localhost:4200/reset-password");
+				modelAndView.setViewName("redirect:http://skylight-production.s3-website-us-east-1.amazonaws.com/reset-password");
 			} else {
 
 				modelAndView.addObject("errorMessage", "Oops!  Your password reset link has expired.");
-				modelAndView.setViewName("redirect:http://localhost:4200/forgot-password");
+				modelAndView.setViewName("redirect:http://skylight-production.s3-website-us-east-1.amazonaws.com/forgot-password");
 			}
 		} catch (RuntimeException e) {
 			modelAndView.addObject("errorMessage", "Oops!  This is an invalid password reset link.");
-			modelAndView.setViewName("redirect:http://localhost:4200/forgot-password");
+			modelAndView.setViewName("redirect:http://skylight-production.s3-website-us-east-1.amazonaws.com/forgot-password");
 		}
 		return modelAndView;
 	}
@@ -278,19 +282,22 @@ public class AuthRestAPIs extends ExceptionResolver {
 
 		ConfirmationToken resetToken = confirmationTokenService
 				.findByConfirmationToken(requestParams.get("resetToken"));
+
+		if (resetToken == null) {
+			return new APIresponse(HttpStatus.NOT_FOUND.value(), "The link has expired.", null);
+		}
+
 		User resetUser = resetToken.getUser();
 
 		try {
-			System.out.println("true");
-			System.out.println(resetToken.getConfirmationToken());
 			resetUser.setPassword(encoder.encode(requestParams.get("password")));
 			userService.save(resetUser);
 
 			confirmationTokenService.delete(resetToken);
 
-			return new APIresponse(HttpStatus.OK.value(), "Password has been changed!", null);
+			return new APIresponse(HttpStatus.OK.value(), "Password has been changed!", resetUser.getEmail());
 		} catch (RuntimeException e) {
-			return new APIresponse(HttpStatus.OK.value(), "Unable to change the password at the time", null);
+			return new APIresponse(HttpStatus.BAD_REQUEST.value(), "Unable to change the password at the time", null);
 		}
 	}
 

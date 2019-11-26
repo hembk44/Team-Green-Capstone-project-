@@ -28,13 +28,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
-import com.csci4060.app.configuration.fileStorage.FileReadException;
 import com.csci4060.app.model.APIresponse;
 import com.csci4060.app.model.Role;
 import com.csci4060.app.model.RoleName;
-import com.csci4060.app.model.UploadFileResponse;
 import com.csci4060.app.model.User;
 import com.csci4060.app.model.calendar.Calendar;
 import com.csci4060.app.services.CalendarService;
@@ -133,10 +129,10 @@ public class FileController {
 //			UploadFileResponse response = new UploadFileResponse(fileName, fileDownloadUri, file.getContentType(),
 //					file.getSize());
 
-			return new APIresponse(HttpStatus.CREATED.value(), "File was succesfully uploaded", newUsersEmailList);
+			return new APIresponse(HttpStatus.CREATED.value(), "Users have been successfully registered.", newUsersEmailList);
 		}
 
-		return new APIresponse(HttpStatus.EXPECTATION_FAILED.value(), "Please upload file in an appropriate format. You can refer to user manual for more information.", null);
+		return new APIresponse(HttpStatus.BAD_REQUEST.value(), "Please upload file in an appropriate format. You can refer to user manual for more information.", null);
 
 	}
 

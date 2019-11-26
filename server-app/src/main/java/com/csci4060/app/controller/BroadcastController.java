@@ -53,8 +53,8 @@ public class BroadcastController {
 					images.add(encodedBase64);
 					fileInputStream.close();
 				} catch (Exception e) {
-					return new APIresponse(HttpStatus.EXPECTATION_FAILED.value(),
-							"Something went wrong. Please check the backend code.", null);
+					return new APIresponse(HttpStatus.BAD_REQUEST.value(),
+							"Something went wrong in the server!", null);
 				}
 			}
 		}
