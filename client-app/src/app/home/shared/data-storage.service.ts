@@ -32,12 +32,17 @@ export class DataStorageService {
   public isLoading: Observable<boolean> = this.isLoadingSubject.asObservable();
 
   private eventSubject: BehaviorSubject<any> = new BehaviorSubject<any>({});
-
+  private upcomingEventsSubject: BehaviorSubject<any> = new BehaviorSubject<
+    any
+  >({});
   private calSubject: BehaviorSubject<any> = new BehaviorSubject<any>({});
   private imageSubject: BehaviorSubject<any> = new BehaviorSubject<any>([]);
   private userSubject: BehaviorSubject<any> = new BehaviorSubject<any>([]);
   private emailSubject: BehaviorSubject<any> = new BehaviorSubject<any>([]);
   public emails: Observable<Emails[]> = this.emailSubject.asObservable();
+  public upcomingEvents: Observable<
+    CalEvent[]
+  > = this.upcomingEventsSubject.asObservable();
   private adminAppointmentReceived: BehaviorSubject<any> = new BehaviorSubject<
     any
   >({});
@@ -64,6 +69,10 @@ export class DataStorageService {
 
   get images() {
     return this.imageSubject.value;
+  }
+
+  get upcomingEventsList(): CalEvent[] {
+    return this.upcomingEventsSubject.value;
   }
 
   get eventsList(): CalEvent[] {
@@ -221,6 +230,22 @@ export class DataStorageService {
         (map(data => data), catchError(error => throwError(error))),
         finalize(() => this.isLoadingSubject.next(false))
       );
+  }
+
+  fetchUpcomingEvents() {
+    this.isLoadingSubject.next(true);
+    this.http
+      .get<ApiResponse>("http://ec2-100-26-194-180.compute-1.amazonaws.com:8181/api/event/" + "upCommingEvents")
+      .pipe(
+        (map(data => data),
+        catchError(error => throwError(error)),
+        finalize(() => this.isLoadingSubject.next(false)))
+      )
+      .subscribe((result: ApiResponse) => {
+        console.log(result);
+        console.log(result.result);
+        this.upcomingEventsSubject.next(result.result);
+      });
   }
 
   getMajors() {
@@ -399,7 +424,11 @@ export class DataStorageService {
       )
       .subscribe((result: ApiResponse) => {
         console.log(result.result);
-        this.userSubject.next(result.result);
+        if(result.result){
+          this.userSubject.next(result.result);
+        } else {
+          this.userSubject.next([]);
+        }
       });
   }
 

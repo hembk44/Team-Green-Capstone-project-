@@ -5,6 +5,7 @@ import { AuthService } from "src/app/auth/auth.service";
 import { HttpClient } from "@angular/common/http";
 import { map, catchError, finalize } from "rxjs/operators";
 import { ApiResponse } from "src/app/auth/api.response";
+import { MatSnackBar } from "@angular/material";
 
 @Injectable({
   providedIn: "root"
@@ -20,10 +21,14 @@ export class GroupDataStorageService {
   private groupSubject: BehaviorSubject<any> = new BehaviorSubject<any>({});
   private majorSubject: BehaviorSubject<any> = new BehaviorSubject<any>({});
 
-  constructor(private http: HttpClient, private authService: AuthService) {}
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService,
+    private _snackbar: MatSnackBar
+  ) {}
 
   get groupLists(): Group[] {
-    console.log(this.groupSubject.value);
+    // console.log(this.groupSubject.value);
     if (!this.groupSubject.value) {
       return [];
     } else {
@@ -64,7 +69,7 @@ export class GroupDataStorageService {
 
   fetchGroup() {
     this.isLoadingSubject.next(true);
-    this.http
+    return this.http
       .get<ApiResponse>(this.baseUrlGroup + "fetch")
       .pipe(
         (map(data => data),
@@ -77,6 +82,14 @@ export class GroupDataStorageService {
         if (result.status == 200 && result.result) {
           this.groupSubject.next(result.result);
         } else {
+          this._snackbar.open(
+            "You do not have any group yet. Please create group!",
+            "close",
+            {
+              duration: 5000,
+              panelClass: ["standard"]
+            }
+          );
           this.groupSubject.next([]);
         }
       });
@@ -124,10 +137,12 @@ export class GroupDataStorageService {
   updateGroup(obj: Object, id: number) {
     {
       this.isLoadingSubject.next(true);
-      return this.http.put<Object>(this.baseUrlGroup + "edit/" + id, obj).pipe(
-        (map(data => data), catchError(error => throwError(error))),
-        finalize(() => this.isLoadingSubject.next(false))
-      );
+      return this.http
+        .put<ApiResponse>(this.baseUrlGroup + "edit/" + id, obj)
+        .pipe(
+          (map(data => data), catchError(error => throwError(error))),
+          finalize(() => this.isLoadingSubject.next(false))
+        );
     }
   }
   postMajors() {

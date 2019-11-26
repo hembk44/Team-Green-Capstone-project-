@@ -69,6 +69,12 @@ export class GroupSelection implements OnInit {
     //     }
     //   });
     //   console.log(this.members);
-    // }
+    // }ocsmoor@fm
+        
+
+  }
+
+  cancel(){
+    this.ref.close([]);
   }
 }
