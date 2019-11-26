@@ -62,16 +62,9 @@ export class UploadCoursesComponent implements OnInit {
       this.dataStorage.addCourses(formData).subscribe(result => {
         console.log(result);
         if (result) {
-<<<<<<< HEAD
           this._snackBar.open(result.message, 'close', {duration:4000, panelClass: ["standard"]})
         } else {
           this._snackBar.open('Something went wrong.', 'close', {duration:4000, panelClass: ["standard"]})
-=======
-          this._snackBar.open(result.message, "close", {
-            duration: 5000,
-            panelClass: ["standard"]
-          });
->>>>>>> 21a876d20177b903673a55f9674e8e244c64b05c
         }
       });
     }

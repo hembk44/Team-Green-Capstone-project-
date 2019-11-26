@@ -92,13 +92,8 @@ export class GroupDetailComponent implements OnInit {
       this.groupDataStorage.shareGroup(shareObj).subscribe(result => {
         console.log(result);
         const sharedMsg = "This group has been successfully shared!";
-<<<<<<< HEAD
-        if (result.status == 200) {
-          this._snackBar.openFromComponent(GroupSnackbarComponent, {
-=======
         if (result.result) {
           this._snackBar.open(sharedMsg, "close", {
->>>>>>> 21a876d20177b903673a55f9674e8e244c64b05c
             duration: 4000,
             panelClass: ["standard"]
           });
@@ -145,14 +140,6 @@ export class GroupDetailComponent implements OnInit {
         result.recipients = this.selectedGroupMembers;
         this.dataStorage.emailSelectedMembers(result).subscribe(result => {
           console.log(result);
-<<<<<<< HEAD
-          if (result.status === 200) {
-            this._snackBar.openFromComponent(GroupSnackbarComponent, {
-              duration: 5000,
-              panelClass: ["standard"],
-              data: "An email has been successfully sent to selected members!"
-            });
-=======
           if (result) {
             this._snackBar.open(
               "An email has been successfully to selected members!",
@@ -162,7 +149,6 @@ export class GroupDetailComponent implements OnInit {
                 panelClass: ["standard"]
               }
             );
->>>>>>> 21a876d20177b903673a55f9674e8e244c64b05c
           }
         });
       }
@@ -181,14 +167,6 @@ export class GroupDetailComponent implements OnInit {
       console.log(result);
       if (result) {
         this.groupDataStorage.sendEmail(result).subscribe(result => {
-<<<<<<< HEAD
-          if (result.status === 200) {
-            this._snackBar.openFromComponent(GroupSnackbarComponent, {
-              duration: 5000,
-              panelClass: ["standard"],
-              data: "An email has been successfully sent to " + this.group.name + "!"
-            });
-=======
           if (result.result) {
             this._snackBar.open(
               "An email has been successfully to " + this.group.name + "!",
@@ -198,7 +176,6 @@ export class GroupDetailComponent implements OnInit {
                 panelClass: ["standard"]
               }
             );
->>>>>>> 21a876d20177b903673a55f9674e8e244c64b05c
           }
         });
       }
