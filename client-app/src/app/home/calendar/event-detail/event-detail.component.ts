@@ -7,6 +7,7 @@ import { DataStorageService } from '../../shared/data-storage.service';
 import { AuthService } from 'src/app/auth/auth.service';
 import { ShareEvent } from './share-event';
 import { RecursiveTemplateAstVisitor } from '@angular/compiler';
+import { AppointmentSnackbarComponent } from '../../appointment/shared-appointment/appointment-snackbar/appointment-snackbar.component';
 
 @Component({
   selector: 'app-event-detail',
@@ -80,7 +81,7 @@ export class EventDetailComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if(result === 'confirmed'){
         this.dataStorage.deleteEvent(this.event.id).subscribe(result => {
-          this.snackbar.open(result.message, 'OK', {duration: 5000});
+          this.snackbar.open(result.message, 'close', {duration:4000, panelClass: ["delete"]})
           this.ref.close();
           this.dataStorage.fetchCalendars();
         });
@@ -102,7 +103,11 @@ export class EventDetailComponent implements OnInit {
           recipients: result
         }
         this.dataStorage.shareEvent(obj).subscribe(result => {
-          this.snackbar.open(result.message, '', {duration: 5000})
+          if(result){
+            this.snackbar.open(result.message, 'close', {duration:4000, panelClass: ["standard"]})
+          } else { 
+            this.snackbar.open('Something went wrong.', 'close', {duration:4000, panelClass: ["standard"]})
+          }
         });
         this.dataStorage.fetchCalendars();
       }
@@ -112,7 +117,11 @@ export class EventDetailComponent implements OnInit {
 
   confirmAttendance(){
     this.dataStorage.userConfirmEvent(this.event.id).subscribe(result => {
-      this.snackbar.open(result.message, '',{duration: 5000})
+      if (result) {
+        this.snackbar.open(result.message, 'close', {duration:4000, panelClass: ["standard"]})
+      } else {
+        this.snackbar.open('Something went wrong.', 'close', {duration:4000, panelClass: ["standard"]})
+      }
     })
   }
 

@@ -6,11 +6,11 @@ export class SignUpInfo {
   password: string;
   // verified: boolean;
 
-  constructor(name: string, username: string, email: string, password: string) {
+  constructor(name: string, username: string, email: string, password: string, role: string[]) {
     this.name = name;
     this.username = username;
     this.email = email;
     this.password = password;
-    this.role = ["admin"];
+    this.role = role;
   }
 }

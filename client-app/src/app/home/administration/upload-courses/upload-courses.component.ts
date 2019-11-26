@@ -4,6 +4,7 @@ import { DataStorageService } from "../../shared/data-storage.service";
 import { AuthService } from "src/app/auth/auth.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router } from "@angular/router";
+import { AppointmentSnackbarComponent } from '../../appointment/shared-appointment/appointment-snackbar/appointment-snackbar.component';
 
 @Component({
   selector: "app-upload-courses",
@@ -61,10 +62,9 @@ export class UploadCoursesComponent implements OnInit {
       this.dataStorage.addCourses(formData).subscribe(result => {
         console.log(result);
         if (result) {
-          this._snackBar.open(result.message, "close", {
-            duration: 5000,
-            panelClass: ["standard"]
-          });
+          this._snackBar.open(result.message, 'close', {duration:4000, panelClass: ["standard"]})
+        } else {
+          this._snackBar.open('Something went wrong.', 'close', {duration:4000, panelClass: ["standard"]})
         }
       });
     }

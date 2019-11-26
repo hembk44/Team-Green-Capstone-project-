@@ -12,6 +12,7 @@ import { NgxMaterialTimepickerTheme } from 'ngx-material-timepicker';
 import { GroupSelection } from 'src/app/home/shared/group-selection';
 import { Observable } from 'rxjs';
 import { startWith, map } from 'rxjs/operators';
+import { AppointmentSnackbarComponent } from 'src/app/home/appointment/shared-appointment/appointment-snackbar/appointment-snackbar.component';
 
 @Component({
   selector: 'app-edit-event',
@@ -46,6 +47,7 @@ export class EditEventComponent implements OnInit {
   @ViewChild("userInput", { static: false }) userInput: ElementRef<
     HTMLInputElement
   >;
+  @ViewChild("chipList", { static: false }) chipList;
   @ViewChild("auto", { static: false }) matAutocomplete: MatAutocomplete;
 
 
@@ -64,7 +66,6 @@ export class EditEventComponent implements OnInit {
     }
   }
   isEmailValid: boolean;
-  chipList: any;
   errorMessage: string;
 
   constructor(
@@ -216,19 +217,17 @@ export class EditEventComponent implements OnInit {
       this.dataStorage.editEvent(this.event.id,this.obj).subscribe(result => {
         if(result) {
           this.dataStorage.fetchCalendars();
-          this.snackbar.open(result.message, 'OK', {duration: 5000});
+          this.snackbar.open(result.message, 'close', {duration:4000, panelClass: ["standard"]})
           this.router.navigate(["home/calendar"]);
         } else {
-          this.snackbar.open('Something went wrong', 'OK', {duration:5000});
+          this.snackbar.open('Something went wrong.', 'close', {duration:4000, panelClass: ["standard"]})
         }
       });
       this.router.navigate(["home/calendar"]);
 
     } else {
       //warning for start not being before end
-      this.snackbar.open("Start must come before end.", "", {
-        duration: 5000
-      });
+      this.snackbar.open('Start must come before end.', 'close', {duration:4000, panelClass: ["standard"]})
     }
 
   }
@@ -292,16 +291,20 @@ export class EditEventComponent implements OnInit {
 
   groupSelect(){
     const dialogRef = this.dialog.open(GroupSelection, {
-      width: '600px'
+      width: "500px"
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log(result);
-      for(let email of result){
-        if(!this.emails.includes(email)){
-          this.emails.push(email);
+      for(let group of result){
+        console.log(group);
+        for(let email of group.emails){
+          console.log(email);
+          if(!this.emails.includes(email.email)){
+            this.emails.push(email.email);
+          }
         }
       }
     })
-  }
+}
 
 }

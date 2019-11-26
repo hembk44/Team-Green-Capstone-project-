@@ -119,12 +119,16 @@ export class ShareCalendarComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log(result);
-      for(let email of result){
-        if(!this.emails.includes(email)){
-          this.emails.push(email);
+      for(let group of result){
+        console.log(group);
+        for(let email of group.emails){
+          console.log(email);
+          if(!this.emails.includes(email.email)){
+            this.emails.push(email.email);
+          }
         }
       }
     })
-  }
+}
 
 }

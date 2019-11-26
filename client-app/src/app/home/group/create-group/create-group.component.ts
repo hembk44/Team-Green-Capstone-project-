@@ -95,7 +95,7 @@ export class CreateGroupComponent implements OnInit {
   ) {
     this.dataStorage.getEmails();
     this.dataStorage.emails.subscribe((result: Emails[]) => {
-      if (result.length > 0) {
+      if (result && result.length > 0) {
         result.forEach(o => {
           if (!this.userList.includes(o.email)) {
             this.userList.push(o.email);

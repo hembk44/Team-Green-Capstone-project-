@@ -11,6 +11,7 @@ import { ENTER, COMMA } from '@angular/cdk/keycodes';
 import { GroupSelection } from 'src/app/home/shared/group-selection';
 import { Observable } from 'rxjs';
 import { startWith, map } from 'rxjs/operators';
+import { AppointmentSnackbarComponent } from 'src/app/home/appointment/shared-appointment/appointment-snackbar/appointment-snackbar.component';
 
 @Component({
   selector: 'app-calendar-item',
@@ -46,10 +47,13 @@ export class CalendarItemComponent implements OnInit {
         this.dataStorage.deleteCalendar(this.calendar.id).subscribe(result => {
           if(result){
             console.log(result);
-            this.snackbar.open(result.message, '',{duration: 5000});
+
+            this.snackbar.openFromComponent(AppointmentSnackbarComponent, {duration: 5000, panelClass:["delete"], data: result.message});
             if(result.status === 200){
               this.dataStorage.fetchCalendars();
             }
+          } else {
+            this.snackbar.openFromComponent(AppointmentSnackbarComponent,{duration:4000, panelClass: ["standard"], data: 'Something went wrong.'});
           }
         });
       }
@@ -80,6 +84,7 @@ export class CalendarItemComponent implements OnInit {
 })
 export class CalRename implements OnInit{
   nameForm: FormGroup;
+  role: string;
   cal: Calendar;
   primaryColor: string;
   emails: string[];
@@ -104,6 +109,7 @@ export class CalRename implements OnInit{
     private dataStorage: DataStorageService,
     private dialog: MatDialog,
     private snackbar: MatSnackBar,
+    private authService: AuthService,
     @Inject(MAT_DIALOG_DATA)public data: Calendar
   ){
     this.dataStorage.getEmails();
@@ -136,6 +142,7 @@ export class CalRename implements OnInit{
   }
   
   ngOnInit(){
+    this.role = this.authService.user;
     this.cal = this.data;
     console.log(this.cal);
     this.emails=[];
@@ -159,12 +166,14 @@ export class CalRename implements OnInit{
     this.dataStorage.updateCalendar(obj, this.cal.id).subscribe(result => {
       if(result){
         console.log(result);
-        this.snackbar.open(result.message, '', {duration: 5000});
+        this.snackbar.open(result.message, 'close', {duration:4000, panelClass: ["standard"]})
         if(result.status === 200){
           this.ref.close();
           this.dataStorage.fetchCalendars();
         }
         
+      } else {
+        this.snackbar.open('Something went wrong.', 'close', {duration:4000, panelClass: ["standard"]})
       }
     });
   }
@@ -214,13 +223,17 @@ export class CalRename implements OnInit{
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log(result);
-      for(let email of result){
-        if(!this.emails.includes(email)){
-          this.emails.push(email);
+      for(let group of result){
+        console.log(group);
+        for(let email of group.emails){
+          console.log(email);
+          if(!this.emails.includes(email.email)){
+            this.emails.push(email.email);
+          }
         }
       }
     })
-  }
+}
 
   remove(email: string): void {
     const index = this.emails.indexOf(email);

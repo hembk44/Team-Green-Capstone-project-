@@ -13,7 +13,7 @@
     >
       <mat-form-field>
         <mat-label>Role</mat-label>
-        <mat-select value="students" formControlName="role">
+        <mat-select formControlName="role">
           <mat-option value="students">Student</mat-option>
           <mat-option value="faculty">Faculty</mat-option>
           <mat-option value="admin">Admin</mat-option>
@@ -54,7 +54,7 @@
         {{ invalidExtension }}
       </mat-error>
       &nbsp;
-      <button type="submit" mat-raised-button class="button-maroon">
+      <button type="submit" mat-raised-button class="button-maroon" [disabled]="!uploadForm.valid">
         Ok
       </button>
     </form>
