@@ -2,34 +2,122 @@
   <app-broadcast></app-broadcast>
 </div>
 <mat-divider></mat-divider>
-<div fxLayout="row" fxLayoutAlign="center center" class="heading">
-  <h3>Welcome, {{ name }}. Here are your upcoming events.</h3>
-</div>
-<mat-list class="example-card-width">
-  <h3 mat-subheader>Upcoming Events</h3>
-  <mat-list-item
-    *ngFor="let event of events | paginate: { itemsPerPage: 4, currentPage: p }"
+<div *ngIf="currentRole === 'ROLE_ADMIN' || currentRole === 'ROLE_PM'">
+  <div fxLayout="row" fxLayoutAlign="center center" class="heading">
+    <h3>Welcome, {{ name }}. Here are your group and upcoming events!</h3>
+  </div>
+
+  <div
+    class="container"
+    fxLayout="row"
+    fxLayout.xs="column"
+    fxLayoutAlign="flex-start"
+    fxLayoutGap="10px"
+    fxLayoutGap.xs="0"
   >
-    <mat-icon mat-list-icon>event</mat-icon>
-    <h4 mat-line>{{ event.title }}</h4>
-    <p mat-line>{{ event.description }}</p>
-    <p mat-line>{{ event.start }} - {{ event.end }}</p>
-    <p mat-line>
-      <mat-icon mat-list-icon style="font-size: 14px; width: 15px;"
-        >room</mat-icon
-      >{{ event.location }}
-    </p>
-  </mat-list-item>
-  <mat-divider></mat-divider>
-</mat-list>
-<div fxLayout="row" fxLayoutAlign="center center" class="pagination-center">
-  <div>
-    <pagination-controls
-      autoHide="true"
-      (pageChange)="p = $event"
-    ></pagination-controls>
+    <div fxFlex="49%">
+      <mat-list class="example-card-width">
+        <h3 mat-subheader>Upcoming Events</h3>
+        <mat-list-item
+          *ngFor="
+            let event of events | paginate: { itemsPerPage: 4, currentPage: p }
+          "
+        >
+          <mat-icon mat-list-icon>event</mat-icon>
+          <h4 mat-line>{{ event.title }}</h4>
+          <p mat-line>{{ event.description }}</p>
+          <p mat-line>{{ event.start }} - {{ event.end }}</p>
+          <p mat-line>
+            <mat-icon mat-list-icon style="font-size: 14px; width: 15px;"
+              >room</mat-icon
+            >{{ event.location }}
+          </p>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+      </mat-list>
+      <div
+        fxLayout="row"
+        fxLayoutAlign="center center"
+        class="pagination-center"
+      >
+        <div>
+          <pagination-controls
+            autoHide="true"
+            (pageChange)="p = $event"
+          ></pagination-controls>
+        </div>
+      </div>
+    </div>
+    <div fxFlex="49%">
+      <mat-list class="example-card-width">
+        <h3 mat-subheader>Your group</h3>
+        <mat-list-item
+          *ngFor="
+            let gr of group | paginate: { itemsPerPage: 4, currentPage: p }
+          "
+        >
+          <mat-icon mat-list-icon>group</mat-icon>
+          <h4 mat-line>{{ gr.name }}</h4>
+          <p mat-line>{{ gr.description }}</p>
+          <p mat-line>{{ gr.semesterTerm }} - {{ gr.semesterYear }}</p>
+          <p mat-line>
+            <mat-icon mat-list-icon style="font-size: 14px; width: 15px;">{{
+              gr.type === "Custom" ? "build" : "school"
+            }}</mat-icon
+            >{{ gr.type }}
+          </p>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+      </mat-list>
+      <div
+        fxLayout="row"
+        fxLayoutAlign="center center"
+        class="pagination-center"
+      >
+        <div>
+          <pagination-controls
+            autoHide="true"
+            (pageChange)="p = $event"
+          ></pagination-controls>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
+
+<div *ngIf="currentRole === 'ROLE_MODERATOR' || currentRole === 'ROLE_USER'">
+  <div fxLayout="row" fxLayoutAlign="center center" class="heading">
+    <h3>Welcome, {{ name }}. Here are your upcoming events!</h3>
+  </div>
+  <mat-list class="example-card-width">
+    <h3 mat-subheader>Upcoming Events</h3>
+    <mat-list-item
+      *ngFor="
+        let event of events | paginate: { itemsPerPage: 4, currentPage: p }
+      "
+    >
+      <mat-icon mat-list-icon>event</mat-icon>
+      <h4 mat-line>{{ event.title }}</h4>
+      <p mat-line>{{ event.description }}</p>
+      <p mat-line>{{ event.start }} - {{ event.end }}</p>
+      <p mat-line>
+        <mat-icon mat-list-icon style="font-size: 14px; width: 15px;"
+          >room</mat-icon
+        >{{ event.location }}
+      </p>
+    </mat-list-item>
+    <mat-divider></mat-divider>
+  </mat-list>
+  <div fxLayout="row" fxLayoutAlign="center center" class="pagination-center">
+    <div>
+      <pagination-controls
+        autoHide="true"
+        (pageChange)="p = $event"
+      ></pagination-controls>
+    </div>
+  </div>
+</div>
+
 <!-- <div class="accordion-style">
   <mat-accordion>
     <mat-expansion-panel>
