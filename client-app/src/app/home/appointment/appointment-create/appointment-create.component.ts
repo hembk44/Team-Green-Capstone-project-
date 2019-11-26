@@ -337,19 +337,16 @@ export class AppointmentCreateComponent implements OnInit {
         .updateAppointment(updatedAppointmentObject, this.id)
         .subscribe(result => {
           console.log(result);
-          if (result.status == 400) {
-            this._snackBar.open(result.message, "close", {
-              duration: 5000,
-              panelClass: ["delete"]
-            });
-            // this.router.navigate(["home/appointment/sent"]);
-          }
-          if (result.status == 200) {
+          if (result.result) {
             this._snackBar.open(result.message, "close", {
               duration: 5000,
               panelClass: ["standard"]
             });
-            this.router.navigate(["home/appointment/sent"]);
+          } else {
+            this._snackBar.open(result.message, "close", {
+              duration: 5000,
+              panelClass: ["delete"]
+            });
           }
         });
     } else {
@@ -389,7 +386,7 @@ export class AppointmentCreateComponent implements OnInit {
       this.dataStorageAppointment.storeAppointment(obj).subscribe(result => {
         if (result) {
           console.log(result);
-          if (result.status == 201) {
+          if (result.result) {
             console.log(result.result.id);
             this.idOfAppointmentCreated = result.result.id;
             console.log(this.idOfAppointmentCreated);
@@ -398,16 +395,24 @@ export class AppointmentCreateComponent implements OnInit {
               .sendApptToCal(this.idOfAppointmentCreated)
               .subscribe((result: any) => {
                 console.log(result);
-                if (result.status == 201) {
+                if (result.result) {
+                  this._snackBar.open(
+                    "Appointment has been successfully created and sent to calendar!",
+                    "close",
+                    {
+                      duration: 5000,
+                      panelClass: ["standard"]
+                    }
+                  );
+                  this.router.navigate(["home/appointment/sent"]);
+                } else {
                   this._snackBar.open(result.message, "close", {
                     duration: 5000,
-                    panelClass: ["standard"]
+                    panelClass: ["delete"]
                   });
-                  this.router.navigate(["home/appointment/sent"]);
                 }
               });
-          }
-          if (result.status === 403) {
+          } else {
             this._snackBar.open(result.message, "close", {
               duration: 5000,
               panelClass: ["delete"]
