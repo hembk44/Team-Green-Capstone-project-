@@ -38,7 +38,7 @@ export class RegisterUsersComponent implements OnInit {
     console.log(this.role.user);
     this.uploadForm = this.formBuilder.group({
       uploadFile: [undefined, [Validators.required]],
-      role: [Validators.required]
+      role: ["students",Validators.required]
     });
   }
 

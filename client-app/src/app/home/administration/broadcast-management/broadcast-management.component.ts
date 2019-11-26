@@ -129,7 +129,6 @@ export class BroadcastManagementComponent implements OnInit,OnDestroy{
 
 
   saveForm(submitForm: FormGroup){
-    if(submitForm.valid){
       this.dataStorage.uploadImage(this.tempArr).subscribe(result => {
         if(result){
           this._snackBar.openFromComponent(AppointmentSnackbarComponent,{duration:4000, panelClass: ["standard"], data: result.message})
@@ -138,7 +137,7 @@ export class BroadcastManagementComponent implements OnInit,OnDestroy{
           this._snackBar.openFromComponent(AppointmentSnackbarComponent,{duration:4000, panelClass: ["standard"], data: 'Something went wrong.'});
         }
       })
-    } 
+    
   }
 
   ngOnDestroy(){
