@@ -132,8 +132,26 @@ body {
   background: #800029;
 }
 
+.mat-list-base .mat-list-item.mat-multi-line .mat-list-item-content,
+.mat-list-base .mat-list-option.mat-multi-line .mat-list-item-content {
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
+}
 
+.mat-list-base .mat-list-item .mat-list-item-content,
+.mat-list-base .mat-list-option .mat-list-item-content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 0 10px !important;
+  position: relative;
+  height: inherit;
+}
 
+.mat-list-base {
+  padding: 0 !important;
+}
 
 @media screen and (min-width: 1200px) {
   .view-more-width {

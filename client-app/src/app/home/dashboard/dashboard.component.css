@@ -46,10 +46,6 @@
   border: #800029 solid 1px;
 }
 
-
-
-
-
 .mat-list .mat-list-item:hover {
   color: white;
   background: #800029;
@@ -59,34 +55,18 @@
 }
 
 .mat-list-base .mat-list-item {
-  margin: 10px;
+  margin: 5px 10px;
   border: #800029 solid 1px;
   max-width: 100%;
 
 }
 
 
-.mat-list-base .mat-list-item .mat-list-item-content,
-.mat-list-base .mat-list-option .mat-list-item-content {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  box-sizing: border-box;
-  padding: 0 10px !important;
-  position: relative;
-  height: inherit;
-}
-
-.mat-list-base .mat-list-item.mat-multi-line .mat-list-item-content,
-.mat-list-base .mat-list-option.mat-multi-line .mat-list-item-content {
-  padding-top: 5px;
-  padding-bottom: 5px !important;
-}
 
 @media screen and (min-width: 1200px) {
 
   .example-card-width {
-    max-width: 90%
+    max-width: 98%
   }
 }
 
@@ -94,7 +74,7 @@
 
 
   .example-card-width {
-    max-width: 90%
+    max-width: 98%
   }
 }
 
@@ -103,7 +83,7 @@
 @media screen and (min-width: 600px) and (max-width: 991px) {
 
   .example-card-width {
-    max-width: 90%
+    max-width: 95%
   }
 }
 
