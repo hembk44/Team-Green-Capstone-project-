@@ -41,12 +41,15 @@ export class ShareEvent implements OnInit{
         });
         dialogRef.afterClosed().subscribe(result => {
           console.log(result);
-          this.emails = this.emails.concat(result);
-          // for(let email of result){
-          //   console.log(email);
-          //   this.emails.push(email);
-            
-          // }
+          for(let group of result){
+            console.log(group);
+            for(let email of group.emails){
+              console.log(email);
+              if(!this.emails.includes(email.email)){
+                this.emails.push(email.email);
+              }
+            }
+          }
         })
     }
 

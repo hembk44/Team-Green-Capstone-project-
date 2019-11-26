@@ -172,7 +172,7 @@ export class GroupDetailComponent implements OnInit {
             this._snackBar.openFromComponent(GroupSnackbarComponent, {
               duration: 5000,
               panelClass: ["standard"],
-              data: "An email has been successfully to " + this.group.name + "!"
+              data: "An email has been successfully sent to " + this.group.name + "!"
             });
           }
         });

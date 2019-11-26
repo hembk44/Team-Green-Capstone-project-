@@ -182,9 +182,9 @@ export class AppointmentCreateComponent implements OnInit {
       this.dataStorageAppointment
         .displayAppointmentDetails(this.id)
         .subscribe(result => {
-          // console.log(result);
+          console.log(result);
           this.detailResponse = result.result;
-          // console.log(this.detailResponse);
+          console.log(this.detailResponse);
           this.pendingUsers = this.detailResponse.pendingUsers;
 
           console.log(this.pendingUsers);
@@ -193,12 +193,19 @@ export class AppointmentCreateComponent implements OnInit {
           }
           this.appointments = this.detailResponse.response;
           for (let i of this.appointments) {
+            console.log(i);
             this.timeslots.push(i.response);
             this.appointmentLocation = i.location;
+            for(let x of i.response){
+              if(x.selectorEmail !== 'Not selected'){
+                this.emails.push(x.selectorEmail);
+                this.pendingUsers.push(x.selectorEmail);
+              }
+            }
           }
           // console.log(this.pendingUsers);
           // console.log(this.appointments);
-          // console.log(this.timeslots);
+          console.log(this.timeslots);
           for (let timeslot of this.timeslots) {
             this.appointmentName = timeslot[0].appointmentName;
             this.appointmentDesc = timeslot[0].appointmentDescription;
@@ -442,18 +449,21 @@ export class AppointmentCreateComponent implements OnInit {
     });
   }
 
-  groupSelect() {
+  groupSelect(){
     const dialogRef = this.dialog.open(GroupSelection, {
-      width: "600px"
+      width: "500px"
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log(result);
-      this.emails = this.emails.concat(result);
-      // for (let email of result) {
-      //   if (!this.emails.includes(email)) {
-      //     this.emails.push(email);
-      //   }
-      // }
-    });
+      for(let group of result){
+        console.log(group);
+        for(let email of group.emails){
+          console.log(email);
+          if(!this.emails.includes(email.email)){
+            this.emails.push(email.email);
+          }
+        }
+      }
+    })
   }
 }

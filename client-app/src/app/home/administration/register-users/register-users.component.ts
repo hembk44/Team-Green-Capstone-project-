@@ -64,19 +64,18 @@ export class RegisterUsersComponent implements OnInit {
         .registerUsers(this.currentFileUpload, this.uploadForm.get('role').value)
         .subscribe(result => {
           console.log(result);
-          if (result.status === 201) {
+          if (result) {
             let snackBarRef = this._snackBar.open(
-              "All users are successfully registered!!!",
-              "close",
-              { duration: 10000, panelClass: ["standard"] }
+              result.message,
+              "",
+              { duration: 5000, panelClass: ["standard"] }
             );
             snackBarRef
               .onAction()
               .subscribe(() => this.router.navigate(["/home/admin"]));
-            // this.groupDetailDataShare.passSharedMessage(result.message);
-            // this._snackBar.openFromComponent(SnackBarGroup, {
-            //   duration: 5000
-            // });
+          }
+          else{
+            this._snackBar.open('Something went wrong.', 'close', {duration: 5000})
           }
         });
       this.router.navigate(["/home/admin"]);

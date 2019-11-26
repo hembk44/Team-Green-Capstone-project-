@@ -16,6 +16,7 @@ import { NgxMaterialTimepickerTheme } from 'ngx-material-timepicker';
 import { ENTER, COMMA } from '@angular/cdk/keycodes';
 import { GroupSelection } from '../../shared/group-selection';
 import { startWith, map } from 'rxjs/operators';
+import { AppointmentSnackbarComponent } from '../../appointment/shared-appointment/appointment-snackbar/appointment-snackbar.component';
 
 @Component({
   selector: "app-create-event",
@@ -193,18 +194,16 @@ export class CreateEventComponent implements OnInit {
       this.dataStorage.storeEvent(this.obj).subscribe(result => {
         if (result) {
           this.dataStorage.fetchCalendars();
-          //confirmation snackbar
-          this.snackbar.open(result.message, "", {
-            duration: 3000
-          });
+          this.snackbar.open(result.message, 'close', {duration:4000, panelClass: ["standard"]})
+        } else {
+          this.snackbar.open('Something went wrong.', 'close', {duration:4000, panelClass: ["standard"]})
         }
       });
       this.router.navigate(["home/calendar"]);
     } else {
       //warning for start not being before end
-      this.snackbar.open("Start must come before end.", "", {
-        duration: 5000
-      });
+      this.snackbar.open('Start must come before end.', 'close', {duration:4000, panelClass: ["standard"]})
+      
     }
   }
 
@@ -265,17 +264,20 @@ export class CreateEventComponent implements OnInit {
 
   groupSelect(){
     const dialogRef = this.dialog.open(GroupSelection, {
-      width: '600px'
+      width: "500px"
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log(result);
-      this.emails = this.emails.concat(result);
-      // for(let email of result){
-      //   if(!this.emails.includes(email)){
-      //     this.emails.push(email);
-      //   }
-      // }
-    })
-  }
+      for(let group of result){
+        console.log(group);
+        for(let email of group.emails){
+          console.log(email);
+          if(!this.emails.includes(email.email)){
+            this.emails.push(email.email);
+          }
+        }
+      }
+    });
+}
 }
 

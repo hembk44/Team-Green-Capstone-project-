@@ -38,7 +38,7 @@
         <mat-chip
           *ngFor="let email of emails"
           [selectable]="selectable"
-          [removable]="removable"
+          [removable]="!pendingUsers.includes(email)"
           (removed)="remove(email)"
         >
           <mat-icon mat-list-icon>person_outline</mat-icon> {{ email }}
@@ -91,6 +91,7 @@
           <button
             mat-raised-button
             class="primary"
+            type="button"
             style="margin-bottom: 10px;"
           >
             {{ timeSlot.startTime }} - {{ timeSlot.endTime }}

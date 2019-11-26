@@ -34,7 +34,7 @@ export class DataStorageService {
   private calSubject: BehaviorSubject<any> = new BehaviorSubject<any>({});
   private imageSubject: BehaviorSubject<any> = new BehaviorSubject<any>([]);
   private userSubject: BehaviorSubject<any> = new BehaviorSubject<any>([]);
-  private emailSubject: BehaviorSubject<any> = new BehaviorSubject<any>({});
+  private emailSubject: BehaviorSubject<any> = new BehaviorSubject<any>([]);
   public emails: Observable<Emails[]> = this.emailSubject.asObservable();
   private adminAppointmentReceived: BehaviorSubject<any> = new BehaviorSubject<
     any
@@ -49,6 +49,7 @@ export class DataStorageService {
     private authService: AuthService,
     private calService: CalendarService
   ) {}
+  
 
   get appointmentsReceived(): Appointment[] {
     if (!this.adminAppointmentReceived.value) {
@@ -72,7 +73,8 @@ export class DataStorageService {
 
   get users(): any[] {
     console.log(this.userSubject.value === {});
-    if (this.userSubject.value.length !== {}) {
+    console.log(this.userSubject.value);
+    if (this.userSubject.value !== {}) {
       return this.userSubject.value;
     } else {
       return [];
@@ -281,8 +283,11 @@ export class DataStorageService {
         finalize(() => this.isLoadingSubject.next(false)))
       )
       .subscribe((result: ApiResponse) => {
-        this.calSubject.next(result.result);
-        this.calService.setCalendars(result.result);
+        if(result.result){
+          this.calSubject.next(result.result);
+          this.calService.setCalendars(result.result);
+        }
+        
       });
   }
 
