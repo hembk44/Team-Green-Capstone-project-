@@ -47,6 +47,7 @@ export class RegisterComponent implements OnInit {
     // });
 
     this.signupForm = this.formBuilder.group({
+      role: ["", Validators.required],
       fname: ["", [Validators.required]],
       lname: ["", [Validators.required]],
       email: ["", [Validators.required, Validators.email]],
@@ -65,7 +66,8 @@ export class RegisterComponent implements OnInit {
       signupFormValues.fname + " " + signupFormValues.lname,
       signupFormValues.email,
       signupFormValues.email,
-      signupFormValues.password
+      signupFormValues.password,
+      [signupFormValues.role]
     );
     console.log(this.signupPayload);
     this.isLoading = true;

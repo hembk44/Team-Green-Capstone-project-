@@ -7,6 +7,15 @@
   <mat-card-content>
     <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
       <mat-form-field>
+        <mat-label>Role</mat-label>
+        <mat-select formControlName="role">
+          <mat-option value="user">Student</mat-option>
+          <mat-option value="moderator">Moderator</mat-option>
+          <mat-option value="pm">Faculty</mat-option>
+          <mat-option value="admin">Admin</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field>
         <input
           matInput
           formControlName="fname"
