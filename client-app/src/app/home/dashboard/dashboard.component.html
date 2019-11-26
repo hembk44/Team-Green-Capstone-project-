@@ -1,22 +1,81 @@
-<div class="broadcast-wrap">
+<div class="carousel">
   <app-broadcast></app-broadcast>
 </div>
 <mat-divider></mat-divider>
-<div class="wrapper">
-  <h3 class="heading">Welcome, {{ name }}. Here are your Events and Appointments for today:</h3>
-  <full-calendar 
-  id="calendar"
-  defaultView="timeGridDay" 
-  [plugins]="calendarPlugins" 
-  [events]="events"
-  [nextDayThreshold]="'00:00:00'"
-  [themeSystem]="'standard'"
-  [eventLimit]="false"
-  [height]="'parent'"
-  [header]="{
-      left: none,
-      center: 'title',
-      right: none
-    }"></full-calendar>
+<div fxLayout="row" fxLayoutAlign="center center" class="heading">
+  <h3>Welcome, {{ name }}. Here are your upcoming events.</h3>
 </div>
-<div class="space"></div>
+
+<mat-list class="example-card-width">
+  <h3 mat-subheader>Upcoming Events</h3>
+  <mat-list-item
+    *ngFor="let event of events | paginate: { itemsPerPage: 4, currentPage: p }"
+  >
+    <mat-icon mat-list-icon>event</mat-icon>
+    <h4 mat-line>{{ event.title }}</h4>
+    <p mat-line>{{ event.description }}</p>
+    <p mat-line>{{ event.start }} - {{ event.end }}</p>
+    <p mat-line>
+      <mat-icon mat-list-icon style="font-size: 14px; width: 15px;"
+        >room</mat-icon
+      >{{ event.location }}
+    </p>
+  </mat-list-item>
+  <mat-divider></mat-divider>
+</mat-list>
+<div fxLayout="row" fxLayoutAlign="center center" class="pagination-center">
+  <div>
+    <pagination-controls
+      autoHide="true"
+      (pageChange)="p = $event"
+    ></pagination-controls>
+  </div>
+</div>
+<!-- <div class="accordion-style">
+  <mat-accordion>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title> Welcome, {{ name }}! </mat-panel-title>
+        <mat-panel-description>
+          All events and Appointments
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <mat-list class="example-card-width">
+        <h3 mat-subheader>Folders</h3>
+        <mat-list-item *ngFor="let folder of folders">
+          <mat-icon mat-list-icon>folder</mat-icon>
+          <h4 mat-line>{{ folder.name }}</h4>
+          <p mat-line>{{ folder.updated | date }}</p>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+        <h3 mat-subheader>Notes</h3>
+        <mat-list-item *ngFor="let note of notes">
+          <mat-icon mat-list-icon>note</mat-icon>
+          <h4 mat-line>{{ note.name }}</h4>
+          <p mat-line>{{ note.updated | date }}</p>
+        </mat-list-item>
+      </mat-list>
+    </mat-expansion-panel>
+  </mat-accordion>
+</div> -->
+<!-- <div class="wrapper">
+    <h3 class="heading">
+      Welcome, {{ name }}. Here are your Events and Appointments for today:
+    </h3>
+    <full-calendar
+      id="calendar"
+      defaultView="timeGridDay"
+      [plugins]="calendarPlugins"
+      [events]="events"
+      [nextDayThreshold]="'00:00:00'"
+      [themeSystem]="'standard'"
+      [eventLimit]="false"
+      [height]="'parent'"
+      [header]="{
+        left: none,
+        center: 'title',
+        right: none
+      }"
+    ></full-calendar>
+  </div>
+  <div class="space"></div> -->

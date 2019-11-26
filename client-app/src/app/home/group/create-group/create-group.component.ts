@@ -123,7 +123,7 @@ export class CreateGroupComponent implements OnInit {
     this.groupDataStorageService.isLoading.subscribe(loading => {
       if (!loading) {
         this.allMajors = this.groupDataStorageService.majors;
-        console.log(this.allMajors);
+        // console.log(this.allMajors);
       }
     });
 
@@ -320,17 +320,26 @@ export class CreateGroupComponent implements OnInit {
         recipients: this.groupMembersEmails,
         type: groupFormValues.groupType,
         semesterTerm: groupFormValues.semesterTerm,
-        semesterYear: groupFormValues.semesterYear
+        semesterYear: groupFormValues.semesterYear,
+        major: groupFormValues.majorControl
       };
       console.log(obj);
       this.groupDataStorageService
         .updateGroup(obj, this.id)
         .subscribe(result => {
-          if (result) {
-            console.log(result);
+          if (result.result) {
+            this._snackBar.open(result.message, "close", {
+              duration: 4000,
+              panelClass: ["standard"]
+            });
 
             this.groupDataStorageService.fetchGroup();
             this.router.navigate(["/home/group/your-group"]);
+          } else {
+            this._snackBar.open(result.message, "close", {
+              duration: 4000,
+              panelClass: ["delete"]
+            });
           }
         });
     } else {

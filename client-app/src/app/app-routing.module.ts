@@ -154,7 +154,7 @@ const routes: Routes = [
             path: "your-group",
             component: YourGroupComponent,
             children: [
-              { path: "", component: GroupStartComponent },
+              { path: "", component: GroupStartComponent, pathMatch: "full" },
 
               { path: "create-group", component: CreateGroupComponent },
               { path: ":id", component: GroupDetailComponent }

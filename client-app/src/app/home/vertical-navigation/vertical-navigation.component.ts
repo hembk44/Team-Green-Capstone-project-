@@ -38,10 +38,9 @@ export class VerticalNavigationComponent implements OnInit {
   }
   logout() {
     this.tokenStorageService.signOut();
-    this._snackbar.openFromComponent(AppointmentSnackbarComponent, {
+    this._snackbar.open("You have been successfully logged out!", "close", {
       duration: 4000,
-      panelClass: ["standard"],
-      data: "You have sucessfully logged out!"
+      panelClass: ["standard"]
     });
     this.router.navigate(["/login"]);
   }

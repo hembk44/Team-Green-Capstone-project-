@@ -1,5 +1,15 @@
-.wrapper{
-    background-color:black;
-    height:100%;
-    overflow:hidden;
+.wrapper {
+  background-color: black;
+  height: 100%;
+  overflow: hidden;
+}
+
+.maroon {
+  color: #800029 !important;
+}
+
+.mat-button.mat-accent,
+.mat-icon-button.mat-accent,
+.mat-stroked-button.mat-accent {
+  color: #800029 !important;
 }
