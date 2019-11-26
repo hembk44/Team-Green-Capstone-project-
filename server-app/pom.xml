@@ -131,7 +131,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-					<finalName>finalDemo2</finalName>
+					<finalName>finalDemo5</finalName>
 				</configuration>
 			</plugin>
 		</plugins>

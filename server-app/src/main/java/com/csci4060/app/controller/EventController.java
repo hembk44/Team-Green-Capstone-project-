@@ -1,8 +1,14 @@
 package com.csci4060.app.controller;
 
 import java.io.FileNotFoundException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.security.sasl.AuthenticationException;
 import javax.validation.Valid;
@@ -15,6 +21,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -321,11 +328,19 @@ public class EventController extends ExceptionResolver {
 		for (User newUser : addedUsers) {
 			addedUserEmail.add(newUser.getEmail());
 			event.getRecipients().add(newUser);
+
+			Calendar newCalendar = calendarService.findByNameAndCreatedBy("Shared Event", newUser);
+			newCalendar.addEvent(event);
+			calendarService.save(newCalendar);
 		}
 
 		for (User oldUser : deletedUsers) {
 			deletedUserEmail.add(oldUser.getEmail());
 			event.getRecipients().remove(oldUser);
+
+			Calendar deletedCalendar = calendarService.findByNameAndCreatedBy("Shared Event", oldUser);
+			deletedCalendar.removeEvent(event);
+			calendarService.save(deletedCalendar);
 
 			if (confirmedUser.contains(oldUser)) {
 				event.getConfirmedBy().remove(oldUser);
@@ -423,5 +438,74 @@ public class EventController extends ExceptionResolver {
 		}
 
 		return new APIresponse(HttpStatus.OK.value(), "Event was successfully deleted.", event);
+	}
+
+	@GetMapping(path = "/upCommingEvents")
+	@PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN') or hasRole('MODERATOR')")
+	public APIresponse getUpcommingEvents() {
+
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		String username = "";
+
+		if (principal instanceof UserDetails) {
+			username = ((UserDetails) principal).getUsername();
+		}
+
+		User user = userService.findByUsername(username);
+
+		DateFormat f = new SimpleDateFormat("MM/dd/yy");
+
+		List<Event> createdEvents = eventService.findAllByCreatedBy(user);
+		List<Event> receivedEvents = eventService.findAllByRecepients(user);
+
+		if (createdEvents == null && receivedEvents == null) {
+			return new APIresponse(HttpStatus.NOT_FOUND.value(), "There are no events at the moment.", null);
+		}
+
+		Set<Event> allEvents = new HashSet<Event>();
+
+		String currentDateString = new SimpleDateFormat("MM/dd/yy").format(new Date());
+		Date currentDate = null;
+
+		try {
+			currentDate = f.parse(currentDateString);
+		} catch (ParseException e1) {
+			return new APIresponse(HttpStatus.BAD_REQUEST.value(), "Cannot parse current Date.", null);
+		}
+
+		if (createdEvents != null) {
+			for (Event event : createdEvents) {
+				String date = event.getStart().substring(0, 10);
+				Date eventDate = null;
+				try {
+					eventDate = (Date) f.parse(date);
+
+					if (!eventDate.before(currentDate)) {
+						allEvents.add(event);
+					}
+				} catch (ParseException e) {
+					return new APIresponse(HttpStatus.BAD_REQUEST.value(), "Cannot parse created event's Date.", null);
+				}
+			}
+		}
+
+		if (receivedEvents != null) {
+			for (Event event : receivedEvents) {
+				String date = event.getStart().substring(0, 10);
+				Date eventDate = null;
+				try {
+					eventDate = (Date) f.parse(date);
+
+					if (!eventDate.before(currentDate)) {
+						allEvents.add(event);
+					}
+				} catch (ParseException e) {
+					return new APIresponse(HttpStatus.BAD_REQUEST.value(), "Cannot parse received event's Date", null);
+				}
+			}
+		}
+
+		return new APIresponse(HttpStatus.OK.value(), "Upcomming events succesfully sent.", allEvents);
 	}
 }
