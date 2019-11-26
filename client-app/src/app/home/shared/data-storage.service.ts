@@ -286,8 +286,7 @@ export class DataStorageService {
         if(result.result){
           this.calSubject.next(result.result);
           this.calService.setCalendars(result.result);
-        }
-        
+        }     
       });
   }
 
