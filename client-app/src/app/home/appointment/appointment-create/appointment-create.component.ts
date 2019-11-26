@@ -111,6 +111,7 @@ export class AppointmentCreateComponent implements OnInit {
     this.userList = [];
     this.dataStorage.getEmails();
     this.dataStorage.emails.subscribe((result: Emails[]) => {
+      console.log(result);
       if (result.length > 0) {
         result.forEach(o => {
           if (!this.userList.includes(o.email)) {
@@ -118,6 +119,9 @@ export class AppointmentCreateComponent implements OnInit {
           }
         });
       }
+      // else {
+      //   console.log("no users!");
+      // }
     });
 
     this.filteredUserList = this.email.valueChanges.pipe(
@@ -334,18 +338,16 @@ export class AppointmentCreateComponent implements OnInit {
         .subscribe(result => {
           console.log(result);
           if (result.status == 400) {
-            this._snackBar.openFromComponent(AppointmentSnackbarComponent, {
+            this._snackBar.open(result.message, "close", {
               duration: 5000,
-              panelClass: ["delete"],
-              data: result.message
+              panelClass: ["delete"]
             });
             // this.router.navigate(["home/appointment/sent"]);
           }
           if (result.status == 200) {
-            this._snackBar.openFromComponent(AppointmentSnackbarComponent, {
+            this._snackBar.open(result.message, "close", {
               duration: 5000,
-              panelClass: ["standard"],
-              data: result.message
+              panelClass: ["standard"]
             });
             this.router.navigate(["home/appointment/sent"]);
           }
@@ -397,24 +399,18 @@ export class AppointmentCreateComponent implements OnInit {
               .subscribe((result: any) => {
                 console.log(result);
                 if (result.status == 201) {
-                  this._snackBar.openFromComponent(
-                    AppointmentSnackbarComponent,
-                    {
-                      duration: 5000,
-                      panelClass: ["standard"],
-                      data:
-                        "Appointment has been successfully created and sent to calendar!"
-                    }
-                  );
+                  this._snackBar.open(result.message, "close", {
+                    duration: 5000,
+                    panelClass: ["standard"]
+                  });
                   this.router.navigate(["home/appointment/sent"]);
                 }
               });
           }
           if (result.status === 403) {
-            this._snackBar.openFromComponent(AppointmentSnackbarComponent, {
+            this._snackBar.open(result.message, "close", {
               duration: 5000,
-              panelClass: ["delete"],
-              data: result.message
+              panelClass: ["delete"]
             });
           }
         }

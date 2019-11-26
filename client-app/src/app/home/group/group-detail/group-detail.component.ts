@@ -19,7 +19,6 @@ import { GroupCreateNavigationService } from "../group/group-create-navigation.s
 import { share } from "rxjs/operators";
 import { MessageGroupComponent } from "../message-group/message-group.component";
 import { MatListOption } from "@angular/material/list";
-import { GroupSnackbarComponent } from "../shared-group/group-snackbar/group-snackbar.component";
 import { DataStorageService } from "../../shared/data-storage.service";
 
 @Component({
@@ -92,12 +91,11 @@ export class GroupDetailComponent implements OnInit {
       console.log(shareObj);
       this.groupDataStorage.shareGroup(shareObj).subscribe(result => {
         console.log(result);
-        const sharedMsg = " This group has been successfully shared!";
-        if (result.status == 200) {
-          this._snackBar.openFromComponent(GroupSnackbarComponent, {
+        const sharedMsg = "This group has been successfully shared!";
+        if (result.result) {
+          this._snackBar.open(sharedMsg, "close", {
             duration: 4000,
-            panelClass: ["standard"],
-            data: sharedMsg
+            panelClass: ["standard"]
           });
         }
       });
@@ -109,19 +107,17 @@ export class GroupDetailComponent implements OnInit {
     this.groupDataStorage.deleteGroup(id).subscribe(result => {
       console.log(result);
 
-      if (result.status == 200) {
+      if (result.result) {
         const deletedMsg =
-          result.result.name + "group has been successfully deleted!";
-        this._snackBar.openFromComponent(GroupSnackbarComponent, {
+          result.result.name + " group has been successfully deleted!";
+        this._snackBar.open(deletedMsg, "close", {
           duration: 4000,
-          panelClass: ["delete"],
-          data: deletedMsg
+          panelClass: ["delete"]
         });
-      } else if (result.status == 403) {
-        this._snackBar.openFromComponent(GroupSnackbarComponent, {
+      } else {
+        this._snackBar.open(result.message, "close", {
           duration: 4000,
-          panelClass: ["delete"],
-          data: result.message
+          panelClass: ["delete"]
         });
       }
       this.groupDataStorage.fetchGroup();
@@ -144,12 +140,15 @@ export class GroupDetailComponent implements OnInit {
         result.recipients = this.selectedGroupMembers;
         this.dataStorage.emailSelectedMembers(result).subscribe(result => {
           console.log(result);
-          if (result.status === 200) {
-            this._snackBar.openFromComponent(GroupSnackbarComponent, {
-              duration: 5000,
-              panelClass: ["standard"],
-              data: "An email has been successfully to selected members!"
-            });
+          if (result) {
+            this._snackBar.open(
+              "An email has been successfully to selected members!",
+              "close",
+              {
+                duration: 5000,
+                panelClass: ["standard"]
+              }
+            );
           }
         });
       }
@@ -168,12 +167,15 @@ export class GroupDetailComponent implements OnInit {
       console.log(result);
       if (result) {
         this.groupDataStorage.sendEmail(result).subscribe(result => {
-          if (result.status === 200) {
-            this._snackBar.openFromComponent(GroupSnackbarComponent, {
-              duration: 5000,
-              panelClass: ["standard"],
-              data: "An email has been successfully to " + this.group.name + "!"
-            });
+          if (result.result) {
+            this._snackBar.open(
+              "An email has been successfully to " + this.group.name + "!",
+              "close",
+              {
+                duration: 5000,
+                panelClass: ["standard"]
+              }
+            );
           }
         });
       }

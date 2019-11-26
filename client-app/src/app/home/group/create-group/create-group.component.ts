@@ -18,7 +18,6 @@ import {
   MatAutocomplete,
   MatAutocompleteSelectedEvent
 } from "@angular/material";
-import { GroupSnackbarComponent } from "../shared-group/group-snackbar/group-snackbar.component";
 import { Observable } from "rxjs";
 import { DataStorageService, Emails } from "../../shared/data-storage.service";
 import { startWith, map } from "rxjs/operators";
@@ -334,17 +333,15 @@ export class CreateGroupComponent implements OnInit {
         this.groupDataStorageService.createGroup(obj).subscribe(result => {
           if (result) {
             console.log(result);
-            if (result.status == 201) {
-              this._snackBar.openFromComponent(GroupSnackbarComponent, {
+            if (result.result) {
+              this._snackBar.open(result.message, "close", {
                 duration: 5000,
-                panelClass: ["standard"],
-                data: result.message
+                panelClass: ["standard"]
               });
-            } else if (result.status == 409) {
-              this._snackBar.openFromComponent(GroupSnackbarComponent, {
+            } else {
+              this._snackBar.open(result.message, "close", {
                 duration: 5000,
-                panelClass: ["delete"],
-                data: result.message
+                panelClass: ["delete"]
               });
             }
 
@@ -373,19 +370,17 @@ export class CreateGroupComponent implements OnInit {
           .subscribe(result => {
             if (result) {
               console.log(result);
-              if (result.status == 201) {
-                this._snackBar.openFromComponent(GroupSnackbarComponent, {
+              if (result.result) {
+                this._snackBar.open(result.message, "close", {
                   duration: 4000,
-                  panelClass: ["standard"],
-                  data: result.message
+                  panelClass: ["standard"]
                 });
                 this.groupDataStorageService.fetchGroup();
                 this.router.navigate(["/home/group/your-group"]);
-              } else if (result.status == 409) {
-                this._snackBar.openFromComponent(GroupSnackbarComponent, {
+              } else {
+                this._snackBar.open(result.message, "close", {
                   duration: 4000,
-                  panelClass: ["delete"],
-                  data: result.message
+                  panelClass: ["delete"]
                 });
               }
             }

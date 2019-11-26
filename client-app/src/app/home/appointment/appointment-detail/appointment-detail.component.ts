@@ -141,12 +141,15 @@ export class AppointmentDetailComponent implements OnInit {
   onConfirm(id: number) {
     this.dataServiceAppointment.userSelectTimeSlot(id).subscribe(result => {
       console.log(result);
-      if (result.status == 410) {
-        this._snackBar.openFromComponent(AppointmentSnackbarComponent, {
-          duration: 5000,
-          panelClass: ["standard"],
-          data: "Your appointment has been successfully confirmed!"
-        });
+      if (result.result) {
+        this._snackBar.open(
+          "Your appointment has been successfully confirmed!",
+          "close",
+          {
+            duration: 5000,
+            panelClass: ["standard"]
+          }
+        );
       }
     });
     if (this.appointmentType === "sent") {
@@ -174,12 +177,24 @@ export class AppointmentDetailComponent implements OnInit {
       if (result) {
         this.dataStorage.emailSelectedMembers(result).subscribe(result => {
           console.log(result);
-          if (result.status === 200) {
-            this._snackBar.openFromComponent(AppointmentSnackbarComponent, {
-              duration: 5000,
-              panelClass: ["standard"],
-              data: "An email has been successfully to selected members!"
-            });
+          if (result.result) {
+            this._snackBar.open(
+              "An email has been successfully to selected members!",
+              "close",
+              {
+                duration: 5000,
+                panelClass: ["standard"]
+              }
+            );
+          } else {
+            this._snackBar.open(
+              "Something went wrong, please contact admin!",
+              "close",
+              {
+                duration: 5000,
+                panelClass: ["delete"]
+              }
+            );
           }
         });
       }
@@ -188,12 +203,21 @@ export class AppointmentDetailComponent implements OnInit {
   onDeleteAppointment(id: number) {
     this.dataServiceAppointment.deleteAppointment(id).subscribe(result => {
       console.log(result);
-      if (result.status == 200) {
-        this._snackBar.openFromComponent(AppointmentSnackbarComponent, {
+      console.log(result.result);
+      if (result.result) {
+        this._snackBar.open(result.message, "close", {
           duration: 5000,
-          panelClass: ["delete"],
-          data: result.message
+          panelClass: ["delete"]
         });
+      } else {
+        this._snackBar.open(
+          "Something went wrong. Please contact admin!",
+          "close",
+          {
+            duration: 5000,
+            panelClass: ["delete"]
+          }
+        );
       }
       this.dataServiceAppointment.fetchAppointment();
     });
