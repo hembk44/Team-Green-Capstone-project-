@@ -41,14 +41,16 @@ export class UpdatePasswordComponent implements OnInit {
       .subscribe(result => {
         console.log(result);
         if (result) {
-          if (result.status == 200) {
-            this._snackbar.openFromComponent(AppointmentSnackbarComponent, {
-              duration: 5000,
-              panelClass: ["standard"],
-              data: result.message
-            });
-            this.router.navigate(["home"]);
-          }
+          this._snackbar.open(result.message, "close", {
+            duration: 5000,
+            panelClass: ["standard"]
+          });
+          this.router.navigate(["home"]);
+        } else {
+          this._snackbar.open(result.message, "close", {
+            duration: 5000,
+            panelClass: ["delete"]
+          });
         }
       });
   }
