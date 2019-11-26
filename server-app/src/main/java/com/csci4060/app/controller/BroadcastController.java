@@ -25,39 +25,40 @@ public class BroadcastController {
 
 	@Autowired
 	FileStorageProperties fileStorageProperties;
-	
+
 	@GetMapping("/getImages")
 	public APIresponse getImages() {
 		List<String> images = new ArrayList<String>();
 
 		String filesPath = Paths.get(fileStorageProperties.getUploadDir()).toAbsolutePath().normalize().toString();
-		System.out.println("File path is " + filesPath);
 
 		File fileFolder = new File(filesPath);
 
-		if (fileFolder != null) {
-			for (final File file : fileFolder.listFiles()) {
+		if (fileFolder.listFiles().length == 0) {
+			return new APIresponse(HttpStatus.NO_CONTENT.value(),
+					"Admin must upload one or more images to view them here.", null);
+		}
+		
+		for (final File file : fileFolder.listFiles()) {
+			if (!file.isDirectory()) {
+				String encodedBase64 = null;
+				try {
+					String extension = FilenameUtils.getExtension(file.getName());
+					FileInputStream fileInputStream = new FileInputStream(file);
 
-				System.out.println("For loop has been reached " + file);
-				if (!file.isDirectory()) {
-					String encodedBase64 = null;
-					try {
-						String extension = FilenameUtils.getExtension(file.getName());
-						FileInputStream fileInputStream = new FileInputStream(file);
+					byte[] bytes = new byte[(int) file.length()];
+					fileInputStream.read(bytes);
 
-						byte[] bytes = new byte[(int) file.length()];
-						fileInputStream.read(bytes);
-
-						encodedBase64 = Base64.getEncoder().encodeToString(bytes);
-						images.add(encodedBase64);
-						fileInputStream.close();
-					} catch (Exception e) {
-						return new APIresponse(HttpStatus.EXPECTATION_FAILED.value(),
-								"Something went wrong. Please check the backend code.", null);
-					}
+					encodedBase64 = Base64.getEncoder().encodeToString(bytes);
+					images.add(encodedBase64);
+					fileInputStream.close();
+				} catch (Exception e) {
+					return new APIresponse(HttpStatus.EXPECTATION_FAILED.value(),
+							"Something went wrong. Please check the backend code.", null);
 				}
 			}
 		}
+
 		return new APIresponse(HttpStatus.OK.value(), "Images are successfully sent", images);
 	}
 }

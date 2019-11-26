@@ -66,7 +66,7 @@ public class GroupController extends ExceptionResolver {
 
 	@Autowired
 	FileReadService fileReadService;
-	
+
 	@Autowired
 	MajorService majorService;
 
@@ -88,7 +88,7 @@ public class GroupController extends ExceptionResolver {
 		String groupName = groupDummy.getName();
 		String groupMajor = groupDummy.getMajor();
 		Major major = majorService.findByName(groupMajor);
-		
+
 		String groupSemesterTerm = groupDummy.getSemesterTerm();
 		int groupSemesterYear = groupDummy.getSemesterYear();
 
@@ -145,8 +145,8 @@ public class GroupController extends ExceptionResolver {
 			}
 		}
 
-		Group group = new Group(groupName, groupDummy.getDescription(), groupType, major, groupSemesterTerm, groupSemesterYear,
-				recipients, otherOwnersList, createdBy);
+		Group group = new Group(groupName, groupDummy.getDescription(), groupType, major, groupSemesterTerm,
+				groupSemesterYear, recipients, otherOwnersList, createdBy);
 
 		groupService.save(group);
 
@@ -158,9 +158,9 @@ public class GroupController extends ExceptionResolver {
 	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('MODERATOR')")
 	public APIresponse createGroupFromFile(@RequestParam("file") MultipartFile file,
 			@RequestParam("user") String groupDetails) throws IOException {
-		
+
 		GroupDummyForFile groupDummy = new ObjectMapper().readValue(groupDetails, GroupDummyForFile.class);
-		
+
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
 		String username = "";
@@ -175,7 +175,7 @@ public class GroupController extends ExceptionResolver {
 		String groupName = groupDummy.getName();
 		String groupMajor = groupDummy.getMajor();
 		Major major = majorService.findByName(groupMajor);
-		
+
 		String groupSemesterTerm = groupDummy.getSemesterTerm();
 		int groupSemesterYear = groupDummy.getSemesterYear();
 
@@ -224,8 +224,14 @@ public class GroupController extends ExceptionResolver {
 
 		List<User> membersList = fileReadService.readFileForGroup(file);
 
-		Group group = new Group(groupName, groupDummy.getDescription(), groupType, major, groupSemesterTerm, groupSemesterYear,
-				membersList, otherOwnersList, createdBy);
+		if (membersList == null) {
+			return new APIresponse(HttpStatus.EXPECTATION_FAILED.value(),
+					"Please upload file in an appropriate format. You can refer to user manual for more information.",
+					null);
+		}
+
+		Group group = new Group(groupName, groupDummy.getDescription(), groupType, major, groupSemesterTerm,
+				groupSemesterYear, membersList, otherOwnersList, createdBy);
 
 		groupService.save(group);
 
@@ -480,7 +486,7 @@ public class GroupController extends ExceptionResolver {
 
 		return new APIresponse(HttpStatus.OK.value(), "Emails have been successfully sent", emailList);
 	}
-	
+
 	@PostMapping(path = "/sendEmailToFew")
 	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('MODERATOR')")
 	public APIresponse sendEmailToFew(@Valid @RequestBody IndividualEmail individualEmail) {
@@ -494,13 +500,13 @@ public class GroupController extends ExceptionResolver {
 		}
 
 		User user = userService.findByUsername(username);
-		
+
 		List<String> emailsFromIndividualEmail = individualEmail.getRecipients();
 
 		List<String> realEmails = new ArrayList<String>();
 
 		for (String email : emailsFromIndividualEmail) {
-			if(userService.findByEmail(email) != null) {
+			if (userService.findByEmail(email) != null) {
 				realEmails.add(email);
 			}
 		}
@@ -518,7 +524,7 @@ public class GroupController extends ExceptionResolver {
 
 		return new APIresponse(HttpStatus.OK.value(), "Emails have been successfully sent", realEmails);
 	}
-	
+
 	@GetMapping(path = "/getAllMajors")
 	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('MODERATOR')")
 	public APIresponse getAllMajors() {
@@ -531,17 +537,17 @@ public class GroupController extends ExceptionResolver {
 
 		return new APIresponse(HttpStatus.OK.value(), "All majors have been successfully sent.", majors);
 	}
-	
+
 	@GetMapping(path = "/getAllCourses/{id}")
 	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('MODERATOR')")
-	public APIresponse getAllCourses(@PathVariable ("id") Long majorId) {
+	public APIresponse getAllCourses(@PathVariable("id") Long majorId) {
 
 		Major major = majorService.findById(majorId);
 
 		if (major == null) {
 			return new APIresponse(HttpStatus.NOT_FOUND.value(), "No major found in the database", null);
 		}
-		
+
 		return new APIresponse(HttpStatus.OK.value(), "All majors have been successfully sent.", major);
 	}
 }

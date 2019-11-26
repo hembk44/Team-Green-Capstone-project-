@@ -96,7 +96,7 @@ public class FileReadServiceImpl implements FileReadService {
 
 						users.add(user);
 					} else {
-						throw new FileReadException("First name, last name, cwid and email must not be empty.");
+						return null;
 					}
 				}
 			}
@@ -176,7 +176,7 @@ public class FileReadServiceImpl implements FileReadService {
 							groupMembers.add(user);
 						}
 					} else {
-						throw new FileReadException("First name, last name, cwid and email must not be empty.");
+						return null;
 					}
 				}
 			}
@@ -240,7 +240,7 @@ public class FileReadServiceImpl implements FileReadService {
 						System.out.println("Title is: "+title);
 						
 					} else {
-						throw new FileReadException("Description and title must not be empty.");
+						return null;
 					}
 				}
 			}

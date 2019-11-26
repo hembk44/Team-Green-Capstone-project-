@@ -136,7 +136,7 @@ public class FileController {
 			return new APIresponse(HttpStatus.CREATED.value(), "File was succesfully uploaded", newUsersEmailList);
 		}
 
-		throw new FileReadException("The file is empty. Please upload a new file.");
+		return new APIresponse(HttpStatus.EXPECTATION_FAILED.value(), "Please upload file in an appropriate format. You can refer to user manual for more information.", null);
 
 	}
 

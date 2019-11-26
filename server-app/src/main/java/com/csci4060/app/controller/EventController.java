@@ -236,7 +236,7 @@ public class EventController extends ExceptionResolver {
 		}
 
 		return new APIresponse(HttpStatus.OK.value(),
-				"Event " + event.getTitle() + " has been shared to users: " + sharedWithList, event);
+				"Event " + event.getTitle() + " has been shared.", event);
 	}
 
 	@PutMapping(path = "/edit/{id}")

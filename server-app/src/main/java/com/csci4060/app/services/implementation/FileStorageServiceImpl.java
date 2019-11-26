@@ -43,7 +43,7 @@ public class FileStorageServiceImpl implements FileStorageService {
 		try {
 			// check if the file's name contains invalid characters
 			if (fileName.contains("..")) {
-				throw new FileStorageException("Sorry! Filename contains invalid path sequence: " + fileName);
+				return null;
 			} 
 //			//check if the file is a xlsx type
 //			else if (!(fileName.endsWith(".xlsx"))) {
@@ -61,7 +61,7 @@ public class FileStorageServiceImpl implements FileStorageService {
 			
 			return fileName;
 		} catch (IOException ex) {
-			throw new FileStorageException("Could not store file" + fileName + ". Please try again!", ex);
+			return null;
 		}
 	}
 
@@ -73,10 +73,10 @@ public class FileStorageServiceImpl implements FileStorageService {
 			if (resource.exists()) {
 				return resource;
 			} else {
-				throw new FileNotFoundException("File not found: " + fileName);
+				return null;
 			}
 		} catch (MalformedURLException ex) {
-			throw new FileNotFoundException("File not found: " + fileName + ". The error is: " + ex);
+			return null;
 		}
 	}
 }

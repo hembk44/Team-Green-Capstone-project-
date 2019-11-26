@@ -187,9 +187,7 @@ public class AuthRestAPIs extends ExceptionResolver {
 //
 //		emailSenderService.sendEmail(mailMessage);
 
-		return new APIresponse(HttpStatus.OK.value(),
-				"Verification code has been sent to your email address. Please click it to register successfully.",
-				null);
+		return new APIresponse(HttpStatus.OK.value(), "User has been registered successfully.", user.getEmail());
 	}
 
 	@GetMapping("/confirm-account/{token}")
@@ -241,16 +239,22 @@ public class AuthRestAPIs extends ExceptionResolver {
 
 			// Add success message to view
 			return new APIresponse(HttpStatus.OK.value(),
-					"A link has been sent to your email, please follow the link to reset your password!", null);
+					"A link has been sent to your email, please follow the link to reset your password!",
+					user.getEmail());
 		}
 
 	}
 
 	@GetMapping(value = "/{resetToken}")
 	public ModelAndView displayResetPasswordPage(@PathVariable("resetToken") String token) {
-
-		ConfirmationToken resettoken = confirmationTokenService.findByConfirmationToken(token);
 		ModelAndView modelAndView = new ModelAndView();
+		ConfirmationToken resettoken = confirmationTokenService.findByConfirmationToken(token);
+		
+		if(resettoken == null) {
+			modelAndView.addObject("errorMessage", "Oops!  Your password reset link has expired.");
+			return modelAndView;
+		}
+				
 		try {
 			if (!(resettoken.getCreatedDate()).after(new Date())) {
 
