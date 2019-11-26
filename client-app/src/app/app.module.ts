@@ -124,11 +124,10 @@ import { BrdcastComponent } from "./home/vertical-navigation/user-manual/brdcast
 import { ManualNavComponent } from "./home/vertical-navigation/user-manual/manual-nav/manual-nav.component";
 import { AppointmentSnackbarComponent } from "./home/appointment/shared-appointment/appointment-snackbar/appointment-snackbar.component";
 import { ManualStartComponent } from "./home/vertical-navigation/user-manual/manual-start/manual-start.component";
-import { GroupSnackbarComponent } from "./home/group/shared-group/group-snackbar/group-snackbar.component";
 import { UploadMajorComponent } from "./home/administration/upload-major/upload-major.component";
 import { YourGroupComponent } from "./home/group/your-group/your-group.component";
 import { EmailDialogComponent } from "./shared/email-dialog/email-dialog.component";
-import { UpdatePasswordComponent } from './home/update-password/update-password.component';
+import { UpdatePasswordComponent } from "./home/update-password/update-password.component";
 
 @NgModule({
   declarations: [
@@ -196,7 +195,6 @@ import { UpdatePasswordComponent } from './home/update-password/update-password.
     ManualNavComponent,
     AppointmentSnackbarComponent,
     ManualStartComponent,
-    GroupSnackbarComponent,
     UploadMajorComponent,
     YourGroupComponent,
     EmailDialogComponent,
@@ -257,8 +255,7 @@ import { UpdatePasswordComponent } from './home/update-password/update-password.
     DeleteUsers,
     ShareEvent,
     RoleConfirm,
-    AppointmentSnackbarComponent,
-    GroupSnackbarComponent
+    AppointmentSnackbarComponent
   ],
   providers: [
     MatDatepickerModule,

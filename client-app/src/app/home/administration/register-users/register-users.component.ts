@@ -61,15 +61,24 @@ export class RegisterUsersComponent implements OnInit {
       this.currentFileUpload = this.selectedFiles.item(0);
       console.log(this.currentFileUpload);
       this.dataStorage
-        .registerUsers(this.currentFileUpload, this.uploadForm.get('role').value)
+        .registerUsers(
+          this.currentFileUpload,
+          this.uploadForm.get("role").value
+        )
         .subscribe(result => {
           console.log(result);
           if (result) {
             let snackBarRef = this._snackBar.open(
+<<<<<<< HEAD
               result.message,
               "",
+=======
+              "All users are successfully registered!!!",
+              "close",
+>>>>>>> 21a876d20177b903673a55f9674e8e244c64b05c
               { duration: 5000, panelClass: ["standard"] }
             );
+
             snackBarRef
               .onAction()
               .subscribe(() => this.router.navigate(["/home/admin"]));
@@ -78,6 +87,9 @@ export class RegisterUsersComponent implements OnInit {
             this._snackBar.open('Something went wrong.', 'close', {duration: 5000})
           }
         });
+      this.uploadForm.reset();
+      this.uploadForm.clearAsyncValidators();
+      this.uploadForm.clearValidators();
       this.router.navigate(["/home/admin"]);
     }
   }

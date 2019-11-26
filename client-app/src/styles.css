@@ -106,7 +106,17 @@ body {
 .standard {
   background: #800029;
   color: white;
-  border: #800029 solid 1px;
+  border: rgb(185, 163, 90) solid 1px;
+}
+
+.standard .mat-simple-snackbar-action {
+  color: rgb(185, 163, 90);
+  ;
+}
+
+.delete .mat-simple-snackbar-action {
+  color: #800029;
+  ;
 }
 
 .standard .mat-simple-snackbar-action{

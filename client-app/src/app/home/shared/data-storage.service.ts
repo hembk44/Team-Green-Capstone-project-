@@ -15,6 +15,8 @@ import { Calendar } from "../calendar/calendar-list/calendar.model";
 import { CalendarService } from "../calendar/calendar-list/calendar.service";
 import { P } from "@angular/cdk/keycodes";
 import { Form } from "@angular/forms";
+import { MatSnackBar } from "@angular/material";
+import { AppointmentSnackbarComponent } from "../appointment/shared-appointment/appointment-snackbar/appointment-snackbar.component";
 
 @Injectable({
   providedIn: "root"
@@ -47,7 +49,8 @@ export class DataStorageService {
   constructor(
     private http: HttpClient,
     private authService: AuthService,
-    private calService: CalendarService
+    private calService: CalendarService,
+    private _snackbar: MatSnackBar
   ) {}
   
 
@@ -100,8 +103,12 @@ export class DataStorageService {
         finalize(() => this.isLoadingSubject.next(false)))
       )
       .subscribe((result: ApiResponse) => {
+        console.log(result);
         if (result.status == 200) {
           this.emailSubject.next(result.result);
+        }
+        if (result.status == 404) {
+          this.emailSubject.next([]);
         }
       });
   }

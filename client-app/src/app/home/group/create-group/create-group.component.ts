@@ -18,7 +18,6 @@ import {
   MatAutocomplete,
   MatAutocompleteSelectedEvent
 } from "@angular/material";
-import { GroupSnackbarComponent } from "../shared-group/group-snackbar/group-snackbar.component";
 import { Observable } from "rxjs";
 import { DataStorageService, Emails } from "../../shared/data-storage.service";
 import { startWith, map } from "rxjs/operators";
@@ -43,7 +42,7 @@ export class CreateGroupComponent implements OnInit {
   filteredUserList: Observable<string[]>;
   userList: string[] = [];
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
-  @ViewChild("chipList", { static: false }) chipList;
+  // @ViewChild("chipList", { static: false }) chipList;
   @ViewChild("userInput", { static: false }) userInput: ElementRef<
     HTMLInputElement
   >;
@@ -223,35 +222,50 @@ export class CreateGroupComponent implements OnInit {
   }
 
   add(event: MatChipInputEvent): void {
-    const input = event.input;
-    this.email.setValue(event.value);
-    console.log(this.email.hasError("email"));
-    if (!this.email.hasError("email")) {
-      if (this.email.value.trim()) {
-        this.isEmailValid = true;
-        this.groupMembersEmails.push(this.email.value.trim());
-        this.customGroupEmails.push(this.email.value.trim());
-        console.log(this.groupMembersEmails);
-      } else if (
-        this.email.value === "" &&
-        this.groupMembersEmails.length <= 0
-      ) {
-        this.chipList.errorState = true;
-        this.isEmailValid = false;
-        this.errorMessage = "please enter a valid email address";
-      } else {
-        this.chipList.errorState = false;
-      }
-    } else {
-      this.chipList.errorState = true;
-      this.isEmailValid = false;
-      this.errorMessage = "please enter a valid email address";
-    }
+    if (!this.matAutocomplete.isOpen) {
+      const input = event.input;
+      const value = event.value;
 
-    // Reset the input value
-    if (input) {
-      input.value = "";
+      // Add emails
+      if (value.trim()) {
+        // this.emails.push(value.trim());
+      }
+
+      // Reset the input value
+      if (input) {
+        input.value = "";
+      }
+      this.email.setValue(null);
     }
+    // const input = event.input;
+    // this.email.setValue(event.value);
+    // console.log(this.email.hasError("email"));
+    // if (!this.email.hasError("email")) {
+    //   if (this.email.value.trim()) {
+    //     this.isEmailValid = true;
+    //     this.groupMembersEmails.push(this.email.value.trim());
+    //     this.customGroupEmails.push(this.email.value.trim());
+    //     console.log(this.groupMembersEmails);
+    //   } else if (
+    //     this.email.value === "" &&
+    //     this.groupMembersEmails.length <= 0
+    //   ) {
+    //     this.chipList.errorState = true;
+    //     this.isEmailValid = false;
+    //     this.errorMessage = "please enter a valid email address";
+    //   } else {
+    //     this.chipList.errorState = false;
+    //   }
+    // } else {
+    //   this.chipList.errorState = true;
+    //   this.isEmailValid = false;
+    //   this.errorMessage = "please enter a valid email address";
+    // }
+
+    // // Reset the input value
+    // if (input) {
+    //   input.value = "";
+    // }
   }
 
   remove(email: string): void {
@@ -334,17 +348,15 @@ export class CreateGroupComponent implements OnInit {
         this.groupDataStorageService.createGroup(obj).subscribe(result => {
           if (result) {
             console.log(result);
-            if (result.status == 201) {
-              this._snackBar.openFromComponent(GroupSnackbarComponent, {
+            if (result.result) {
+              this._snackBar.open(result.message, "close", {
                 duration: 5000,
-                panelClass: ["standard"],
-                data: result.message
+                panelClass: ["standard"]
               });
-            } else if (result.status == 409) {
-              this._snackBar.openFromComponent(GroupSnackbarComponent, {
+            } else {
+              this._snackBar.open(result.message, "close", {
                 duration: 5000,
-                panelClass: ["delete"],
-                data: result.message
+                panelClass: ["delete"]
               });
             }
 
@@ -373,19 +385,17 @@ export class CreateGroupComponent implements OnInit {
           .subscribe(result => {
             if (result) {
               console.log(result);
-              if (result.status == 201) {
-                this._snackBar.openFromComponent(GroupSnackbarComponent, {
+              if (result.result) {
+                this._snackBar.open(result.message, "close", {
                   duration: 4000,
-                  panelClass: ["standard"],
-                  data: result.message
+                  panelClass: ["standard"]
                 });
                 this.groupDataStorageService.fetchGroup();
                 this.router.navigate(["/home/group/your-group"]);
-              } else if (result.status == 409) {
-                this._snackBar.openFromComponent(GroupSnackbarComponent, {
+              } else {
+                this._snackBar.open(result.message, "close", {
                   duration: 4000,
-                  panelClass: ["delete"],
-                  data: result.message
+                  panelClass: ["delete"]
                 });
               }
             }

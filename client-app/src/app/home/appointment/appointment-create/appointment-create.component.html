@@ -9,11 +9,7 @@
   (ngSubmit)="onSubmit()"
 >
   <mat-form-field style="width: 50%;">
-    <input
-      matInput
-      placeholder="Appointment Title"
-      formControlName="title"
-    />
+    <input matInput placeholder="Appointment Title" formControlName="title" />
   </mat-form-field>
 
   <mat-form-field>
@@ -25,20 +21,15 @@
   </mat-form-field>
 
   <mat-form-field>
-    <input
-      matInput
-      placeholder="Location"
-      formControlName="location"
-    />
+    <input matInput placeholder="Location" formControlName="location" />
   </mat-form-field>
-
   <div>
     <mat-form-field class="example-chip-list" style="width: 50%;">
       <mat-chip-list #chipList aria-label="adding emails">
         <mat-chip
           *ngFor="let email of emails"
           [selectable]="selectable"
-          [removable]="!pendingUsers.includes(email)"
+          [removable]="removable"
           (removed)="remove(email)"
         >
           <mat-icon mat-list-icon>person_outline</mat-icon> {{ email }}
