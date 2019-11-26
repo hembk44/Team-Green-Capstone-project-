@@ -174,22 +174,30 @@ public class AdminController extends ExceptionResolver {
 	@PreAuthorize("hasRole('ADMIN')")
 	public APIresponse deleteUser(@RequestBody List<String> emails) {
 
+		List<String> deletedUsers = new ArrayList<String>();
+		
 		for (String email : emails) {
 			User user = userService.findByEmail(email);
 
 			if (user != null) {
+				deletedUsers.add(user.getEmail());
 				userService.delete(user);
-
-				SimpleMailMessage mailMessage = new SimpleMailMessage();
-
-				mailMessage.setTo(user.getEmail());
-				mailMessage.setSubject("User Removed");
-				mailMessage.setFrom("ulmautoemail@gmail.com");
-				mailMessage.setText("You have been removed from the ulm communication app. " + "Thank you!");
-
-				emailSenderService.sendEmail(mailMessage);
 			}
 
+		}
+		
+		if(!deletedUsers.isEmpty()) {
+			
+			SimpleMailMessage mailMessage = new SimpleMailMessage();
+
+			String[] emailsToSend = deletedUsers.toArray(new String[deletedUsers.size()]);
+			
+			mailMessage.setTo(emailsToSend);
+			mailMessage.setSubject("User Removed");
+			mailMessage.setFrom("ulmautoemail@gmail.com");
+			mailMessage.setText("You have been removed from the ulm communication app. " + "Thank you!");
+
+			emailSenderService.sendEmail(mailMessage);
 		}
 
 		return new APIresponse(HttpStatus.OK.value(), "User was successfully deleted.", emails);
@@ -439,7 +447,7 @@ public class AdminController extends ExceptionResolver {
 		loggedIn.setPassword(encoder.encode(password.get("password")));
 		userService.save(loggedIn);
 
-		return new APIresponse(HttpStatus.OK.value(), "Password has been successfully chnaged!", null);
+		return new APIresponse(HttpStatus.OK.value(), "Password has been successfully chnaged!", loggedIn.getEmail());
 
 	}
 

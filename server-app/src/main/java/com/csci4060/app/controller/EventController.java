@@ -94,7 +94,7 @@ public class EventController extends ExceptionResolver {
 		Calendar calendar = calendarService.findById(eventDummy.getCalendarId());
 
 		if (calendar == null) {
-			return new APIresponse(HttpStatus.FORBIDDEN.value(),
+			return new APIresponse(HttpStatus.NOT_FOUND.value(),
 					"Calendar with the given id is not present in the database", null);
 		}
 
@@ -108,7 +108,7 @@ public class EventController extends ExceptionResolver {
 			calendar.getEvents().add(event);
 			calendarService.save(calendar);
 		} else {
-			return new APIresponse(HttpStatus.FORBIDDEN.value(),
+			return new APIresponse(HttpStatus.BAD_REQUEST.value(),
 					"You did not create the calendar. Authorization denied!", null);
 		}
 
@@ -142,7 +142,8 @@ public class EventController extends ExceptionResolver {
 			emailSenderService.sendEmail(mailMessage);
 		}
 
-		return new APIresponse(HttpStatus.CREATED.value(), "event created successfully", event);
+		return new APIresponse(HttpStatus.CREATED.value(), "Event " + event.getTitle() + " created successfully",
+				event);
 	}
 
 	@PostMapping(path = "/confirm/{id}", consumes = "application/json")
@@ -162,7 +163,8 @@ public class EventController extends ExceptionResolver {
 		Event event = eventService.findById(eventId);
 
 		if (event == null) {
-			return new APIresponse(HttpStatus.NOT_FOUND.value(), "event does not exist in the database", null);
+			return new APIresponse(HttpStatus.NOT_FOUND.value(),
+					"Event with the given id does not exist in the database", null);
 		}
 
 		if (!event.getRecipients().contains(loggedInUser)) {
@@ -176,8 +178,7 @@ public class EventController extends ExceptionResolver {
 		event.getConfirmedBy().add(loggedInUser);
 		eventService.save(event);
 
-		return new APIresponse(HttpStatus.CREATED.value(), "event confirmed successfully by " + loggedInUser.getName(),
-				event);
+		return new APIresponse(HttpStatus.OK.value(), "Event confirmed successfully.", event);
 	}
 
 	@PostMapping(path = "/share")
@@ -199,17 +200,16 @@ public class EventController extends ExceptionResolver {
 		Event event = eventService.findById(eventId);
 
 		if (event == null) {
-			return new APIresponse(HttpStatus.BAD_REQUEST.value(), "Event with id " + eventId + " does not exist",
-					null);
+			return new APIresponse(HttpStatus.NOT_FOUND.value(), "Event with id " + eventId + " does not exist", null);
 		}
 
 		if (event.getCreatedBy() != user) {
-			return new APIresponse(HttpStatus.FORBIDDEN.value(), "You did not create the event. Authorization denied!",
-					null);
+			return new APIresponse(HttpStatus.BAD_REQUEST.value(),
+					"You did not create the event. Authorization denied!", null);
 		}
 
 		if (event.getTimeSlotId() != null) {
-			return new APIresponse(HttpStatus.FORBIDDEN.value(),
+			return new APIresponse(HttpStatus.BAD_REQUEST.value(),
 					"This is an appointment. Please go to the appointment tab to add/delete users", null);
 		}
 
@@ -235,8 +235,7 @@ public class EventController extends ExceptionResolver {
 
 		}
 
-		return new APIresponse(HttpStatus.OK.value(),
-				"Event " + event.getTitle() + " has been shared.", event);
+		return new APIresponse(HttpStatus.OK.value(), "Event " + event.getTitle() + " has been shared.", event);
 	}
 
 	@PutMapping(path = "/edit/{id}")
@@ -256,29 +255,28 @@ public class EventController extends ExceptionResolver {
 		Event event = eventService.findById(eventId);
 
 		if (event == null) {
-			return new APIresponse(HttpStatus.BAD_REQUEST.value(), "Event with id " + eventId + " does not exist",
-					null);
+			return new APIresponse(HttpStatus.NOT_FOUND.value(), "Event with id " + eventId + " does not exist", null);
 		}
 
 		if (event.getCreatedBy() != user) {
-			return new APIresponse(HttpStatus.FORBIDDEN.value(), "You did not create the event. Authorization denied!",
-					null);
+			return new APIresponse(HttpStatus.BAD_REQUEST.value(),
+					"You did not create the event. Authorization denied!", null);
 		}
 
 		if (event.getTimeSlotId() != null) {
-			return new APIresponse(HttpStatus.FORBIDDEN.value(),
+			return new APIresponse(HttpStatus.BAD_REQUEST.value(),
 					"This is an appointment. Please go to the appointment tab to edit the appointment", null);
 		}
 
 		Calendar calendar = calendarService.findById(eventEdit.getCalendarId());
 
 		if (calendar == null) {
-			return new APIresponse(HttpStatus.BAD_REQUEST.value(),
+			return new APIresponse(HttpStatus.NOT_FOUND.value(),
 					"Calendar with id " + eventEdit.getCalendarId() + " does not exist", null);
 		}
 
 		if (calendar.getCreatedBy() != user) {
-			return new APIresponse(HttpStatus.FORBIDDEN.value(),
+			return new APIresponse(HttpStatus.BAD_REQUEST.value(),
 					"You did not create the Calendar. So you cannot put the event in this calendar.", null);
 		}
 
@@ -385,17 +383,16 @@ public class EventController extends ExceptionResolver {
 		Event event = eventService.findById(eventId);
 
 		if (event == null) {
-			return new APIresponse(HttpStatus.NOT_FOUND.value(), "Event with id " + eventId + " does not exists.",
-					null);
+			return new APIresponse(HttpStatus.NOT_FOUND.value(), "Event with id " + eventId + " does not exist.", null);
 		}
 
 		if (event.getCreatedBy() != user) {
-			return new APIresponse(HttpStatus.FORBIDDEN.value(), "You did not create the event. Authorization denied!",
-					null);
+			return new APIresponse(HttpStatus.BAD_REQUEST.value(),
+					"You did not create the event. Authorization denied!", null);
 		}
 
 		if (event.getTimeSlotId() != null) {
-			return new APIresponse(HttpStatus.FORBIDDEN.value(),
+			return new APIresponse(HttpStatus.BAD_REQUEST.value(),
 					"This is an appointment time slot. You cannot delete an individual time slot. Please go to the appointment tab to delete the whole appointment.",
 					null);
 		}

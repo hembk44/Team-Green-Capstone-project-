@@ -242,19 +242,19 @@ public class AuthRestAPIs extends ExceptionResolver {
 					"A link has been sent to your email, please follow the link to reset your password!",
 					user.getEmail());
 		}
-
 	}
 
 	@GetMapping(value = "/{resetToken}")
 	public ModelAndView displayResetPasswordPage(@PathVariable("resetToken") String token) {
 		ModelAndView modelAndView = new ModelAndView();
 		ConfirmationToken resettoken = confirmationTokenService.findByConfirmationToken(token);
-		
-		if(resettoken == null) {
+
+		if (resettoken == null) {
 			modelAndView.addObject("errorMessage", "Oops!  Your password reset link has expired.");
+			modelAndView.setViewName("redirect:http://localhost:4200/forgot-password");
 			return modelAndView;
 		}
-				
+
 		try {
 			if (!(resettoken.getCreatedDate()).after(new Date())) {
 
@@ -278,19 +278,22 @@ public class AuthRestAPIs extends ExceptionResolver {
 
 		ConfirmationToken resetToken = confirmationTokenService
 				.findByConfirmationToken(requestParams.get("resetToken"));
+
+		if (resetToken == null) {
+			return new APIresponse(HttpStatus.NOT_FOUND.value(), "The link has expired.", null);
+		}
+
 		User resetUser = resetToken.getUser();
 
 		try {
-			System.out.println("true");
-			System.out.println(resetToken.getConfirmationToken());
 			resetUser.setPassword(encoder.encode(requestParams.get("password")));
 			userService.save(resetUser);
 
 			confirmationTokenService.delete(resetToken);
 
-			return new APIresponse(HttpStatus.OK.value(), "Password has been changed!", null);
+			return new APIresponse(HttpStatus.OK.value(), "Password has been changed!", resetUser.getEmail());
 		} catch (RuntimeException e) {
-			return new APIresponse(HttpStatus.OK.value(), "Unable to change the password at the time", null);
+			return new APIresponse(HttpStatus.BAD_REQUEST.value(), "Unable to change the password at the time", null);
 		}
 	}
 

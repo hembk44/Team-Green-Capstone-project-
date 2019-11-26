@@ -75,7 +75,7 @@ public class CalendarController extends ExceptionResolver {
 
 		if (calendarService.findByNameAndCreatedBy(calendarName, createdBy) != null) {
 
-			return new APIresponse(HttpStatus.CONFLICT.value(),
+			return new APIresponse(HttpStatus.BAD_REQUEST.value(),
 					"Calendar with name " + calendarName + " already exists.Please choose a different name.", null);
 		}
 
@@ -167,13 +167,13 @@ public class CalendarController extends ExceptionResolver {
 		Calendar calendar = calendarService.findById(calendarShare.getCalendarId());
 
 		if (calendar == null) {
-			return new APIresponse(HttpStatus.FORBIDDEN.value(),
+			return new APIresponse(HttpStatus.NOT_FOUND.value(),
 					"Calendar with the given id is not present in the database", null);
 		}
 
 		if (calendar.getCreatedBy() != user) {
-			return new APIresponse(HttpStatus.FORBIDDEN.value(),
-					"Calendar with the given id is not present in the database", null);
+			return new APIresponse(HttpStatus.BAD_REQUEST.value(),
+					"You did not create the calendar. Authorization failed!", null);
 		}
 
 		List<String> emailsFromJson = calendarShare.getRecipients();
@@ -209,7 +209,7 @@ public class CalendarController extends ExceptionResolver {
 		}
 
 		return new APIresponse(HttpStatus.OK.value(),
-				"Calendar " + calendar.getName() + " has been shared to users: " + sharedWithList, calendar);
+				"Calendar " + calendar.getName() + " has been shared.", calendar);
 	}
 
 	@PutMapping(path = "/edit/{id}")
@@ -230,12 +230,12 @@ public class CalendarController extends ExceptionResolver {
 		Calendar calendar = calendarService.findById(calendarId);
 
 		if (calendar == null) {
-			return new APIresponse(HttpStatus.BAD_REQUEST.value(), "Calendar with id " + calendarId + " does not exist",
+			return new APIresponse(HttpStatus.NOT_FOUND.value(), "Calendar with id " + calendarId + " does not exist",
 					null);
 		}
 
 		if (calendar.getCreatedBy() != user) {
-			return new APIresponse(HttpStatus.FORBIDDEN.value(),
+			return new APIresponse(HttpStatus.BAD_REQUEST.value(),
 					"You did not create the Calendar. Authorization denied!", null);
 		}
 
@@ -244,7 +244,7 @@ public class CalendarController extends ExceptionResolver {
 		if (!calendarName.equals(calendarCreate.getName())) {
 			if (calendarService.findByNameAndCreatedBy(calendarCreate.getName(), calendar.getCreatedBy()) != null) {
 
-				return new APIresponse(HttpStatus.CONFLICT.value(), "Calendar with name " + calendarCreate.getName()
+				return new APIresponse(HttpStatus.BAD_REQUEST.value(), "Calendar with name " + calendarCreate.getName()
 						+ " already exists.Please choose a different name.", null);
 			}
 		}
@@ -350,13 +350,13 @@ public class CalendarController extends ExceptionResolver {
 		}
 
 		if (calendar.getCreatedBy() != user) {
-			return new APIresponse(HttpStatus.FORBIDDEN.value(),
+			return new APIresponse(HttpStatus.BAD_REQUEST.value(),
 					"You did not create the calendar. Authorization denied!", null);
 		}
 
 		if (calendar.getName().equals("Main") || calendar.getName().equals("Appointment")
 				|| calendar.getName().equals("Shared Event")) {
-			return new APIresponse(HttpStatus.FORBIDDEN.value(), "You cannot delete default calendars.", null);
+			return new APIresponse(HttpStatus.NOT_FOUND.value(), "You cannot delete default calendars.", null);
 		}
 
 		List<User> recipientsList = calendar.getShareduser();
