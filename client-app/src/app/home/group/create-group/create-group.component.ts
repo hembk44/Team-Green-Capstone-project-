@@ -42,7 +42,7 @@ export class CreateGroupComponent implements OnInit {
   filteredUserList: Observable<string[]>;
   userList: string[] = [];
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
-  @ViewChild("chipList", { static: false }) chipList;
+  // @ViewChild("chipList", { static: false }) chipList;
   @ViewChild("userInput", { static: false }) userInput: ElementRef<
     HTMLInputElement
   >;
@@ -222,35 +222,50 @@ export class CreateGroupComponent implements OnInit {
   }
 
   add(event: MatChipInputEvent): void {
-    const input = event.input;
-    this.email.setValue(event.value);
-    console.log(this.email.hasError("email"));
-    if (!this.email.hasError("email")) {
-      if (this.email.value.trim()) {
-        this.isEmailValid = true;
-        this.groupMembersEmails.push(this.email.value.trim());
-        this.customGroupEmails.push(this.email.value.trim());
-        console.log(this.groupMembersEmails);
-      } else if (
-        this.email.value === "" &&
-        this.groupMembersEmails.length <= 0
-      ) {
-        this.chipList.errorState = true;
-        this.isEmailValid = false;
-        this.errorMessage = "please enter a valid email address";
-      } else {
-        this.chipList.errorState = false;
-      }
-    } else {
-      this.chipList.errorState = true;
-      this.isEmailValid = false;
-      this.errorMessage = "please enter a valid email address";
-    }
+    if (!this.matAutocomplete.isOpen) {
+      const input = event.input;
+      const value = event.value;
 
-    // Reset the input value
-    if (input) {
-      input.value = "";
+      // Add emails
+      if (value.trim()) {
+        // this.emails.push(value.trim());
+      }
+
+      // Reset the input value
+      if (input) {
+        input.value = "";
+      }
+      this.email.setValue(null);
     }
+    // const input = event.input;
+    // this.email.setValue(event.value);
+    // console.log(this.email.hasError("email"));
+    // if (!this.email.hasError("email")) {
+    //   if (this.email.value.trim()) {
+    //     this.isEmailValid = true;
+    //     this.groupMembersEmails.push(this.email.value.trim());
+    //     this.customGroupEmails.push(this.email.value.trim());
+    //     console.log(this.groupMembersEmails);
+    //   } else if (
+    //     this.email.value === "" &&
+    //     this.groupMembersEmails.length <= 0
+    //   ) {
+    //     this.chipList.errorState = true;
+    //     this.isEmailValid = false;
+    //     this.errorMessage = "please enter a valid email address";
+    //   } else {
+    //     this.chipList.errorState = false;
+    //   }
+    // } else {
+    //   this.chipList.errorState = true;
+    //   this.isEmailValid = false;
+    //   this.errorMessage = "please enter a valid email address";
+    // }
+
+    // // Reset the input value
+    // if (input) {
+    //   input.value = "";
+    // }
   }
 
   remove(email: string): void {

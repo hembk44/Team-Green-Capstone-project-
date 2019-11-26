@@ -34,7 +34,7 @@ export class AppointmentDetailComponent implements OnInit {
   appointmentLocation: string;
   currentRole: string;
   appointmentType: string;
-  pendingUsers: string[] = [];
+  pendingUsers: any[] = [];
   selectedPendingRecipients: string[] = [];
   isScheduledAppointmentEmpty: boolean = false;
 

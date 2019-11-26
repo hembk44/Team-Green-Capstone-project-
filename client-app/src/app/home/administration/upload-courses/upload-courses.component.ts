@@ -6,12 +6,11 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router } from "@angular/router";
 
 @Component({
-  selector: 'app-upload-courses',
-  templateUrl: './upload-courses.component.html',
-  styleUrls: ['./upload-courses.component.css']
+  selector: "app-upload-courses",
+  templateUrl: "./upload-courses.component.html",
+  styleUrls: ["./upload-courses.component.css"]
 })
 export class UploadCoursesComponent implements OnInit {
-
   uploadForm: FormGroup;
   validFileExtensions: string[] = ["xlsx", "csv"];
   invalidExtension: string;
@@ -23,7 +22,7 @@ export class UploadCoursesComponent implements OnInit {
   currentRole: string;
 
   majors: string[];
-  
+
   constructor(
     private formBuilder: FormBuilder,
     private dataStorage: DataStorageService,
@@ -36,15 +35,15 @@ export class UploadCoursesComponent implements OnInit {
     this.majors = [];
     this.dataStorage.getMajors();
     this.dataStorage.isLoading.subscribe(loading => {
-      if(!loading){
+      if (!loading) {
         this.majors = this.dataStorage.majors;
       }
-    })
+    });
     this.currentRole = this.role.user;
     console.log(this.role.user);
     this.uploadForm = this.formBuilder.group({
       uploadFile: [undefined, [Validators.required]],
-      major: ['', Validators.required]
+      major: ["", Validators.required]
     });
     console.log(this.majors);
   }
@@ -57,14 +56,17 @@ export class UploadCoursesComponent implements OnInit {
       this.currentFileUpload = this.selectedFiles.item(0);
       console.log(this.currentFileUpload);
       const formData = new FormData();
-      formData.append('major', this.uploadForm.value['major']);
-      formData.append('file', this.currentFileUpload);
+      formData.append("major", this.uploadForm.value["major"]);
+      formData.append("file", this.currentFileUpload);
       this.dataStorage.addCourses(formData).subscribe(result => {
         console.log(result);
-        if(result){
-          this._snackBar.open(result.message, '',{duration:5000})
+        if (result) {
+          this._snackBar.open(result.message, "close", {
+            duration: 5000,
+            panelClass: ["standard"]
+          });
         }
-      })
+      });
     }
   }
 
@@ -92,5 +94,4 @@ export class UploadCoursesComponent implements OnInit {
     }
     return false;
   }
-
 }
