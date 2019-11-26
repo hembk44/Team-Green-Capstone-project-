@@ -12,6 +12,8 @@ import { SignUpInfo } from "./signup-info";
 import { ApiResponse } from "./api.response";
 import { TokenStorageService } from "./token-storage.service";
 import { Router } from "@angular/router";
+import { AppointmentSnackbarComponent } from '../home/appointment/shared-appointment/appointment-snackbar/appointment-snackbar.component';
+import { MatSnackBar } from '@angular/material';
 
 const httpOptions = {
   headers: new HttpHeaders({ "Content-Type": "application/json" })
@@ -53,14 +55,40 @@ export class AuthService {
   constructor(
     private http: HttpClient,
     private tokenStorage: TokenStorageService,
-    private router: Router
+    private router: Router,
+    private _snackbar: MatSnackBar
   ) {}
 
   attemptAuth(credentials: AuthLoginInfo) {
     return this.http
       .post<ApiResponse>(this.loginUrl, credentials, httpOptions)
       .subscribe((data: ApiResponse) => {
-        if (data.status === 200) {
+        if (data) {
+          if (data.status == 200) {
+            this.tokenStorage.saveToken(data.result.accessToken);
+            this.tokenStorage.saveUsername(data.result.name);
+            this.tokenStorage.saveName(data.result.username);
+            this.tokenStorage.saveAuthority(data.result.role);
+            this.userRoleSubject.next(this.tokenStorage.getAuthority());
+            this.usernameSubject.next(this.tokenStorage.getUsername());
+            console.log(data.result.role);
+            this.isLoggedin.next(true);
+
+            this._snackbar.openFromComponent(AppointmentSnackbarComponent, {
+              duration: 4000,
+              panelClass: ["standard"],
+              data: "Login Successful!"
+            });
+            // this.router.navigate(["home"]);
+          }
+          if (data.status == 403) {
+            this._snackbar.openFromComponent(AppointmentSnackbarComponent, {
+              duration: 4000,
+              panelClass: ["delete"],
+              data: data.message
+            });
+            this.isLoggedin.next(false);
+          }
           console.log(data);
           console.log(data.result);
           this.tokenStorage.saveToken(data.result.accessToken);

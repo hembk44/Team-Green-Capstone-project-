@@ -6,7 +6,6 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { AuthService } from "../auth/auth.service";
 import { TokenStorageService } from "../auth/token-storage.service";
 import { MatDialog } from "@angular/material/dialog";
-import { EmailDialogComponent } from "../shared/email-dialog/email-dialog.component";
 
 @Component({
   selector: "app-login",
@@ -16,12 +15,12 @@ import { EmailDialogComponent } from "../shared/email-dialog/email-dialog.compon
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
 
-  isLoggedIn = false;
-  isLoginFailed = false;
-  isLoading = false;
+  // isLoggedIn = false;
+  // isLoginFailed = false;
+  // isLoading = false;
 
-  errorMessage = "";
-  roles: string[] = [];
+  // errorMessage = "";
+  // roles: string[] = [];
 
   constructor(
     private authService: AuthService,
@@ -39,16 +38,10 @@ export class LoginComponent implements OnInit {
   }
 
   forgotPassword() {
-    // const dialogRef = this.dialog.open(EmailDialogComponent, {
-    //   width: "400px"
-    // });
-
-    // dialogRef.afterClosed().subscribe(r => console.log(r));
     this.router.navigate(["forgot-password"]);
   }
 
   onSubmit() {
-    // console.log(this.form);
     const loginFormValues = this.loginForm.value;
     if (this.loginForm.invalid) {
       return;
@@ -56,22 +49,20 @@ export class LoginComponent implements OnInit {
     const loginPayload = {
       username: loginFormValues.email,
       password: loginFormValues.password
-      // username: this.loginForm.controls.username.value,
-      // password: this.loginForm.controls.password.value
     };
 
-    // this.loginInfo = new AuthLoginInfo(this.form.username, this.form.password);
-    this.isLoading = true;
     this.authService.attemptAuth(loginPayload);
-    this.authService.isLoggedIn.subscribe(loggedIn => {
-      if(!loggedIn){
-        this.isLoginFailed = true;
+    this.authService.isLoggedIn.subscribe(result => {
+      if (result) {
+        // this.isLoginFailed = false;
+        this.router.navigate(["home"]);
       }
-    })
-    // this.router.navigate(["home"]);
-  }
+      //  else if (!result) {
+      //   console.log(this.isLoginFailed);
 
-  // reloadPage() {
-  //   window.location.reload();
-  // }
+      //   this.isLoginFailed = true;
+      //   console.log(this.isLoginFailed);
+      // }
+    });
+  }
 }

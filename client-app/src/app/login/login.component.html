@@ -78,14 +78,9 @@
 </div> -->
 <div class="container">
   <mat-card class="example-card">
-    <!-- <mat-card-header>
-    <mat-card-title>Login</mat-card-title>
-    <mat-card-subtitle>Please enter your credentials</mat-card-subtitle>
-  </mat-card-header> -->
-
     <mat-card-content>
       <h3>Please login</h3>
-      <mat-error *ngIf="isLoginFailed">Incorrect email or password.</mat-error>
+
       <form
         class="example-form"
         [formGroup]="loginForm"
@@ -128,7 +123,9 @@
             >forgot password?</a
           ></span
         >
-
+        <!-- <mat-error *ngIf="isLoginFailed"
+          >Incorrect email or password.</mat-error
+        > -->
         <div style="padding-top: 5px">
           <button mat-raised-button type="submit" class="primary">Login</button>
         </div>
