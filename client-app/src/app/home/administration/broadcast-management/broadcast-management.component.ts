@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { DataStorageService } from '../../shared/data-storage.service';
 import { MatSnackBar } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
+import { AppointmentSnackbarComponent } from '../../appointment/shared-appointment/appointment-snackbar/appointment-snackbar.component';
 
 @Component({
   selector: 'app-broadcast-management',
@@ -41,6 +42,7 @@ export class BroadcastManagementComponent implements OnInit,OnDestroy{
     this.newImgs = [];
     
     this.dataStorage.getImages().subscribe(result => {
+      if(result.result){
       this.images = result.result;
       for(let img of this.images){
         const date = new Date().valueOf();
@@ -60,12 +62,16 @@ export class BroadcastManagementComponent implements OnInit,OnDestroy{
           this.newImgs.push(reader.result);
         }
       }
+    } else {
+      this._snackBar.open('Something went wrong. Please try again later.');
+    }
       console.log(this.newImgs);
     })
-
+    
     this.imageForm = this.formBuilder.group({
       image: [undefined, Validators.required]
     })
+
   }
 
   dataURItoBlob(dataURI) {
@@ -123,11 +129,15 @@ export class BroadcastManagementComponent implements OnInit,OnDestroy{
 
 
   saveForm(submitForm: FormGroup){
-    if(submitForm.valid){
       this.dataStorage.uploadImage(this.tempArr).subscribe(result => {
-        this._snackBar.open(result.message, '',{duration:5000})
+        if(result){
+          this._snackBar.openFromComponent(AppointmentSnackbarComponent,{duration:4000, panelClass: ["standard"], data: result.message})
+        }
+        else {
+          this._snackBar.openFromComponent(AppointmentSnackbarComponent,{duration:4000, panelClass: ["standard"], data: 'Something went wrong.'});
+        }
       })
-    } 
+    
   }
 
   ngOnDestroy(){

@@ -71,11 +71,14 @@ export class DeleteUsersComponent implements OnInit {
           const obj = {
             "emails": this.updateEmails
           };
-          this.dataStorage.deleteUsers(obj).subscribe(result => {
+          this.dataStorage.deleteUsers(this.updateEmails).subscribe(result => {
             console.log(result);
             if(result){
-              this.snackbar.open(result.message, '', {duration: 5000});
+              this.snackbar.open(result.message, '',{duration:3000, panelClass:["standard"]});
               this.dataStorage.fetchUsers();
+            }
+            else{
+              this.snackbar.open('Something went wrong. Please try again later', '',{duration:3000, panelClass:["standard"]});
             }
           });
           

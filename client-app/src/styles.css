@@ -18,6 +18,8 @@
   background: #800029 !important;
 }
 
+
+
 .cal-event .cal-event-title {
   color: white;
 }
@@ -115,6 +117,14 @@ body {
 .delete .mat-simple-snackbar-action {
   color: #800029;
   ;
+}
+
+.standard .mat-simple-snackbar-action{
+  color: rgb(185,163,90);
+}
+
+.delete .mat-simple-snackbar-action{
+  color: rgb(185,163,90);
 }
 
 .primary {

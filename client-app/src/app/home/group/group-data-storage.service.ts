@@ -11,7 +11,7 @@ import { MatSnackBar } from "@angular/material";
   providedIn: "root"
 })
 export class GroupDataStorageService {
-  private baseUrlGroup = "http://localhost:8181/api/group/";
+  private baseUrlGroup = "http://ec2-100-26-194-180.compute-1.amazonaws.com:8181/api/group/";
 
   private isLoadingSubject: BehaviorSubject<boolean> = new BehaviorSubject<
     boolean
@@ -58,7 +58,7 @@ export class GroupDataStorageService {
   createGroupWithFile(formData: FormData) {
     return this.http
       .post<ApiResponse>(
-        "http://localhost:8181/api/group/createFromFile",
+        "http://ec2-100-26-194-180.compute-1.amazonaws.com:8181/api/group/createFromFile",
         formData
       )
       .pipe(
@@ -148,7 +148,7 @@ export class GroupDataStorageService {
   postMajors() {
     this.isLoadingSubject.next(true);
     return this.http
-      .post<ApiResponse>("http://localhost:8181/api/admin/", null)
+      .post<ApiResponse>("http://ec2-100-26-194-180.compute-1.amazonaws.com:8181/api/admin/", null)
       .pipe(
         (map(data => data), catchError(error => throwError(error))),
         finalize(() => this.isLoadingSubject.next(false))

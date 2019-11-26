@@ -43,7 +43,7 @@
           *ngIf="
             currentRole == 'ROLE_USER' ||
             currentRole == 'ROLE_MODERATOR' ||
-            (currentRole === 'ROLE_ADMIN' && appointmentType === 'received')
+            ((currentRole === 'ROLE_ADMIN' || currentRole==='ROLE_PM') && appointmentType === 'received')
           "
           style="margin-top: 10px;"
         >
@@ -54,6 +54,7 @@
               [matMenuTriggerFor]="menu"
               matTooltip="Please click to confirm"
               style="margin-bottom: 10px;"
+              type="button"
             >
               {{ timeSlot.startTime }} - {{ timeSlot.endTime }}
             </button>

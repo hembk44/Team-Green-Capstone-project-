@@ -5,6 +5,7 @@ import { AuthService } from "src/app/auth/auth.service";
 import { MatSnackBar } from "@angular/material";
 import { Router } from "@angular/router";
 import { GroupDataStorageService } from "../../group/group-data-storage.service";
+import { AppointmentSnackbarComponent } from '../../appointment/shared-appointment/appointment-snackbar/appointment-snackbar.component';
 
 @Component({
   selector: "app-upload-major",
@@ -56,18 +57,15 @@ export class UploadMajorComponent implements OnInit {
       formData.append("file", this.currentFileUpload);
       this.dataStorage.uploadMajors(formData).subscribe(result => {
         console.log(result);
-        if (result.status === 200) {
-          let snackBarRef = this._snackBar.open(
-            result.message,
-            "",
-            { duration: 5000, panelClass: ["standard"] }
-          );
-          snackBarRef
-            .onAction()
-            .subscribe(() => this.router.navigate(["/home/admin"]));
+        if (result) {
+          this._snackBar.open(result.message, 'close', {duration:4000, panelClass: ["standard"]})
+        } else {
+          this._snackBar.open('Something went wrong.', 'close', {duration:4000, panelClass: ["standard"]})
         }
       });
-      this.router.navigate(["/home/admin"]);
+      this.uploadForm.reset();
+      this.uploadForm.clearAsyncValidators();
+      this.uploadForm.clearValidators();
     }
   }
 

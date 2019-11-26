@@ -7,6 +7,7 @@ import { GroupSelection } from '../../shared/group-selection';
 import { AuthService } from 'src/app/auth/auth.service';
 import { Observable } from 'rxjs';
 import { startWith, map } from 'rxjs/operators';
+import { AppointmentSnackbarComponent } from '../../appointment/shared-appointment/appointment-snackbar/appointment-snackbar.component';
 
 @Component({
   selector: 'app-calendar-create',
@@ -96,12 +97,13 @@ export class CalendarCreateComponent implements OnInit {
     }
     this.dataStorage.newCalendar(obj).subscribe(result => {
       if (result) {
-        this.snackbar.open(result.message,'' ,{duration: 5000})
+        this.snackbar.open(result.message, 'close', {duration:4000, panelClass: ["standard"]})
         if(result.status === 201){
           this.dataStorage.fetchCalendars();
           this.ref.close();
         }
-        
+      } else {
+        this.snackbar.open('Something went wrong.', 'close', {duration:4000, panelClass: ["standard"]})
       }
     });
     
@@ -159,9 +161,13 @@ export class CalendarCreateComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log(result);
-      for(let email of result){
-        if(!this.emails.includes(email)){
-          this.emails.push(email);
+      for(let group of result){
+        console.log(group);
+        for(let email of group.emails){
+          console.log(email);
+          if(!this.emails.includes(email.email)){
+            this.emails.push(email.email);
+          }
         }
       }
     })

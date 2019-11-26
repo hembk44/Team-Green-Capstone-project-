@@ -6,6 +6,7 @@ import {
   MatSnackBar
 } from "@angular/material";
 import { DataStorageService } from "../../shared/data-storage.service";
+import { AppointmentSnackbarComponent } from '../../appointment/shared-appointment/appointment-snackbar/appointment-snackbar.component';
 
 @Component({
   selector: "app-update-roles",
@@ -80,10 +81,12 @@ export class UpdateRolesComponent implements OnInit {
       dialogRef.afterClosed().subscribe(result => {
         if (result === "confirmed") {
           this.dataStorage.updateRoles(this.updates).subscribe(result => {
-            if(result){
-              this.snackbar.open(result.message, '', {duration:3000});
+            if (result) {
+              this.snackbar.open(result.message, 'close', {duration:4000, panelClass: ["standard"]});
               this.dataStorage.fetchUsers();
-            }      
+            } else {
+              this.snackbar.open('Something went wrong.', 'close', {duration:4000, panelClass: ["standard"]})
+            }
           });
           this.updateEmails = [];
           this.updates = [];

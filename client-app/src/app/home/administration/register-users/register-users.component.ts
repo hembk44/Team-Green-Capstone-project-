@@ -38,7 +38,7 @@ export class RegisterUsersComponent implements OnInit {
     console.log(this.role.user);
     this.uploadForm = this.formBuilder.group({
       uploadFile: [undefined, [Validators.required]],
-      role: [Validators.required]
+      role: ["students",Validators.required]
     });
   }
 
@@ -67,20 +67,19 @@ export class RegisterUsersComponent implements OnInit {
         )
         .subscribe(result => {
           console.log(result);
-          if (result.status === 201) {
+          if (result) {
             let snackBarRef = this._snackBar.open(
-              "All users are successfully registered!!!",
-              "close",
+              result.message,
+              "",
               { duration: 5000, panelClass: ["standard"] }
             );
 
             snackBarRef
               .onAction()
               .subscribe(() => this.router.navigate(["/home/admin"]));
-            // this.groupDetailDataShare.passSharedMessage(result.message);
-            // this._snackBar.openFromComponent(SnackBarGroup, {
-            //   duration: 5000
-            // });
+          }
+          else{
+            this._snackBar.open('Something went wrong.', 'close', {duration: 5000})
           }
         });
       this.uploadForm.reset();
